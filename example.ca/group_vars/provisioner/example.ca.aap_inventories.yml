@@ -1,0 +1,83 @@
+---
+
+inventories:
+  - name: "satellite.{{ _global_domain_name }}"
+    description: "demo satellite inventory"
+    organization: "Default"
+    state: present
+
+  - name: "TheSatellite"
+    description: "The Satellite Server"
+    organization: "Default"
+    state: present
+
+  - name: "TheAutomationController"
+    description: "The AAP Controller Server"
+    organization: "Default"
+    state: present
+
+  - name: "SOE_pipeline_inventory"
+    description: "demo SOE pipeline inventory"
+    organization: "Default"
+    state: present
+
+  - name: "SOE_qa_pipeline_inventory"
+    description: "demo SOE pipeline inventory"
+    organization: "Default"
+    state: present
+
+  - name: "convert2rhel_pipeline_inventory"
+    description: "demo SOE pipeline inventory"
+    organization: "Default"
+    state: present
+    variables:
+      host_platform: "vmware"
+      satellite_username: '{{ satellite_username_vault }}'
+      satellite_password: '{{ satellite_password_vault }}'
+      satellite_organization: '{{ satellite_organization_vault }}'
+      satellite_location: '{{ satellite_location_vault }}'
+      vmware_datacenter_name: '{{ vmware_datacenter_name_vault }}'
+      vmware_vcenter_hostname: '{{ vmware_vcenter_hostname_vault }}'
+      vmware_vcenter_username: '{{ vmware_vcenter_username_vault }}'
+      vmware_vcenter_password: '{{ vmware_vcenter_password_vault }}'
+      vmware_validate_certs: false
+
+      disk_search_pattern: "sd.*"
+
+      snapshot_disk_size_gb: "100"
+      snapshot_disk_provision_type: "thin"
+      snapshot_disk_datastore: "NASAEX_VMS"
+      snapshot_disk_state: "present"
+      snapshot_disk_controller: 0
+      snapshot_disk_unit: 42
+      snapshot_disk_scsi_type: "paravirtual"
+      snapshot_disk_mode: "persistent"
+
+      snapshot_create_set_name: "c2r"
+      snapshot_revert_set_name: "c2r"
+      snapshot_remove_set_name: "c2r"
+
+      snapshot_create_snapshot_autoextend_threshold: 70
+      snapshot_create_snapshot_autoextend_percent: 20
+      snapshot_create_boot_backup: true
+      # we don't want to snap log volumes or audit volumes
+      # as they will have interesting data
+      snapshot_create_volumes:
+        - vg: vg_root
+          lv: lv_root
+          size: 10G
+        - vg: vg_root
+          lv: lv_var
+          size: 10G
+        - vg: vg_root
+          lv: lv_home
+          size: 1G
+        - vg: vg_root
+          lv: lv_var_log
+          size: 1G
+        - vg: vg_root
+          lv: lv_var_audit
+          size: 1G
+        - vg: vg_root
+          lv: lv_var_tmp
+          size: 1G

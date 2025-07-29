@@ -1,0 +1,29 @@
+---
+
+idm_automount_locations:
+  - name: "raleigh"
+    state: "present"
+  - name: "test location 2"
+    state: "present"
+  - name: "test location 3"
+    state: "present"
+  - name: "test location 3"
+    state: "absent"
+  - name: "test location 2"
+    state: "absent"
+
+idm_automount_maps:
+  - name: "auto.master"
+    location: "raleigh"
+  - name: "auto.devel"
+    location: "raleigh"
+
+idm_automount_keys:
+  - key: "project1"
+    location: "raleigh"
+    mapname: "auto.devel"
+    info: "-soft,timeo=150,rsize=8192,wsize=8192,noatime nas3.example.ca:/volume1/exports/&"
+  - key: "/projects"
+    location: "raleigh"
+    mapname: "auto.master"
+    info: "auto.devel"

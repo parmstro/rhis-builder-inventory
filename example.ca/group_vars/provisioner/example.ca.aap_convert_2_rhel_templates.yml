@@ -1,0 +1,263 @@
+---
+
+convert_2_rhel_templates:
+  - name: "c2r_deploy_test_servers"
+    description: "Deploy convert2RHEL test machines to Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheAutomationController"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee"
+    playbook: "create_hosts.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      host_build_comment: "Created by rhis-builder-aap for convert2RHEL demo"
+      deploy: true
+      post_deploy_timeout: 600  # seconds
+      use_sync_build: false
+      enable_debug_logging: false
+      satellite_validate_certs: true
+      platform_hosts:
+        - fqdn: "centosdemo1.{{ _global_domain_name }}"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_centos79_vm"
+          compute_resource: "vcenter.{{ _global_domain_name }}"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+        - fqdn: "centosdemo2.{{ _global_domain_name }}"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_centos79_vm"
+          compute_resource: "vcenter.{{ _global_domain_name }}"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+        - fqdn: "oeldemo1.{{ _global_domain_name }}"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_oel79_vm"
+          compute_resource: "vcenter.{{ _global_domain_name }}"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+        - fqdn: "oeldemo2.{{ _global_domain_name }}"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_oel79_vm"
+          compute_resource: "vcenter.{{ _global_domain_name }}"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+          comment: "c2r_demo_host deleteme"
+
+  - name: "c2r_analyze"
+    description: "Run convert2RHEL analyze step on test machines in Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_analyze"
+      analysis_convert2rhel_preconv_opts: "--els"
+      analysis_convert2rhel_eus: "false"
+      common_convert2rhel_repo_satellite: "true"
+      # these are required but may be empty strings
+      rhsm_username: ""
+      rhsm_password: ""
+      rhsm_org: ""
+      rhsm_activation_key: ""
+
+  - name: "c2r_convert"
+    description: "Run convert2RHEL convert step test machines to Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_convert"
+      common_convert2rhel_repo_satellite: "true"
+      convert_convert2rhel_opts: "--els"
+      convert_reboot_requested: "true"
+      # these are required but may be empty strings
+      rhsm_username: ""
+      rhsm_password: ""
+      rhsm_org: ""
+      rhsm_activation_key: ""
+
+  - name: "c2r_preconvert_remediate"
+    description: "Run pre-conversion remediation steps on test machines in Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_preconvert_remediate"
+
+  - name: "c2r_post_remediate"
+    description: "Run post conversion remediation on convert2RHEL test machines in Development"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_post_remediate"
+
+  - name: "c2r_post_validate"
+    description: "Validate that convert2RHEL test machines in Development function and are running the new OS"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_post_validate"
+      validate_convert2rhel_target_release: "7.9"
+
+  - name: "c2r_prereq_cdn"
+    description: "Configure convert2RHEL prerequisites fo test machines registered to the Red Hat CDN"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_prereq_cdn"
+
+  - name: "c2r_Prereq_SAT"
+    description: "Configure convert2RHEL prerequisites for test machines registered to Red Hat Satellite"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_prereq_sat"
+      centos_host_pre_convert_sat_activationkey: "convertCentOS2RHEL7"
+      centos_host_pre_convert_sat_org_id: "Default_Organization"
+      oel_host_pre_convert_sat_activationkey: "convertOEL2RHEL7"
+      oel_host_pre_convert_sat_org_id: "Default_Organization"
+
+  - name: "c2r_snapshot_cleanup"
+    description: "Cleanup LVM snapshot configuration on hosts - remove snapshot disks etc.."
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_cleanup"
+
+  - name: "c2r_snapshot_create"
+    description: "Create the LVM snapshot on hosts"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_create"
+
+  - name: "c2r_snapshot_prepare"
+    description: "Prepare host for the LVM snapshot - ensure disk space, etc."
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_prepare"
+
+  - name: "c2r_snapshot_remove"
+    description: "Commit the changes by removing the LVM snapshot from the host"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_remove"
+
+  - name: "c2r_snapshot_revert"
+    description: "Revert the system to the stored LVM snapshot for the host"
+    job_type: "run"
+    organization: "Default"
+    inventory: "convert2rhel_pipeline_inventory"
+    project: "rhis-builder-convert2rhel"
+    execution_environment: "satellite_ee"
+    playbook: "run_role.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      role_name: "c2r_snapshot_revert"

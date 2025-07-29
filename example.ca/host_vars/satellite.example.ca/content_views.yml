@@ -1,0 +1,1017 @@
+---
+# Much of this configuration can be considered standard. It implements a
+# common pattern for content views and composite content views.
+# More complex implementations are possible. Samples may be provided for these at a later date.
+# For simple environments, you will strip many of these out.
+
+# NOTE: We may implement a list of lists. Isolate each content view configuration in its own
+# file and with its own variable name. Then generate a list with the variable names to 
+# generate a list that is interpreted by the role. It would eliminate a lot of editing
+# on a currently **way** too large file where many mistakes are possible.
+# This also has a testing advantage as small files and configurations can be managed 
+# individually. The list of lists allows for easy composition.
+
+
+# This contains all the definitions for Content Views and Composite Content Views
+# It defines the filters and filter rules for the content views as well
+
+errata_end_date: "{{ ansible_date_time.date }}"
+skip_publish_all: false
+
+#######################################
+# REQUIRED CONTENT VIEWS WILL BE MARKED
+#######################################
+
+content_views:
+
+# AAP Files for installing the Ansible Nodes for the RH-ISAM
+# REQUIRED for installing AAP24 with rhis-builder
+# OMIT if installing for AAP25
+
+  - name: "AAP24_Files"
+    desc: "Red Hat Ansible Automation Platform Install Files"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
+        product: "Red Hat Ansible Automation Platform"
+    environments:
+      - "Library"
+
+  - name: "AAP24_RPMs"
+    desc: "Red Hat Ansible Automation Platform Install RPMs"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 RPMs"
+        product: "Red Hat Ansible Automation Platform"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    environments:
+      - "Library"
+
+# AAP Files for installing the Ansible Nodes for the RH-ISAM
+# REQUIRED for installing AAP25 with rhis-builder
+# OMIT if installing for AAP24
+
+  - name: "AAP25_Files"
+    desc: "Red Hat Ansible Automation Platform Install Files"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Ansible Automation Platform 2.5 for RHEL 9 x86_64 Files"
+        product: "Red Hat Ansible Automation Platform"
+    environments:
+      - "Library"
+
+  - name: "AAP25_RPMs"
+    desc: "Red Hat Ansible Automation Platform Install RPMs"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Ansible Automation Platform 2.5 for RHEL 9 x86_64 RPMs"
+        product: "Red Hat Ansible Automation Platform"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    environments:
+      - "Library"
+
+# EPEL8 for the WordPress sample app
+# REQUIRED for AAP24 or AAP25 sample SOE workflows
+# 
+  - name: "EPEL8"
+    desc: "Extra Packages for Enterprise Linux 8"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "EPEL8"
+        product: "EPEL8"
+      - name: "EPEL8"                     # EPEL8 cv requires EPEL8_Stream
+        product: "EPEL8_Stream"           # required by testapp wordpress
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    environments:
+      - "Library"
+
+# EPEL9 for the WordPress sample app
+# REQUIRED for AAP24 or AAP25 sample SOE workflows
+  - name: "EPEL9"
+    desc: "Extra Packages for Enterprise Linux 9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "EPEL9"
+        product: "EPEL9"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    environments:
+      - "Library"
+
+
+# REQUIRED for convert2RHEL sample workflows
+  - name: "convert2rhel7"
+    desc: "convert2rhel utilities for EL7 conversions"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "convert2rhel7"
+        product: "convert2rhel"
+    environments:
+      - "Library"
+
+# REQUIRED for convert2RHEL sample workflows
+  - name: "convert2rhel8"
+    desc: "convert2rhel utilities for EL8 conversions"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "convert2rhel7"
+        product: "convert2rhel"
+    environments:
+      - "Library"
+
+# RHEL8
+# REQUIRED
+  - name: "SOE8"
+    desc: "Red Hat Enterprise Linux 8 Standard Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.10"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 8 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+# SOE_RHEL9_x86_64 - the new RHEL 8 :-)
+# REQUIRED
+  - name: "SOE9"
+    desc: "Red Hat Enterprise Linux 9 x86_64 Standard Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 9 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# SOE_RHEL9 aarch64 - the new RHEL8 aarch64  :-)
+# OPTIONAL
+
+  - name: "SOE9_aarch64"
+    desc: "Red Hat Enterprise Linux 9 aarch64 Standard Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream RPMs 9"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS RPMs 9"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - Supplementary RPMs 9"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.5"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to work with RPi4++
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.5"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.2"     # known to work with RPi4++
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Satellite Client 6 for RHEL 9 aarch64 RPMs"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 9 aarch64 RPMs"
+        product: "Red Hat Enterprise Linux for ARM 64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+# REQUIRED for convert2RHEL sample workflows  - OPTIONAL Otherwise
+
+  - name: "SOE7"
+    desc: "RHEL 7 Standard Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
+        product: "Red Hat Ansible Engine"
+      - name: "Red Hat Satellite Client 6 for RHEL 7 Server RPMs x86_64"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server - Optional RPMs x86_64 7Server"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server - RH Common RPMs x86_64 7Server"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9"
+        product: "Red Hat Enterprise Linux Server"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all packages with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of the 1st of the month"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# REQUIRED for convert2RHEL sample workflows - OPTIONAL Otherwise
+# This repo is now static - no need of filters
+
+  - name: "CentOS79"
+    desc: "CentOS 7.9 Content for conversion to RHEL 7.9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "CentOS79"
+        product: "CentOS79"
+      - name: "updates"
+        product: "CentOS79"
+    environments:
+      - "Library"
+      - "Development"
+  
+
+# REQUIRED for convert2RHEL sample workflows - OPTIONAL Otherwise
+# This repo is now static - no filters
+
+  - name: "OEL79"
+    desc: "Content for Oracle Enterprise Linux conversion to RHEL"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "OEL79"
+        product: "OEL79"
+    environments:
+      - "Library"
+      - "Development"
+
+
+# REQUIRED for LEAPP sample workflows - OPTIONAL Otherwise
+
+  - name: "LEAPP_2_RHEL8"
+    desc: "Red Hat Enterprise Linux 8 for LEAPP migrations"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8.10"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8.10"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8.10"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+
+# REQUIRED for LEAPP sample workflows - OPTIONAL Otherwise
+
+  - name: "LEAPP_2_RHEL9"
+    desc: "Red Hat Enterprise Linux 9 for LEAPP migrations"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 9 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            state: "present"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+
+
+# OPTIONAL
+
+  - name: "mssqlserver2022_rhel9"
+    desc: "Microsoft SQL Server for Linux - RHEL9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "mssqlserver2022_rhel9"
+        product: "Microsoft SQL Server for Linux 2022 for RHEL 9"
+      - name: "msqltools2022_rhel9"
+        product: "Microsoft SQL Server for Linux 2022 for RHEL 9"
+    filters:
+      - name: "Include_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of the 1st of the month"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            enddate: "{{ errata_end_date }}"
+            datetype: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+
+
+# REQUIRED for SOE sample workflows
+
+  - name: "JBoss8EAP74"
+    desc: "Red Hat JBoss EAP 7.4 Content for RHEL 8"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "JBoss Enterprise Application Platform 7.4 RHEL 8 RPMs"
+        product: "JBoss Enterprise Application Platform"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: "true"
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+
+
+# REQUIRED for SOE sample workflows
+
+  - name: "JBoss9EAP74"
+    desc: "Red Hat JBoss EAP 7.4 Content for RHEL 9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "JBoss Enterprise Application Platform 7.4 RHEL 9 RPMs"
+        product: "JBoss Enterprise Application Platform"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: "true"
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+
+
+# OPTIONAL
+
+  - name: "CentOS_S9"
+    desc: "CentOS Stream 9 Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "centos-9-appstream"
+        product: "CentOS Stream 9"
+      - name: "centos-9-baseos"
+        product: "CentOS Stream 9"
+    filters:
+      - name: "Include_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of the 1st of the month"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            enddate: "{{ errata_end_date }}"
+            datetype: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+
+
+composite_content_views:
+
+
+# REQUIRED for AAP24 deployment
+# OPTIONAL for AAP25 deployment
+
+  - name: "SOE_AAP24"
+    desc: "SOE for Ansible Automation Platform 2.4 Servers"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE9"
+        latest: true
+      - content_view: "AAP24_Files"
+        latest: true
+      - content_view: "AAP24_RPMs"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+
+# REQUIRED for AAP25 deployment
+# OPTIONAL for AAP24 deployment
+
+  - name: "SOE_AAP25"
+    desc: "SOE for Ansible Automation Platform 2.5 Servers"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE9"
+        latest: true
+      - content_view: "AAP25_Files"
+        latest: true
+      - content_view: "AAP25_RPMs"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+
+
+# REQUIRED for SOE sample Workflows 
+
+  - name: "SOE8_EPEL"
+    desc: "SOE for RHEL8 with EPEL"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE8"
+        latest: true
+      - content_view: "EPEL8"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# REQUIRED for SOE sample Workflows 
+
+  - name: "SOE9_EPEL"
+    desc: "SOE for RHEL9 with EPEL9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE9"
+        latest: true
+      - content_view: "EPEL9"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# REQUIRED for convert2RHEL sample Workflows 
+# OPTIONAL Otherwise
+
+  - name: "convert_CentOS2RHEL7"
+    desc: "convert2RHEL content for CentOS 7.9 to RHEL 7.9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE7"
+        latest: true
+      - content_view: "convert2rhel7"
+        latest: true
+      - content_view: "CentOS79"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+
+
+# REQUIRED for convert2RHEL sample Workflows 
+# OPTIONAL Otherwise
+
+  - name: "convert_OEL2RHEL7"
+    desc: "convert2RHEL content for OEL 7.9 to RHEL 7.9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE7"
+        latest: true
+      - content_view: "convert2rhel7"
+        latest: true
+      - content_view: "OEL79"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+
+
+# REQUIRED for LEAPP sample Workflows 
+# OPTIONAL Otherwise
+
+  - name: "LEAPP_7_2_8"
+    desc: "Migrate from RHEL 7.9 to RHEL 8"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE7"
+        latest: true
+      - content_view: "LEAPP_2_RHEL8"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+
+# REQUIRED for LEAPP sample Workflows 
+# OPTIONAL Otherwise
+
+  - name: "LEAPP_8_2_9"
+    desc: "Migrate from RHEL 8 to RHEL 9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE8"
+        latest: true
+      - content_view: "LEAPP_2_RHEL9"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+
+
+# REQUIRED for SOE sample Workflows 
+
+  - name: "SOE8_JBoss"
+    desc: "Production JBoss Applications"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE8"
+        latest: true
+      - content_view: "JBoss8EAP74"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# REQUIRED for SOE sample Workflows 
+
+  - name: "SOE9_JBoss"
+    desc: "Production JBoss Applications"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE9"
+        latest: true
+      - content_view: "JBoss9EAP74"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# OPTIONAL
+
+  - name: "SOE9_MSSQL"
+    desc: "SQL Server SOE"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "SOE9"
+        latest: true
+      - content_view: "mssqlserver2022_rhel9"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"

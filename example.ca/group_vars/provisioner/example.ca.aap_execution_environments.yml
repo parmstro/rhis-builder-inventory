@@ -1,0 +1,15 @@
+---
+
+# Ansible execution environments
+exec_envs:
+  - name: "satellite_ee"
+    credential: "aaphub24_containers"
+    image: "{{ groups['hubs'][0] }}/satellite_ee"
+    description: "Execution Environment for rhis_builder incl. realm certificates and collections"
+    pull: "always"
+    organization: "Default"
+    tag: "v1"
+    git_repo: "https://github.com/parmstro/rhis_ansible_ee.git"
+    git_dest: "{{ rhis_default_git_dest }}"
+    git_clone: true
+    git_force: true

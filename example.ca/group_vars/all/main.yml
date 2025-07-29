@@ -1,0 +1,45 @@
+# variables for all hosts
+
+debug_output: false
+
+# Satellite vars
+sat_organization: "Default Organization"
+sat_location: "Default Location"
+sat_validate_certs: true
+sat_server_url: "https://satellite.example.ca"
+sat_username: "{{ satellite_admin_username_vault }}"
+sat_password: "{{ satellite_admin_password_vault }}"
+
+# IdM certificate config vars
+ipa_domain: example.ca
+ipa_server_fqdn: idm.example.ca
+ipa_realm: "{{ ipa_domain | upper }}"
+ipa_principal: "{{ ipa_principal_vault }}"
+ipa_password: "{{ ipa_password_vault }}"
+force_regen: true
+crt_dir: "/etc/ipa/private"
+passfile: "{{ crt_dir }}/passout.txt"
+ssl_private_key_pem_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pem"
+ssl_private_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.key"
+ssl_private_key_passphrase: "{{ ssl_private_key_passphrase_vault }}"
+ssl_private_key_cipher: des3
+ssl_private_key_size: 2048
+ssl_public_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pub"
+ssl_public_key_format: PEM
+csr_path: "{{ crt_dir }}/{{ ansible_fqdn }}.csr"
+csr_email_address: "parmstro@example.ca"
+csr_organization_name: "Paul Armstrong"
+csr_organization_unit_name: "Red Lab"
+csr_country_name: "CA"
+csr_state_or_province_name: "ON"
+csr_locality_name: "Cambridge"
+csr_digest: "aes256"
+crt_service_type: "HTTP"
+ssl_crt_path: "{{ crt_dir }}/{{ ansible_fqdn }}.crt"
+create_crt_key_bundle: false
+crt_key_bundle_path: "{{ crt_dir }}/{{ ansible_fqdn }}.cockpit.cert"
+cockpit_crt_path: "/etc/cockpit/ws-certs.d/z-{{ ansible_fqdn }}.cockpit.crt"
+cockpit_key_path: "/etc/cockpit/ws-certs.d/z-{{ ansible_fqdn }}.cockpit.key"
+cockpit_bundle_path: "/etc/cockpit/ws-certs.d/z-{{ ansible_fqdn }}.cockpit.cert"
+cockpit_self_ca_crt: "/etc/cockpit/ws-certs.d/0-self-signed-ca.pem"
+cockpit_self_crt: "/etc/cockpit/ws-certs.d/0-self-signed.cert"

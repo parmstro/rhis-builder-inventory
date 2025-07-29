@@ -1,0 +1,50 @@
+---
+
+# These vault variables should be encrypted in your
+# rhisbuilder_vault.yml file
+ipa_admin_principal: "{{ ipa_admin_principal_vault }}"
+ipa_admin_password: "{{ ipa_admin_password_vault }}"
+ipa_dm_password: "{{ ipa_dm_password_vault }}"
+ipa_default_user_password: "{{ ipa_default_user_password_vault }}"
+
+# These variables get used outside of the redhat role, so are set here.
+ipa_server_domain: "example.ca"
+ipa_server_realm: "{{ ipa_server_domain | upper }}"
+
+# ipaserver role variables
+# Some variables deviate from our standard as they
+# are specified by the redhat.rhel_idm collection
+
+# commonly changed variables
+ipaserver_ip_addresses: "192.168.140.5"
+ipaserver_hostname: "{{ ansible_fqdn }}"
+ipaserver_forwarders:
+  - "8.8.8.8"
+# - "192.168.252.5"
+# use the above to provide other domain forwarders like for Windows domains
+
+ipaserver_forward_policy: "first"
+default_password: "{{ ipa_default_user_password }}"
+
+# infrequently changed variables
+ipaadmin_password: "{{ ipa_admin_password }}"
+ipadm_password: "{{ ipa_dm_password }}"
+
+ipaserver_domain: "{{ ipa_server_domain }}"
+ipaserver_realm: "{{ ipa_server_realm }}"
+
+ipaserver_no_host_dns: true
+ipaserver_mem_check: false
+
+ipaserver_install_packages: false
+ipaserver_setup_firewalld: true
+
+ipaserver_setup_adtrust: false
+ipaserver_setup_kra: true
+ipaserver_setup_dns: true
+
+ipaserver_auto_reverse: true
+ipaserver_external_ca: false
+
+makehomedir: true
+sshtrustdns: true

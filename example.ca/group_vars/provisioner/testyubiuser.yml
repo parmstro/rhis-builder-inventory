@@ -1,0 +1,5 @@
+---
+# These values are required for each user
+piv_current_username: "testyubiuser"
+piv_current_user_csr_subject: "/CN=testyubiuser/DC=example/DC=ca/emailAddress=parmstro@redhat.com"
+piv_current_realm: "EXAMPLE.CA"

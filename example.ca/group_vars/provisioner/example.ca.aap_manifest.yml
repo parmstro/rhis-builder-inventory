@@ -1,0 +1,10 @@
+---
+# AAP Manifest variables
+
+aap_manifest_name: "aapcontroller.{{ _global_domain_name }}"
+aap_manifest_destiny: "/tmp/aapcontroller.{{ _global_domain_name }}.zip"
+aap_manifest_portal_url: "https://subscription.rhsm.redhat.com"
+aap_manifest_validate_certs: false
+aap_manifest_cdn_username: "{{ aap_cdn_username_vault }}"
+aap_manifest_cdn_password: "{{ aap_cdn_password_vault }}"
+aap_manifest_account: "{{ aap_cdn_account_number_vault }}"

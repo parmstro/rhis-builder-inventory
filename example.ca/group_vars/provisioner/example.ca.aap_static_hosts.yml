@@ -1,0 +1,162 @@
+---
+
+static_hosts:
+  - name: "satellite.{{ _global_domain_name }}"
+    description: "The satellite server"
+    enabled: true
+    inventory: "TheSatellite"
+    state: present
+
+  - name: "aapcontroller24.{{ _global_domain_name }}"
+    description: "The AAP Controller server"
+    enabled: true
+    inventory: "TheAutomationController"
+    state: present
+
+  - name: "testjboss2.{{ _global_domain_name }}"
+    description: "jboss SOE test host"
+    enabled: true
+    inventory: "SOE_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testjboss2.{{ _global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel8_vm/dev/soe_jboss"
+      kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "testlamp2.{{ _global_domain_name }}"
+    description: "LAMP stack SOE test host"
+    enabled: true
+    inventory: "SOE_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testlamp2.{{ _global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel8_vm/dev/soe_lamp"
+      kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "testwordpress2.{{ _global_domain_name }}"
+    description: "Wordpress SOE test host"
+    enabled: true
+    inventory: "SOE_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testwordpress2.{{ _global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel8_vm/dev/soe_wordpress"
+      kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestjboss2.{{ _global_domain_name }}"
+    description: "jboss SOE qa test host"
+    enabled: true
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestjboss2.{{ _global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel8_vm/qa/soe_jboss"
+      kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestlamp2.{{ _global_domain_name }}"
+    description: "LAMP stack SOE qa test host"
+    enabled: true
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestlamp2.{{ _global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel8_vm/qa/soe_lamp"
+      kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestwordpress2.{{ _global_domain_name }}"
+    description: "Wordpress SOE test host"
+    enabled: true
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestwordpress2.{{ _global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel8_vm/dev/soe_wordpress"
+      kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "centosdemo1.{{ _global_domain_name }}"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "centosdemo1.{{ _global_domain_name }}"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_centos79_vm"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+  - name: "centosdemo2.{{ _global_domain_name }}"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "centosdemo2.{{ _global_domain_name }}"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_centos79_vm"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+  - name: "oeldemo1.{{ _global_domain_name }}"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "oeldemo1.{{ _global_domain_name }}"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_oel79_vm"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"
+
+  - name: "oeldemo2.{{ _global_domain_name }}"
+    description: "convert2rhel test host"
+    enabled: true
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "oeldemo2.{{ _global_domain_name }}"
+      delete_host: false
+      organization: "Default Organization"
+      location: "Default Location"
+      hostgroup: "hg_x86_64_oel79_vm"
+      compute_resource: "vcenter.{{ _global_domain_name }}"
+      compute_profile: "2-Medium"
+      mac: "00:50:56:ff:ff:ff"
+      comment: "c2r_demo_host deleteme"

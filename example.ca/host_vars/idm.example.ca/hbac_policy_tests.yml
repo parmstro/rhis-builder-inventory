@@ -1,0 +1,28 @@
+---
+
+# There is no module to implement this. We will do it through the API using the URI object
+# TODO: implement module in upstream freeipa-ansible-modules
+
+# hbac_policy_tests:
+#  - user: string                # required
+#    sourcehost: string          # optional
+#    targethost: string          # required
+#    service: string             # required
+#    rules: list                 # required
+#    nodetail: boolean           # optional default false
+#    enabled: boolean            # whether to include all enabled rules, optional, default is false
+#    disabled: boolean           # whether to include all disabled rules, optional, default is false
+
+idm_hbac_policy_tests:
+  - user: "bofh"                          # required
+    host: "idm.example.ca"                # required
+    service: "sshd"                       # required
+    enabled: true                         # whether to include all enabled rules, optional, default is false
+    disabled: false                       # whether to include all disabled rules, optional, default is false
+  - user: "pfy-operator"
+    host: "idm.example.ca"
+    service: "sshd"
+    rules:
+      - "hbacr-allow-prod-sysadmins-all-prod"
+    enabled: false
+    disabled: false

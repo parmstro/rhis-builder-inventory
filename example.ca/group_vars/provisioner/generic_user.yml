@@ -1,0 +1,5 @@
+---
+
+# piv_current_username: "idm_user"
+# piv_current_user_csr_subject: "/CN=idm_user/DC=example/DC=ca/emailAddress=idm_user@example.ca"
+# piv_current_realm: "EXAMPLE.CA"

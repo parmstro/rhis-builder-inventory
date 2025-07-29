@@ -1,0 +1,7 @@
+---
+# Smart Card (PIV) defaults
+piv_factory_default_management_key: "010203040506070801020304050607080102030405060708"
+piv_factory_default_pin: "123456"
+piv_factory_default_puk: "12345678"
+# when initializing a FIPS compliant yubikey we require an 8 digit pin
+piv_ factory_default_FIPS_pin: "12345678"

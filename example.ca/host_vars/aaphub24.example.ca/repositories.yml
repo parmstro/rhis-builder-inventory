@@ -1,0 +1,84 @@
+---
+# This file contains the list of repositories that are to be maintained in sync
+# for the ansible automation hub
+
+collection_remotes:
+  - name: "rh-validated"
+    url: "https://console.redhat.com/api/automation-hub/content/validated/"
+    include_deps: true
+    token: "{{ remote_rh_validated_vault }}"
+    sso_url: "{{ remote_rh_sso_url_vault }}"
+    # requirements: "a list"  # OR provide the file
+    # requirements_file: "the requirements file path"
+    # username: "A username"
+    # password: "A password"
+    # proxy_url: "vaulted url for the proxy"
+    # proxy_username: "vaulted proxy login"
+    # proxy_password: "vaulted proxy password"
+    tls_validation: true
+    # client_key: "vaulted path to the key file or content - see documentation"
+    # cleint_cert: "vaulted path to the cert file or content - see documentation"
+    # ca_cert:
+    download_concurrency: 10
+    # rate_limit_req_per_sec: default is not limited
+  - name: "rh-certified"
+    url: "https://console.redhat.com/api/automation-hub/content/published/"
+    include_deps: true
+    token: "{{ remote_rh_certified_vault }}"
+    sso_url: "{{ remote_rh_sso_url_vault }}"
+    tls_validation: true
+    download_concurrency: 10
+  - name: "community"
+    url: "https://galaxy.ansible.com/api/"
+    include_deps: true
+    requirements:
+      collections:
+        - community.aws
+        - community.azure
+        - community.crypto
+        - community.docker
+        - community.general
+        - community.google
+        - community.grafana
+        - community.kubevirt
+        - community.libvirt
+        - community.mysql
+        - community.network
+        - community.postgresql
+        - community.vmware
+        - community.windows
+    tls_validation: true
+    download_concurrency: 10
+    rate_limit_req_per_sec: 8
+
+collection_repositories:
+  - name: "validated"
+    description: "Validated collection repositories from Red Hat"
+    retained_versions: 3
+    validated_distribution: false
+    pipeline: "none"
+    labels: []
+    hide_from_search: false
+    private: false
+    remote: "rh-validated"
+    sync_wait: false
+  - name: "rh-certified"
+    description: "Red Hat Certified content repository"
+    retained_versions: 1
+    validated_distribution: false
+    pipeline: "none"
+    labels: []
+    hide_from_search: false
+    private: false
+    remote: "rh-certified"
+    sync_wait: false
+  - name: "community"
+    description: "Community content repository"
+    retained_versions: 1
+    validated_distribution: false
+    pipeline: "none"
+    labels: []
+    hide_from_search: false
+    private: false
+    remote: "community"
+    sync_wait: false

@@ -1,0 +1,8 @@
+---
+
+# Workflows are long files. Create a workflow template as a yaml document in its own files.
+# Add the name of the workflow object to this list
+workflow_templates:
+  - "{{ workflow_soe_content_delivery_pipeline_dev }}"  # see workflow.SOE_content_delivery_pipeline.yml
+  - "{{ workflow_soe_content_delivery_pipeline_qa }}"
+  - "{{ workflow_c2r_pipeline }}"                   # see workflow.convert2rhel_pipeline.yml
