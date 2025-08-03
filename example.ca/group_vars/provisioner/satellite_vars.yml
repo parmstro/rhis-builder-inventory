@@ -1,11 +1,11 @@
-# These variables are used to reference the satellite 
-# when asking it to build hosts. 
+# These variables are used to reference the satellite
+# when asking it to build hosts.
 
 satellite_name: "satellite"
 satellite_domain: "example.ca"
 satellite_fqdn: "{{ satellite_name }}.{{ satellite_domain }}"
 satellite_server_url: "https://{{ satellite_fqdn }}"
-satellite_validate_certs: true
+satellite_validate_certs: false
 
 satellite_username: "{{ satellite_username_vault }}"
 satellite_password: "{{ satellite_password_vault }}"
