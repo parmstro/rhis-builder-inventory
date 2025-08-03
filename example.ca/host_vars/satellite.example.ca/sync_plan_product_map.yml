@@ -4,27 +4,9 @@
 # NOTE - the file is named the other way around so you see it in the list and don't forget about it!
 
 product_plans:
-  - name: "Red Hat Enterprise Linux Server for x86_64"
-    plan: "nightly_os"
-    organization: "{{ satellite_organization }}"
 
+# RHEL8, RHEL9, RHEL10 x86_64
   - name: "Red Hat Enterprise Linux for x86_64"
-    plan: "nightly_os"
-    organization: "{{ satellite_organization }}"
-
-  - name: "Red Hat Satellite Capsule"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
-
-  - name: "Red Hat Ansible Automation Platform"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
-
-  - name: "Red Hat Ansible Engine"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
-
-  - name: "Red Hat Enterprise Linux Server"
     plan: "nightly_os"
     organization: "{{ satellite_organization }}"
 
@@ -32,10 +14,51 @@ product_plans:
     plan: "nightly_os"
     organization: "{{ satellite_organization }}"
 
+# RHEL9, RHEL10 ARM 64
+  - name: "Red Hat Enterprise Linux for ARM 64"
+    plan: "nightly_os"
+    organization: "{{ satellite_organization }}"
+
+# RHEL 7.9 and ELS
+  - name: "Red Hat Enterprise Linux Server"
+    plan: "nightly_os"
+    organization: "{{ satellite_organization }}"
+
+  - name: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
+    plan: "nightly_os"
+    organization: "{{ satellite_organization }}"
+
+# Satellite for RHEL9
+  - name: "Red Hat Satellite Capsule"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+# AAP 2.4 and 2.5
+  - name: "Red Hat Ansible Automation Platform"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+# Ansible Engine for RHEL 7.9
+  - name: "Red Hat Ansible Engine"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+# JBoss EAP7 EAP8
+  - name: "JBoss Enterprise Application Platform"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+# RHEL9 imagemode containers
+  - name: "rhel9_containers"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+# convert2RHEL utilities
   - name: "convert2rhel"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
+# Extra Packages for Enterprise Linux
   - name: "EPEL8"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
@@ -44,6 +67,7 @@ product_plans:
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
+# CentOS
   - name: "CentOS79"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
@@ -52,10 +76,16 @@ product_plans:
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
+  - name: "CentOS Stream 8"
+    plan: "nightly_third_party"
+    organization: "{{ satellite_organization }}"
+
+# Oracle Enterprise Linux
   - name: "OEL79"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
+# Microsoft SQL Server
   - name: "Microsoft SQL Server for Linux 2022 for RHEL 8"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"

@@ -1,0 +1,5 @@
+---
+# SCAP scan search query to scan a test host
+
+scan:
+  search_query: "name ^ linsql0.example.ca"

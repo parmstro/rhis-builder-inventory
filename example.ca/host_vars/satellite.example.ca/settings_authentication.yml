@@ -1,6 +1,10 @@
 ---
 
 # yamllint disable rule:line-length
+# This file represents all the current possible configuration elements in
+# Satellite 6.17
+# Please uncomment those that you would like to configure
+# defaults can be set, use cautiously
 
 settings_authentication:
 

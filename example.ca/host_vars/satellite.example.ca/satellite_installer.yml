@@ -52,8 +52,9 @@ sat_installer_options:
   - '--foreman-proxy-content-enable-docker true'
   - '--foreman-proxy-content-enable-file true'
   - '--foreman-proxy-content-enable-yum true'
-#  - '--foreman-proxy-content-enable-ostree true'
+  - '--foreman-proxy-content-enable-ostree false'
   - '--foreman-proxy-plugin-discovery-install-images true'
+# Comment the next 9 lines out if your environment use external DHCP
   - '--foreman-proxy-dhcp true'
   - '--foreman-proxy-dhcp-interface "{{ dhcp_interface }}"'
   - '--foreman-proxy-dhcp-range "192.168.140.100 192.168.140.254"'

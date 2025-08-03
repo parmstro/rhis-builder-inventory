@@ -11,15 +11,16 @@ apply_standard_tuning: true
 
 # prerequisites
 cdn_organization_id: "{{ cdn_organization_id_vault }}"
-cdn_sat_activation_key: "{{ cdn_sat_activation_key_vault }}"
+cdn_sat_activation_key: "{{ cdn_activation_key_vault }}"
 
 repository_ids:
   - rhel-9-for-x86_64-baseos-rpms
   - rhel-9-for-x86_64-appstream-rpms
-  - satellite-6.16-for-rhel-9-x86_64-rpms
-  - satellite-maintenance-6.16-for-rhel-9-x86_64-rpms
+  - satellite-6.17-for-rhel-9-x86_64-rpms
+  - satellite-maintenance-6.17-for-rhel-9-x86_64-rpms
 
 sat_firewalld_zone: "public"
+sat_firewalld_interface: "eno1"
 sat_firewalld_services:
   - RH-Satellite-6
   - http
@@ -29,9 +30,9 @@ sat_firewalld_services:
   - tftp
 
 timeservers:
-  - "192.168.252.7"
-  - "192.168.252.8"
-  - "192.168.252.9"
+  - "time1.example.ca"
+  - "time2.example.ca"
+  - "time3.example.ca"
 
 # Set this variable to false to skip IdM integration
 # Note: this probably means you aren't using Realms anywhere

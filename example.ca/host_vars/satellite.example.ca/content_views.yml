@@ -5,10 +5,10 @@
 # For simple environments, you will strip many of these out.
 
 # NOTE: We may implement a list of lists. Isolate each content view configuration in its own
-# file and with its own variable name. Then generate a list with the variable names to 
+# file and with its own variable name. Then generate a list with the variable names to
 # generate a list that is interpreted by the role. It would eliminate a lot of editing
 # on a currently **way** too large file where many mistakes are possible.
-# This also has a testing advantage as small files and configurations can be managed 
+# This also has a testing advantage as small files and configurations can be managed
 # individually. The list of lists allows for easy composition.
 
 
@@ -76,6 +76,7 @@ content_views:
     environments:
       - "Library"
 
+
 # AAP Files for installing the Ansible Nodes for the RH-ISAM
 # REQUIRED for installing AAP25 with rhis-builder
 # OMIT if installing for AAP24
@@ -128,9 +129,10 @@ content_views:
     environments:
       - "Library"
 
+
 # EPEL8 for the WordPress sample app
 # REQUIRED for AAP24 or AAP25 sample SOE workflows
-# 
+
   - name: "EPEL8"
     desc: "Extra Packages for Enterprise Linux 8"
     org: "{{ satellite_organization }}"
@@ -139,8 +141,8 @@ content_views:
     repositories:
       - name: "EPEL8"
         product: "EPEL8"
-      - name: "EPEL8"                     # EPEL8 cv requires EPEL8_Stream
-        product: "EPEL8_Stream"           # required by testapp wordpress
+      - name: "EPEL8_Stream"                     # EPEL8 cv requires EPEL8_Stream
+        product: "EPEL8"                         # required by testapp wordpress
     filters:
       - name: "Include_All_Packages_No_Errata"
         type: "rpm"
@@ -170,8 +172,10 @@ content_views:
     environments:
       - "Library"
 
+
 # EPEL9 for the WordPress sample app
 # REQUIRED for AAP24 or AAP25 sample SOE workflows
+
   - name: "EPEL9"
     desc: "Extra Packages for Enterprise Linux 9"
     org: "{{ satellite_organization }}"
@@ -211,6 +215,7 @@ content_views:
 
 
 # REQUIRED for convert2RHEL sample workflows
+
   - name: "convert2rhel7"
     desc: "convert2rhel utilities for EL7 conversions"
     org: "{{ satellite_organization }}"
@@ -222,7 +227,6 @@ content_views:
     environments:
       - "Library"
 
-# REQUIRED for convert2RHEL sample workflows
   - name: "convert2rhel8"
     desc: "convert2rhel utilities for EL8 conversions"
     org: "{{ satellite_organization }}"
@@ -234,27 +238,30 @@ content_views:
     environments:
       - "Library"
 
-# RHEL8
+# SOE_RHEL10_x86_64
 # REQUIRED
-  - name: "SOE8"
-    desc: "Red Hat Enterprise Linux 8 Standard Operating Environment Content"
+
+  - name: "SOE10"
+    desc: "Red Hat Enterprise Linux 10 x86_64 Standard Operating Environment Content"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.0"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.0"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream RPMs 10"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.10"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS RPMs 10"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - Supplementary RPMs 10"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - Extensions RPMs 10"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Satellite 6 Client 2 for RHEL 8 x86_64 RPMs"
+      - name: "Red Hat Satellite Client 6 for RHEL 10 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 10 x86_64 RPMs"
         product: "Red Hat Enterprise Linux for x86_64"
     filters:
       - name: "Include_All_Packages_No_Errata"
@@ -297,27 +304,96 @@ content_views:
       - "Qualification"
       - "Production"
 
-# SOE_RHEL9_x86_64 - the new RHEL 8 :-)
+
+# RHEL10 SOE aarch64 content
+# OPTIONAL
+
+  - name: "SOE10_aarch64"
+    desc: "Red Hat Enterprise Linux 10 aarch64 Standard Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.0"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.0"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream RPMs 10"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS RPMs 10"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - Supplementary RPMs 10"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - Extensions RPMs 10"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Satellite Client 6 for RHEL 10 aarch64 RPMs"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 10 aarch64 RPMs"
+        product: "Red Hat Enterprise Linux for ARM 64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
+# SOE RHEL9 x86_64 content
 # REQUIRED
+
   - name: "SOE9"
     desc: "Red Hat Enterprise Linux 9 x86_64 Standard Operating Environment Content"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
     repositories:
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.5"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+        product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9"
-        product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
-        product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
-        product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
-        product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
         product: "Red Hat Enterprise Linux for x86_64"
@@ -365,8 +441,8 @@ content_views:
       - "Production"
 
 
-# SOE_RHEL9 aarch64 - the new RHEL8 aarch64  :-)
-# OPTIONAL
+# SOE RHEL9 aarch64 content
+# OPTIONAL - used for RHEL edge system use cases
 
   - name: "SOE9_aarch64"
     desc: "Red Hat Enterprise Linux 9 aarch64 Standard Operating Environment Content"
@@ -374,19 +450,19 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.6"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.6"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to work with RPi4++
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.2"     # known to work with RPi4++
+        product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream RPMs 9"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS RPMs 9"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - Supplementary RPMs 9"
-        product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.5"
-        product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to work with RPi4++
-        product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.5"
-        product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.2"     # known to work with RPi4++
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Satellite Client 6 for RHEL 9 aarch64 RPMs"
         product: "Red Hat Enterprise Linux for ARM 64"
@@ -433,6 +509,72 @@ content_views:
       - "Qualification"
       - "Production"
 
+
+# SOE RHEL8 content
+# REQUIRED
+
+  - name: "SOE8"
+    desc: "Red Hat Enterprise Linux 8 Standard Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.10"   # RHEL8.last
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Satellite 6 Client 2 for RHEL 8 x86_64 RPMs"
+        product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+      - name: "Exclude_FireFox"
+        type: "rpm"
+        inclusion: false
+        description: "Do not provide Firefox to servers"
+        repositories: "[]"
+        rules:
+          - name: "firefox*"
+            basearch: "x86_64"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Production"
+
+
 # REQUIRED for convert2RHEL sample workflows  - OPTIONAL Otherwise
 
   - name: "SOE7"
@@ -441,20 +583,20 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
-        product: "Red Hat Ansible Engine"
-      - name: "Red Hat Satellite Client 6 for RHEL 7 Server RPMs x86_64"
-        product: "Red Hat Enterprise Linux Server"
-      - name: "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64"
-        product: "Red Hat Enterprise Linux Server"
-      - name: "Red Hat Enterprise Linux 7 Server - Optional RPMs x86_64 7Server"
-        product: "Red Hat Enterprise Linux Server"
-      - name: "Red Hat Enterprise Linux 7 Server - RH Common RPMs x86_64 7Server"
+      - name: "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9"
         product: "Red Hat Enterprise Linux Server"
       - name: "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"
         product: "Red Hat Enterprise Linux Server"
-      - name: "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9"
+      - name: "Red Hat Enterprise Linux 7 Server - Optional RPMs x86_64 7Server"
         product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Enterprise Linux 7 Server - RH Common RPMs x86_64 7Server"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Satellite Client 6 for RHEL 7 Server RPMs x86_64"
+        product: "Red Hat Enterprise Linux Server"
+      - name: "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
+        product: "Red Hat Ansible Engine"
     filters:
       - name: "Include_All_Packages_No_Errata"
         type: "rpm"
@@ -507,7 +649,7 @@ content_views:
     environments:
       - "Library"
       - "Development"
-  
+
 
 # REQUIRED for convert2RHEL sample workflows - OPTIONAL Otherwise
 # This repo is now static - no filters
@@ -578,8 +720,6 @@ content_views:
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
-
-# REQUIRED for LEAPP sample workflows - OPTIONAL Otherwise
 
   - name: "LEAPP_2_RHEL9"
     desc: "Red Hat Enterprise Linux 9 for LEAPP migrations"
@@ -714,8 +854,45 @@ content_views:
     environments:
       - "Library"
 
-
-# REQUIRED for SOE sample workflows
+  - name: "JBoss8EAP8"
+    desc: "Red Hat JBoss EAP 8.x Content for RHEL 8"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "JBoss Enterprise Application Platform 8.0 RHEL 8 x86_64 RPMs"
+        product: "JBoss Enterprise Application Platform"
+      - name: "JBoss Enterprise Application Platform 8.1 RHEL 8 x86_64 RPMs"
+        product: "JBoss Enterprise Application Platform"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: "true"
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
 
   - name: "JBoss9EAP74"
     desc: "Red Hat JBoss EAP 7.4 Content for RHEL 9"
@@ -724,6 +901,46 @@ content_views:
     publication_threshold_hours: 24
     repositories:
       - name: "JBoss Enterprise Application Platform 7.4 RHEL 9 RPMs"
+        product: "JBoss Enterprise Application Platform"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: "true"
+        description: "Include all packages with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: "true"
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    date_filter_name: "Include_Errata_By_Date"
+    environments:
+      - "Library"
+
+  - name: "JBoss9EAP8"
+    desc: "Red Hat JBoss EAP 8.x Content for RHEL 9"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "JBoss Enterprise Application Platform 8.0 RHEL 9 x86_64 RPMs"
+        product: "JBoss Enterprise Application Platform"
+      - name: "JBoss Enterprise Application Platform 8.1 RHEL 9 x86_64 RPMs"
         product: "JBoss Enterprise Application Platform"
     filters:
       - name: "Include_All_Packages_No_Errata"
@@ -802,11 +1019,10 @@ content_views:
 
 composite_content_views:
 
-
 # REQUIRED for AAP24 deployment
 # OPTIONAL for AAP25 deployment
 
-  - name: "SOE_AAP24"
+  - name: "SOE9_AAP24"
     desc: "SOE for Ansible Automation Platform 2.4 Servers"
     org: "{{ satellite_organization }}"
     force_publish: false
@@ -823,10 +1039,11 @@ composite_content_views:
       - "Development"
       - "Qualification"
 
+
 # REQUIRED for AAP25 deployment
 # OPTIONAL for AAP24 deployment
 
-  - name: "SOE_AAP25"
+  - name: "SOE9_AAP25"
     desc: "SOE for Ansible Automation Platform 2.5 Servers"
     org: "{{ satellite_organization }}"
     force_publish: false
@@ -844,7 +1061,7 @@ composite_content_views:
       - "Qualification"
 
 
-# REQUIRED for SOE sample Workflows 
+# REQUIRED for SOE sample Workflows
 
   - name: "SOE8_EPEL"
     desc: "SOE for RHEL8 with EPEL"
@@ -861,9 +1078,6 @@ composite_content_views:
       - "Development"
       - "Qualification"
       - "Production"
-
-
-# REQUIRED for SOE sample Workflows 
 
   - name: "SOE9_EPEL"
     desc: "SOE for RHEL9 with EPEL9"
@@ -882,7 +1096,7 @@ composite_content_views:
       - "Production"
 
 
-# REQUIRED for convert2RHEL sample Workflows 
+# REQUIRED for convert2RHEL sample Workflows
 # OPTIONAL Otherwise
 
   - name: "convert_CentOS2RHEL7"
@@ -902,10 +1116,6 @@ composite_content_views:
       - "Development"
       - "Qualification"
 
-
-# REQUIRED for convert2RHEL sample Workflows 
-# OPTIONAL Otherwise
-
   - name: "convert_OEL2RHEL7"
     desc: "convert2RHEL content for OEL 7.9 to RHEL 7.9"
     org: "{{ satellite_organization }}"
@@ -924,7 +1134,7 @@ composite_content_views:
       - "Qualification"
 
 
-# REQUIRED for LEAPP sample Workflows 
+# REQUIRED for LEAPP sample Workflows
 # OPTIONAL Otherwise
 
   - name: "LEAPP_7_2_8"
@@ -942,9 +1152,6 @@ composite_content_views:
       - "Development"
       - "Qualification"
 
-# REQUIRED for LEAPP sample Workflows 
-# OPTIONAL Otherwise
-
   - name: "LEAPP_8_2_9"
     desc: "Migrate from RHEL 8 to RHEL 9"
     org: "{{ satellite_organization }}"
@@ -961,7 +1168,7 @@ composite_content_views:
       - "Qualification"
 
 
-# REQUIRED for SOE sample Workflows 
+# REQUIRED for SOE sample Workflows
 
   - name: "SOE8_JBoss"
     desc: "Production JBoss Applications"
@@ -973,14 +1180,13 @@ composite_content_views:
         latest: true
       - content_view: "JBoss8EAP74"
         latest: true
+      - content_view: "JBoss8EAP8"
+        latest: true
     environments:
       - "Library"
       - "Development"
       - "Qualification"
       - "Production"
-
-
-# REQUIRED for SOE sample Workflows 
 
   - name: "SOE9_JBoss"
     desc: "Production JBoss Applications"
@@ -991,6 +1197,8 @@ composite_content_views:
       - content_view: "SOE9"
         latest: true
       - content_view: "JBoss9EAP74"
+        latest: true
+      - content_view: "JBoss9EAP8"
         latest: true
     environments:
       - "Library"

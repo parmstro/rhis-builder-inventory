@@ -1,19 +1,23 @@
 ---
 # settings for rh_cloud capabilities
+# This file represents all the current possible configuration elements in
+# Satellite 6.17
+# Please uncomment those that you would like to configure
+# defaults can be set, use cautiously
 
 settings_rhcloud:
-  - description: "Enable automatic upload of your host inventory to the Red Hat cloud"
-    settings_type: "boolean"
-    default: true
-    name: "allow_auto_inventory_upload"
-    full_name: "Automatic inventory upload"
-    value: true
-    readonly: false
-    encrypted: false
+#   - description: "Enable automatic upload of your host inventory to the Red Hat cloud"
+#     settings_type: "boolean"
+# #    default: true
+#     name: "allow_auto_inventory_upload"
+#     full_name: "Automatic inventory upload"
+#     value: true
+#     readonly: false
+#     encrypted: false
 
   - description: "Enable automatic synchronization of Insights recommendations from the Red Hat cloud"
     settings_type: "boolean"
-    default: false
+#    default: false
     id: "allow_auto_insights_sync"
     name: "allow_auto_insights_sync"
     full_name: "Synchronize recommendations Automatically"
@@ -23,7 +27,7 @@ settings_rhcloud:
 
   - description: "Enable automatic deletion of mismatched host records from the Red Hat cloud"
     settings_type: "boolean"
-    default: false
+#    default: false
     id: "allow_auto_insights_mismatch_delete"
     name: "allow_auto_insights_mismatch_delete"
     full_name: "Automatic mismatch deletion"
@@ -31,51 +35,51 @@ settings_rhcloud:
     readonly: false
     encrypted: false
 
-  - description: "Obfuscate host names sent to the Red Hat cloud"
-    settings_type: "boolean"
-    default: false
-    id: "obfuscate_inventory_hostnames"
-    name: "obfuscate_inventory_hostnames"
-    full_name: "Obfuscate host names"
-    value: false
-    readonly: false
-    encrypted: false
+#   - description: "Obfuscate host names sent to the Red Hat cloud"
+#     settings_type: "boolean"
+# #    default: false
+#     id: "obfuscate_inventory_hostnames"
+#     name: "obfuscate_inventory_hostnames"
+#     full_name: "Obfuscate host names"
+#     value: false
+#     readonly: false
+#     encrypted: false
 
-  - description: "Obfuscate ipv4 addresses sent to the Red Hat cloud"
-    settings_type: "boolean"
-    default: false
-    id: "obfuscate_inventory_ips"
-    name: "obfuscate_inventory_ips"
-    full_name: "Obfuscate host ipv4 addresses"
-    value: false
-    readonly: false
-    encrypted: false
+#   - description: "Obfuscate ipv4 addresses sent to the Red Hat cloud"
+#     settings_type: "boolean"
+# #    default: false
+#     id: "obfuscate_inventory_ips"
+#     name: "obfuscate_inventory_ips"
+#     full_name: "Obfuscate host ipv4 addresses"
+#     value: false
+#     readonly: false
+#     encrypted: false
 
-  - description: "Exclude installed packages from being uploaded to the Red Hat cloud"
-    settings_type: "boolean"
-    default: false
-    id: "exclude_installed_packages"
-    name: "exclude_installed_packages"
-    full_name: "Exclude installed Packages"
-    value: false
-    readonly: false
-    encrypted: false
+#   - description: "Exclude installed packages from being uploaded to the Red Hat cloud"
+#     settings_type: "boolean"
+# #    default: false
+#     id: "exclude_installed_packages"
+#     name: "exclude_installed_packages"
+#     full_name: "Exclude installed Packages"
+#     value: false
+#     readonly: false
+#     encrypted: false
 
-  - description: "Should import include parameter tags from Foreman?"
-    settings_type: "boolean"
-    default: false
-    id: "include_parameter_tags"
-    name: "include_parameter_tags"
-    full_name: "Include parameters in insights-client reports"
-    value: false
-    readonly: false
+#   - description: "Should import include parameter tags from Foreman?"
+#     settings_type: "boolean"
+# #    default: false
+#     id: "include_parameter_tags"
+#     name: "include_parameter_tags"
+#     full_name: "Include parameters in insights-client reports"
+#     value: false
+#     readonly: false
 
-  - description: "RHC daemon id"
-    settings_type: null
-    default: null
-    id: "rhc_instance_id"
-    name: "rhc_instance_id"
-    full_name: "ID of the RHC(Yggdrasil) daemon"
-    value: "86217994-2945-4dc0-8f9f-deaa2acfefe5"
-    readonly: false
-    encrypted: false
+#   - description: "RHC daemon id"
+#     settings_type: null
+# #    default: null
+#     id: "rhc_instance_id"
+#     name: "rhc_instance_id"
+#     full_name: "ID of the RHC(Yggdrasil) daemon"
+#     value: "86217994-2945-4dc0-8f9f-deaa2acfefe5"
+#     readonly: false
+#     encrypted: false

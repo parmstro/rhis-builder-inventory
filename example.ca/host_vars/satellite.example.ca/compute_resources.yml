@@ -24,7 +24,7 @@ azure1_client_secret_id: "{{ azure1_client_secret_id_vault }}"
 azure1_client_secret: "{{ azure1_client_secret_vault }}"
 azure1_cloud: "azure"
 azure1_region: "Canada Central"
-azure1_resourcegroup1: "rg_example_ca"
+azure1_resourcegroup1: "rg_parmstrong_ca"
 
 aws1_access_key: "{{ aws1_access_key_vault }}"
 aws1_secret_key: "{{ aws1_secret_key_vault }}"
@@ -40,7 +40,7 @@ compute_resources:
     provider_params:
       caching_enabled: false  # setting this to true currently causes some server faults.
       datacenter: "example.ca"
-      url: "192.168.140.30"
+      url: "vcenter.example.ca"
       user: "{{ vcenter_service_username }}"
       password: "{{ vcenter_service_password }}"
 
