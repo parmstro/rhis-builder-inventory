@@ -10,6 +10,7 @@ satellite_location: "{{ satellite_initial_location }}"
 satellite_organization: "{{ satellite_initial_organization }}"
 satellite_domain: "{{ _global_domain_name }}"
 satellite_server_url: "https://{{ satellite_fqdn }}"
+satellite_url: "{{ satellite_server_url }}"
 satellite_validate_certs: true
 
 search_dh_mac: "ff:ff:ff:ff:ff:ff"
@@ -37,45 +38,45 @@ _default_child_iface2: "enp2s0f1"
 
 
 # Ansible 2.4 growth deployment
-platform_hosts:
-  - fqdn: "aapcontroller24.{{ _global_domain_name }}"
-    delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
-    hostgroup: "hg_x86_64_rhel9_metal/aap_24"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
-    compute_resource: "baremetal"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:d2"
-        ip: "192.168.140.13"
+# platform_hosts:
+#   - fqdn: "aapcontroller24.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_metal/aap_24"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "baremetal"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: "54:b2:03:f1:0b:d2"
+#         ip: "192.168.140.13"
 
 
-  - fqdn: "aaphub24.{{ _global_domain_name }}"
-    delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
-    hostgroup: "hg_x86_64_rhel9_metal/aap_24"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
-    compute_resource: "baremetal"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:6a"
-        ip: "192.168.140.14"
+#   - fqdn: "aaphub24.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_metal/aap_24"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "baremetal"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: "54:b2:03:f1:0b:6a"
+#         ip: "192.168.140.14"
 
 # AAP 2.5 Growth Deployment
 # platform_hosts:
