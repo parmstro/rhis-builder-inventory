@@ -26,6 +26,7 @@ compute_profiles:
           memoryHotAddEnabled: true
           cpuHotAddEnabled: true
           add_cdrom: false
+          firmware: "uefi"
           boot_order:
             - "network"
             - "disk"
@@ -84,6 +85,7 @@ compute_profiles:
           memoryHotAddEnabled: true
           cpuHotAddEnabled: true
           add_cdrom: false
+          firmware: "uefi"
           boot_order:
             - "network"
             - "disk"
@@ -142,6 +144,7 @@ compute_profiles:
           memoryHotAddEnabled: true
           cpuHotAddEnabled: true
           add_cdrom: false
+          firmware: "uefi"
           boot_order:
             - "network"
             - "disk"

@@ -1,6 +1,6 @@
 <%#
 name: SOE Kickstart Default
-description: Satellite 6.12 Kickstart Default template clone with customizations
+description: Satellite 6.17 Standard Operating Environment Kickstart Default Template
 snippet: false
 model: ProvisioningTemplate
 kind: provision
@@ -18,9 +18,12 @@ test_on:
 - host4static
 - host6static
 description: |
-  This kickstart template has been customized to support NBDE and Satellite 6.12
-  The provisioning template for kickstart based distributions. The output is fetched by Anaconda installer during
-  the network based installation. To customize the installation, modify the host parameters.
+  This kickstart template has been customized to support NBDE
+  The provisioning template is designed for kickstart based distributions. 
+  The output is fetched by Anaconda installer during the network based installation. 
+  To customize the installation, modify the host parameters.
+  The RHIS environment configures global parameters with reasonable defaults for all allowable parameters.
+  These parameters can be overridden in hostgroup configurations or for individual builds.
 
   This template accepts the following parameters:
   - lang: string (default="en_US.UTF-8")
@@ -32,6 +35,7 @@ description: |
   - enable-epel: boolean (default=false)
   
   - salt_master: string (default=undef)
+  
   - ntp-server: string (default=undef)
   - bootloader-append: string (default="nofb quiet splash=quiet")
   - disable-firewall: boolean (default=false)
@@ -52,7 +56,6 @@ description: |
   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-kickstart-syntax
   - https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user
 -%>
-# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
 
 <%
   rhel_compatible = @host.operatingsystem.family == 'Redhat' && @host.operatingsystem.name != 'Fedora'
@@ -70,6 +73,21 @@ description: |
   iface = @host.provision_interface
   appstream_present = false
 -%>
+
+# ##### Begin Rendering Information #####
+# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
+# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
+# for <%= @host %> running <%= @host.operatingsystem.name %> <%= os_major %> <%= @arch %>
+# Organization: <%= @host.organization %>
+# Location: <%= @host.location %>
+<%
+if plugin_present?('katello')
+-%>
+# Lifecycle environment: <%= @host.single_lifecycle_environment %>
+# Content View: <%= @host.single_content_view %>
+# Content Source: <%= @host.content_source %>
+<% end -%>
+# ##### End Rendering Information #####
 
 <% if (is_fedora && os_major < 29) || (rhel_compatible && os_major <= 7) -%>
 install
@@ -91,100 +109,31 @@ liveimg --url=<%= liveimg_url %> <%= proxy_string %>
 <% else %>
 <%= @mediapath %><%= proxy_string %>
 <% @additional_media.each do |medium| -%>
-<% if rhel_compatible && @host.operatingsystem.name.downcase.include?("centos") && os_major >= 8 && medium[:url] && medium[:url].include?("AppStream") -%>
-# renamed from "<%= medium[:url] %>" for CentOS Anaconda to work
-repo --name AppStream --baseurl <%= medium[:url] %>
-<% else -%>
 repo --name <%= medium[:name] %> --baseurl <%= medium[:url] %> <%= medium[:install] ? ' --install' : '' %><%= proxy_string %>
-<% end -%>
 <% end -%>
 <%= snippet_if_exists(template_name + " custom repositories") %>
 <% end %>
+
 lang <%= host_param('lang') || 'en_US.UTF-8' %>
 selinux --<%= host_param('selinux-mode') || host_param('selinux') || 'enforcing' %>
 keyboard <%= host_param('keyboard') || 'us' %>
-skipx
 
 <%
-  network_options = []
-  nameservers = []
-  subnet4 = iface.subnet
-  subnet6 = iface.subnet6
-
-  # device and hostname
-  if iface.bond? && rhel_compatible && os_major >= 6
-    network_options.push("--device=#{iface.identifier}")
-  else
-    network_options.push("--device=#{iface.mac || iface.identifier}")
-  end
-  network_options.push("--hostname #{@host.name}")
-
-  # single stack
-  if subnet4 && !subnet6
-    network_options.push("--noipv6")
-  elsif !subnet4 && subnet6
-    network_options.push("--noipv4")
-  end
-
-  # dual stack MTU check
-  raise("IPv4 and IPv6 subnets have different MTU") if subnet4 && subnet6 && subnet4.mtu.present? && subnet6.mtu.present? && subnet4.mtu != subnet6.mtu
-
-  # IPv4
-  if (subnet4 && !subnet4.dhcp_boot_mode?) || @static
-    network_options.push("--bootproto static")
-    network_options.push("--ip=#{iface.ip}")
-    network_options.push("--netmask=#{subnet4.mask}")
-    network_options.push("--gateway=#{subnet4.gateway}")
-  elsif subnet4 && subnet4.dhcp_boot_mode?
-    network_options.push("--bootproto dhcp")
-  end
-  if subnet4
-    nameservers.concat(subnet4.dns_servers)
-    network_options.push("--mtu=#{subnet4.mtu}") if subnet4.mtu.present?
-  end
-
-  # IPv6
-  if rhel_compatible && os_major >= 6
-    if (subnet6 && !subnet6.dhcp_boot_mode?) || @static6
-      network_options.push("--ipv6=#{iface.ip6}/#{subnet6.cidr}")
-      network_options.push("--ipv6gateway=#{subnet6.gateway}")
-    elsif subnet6 && subnet6.dhcp_boot_mode?
-      if host_param_true?('use-slaac')
-        network_options.push("--ipv6 auto")
-      else
-        network_options.push("--ipv6 dhcp")
-      end
-    end
-    if subnet6
-      nameservers.concat(subnet6.dns_servers)
-      network_options.push("--mtu=#{subnet6.mtu}") if subnet6.mtu.present?
-    end
-  end
-
-  # bond
-  if iface.bond? && rhel_compatible && os_major >= 6
-    bond_slaves = iface.attached_devices_identifiers.join(',')
-    network_options.push("--bondslaves=#{bond_slaves}")
-    network_options.push("--bondopts=mode=#{iface.mode},#{iface.bond_options.tr(' ', ',')}")
-  end
-
-  # VLAN (only on physical is recognized)
-  if iface.virtual? && iface.tag.present? && iface.attached_to.present?
-    if rhel_compatible && os_major == 6
-      network_options.push("--vlanid=#{iface.tag}")
-    else
-      network_options.push("--interfacename=vlan#{iface.tag}")
-    end
-  end
-
-  # DNS
-  if nameservers.size > 0
-    network_options.push("--nameserver=#{nameservers.join(',')}")
-  else
-    network_options.push("--nodns")
-  end
+# start with provisioning interface, then other non-bond non-bridge interfaces and the bonds + bridges at the end
+@host.interfaces.reject{ |iface| iface.bmc? }.sort_by { |iface| (iface.bond? || iface.bridge?) ? 0 : iface.provision? ? 20 : 10 }.each do |iface|
 -%>
-network <%= network_options.join(' ') %>
+<%= snippet(
+      'kickstart_network_interface',
+      variables: {
+        iface: iface,
+        host: @host,
+        static: @static,
+        static6: @static6
+      }
+    ) -%>
+<%
+end
+-%>
 
 rootpw --iscrypted <%= root_pass %>
 <% if host_param_true?('disable-firewall') -%>
@@ -243,10 +192,22 @@ repo --name="Server-Mysql"
 <%= @host.diskLayout %>
 <% end -%>
 
+
+<% if host_param_true?('use_graphical_installer') -%>
+graphical
+<% else -%>
+skipx
 text
-reboot
+<% end -%>
+reboot<% if host_param_true?('install_reboot_kexec') %> --kexec<% end %>
 
 %packages
+<% if host_param('install_environment_group') -%>
+@^<%= host_param('install_environment_group') %>
+<% else -%>
+@^minimal-environment
+<% end -%>
+
 <%= snippet_if_exists(template_name + " custom packages") %>
 yum
 dhclient
@@ -260,7 +221,7 @@ chrony
 <% if rhel_compatible && os_major < 9 -%>
 wget
 <% end -%>
-@Core
+
 <% if host_param_true?('fips_enabled') -%>
 <%=   snippet 'fips_packages' %>
 <% end -%>
@@ -296,7 +257,6 @@ exec < /dev/tty3 > /dev/tty3
 chvt 3
 (
 logger "Starting anaconda <%= @host %> postinstall"
-<%= snippet 'soe_kickstart_networking_setup' %>
 
 # Set firewall default zone to drop asap
 <% if host_param('network_zone') != 'default' && host_param('network_zone') != '' -%>
