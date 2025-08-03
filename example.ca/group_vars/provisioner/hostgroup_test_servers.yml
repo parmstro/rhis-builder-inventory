@@ -12,6 +12,7 @@ platform_hosts:
     kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
     compute_resource: "baremetal"
     comment: "rhis_test_host deleteme"
+    pxe_loader: "Grub2 UEFI"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -37,7 +38,7 @@ platform_hosts:
     operatingsystem: "RHEL 8.10"
     kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
     ptable: "Kickstart default"
-    pxe_loader: "PXELinux UEFI"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -49,6 +50,7 @@ platform_hosts:
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
     compute_resource: "baremetal"
     comment: "rhis_test_host deleteme"
+    pxe_loader: "Grub2 UEFI"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -73,7 +75,7 @@ platform_hosts:
     operatingsystem: "RHEL 9.5"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
     ptable: "Kickstart default"
-    pxe_loader: "PXELinux UEFI"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -84,6 +86,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_cis2"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -94,6 +97,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_jboss"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -104,6 +108,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -114,6 +119,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -124,6 +130,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/qa/soe8_qa_jboss"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -134,6 +141,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/qa/soe8_qa_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -144,6 +152,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel8_vm/qa/soe8_qa_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -154,6 +163,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_cis2"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -164,6 +174,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_jboss"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -174,6 +185,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -184,6 +196,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -194,6 +207,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_jboss"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
@@ -204,6 +218,7 @@ platform_hosts:
     hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
+    pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
