@@ -258,14 +258,6 @@ chvt 3
 (
 logger "Starting anaconda <%= @host %> postinstall"
 
-# Set firewall default zone to drop asap
-<% if host_param('network_zone') != 'default' && host_param('network_zone') != '' -%>
-  firewall-offline-cmd --set-default-zone=drop
-  firewall-offline-cmd --zone=<%= host_param('network_zone') -%> --change-interface=$sanitized_real
-  
-  #sed -i s/^DefaultZone=.*/DefaultZone=drop/g /etc/firewalld/firewalld.conf
-<% end -%>
-
 # Set firewall zone drifting to no asap
 <% if (is_fedora && os_major <= 29) || (rhel_compatible && os_major <= 8) -%>
   sed -i s/^AllowZoneDrifting=yes/AllowZoneDrifting=no/g /etc/firewalld/firewalld.conf
@@ -306,10 +298,10 @@ subscription-manager repos
   <% end -%>
 <%= snippet 'freeipa_register' %>
 <% end -%>
+
 <% if host_param_true?('use_NBDE') %>
   <%= snippet 'soe_use_NBDE' %>
 <% end -%>
-
 
 <% unless host_param_false?('package_upgrade') -%>
 # update all the base packages from the updates repository

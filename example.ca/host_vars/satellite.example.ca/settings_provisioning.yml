@@ -72,7 +72,7 @@ settings_provisioning:
     description: "Satellite will update the host IP with the IP that made the built request"
     settings_type: "boolean"
 #    default: false
-    value: true
+    value: false
 
 #   - name: "use_shortname_for_vms"
 #     full_name: "Use short name for VMs"
