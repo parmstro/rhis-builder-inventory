@@ -38,17 +38,6 @@ provisioning_templates:
     locations:
       - "{{ satellite_location }}"
 
-  - name: "soe_kickstart_ifcfg_generic_interface"
-    type: "snippet"
-    locked: false
-    description: "Modified to support defined network zone"
-    audit_comment: "created by rhis-builder-satellite"
-    path: "prov_template_snippet_soe_kickstart_ifcfg_generic_interface.j2"
-    organizations:
-      - "{{ satellite_organization }}"
-    locations:
-      - "{{ satellite_location }}"
-
   - name: "soe_install_cockpit"
     type: "snippet"
     locked: false
