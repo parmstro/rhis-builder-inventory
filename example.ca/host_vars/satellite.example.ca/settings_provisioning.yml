@@ -67,6 +67,7 @@ settings_provisioning:
 # #    default: "10.0.0.0"
 #     value: "192.168.0.1"
 
+# Currently if this is true, we get a build loop with our default kickstart
   - name: "update_ip_from_built_request"
     full_name: "Update IP from built request"
     description: "Satellite will update the host IP with the IP that made the built request"
