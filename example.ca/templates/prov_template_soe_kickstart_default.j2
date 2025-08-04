@@ -17,6 +17,7 @@ test_on:
 - host4and6dhcp
 - host4static
 - host6static
+
 description: |
   This kickstart template has been customized to support NBDE
   The provisioning template is designed for kickstart based distributions. 
@@ -75,7 +76,6 @@ description: |
 -%>
 
 # ##### Begin Rendering Information #####
-# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
 # This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
 # for <%= @host %> running <%= @host.operatingsystem.name %> <%= os_major %> <%= @arch %>
 # Organization: <%= @host.organization %>
@@ -298,10 +298,10 @@ subscription-manager repos
   <% end -%>
 <%= snippet 'freeipa_register' %>
 <% end -%>
-
 <% if host_param_true?('use_NBDE') %>
   <%= snippet 'soe_use_NBDE' %>
 <% end -%>
+
 
 <% unless host_param_false?('package_upgrade') -%>
 # update all the base packages from the updates repository

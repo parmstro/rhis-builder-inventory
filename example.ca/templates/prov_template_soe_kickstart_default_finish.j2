@@ -9,6 +9,7 @@ oses:
 - CentOS_Stream
 - Fedora
 - Rocky
+
 description: |
   This Finish Template has been customized to support NBDE and Satellite 6.12
   A finish template executed at the end of the image based provisioning
@@ -111,7 +112,6 @@ chmod +x /root/ansible_provisioning_call.sh
 <% if host_param_true?('use_NBDE') %>
   clevis luks pass -d /dev/sda2 -s 1 | cryptsetup reencrypt /dev/sda2
 <% end -%>
-
 
 sync
 
