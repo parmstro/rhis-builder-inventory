@@ -3,27 +3,30 @@
 # The goal of the test_hosthost.yml configuration file is to exercise all the hostgroups deployed in the
 # rhis-builder-satellite deployment to ensure capability and to ensure that pipelines will work appropriately
 
+build_release_limit: 6  # a good number is the number of hypervisors, this should be adjusted to compensate for array write saturation.
+build_release_timeout: 1200  # 20 minutes should be plenty of time, decrease this if you have a fast array. That is usually the bottleneck.
+
 platform_hosts:
-  # - fqdn: "hg-x86-64-rhel8-metal1.example.ca"
-  #   delete_host: false
-  #   organization: "Default Organization"
-  #   location: "Default Location"
-  #   hostgroup: "hg_x86_64_rhel8_metal"
-  #   kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
-  #   compute_resource: "baremetal"
-  #   comment: "rhis_test_host deleteme"
-  #   pxe_loader: "Grub2 UEFI"
-  #   interfaces_attributes:
-  #     - type: "interface"
-  #       identifier: "{{ _default_provision_iface }}"
-  #       domain: "{{ _default_domain }}"
-  #       execution: true
-  #       managed: true
-  #       primary: true
-  #       provision: true
-  #       subnet: "example.ca"
-  #       mac: "54:b2:03:f1:0b:9f"
-  #       ip: "192.168.140.201"
+  - fqdn: "hg-x86-64-rhel8-metal1.example.ca"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel8_metal"
+    kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    pxe_loader: "Grub2 UEFI"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "example.ca"
+        mac: "54:b2:03:f1:0b:9f"
+        ip: "192.168.140.201"
 
   - fqdn: "hg-x86-64-rhel8-vm1.example.ca"
     delete_host: false
@@ -42,26 +45,26 @@ platform_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  # - fqdn: "hg-x86-64-rhel9-metal1.example.ca"
-  #   delete_host: false
-  #   organization: "Default Organization"
-  #   location: "Default Location"
-  #   hostgroup: "hg_x86_64_rhel9_metal"
-  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
-  #   compute_resource: "baremetal"
-  #   comment: "rhis_test_host deleteme"
-  #   pxe_loader: "Grub2 UEFI"
-  #   interfaces_attributes:
-  #     - type: "interface"
-  #       identifier: "{{ _default_provision_iface }}"
-  #       domain: "{{ _default_domain }}"
-  #       execution: true
-  #       managed: true
-  #       primary: true
-  #       provision: true
-  #       subnet: "{{ _default_subnetname }}"
-  #       mac: "54:b2:03:f1:0b:d2"
-  #       ip: "192.168.140.202"
+  - fqdn: "hg-x86-64-rhel9-metal1.example.ca"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    pxe_loader: "Grub2 UEFI"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:d2"
+        ip: "192.168.140.202"
 
   - fqdn: "hg-x86-64-rhel9-vm1.example.ca"
     delete_host: false
