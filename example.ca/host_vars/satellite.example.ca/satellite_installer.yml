@@ -57,7 +57,7 @@ sat_installer_options:
 # Comment the next 9 lines out if your environment use external DHCP
   - '--foreman-proxy-dhcp true'
   - '--foreman-proxy-dhcp-interface "{{ dhcp_interface }}"'
-  - '--foreman-proxy-dhcp-range "192.168.140.100 192.168.140.254"'
+  - '--foreman-proxy-dhcp-range "192.168.141.100 192.168.141.254"'
   - '--foreman-proxy-dhcp-gateway "192.168.140.1"'
   - '--foreman-proxy-dhcp-nameservers "192.168.140.5"'
   - '--foreman-proxy-dhcp-option-domain "[{{ satellite_domain }}]"'
