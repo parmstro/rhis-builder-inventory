@@ -4,8 +4,8 @@
 # rhis-builder-satellite deployment to ensure capability and to ensure that pipelines will work appropriately
 
 build_release_limit: 4  # a good number is the number of hypervisors, this should be adjusted to compensate for array write saturation.
-# 30 minutes is a lot of time, but I have small storage devices, decrease this if you have a fast array. That is usually the bottleneck.
-build_release_timeout: 1800
+# 30 minutes is a lot of time, but I have slow storage devices for VMs, decrease this if you have a fast array. That is usually the bottleneck.
+build_release_timeout: 1800 # baremetal reliably builds in under 10 minutes - building 14 hosts at once was a non-issue.
 
 platform_hosts:
   - fqdn: "hg-x86-64-rhel8-metal1.example.ca"
