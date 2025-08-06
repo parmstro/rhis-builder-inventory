@@ -3,8 +3,9 @@
 # The goal of the test_hosthost.yml configuration file is to exercise all the hostgroups deployed in the
 # rhis-builder-satellite deployment to ensure capability and to ensure that pipelines will work appropriately
 
-build_release_limit: 6  # a good number is the number of hypervisors, this should be adjusted to compensate for array write saturation.
-build_release_timeout: 1200  # 20 minutes should be plenty of time, decrease this if you have a fast array. That is usually the bottleneck.
+build_release_limit: 4  # a good number is the number of hypervisors, this should be adjusted to compensate for array write saturation.
+# 30 minutes is a lot of time, but I have small storage devices, decrease this if you have a fast array. That is usually the bottleneck.
+build_release_timeout: 1800
 
 platform_hosts:
   - fqdn: "hg-x86-64-rhel8-metal1.example.ca"
