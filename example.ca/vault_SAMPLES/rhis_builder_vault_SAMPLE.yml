@@ -293,6 +293,6 @@ vmware_vcenter_password_vault: "{{ vcenter_password_vault }}"                   
 # rhis-builder-yubi vault
 #####################################
 piv_mgmt_pin_vault: "123498"                                                                       # notsecret
-piv_mgmt_FIPS_pin_vault: "12349876"                                                                # notsecret
+piv_mgmt_fips_pin_vault: "12349876"                                                                # notsecret
 piv_secure_dir_vault: "/root/yubico"                                                               # notsecret
 piv_vault_dir_vault: "/root/vault"                                                                 # notsecret
