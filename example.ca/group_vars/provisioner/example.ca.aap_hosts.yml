@@ -78,7 +78,7 @@ aap24_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:d2"
+        mac: "54:b2:03:f1:0b:46"
         ip: "192.168.140.15"
 
 
@@ -101,7 +101,7 @@ aap24_hosts:
 #         primary: true
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
-#         mac: "54:b2:03:f1:0b:6a"
+#         mac: "54:b2:03:f1:0b:9f"
 #         ip: "192.168.140.44"
 
 #   - fqdn: "{{ groups['aap_controllers'][0] }}"
@@ -120,7 +120,7 @@ aap24_hosts:
 #         primary: true
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
-#         mac: "54:b2:03:f1:0b:d2"
+#         mac: "54:b2:03:f1:0b:46"
 #         ip: "192.168.140.45"
 
 #   - fqdn: "{{ groups['aap_db'][0] }}"
