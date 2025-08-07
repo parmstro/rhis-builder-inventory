@@ -2,7 +2,7 @@
 
 # Hosts to test convert2rhel content and workflows
 
-convert2rhel_hosts:
+convert2rhel_test_hosts:
   - fqdn: "centostest1.example.ca"
     delete_host: false
     organization: "Default Organization"

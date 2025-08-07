@@ -31,4 +31,9 @@ build_release_limit: 4  # a good number is the number of hypervisors, this shoul
 build_release_timeout: 1800 # baremetal reliably builds in under 10 minutes - building 14 hosts at once was a non-issue.
 
 platform_hosts:
-  "{{ aap_hosts }}"
+  "{{ aap24_hosts }}"
+#  "{{ bond_test_hosts }}"
+#  "{{ capsule_hosts }}"
+#  "{{ convert2rhel_test_hosts }}"
+#  "{{ hg_test_hosts }}"
+#  "{{ kvm_hypervisor_test_hosts }}

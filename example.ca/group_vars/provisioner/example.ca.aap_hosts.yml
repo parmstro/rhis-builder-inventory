@@ -40,27 +40,7 @@ _default_child_iface2: "enp2s0f1"
 # These are bare metal hosts and specific to the development lab
 # Ansible 2.4 growth deployment
 
-aap_hosts:
-# The aap controller node
-  - fqdn: "{{ groups['aap_controllers'][0] }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap9_24"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
-    compute_resource: "baremetal"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:d2"
-        ip: "192.168.140.13"
-
+aap24_hosts:
 # The aap hub node
   - fqdn: "{{ groups['aap_hubs'][0] }}"
     delete_host: false
@@ -81,26 +61,30 @@ aap_hosts:
         mac: "54:b2:03:f1:0b:6a"
         ip: "192.168.140.14"
 
+# The aap controller node
+  - fqdn: "{{ groups['aap_controllers'][0] }}"
+    delete_host: false
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
+    hostgroup: "hg_x86_64_rhel9_metal/aap9_24"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+    compute_resource: "baremetal"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:d2"
+        ip: "192.168.140.15"
+
+
 # AAP 2.5 Growth Deployment
-# platform_hosts:
-#   - fqdn: "{{ groups['aap_controllers'][0] }}"
-#     delete_host: false
-#     organization: "{{ satellite_organization }}"
-#     location: "{{ satellite_location }}"
-#     hostgroup: "hg_x86_64_rhel9_metal/aap_25"
-#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
-#     compute_resource: "baremetal"
-#     interfaces_attributes:
-#       - type: "interface"
-#         identifier: "{{ _default_provision_iface }}"
-#         domain: "{{ _default_domain }}"
-#         execution: true
-#         managed: true
-#         primary: true
-#         provision: true
-#         subnet: "{{ _default_subnetname }}"
-#         mac: "54:b2:03:f1:0b:d2"
-#         ip: "192.168.140.13"
+# aap25_hosts:
+
 #   - fqdn: "{{ groups['aap_hubs'][0] }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
@@ -118,7 +102,27 @@ aap_hosts:
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
 #         mac: "54:b2:03:f1:0b:6a"
-#         ip: "192.168.140.14"
+#         ip: "192.168.140.44"
+
+#   - fqdn: "{{ groups['aap_controllers'][0] }}"
+#     delete_host: false
+#     organization: "{{ satellite_organization }}"
+#     location: "{{ satellite_location }}"
+#     hostgroup: "hg_x86_64_rhel9_metal/aap_25"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+#     compute_resource: "baremetal"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: "54:b2:03:f1:0b:d2"
+#         ip: "192.168.140.45"
+
 #   - fqdn: "{{ groups['aap_db'][0] }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
@@ -127,7 +131,8 @@ aap_hosts:
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
 #     compute_resource: "{{ vm_compute_resource }}"
 #     mac: "00:50:56:ff:ff:ff"
-#     ip: "192.168.140.15"
+#     ip: "192.168.140.46"
+
 #   - fqdn: "{{ groups['aap_gateway'][0] }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
@@ -136,7 +141,8 @@ aap_hosts:
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
 #     compute_resource: "{{ vm_compute_resource }}"
 #     mac: "00:50:56:ff:ff:ff"
-#     ip: "192.168.140.16"
+#     ip: "192.168.140.47"
+
 #   - fqdn: "{{ groups['aap_eda_controller'][0] }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
@@ -145,4 +151,4 @@ aap_hosts:
 #     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
 #     compute_resource: "{{ vm_compute_resource }}"
 #     mac: "00:50:56:ff:ff:ff"
-#     ip: "192.168.140.17"
+#     ip: "192.168.140.48"
