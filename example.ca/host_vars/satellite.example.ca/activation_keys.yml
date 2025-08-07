@@ -335,6 +335,22 @@ activation_keys:
     lifecycle_environment: "Production"
     unlimited_hosts: true
 
+  - name: "SOE7ELS"
+    state: "present"
+    description: "Activate a RHEL 7 ELS system in development"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "rhel-7-server-els-rpms"
+        override: "enabled"
+      - label: "rhel-7-server-els-optional-rpms"
+        override: "enabled"
+      - label: "rhel-7-server-satellite-client-6-rpms"
+        override: "enabled"
+    content_view: "SOE7ELS"
+    lifecycle_environment: "Development"
+    unlimited_hosts: true
+
   - name: "SOE7"
     state: "present"
     description: "Activate a RHEL 7 system in development"
