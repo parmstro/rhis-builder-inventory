@@ -12,7 +12,7 @@ redhat_registry_password: "{{ redhat_registry_password_vault }}"
 automation_hub_token: "{{ automation_hub_token_vault }}"
 private_hub_token: "{{ private_automation_hub24_token_vault }}"
 private_hub_url: "https://aaphub24.{{ _global_domain_name }}/api/galaxy/"
-aap_platform_host: "{{ groups['controllers'][0] }}"
+aap_platform_host: "{{ groups['aap_controllers'][0] }}"
 aap_platform_username: "{{ aap_admin_username_vault }}"
 aap_platform_password: "{{ aap_admin_password_vault }}"
 # AAP Authentication
@@ -20,7 +20,7 @@ aap_ldap_domain_map: "dc=example,dc=ca"
 aap_admin_username: "{{ aap_admin_username_vault }}"
 aap_admin_password: "{{ aap_admin_password_vault }}"
 
-active_controller: "{{ groups['controllers'][0] }}"
+active_controller: "{{ groups['aap_controllers'][0] }}"
 aap_validate_certs: false
 ah_container_token: ""
 

@@ -62,10 +62,10 @@ platform_installer_config:
   aap_pg_password: "{{ aap_pg_password_vault }}"
   aap_pg_sslmode: "prefer"
   aap_pg_use_ssl: true
-  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['hubs'][0] }}/{{ groups['hubs'][0] }}.crt"
-  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['hubs'][0] }}/{{ groups['hubs'][0] }}.key"
+  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
+  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
 
   # Automation Controller
   aap_hub_verify_ssl: true
-  aap_hub_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['hubs'][0] }}/{{ groups['hubs'][0] }}.crt"
-  aap_hub_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['hubs'][0] }}/{{ groups['hubs'][0] }}.key"
+  aap_hub_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
+  aap_hub_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"

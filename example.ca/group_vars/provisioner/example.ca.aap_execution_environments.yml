@@ -4,7 +4,7 @@
 exec_envs:
   - name: "satellite_ee"
     credential: "aaphub24_containers"
-    image: "{{ groups['hubs'][0] }}/satellite_ee"
+    image: "{{ groups['aap_hubs'][0] }}/satellite_ee"
     description: "Execution Environment for rhis_builder incl. realm certificates and collections"
     pull: "always"
     organization: "Default"

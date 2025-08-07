@@ -15,10 +15,10 @@ satellite.example.ca
 capsule1.example.ca
 capsule2.example.ca
 
-[aap_controller]
+[aap_controllers]
 aapcontroller24.example.ca
 
-[automation_hub]
+[aap_hubs]
 aaphub24.example.ca
 
 [container_servers]
