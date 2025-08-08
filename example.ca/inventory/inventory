@@ -15,6 +15,9 @@ satellite.example.ca
 capsule1.example.ca
 capsule2.example.ca
 
+[platform_installer]
+aapcontroller24.example.ca
+
 [aap_controllers]
 aapcontroller24.example.ca
 
