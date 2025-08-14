@@ -2,12 +2,15 @@
 
 # These varibles are for our imagebuilder setup
 # figure out the proper location for them in the container world
+# vars file for rhis_post
+_global_domain_name: "example.ca"
+
 
 osbuild_config_dir: "/etc/osbuild-composer/repositories"
 osbuild_toml_dir: "/etc/osbuild-composer/toml"
 repo_file: "/etc/yum.repos.d/redhat.repo"
 
-#target_activationkey: "bootstrap9"
+# target_activationkey: "bootstrap9"
 target_activationkey: "SOE9_JBoss"
 target_organization: "Default_Organization"
 target_arch: "x86_64"

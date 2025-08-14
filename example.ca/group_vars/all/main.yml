@@ -7,8 +7,8 @@ sat_organization: "Default Organization"
 sat_location: "Default Location"
 sat_validate_certs: true
 sat_server_url: "https://satellite.example.ca"
-sat_username: "{{ satellite_admin_username_vault }}"
-sat_password: "{{ satellite_admin_password_vault }}"
+sat_username: "{{ satellite_username_vault }}"
+sat_password: "{{ satellite_password_vault }}"
 
 # IdM certificate config vars
 ipa_domain: example.ca
