@@ -1,0 +1,22 @@
+<%#
+name: soe_nbde_key_reset
+description: "This snippet reencrypts luks encrypted drives for newly deployed image based systems"
+snippet: true
+model: ProvisioningTemplate
+organizations:
+- Default Organization
+locations:
+- Default Location
+-%>
+<%#
+This template expects the following host paramaters to be set in the hostgroup
+use_NBDE
+default_passphrase
+tang_server
+%>
+
+<% if host_param('enc_target_drive') != "" %>
+  clevis luks pass -d <%= host_param('enc_target_drive') %> -s 1 | cryptsetup reencrypt <%= host_param('enc_target_drive') %> <<< <%= host_param('default_passphrase') %>
+<% else %>
+  clevis luks pass -d <%= discovered_drive %> -s 1 | cryptsetup reencrypt <%= discovered_drive %> <<< <%= host_param('default_passphrase') %>
+<% end -%>
