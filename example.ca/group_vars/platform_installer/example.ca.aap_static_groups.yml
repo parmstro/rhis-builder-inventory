@@ -1,0 +1,129 @@
+---
+
+static_groups:
+# SOE Dev testing inventory static groups
+  - name: "JBoss"
+    description: "Main group for JBoss test servers"
+    hosts:
+      - "testjboss2.{{ _global_domain_name }}"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "LAMP"
+    description: "Main group for LAMP stack test servers"
+    hosts:
+      - "testlamp2.{{ _global_domain_name }}"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "dbservers"
+    description: "Installer group for database servers in LAMP stack test"
+    hosts:
+      - "testlamp2.{{ _global_domain_name }}"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "webservers"
+    description: "Installer group for web servers in LAMP stack test"
+    hosts:
+      - "testlamp2.{{ _global_domain_name }}"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "WordPress"
+    description: "Main group for WordPress servers"
+    hosts:
+      - "testwordpress2.{{ _global_domain_name }}"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "wordpressserver"
+    description: "Installer group for WordPress servers"
+    hosts:
+      - "testwordpress2.{{ _global_domain_name }}"
+    inventory: "SOE_pipeline_inventory"
+    state: present
+
+  - name: "controller"
+    description: "The automation controller"
+    hosts:
+      - "aapcontroller24.{{ _global_domain_name }}"
+    inventory: "TheAutomationController"
+    state: present
+
+  - name: "provisioner"
+    description: "An alias for the automation controller"
+    hosts:
+      - "aapcontroller24.{{ _global_domain_name }}"
+    inventory: "TheProvisioner"
+    state: present
+
+# c2r demo pipeline static groups
+  - name: "centos"
+    description: "Main group for centos test servers"
+    hosts:
+      - "centosdemo1.{{ _global_domain_name }}"
+      - "centosdemo2.{{ _global_domain_name }}"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+  - name: "oel"
+    description: "Main group for centos test servers"
+    hosts:
+      - "oeldemo1.{{ _global_domain_name }}"
+      - "oeldemo2.{{ _global_domain_name }}"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+  - name: "cconvert2rhel"
+    description: "Main group for convert2rhel test servers"
+    hosts:
+      - "centosdemo1.{{ _global_domain_name }}"
+      - "centosdemo2.{{ _global_domain_name }}"
+      - "oeldemo1.{{ _global_domain_name }}"
+      - "oeldemo2.{{ _global_domain_name }}"
+    inventory: "convert2rhel_pipeline_inventory"
+    state: present
+
+# SOE QA testing inventory static groups
+  - name: "JBoss"
+    description: "Main group for JBoss test servers"
+    hosts:
+      - "qatestjboss2.{{ _global_domain_name }}"
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+
+  - name: "LAMP"
+    description: "Main group for LAMP stack test servers"
+    hosts:
+      - "qatestlamp2.{{ _global_domain_name }}"
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+
+  - name: "dbservers"
+    description: "Installer group for database servers in LAMP stack test"
+    hosts:
+      - "qatestlamp2.{{ _global_domain_name }}"
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+
+  - name: "webservers"
+    description: "Installer group for web servers in LAMP stack test"
+    hosts:
+      - "qatestlamp2.{{ _global_domain_name }}"
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+
+  - name: "WordPress"
+    description: "Main group for WordPress servers"
+    hosts:
+      - "qatestwordpress2.{{ _global_domain_name }}"
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present
+
+  - name: "wordpressserver"
+    description: "Installer group for WordPress servers"
+    hosts:
+      - "qatestwordpress2.{{ _global_domain_name }}"
+    inventory: "SOE_qa_pipeline_inventory"
+    state: present

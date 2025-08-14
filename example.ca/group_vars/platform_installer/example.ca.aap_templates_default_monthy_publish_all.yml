@@ -1,0 +1,175 @@
+---
+
+templates_default_monthly_publish:
+  - name: "MonthlyPublishContent"
+    description: "Publish all SOE Content"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheProvisioner"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee"
+    playbook: "publish_only.yml"
+    become_enabled: true
+    credentials:
+      - "default_machine"
+      - "default_vault"
+    variables:
+      force_publish_all: true
+      skip_publish_all: false
+      description: "Published by rhis-builder-pipelines"
+      satellite_validate_certs: true
+      content_views:
+        - name: "AAP24_Files"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "AAP24_RPMs"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "AAP25_Files"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "AAP25_RPMs"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "bootc_containers"
+          environments:
+            - "Library"
+        - name: "CentOS79"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+        - name: "CentOS_S9"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+        - name: "convert2rhel7"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "convert2rhel8"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "EPEL8"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "EPEL9"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "JBoss8EAP74"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "JBoss9EAP74"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "LEAPP_2_RHEL8"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "LEAPP_2_RHEL9"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "mssqlserver2022_rhel9"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+        - name: "OEL79"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+        - name: "SOE7"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+            - "Qualification"
+            - "Production"
+        - name: "SOE8"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+            - "Qualification"
+            - "Production"
+        - name: "SOE9"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+            - "Qualification"
+            - "Production"
+        - name: "SOE9_aarch64"
+          date_filter_name: "Include_Errata_By_Date"
+          environments:
+            - "Library"
+            - "Development"
+            - "Qualification"
+            - "Production"
+
+      composite_content_views:
+        - name: "SOE_AAP24"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "SOE_AAP25"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "SOE8_JBoss"
+          environments:
+            - "Library"
+            - "Development"
+            - "Qualification"
+            - "Production"
+        - name: "SOE9_JBoss"
+          environments:
+            - "Library"
+            - "Development"
+            - "Qualification"
+            - "Production"
+        - name: "SOE8_EPEL"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "SOE9_EPEL"
+          environments:
+            - "Library"
+            - "SOE_Development"
+            - "SOE_Qualification"
+            - "SOE_Production"
+        - name: "convert_CentOS2RHEL7"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "convert_OEL2RHEL7"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "LEAPP_7_2_8"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "LEAPP_8_2_9"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "SOE9_MSSQL"
+          environments:
+            - "Library"
+            - "SOE_Development"
+        - name: "SOE9_POS"
+          environments:
+            - "Library"
+            - "SOE_Development"

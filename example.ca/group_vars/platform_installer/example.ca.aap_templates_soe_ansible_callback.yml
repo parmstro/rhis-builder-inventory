@@ -1,0 +1,24 @@
+---
+
+templates_soe_ansible_callback:
+  - name: "SOE_Base_Ansible_Callback"
+    description: "Satellite build invoked Ansible Callback"
+    job_type: "run"
+    organization: "Default"
+    inventory: "satellite.{{ _global_domain_name }}"
+    project: "rhis-builder-day-2-ops"
+    execution_environment: "satellite_ee"
+    playbook: "post_provisioning_base.yml"
+    become_enabled: true
+    host_config_key: "{{ satellite_ansible_callback_config_key }}"
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      sysmessage_type: "base"
+      time_timedaemon: "chrony"
+      time_timeservers:
+        - "time1.parmstrong.ca"
+        - "time2.parmstrong.ca"
+        - "time3.parmstrong.ca"
+      time_timezone: "America/Toronto"

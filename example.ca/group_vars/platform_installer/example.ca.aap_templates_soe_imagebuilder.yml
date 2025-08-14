@@ -1,0 +1,90 @@
+---
+
+templates_soe_imagebuilder:
+  - name: "detect_imagebuilder9"
+    description: "Determine if imagebuilder system exists"
+    job_type: "run"
+    organization: "Default"
+    inventory: "satellite.{{ _global_domain_name }}"
+    project: "rhis-builder-imagebuilder"
+    execution_environment: "satellite_ee"
+    playbook: "detect_imagebuilder9.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      satellite_username: "sat_readonly"
+      satellite_password: "redhat"
+      satellite_url: "https://satellite.example.ca/"
+      satellite_validate_certs: true
+      host:
+        fqdn: "imagebuilder9.{{ _global_domain_name }}"
+        organization: "Default_Organization"
+
+
+  - name: "create_imagebuilder9"
+    description: "Deploy an imagebuilder system if it does not exist"
+    job_type: "run"
+    organization: "Default"
+    inventory: "satellite.{{ _global_domain_name }}"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee"
+    playbook: "create_hosts.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      host_build_comment: "Created by rhis-builder"
+      deploy: true
+      post_deploy_timeout: 600  # seconds
+      use_sync_build: false
+      enable_debug_logging: false
+      satellite_validate_certs: true
+      platform_hosts:
+        - fqdn: "imagebuilder9.{{ _global_domain_name }}"
+          delete_host: false
+          organization: "Default Organization"
+          location: "Default Location"
+          hostgroup: "hg_x86_64_rhel9_vm/dev"
+          kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+          compute_resource: "VMware_Lab"
+          compute_profile: "2-Medium"
+          mac: "00:50:56:ff:ff:ff"
+
+  - name: "deploy_imagebuilder_code"
+    description: "Determine if imagebuilder system exists"
+    job_type: "run"
+    organization: "Default"
+    inventory: "satellite.{{ _global_domain_name }}"
+    project: "rhis-builder-imagebuilder"
+    execution_environment: "satellite_ee"
+    playbook: "deploy_imagebuilder9.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      fqdn: "imagebuilder9.{{ _global_domain_name }}"
+
+  - name: "config_imagebuilder_build"
+    description: "Determine if imagebuilder system exists"
+    job_type: "run"
+    organization: "Default"
+    inventory: "satellite.{{ _global_domain_name }}"
+    project: "rhis-builder-imagebuilder"
+    execution_environment: "satellite_ee"
+    playbook: "config_imagebuilder_build.yml"
+    become_enabled: true
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+    variables:
+      fqdn: "imagebuilder9.{{ _global_domain_name }}"
+      osbuild_config_dir: "/etc/osbuild-composer/repositories"
+      osbuild_toml_dir: "/etc/osbuild-composer/toml"
+      repo_file: "/etc/yum.repos.d/redhat.repo"
+      target_activationkey: "SOE9_JBoss"
+      target_organization: "Default_Organization"
+      target_arch: "x86_64"
