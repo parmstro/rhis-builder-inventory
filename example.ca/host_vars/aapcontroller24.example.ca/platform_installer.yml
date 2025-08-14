@@ -17,8 +17,8 @@ satellite_domain: "example.ca"
 satellite_fqdn: "{{ satellite_hostname }}.{{ satellite_domain }}"
 satellite_server_url: "https://{{ satellite_fqdn }}"
 
-satellite_admin_username: "{{ satellite_admin_username_vault }}"
-satellite_admin_password: "{{ satellite_admin_password_vault }}"
+satellite_username: "{{ satellite_username_vault }}"
+satellite_password: "{{ satellite_password_vault }}"
 
 satellite_initial_location: "Default Location"
 satellite_initial_organization: "Default Organization"
@@ -39,7 +39,7 @@ platform_installer_config:
   topology: "{{ platform_topology }}"
   aap_product: "Red Hat Ansible Automation Platform"
   aap_file_repo_name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
-  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.4-8.1-x86_64.tar.gz"
+  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.4-13.1-x86_64.tar.gz"
   aap_destination_dir: "/root/ansible_installer"
   # Installer Template
   # All
