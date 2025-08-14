@@ -10,9 +10,16 @@ repository_ids:
   - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-supplementary-rpms"
   - "satellite-client-6-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
 
+# TODO: Change this to handle a list instead
+# NOTE: existing configurations will need to move to list when this changes.
+
 timeserver1: "192.168.252.8"
 timeserver2: "192.168.252.7"
 timeserver3: "192.168.252.9"
+
+idm_pre_dns_resolvers:  # e.g. replace with your own resolvers
+  - 8.8.8.8
+  - 8.8.4.4
 
 ipa_firewalld_zone: "public"
 # interface supporting the default ipv4 address
