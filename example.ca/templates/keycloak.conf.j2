@@ -1,0 +1,11 @@
+hostname={{ ansible_fqdn }}
+http-enabled=false
+https-enabled=true
+https-certificate-file=/etc/ipa/private/{{ ansible_fqdn }}.crt 
+https-certificate-key-file=/etc/ipa/private/{{ ansible_fqdn }}.key 
+https-port=443
+http-port=8080
+# db=postgres
+# db-url=jdbc:postgresql://localhost/keycloak
+# db-username={{ keycloak_db_user }}
+# db-password={{ keycloak_db_user_password_vault }}

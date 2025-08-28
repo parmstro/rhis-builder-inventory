@@ -1,0 +1,10 @@
+keycloak_valid_configs:
+  - keycloak_version: "26.2"
+    postgresql_version: "17"
+    openjdk_version: "21"
+  - keycloak_version: "26.0"
+    postgresql_version: "16"
+    openjdk_version: "21"
+  - keycloak_version: "24.0"
+    postgresql_version: "16"
+    openjdk_version: "17"
