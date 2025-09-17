@@ -8,9 +8,9 @@ _default_network_prefix: "22"
 _default_network_mask: "255.255.252.0"
 
 timeservers:
-  - "time1.example.ca"
-  - "time2.example.ca"
-  - "time3.example.ca"
+  - "time1.{{ _global_domain_name }}"
+  - "time2.{{ _global_domain_name }}"
+  - "time3.{{ _global_domain_name }}"
 
 #######################################################################################################################
 # Satellite vars used by all configurations

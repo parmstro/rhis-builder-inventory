@@ -18,6 +18,10 @@ platform_node_pre_storage:
     vg_name: "vg_root"
     minimum_size: "60G"
     state: present
+  - lv_name: "lv_home"
+    vg_name: "vg_root"
+    minimum_size: "30G"
+    state: present
   - lv_name: "lv_var_tmp"
     vg_name: "vg_root"
     minimum_size: "6G"

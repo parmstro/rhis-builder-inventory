@@ -16,7 +16,7 @@ templates_soe_imagebuilder:
     variables:
       satellite_username: "sat_readonly"
       satellite_password: "redhat"
-      satellite_url: "https://satellite.example.ca/"
+      satellite_url: "gr"
       satellite_validate_certs: true
       host:
         fqdn: "imagebuilder9.{{ _global_domain_name }}"

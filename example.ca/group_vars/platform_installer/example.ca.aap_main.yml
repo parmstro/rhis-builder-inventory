@@ -1,9 +1,7 @@
 ---
 
 # vars file for rhis_post
-_global_domain_name: "example.ca"
-
-ipa_server_fqdn: "idm.{{ _global_domain_name }}"
+ipa_server_fqdn: "{{ groups['idm_primary'][0] }}"
 
 rhis_default_git_dest: "~/rhis_ee_repos"
 redhat_container_registry_url: "registry.redhat.io"

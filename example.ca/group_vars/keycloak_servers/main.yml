@@ -20,16 +20,8 @@ keycloak_installer_info:
   keycloak_installer_version: "rhbk-26.0.14"
 
 register_satellite: true  # works for any rhsm target
-satellite_url: "https://satellite.example.ca"
-satellite_username: "{{ satellite_username_vault }}"
-satellite_password: "{{ satellite_password_vault }}"
-satellite_use_gssapi: false
-satellite_organization: "Default Organization"
 satellite_activation_keys:
   - "SOE9_Keycloak_dev"
-satellite_registration_force: true
-satellite_registration_insecure: true
-satellite_validate_certs: false
 
 # FOR NON-Satellite registered servers
 # 26.0.8 will support RHEL 9 SOE with postgresql 16
@@ -72,7 +64,7 @@ register_idm: true
 
 ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
 ipaadmin_password: "{{ ipa_admin_password_vault }}"
-ipaclient_domain: "example.ca"
+ipaclient_domain: "{{ _global_domain_name }"
 ipaclient_mkhomedir: true
 ipaclient_ntp_servers:  # "these are not the servers you are looking for... "
   - "time.aws.ca"
@@ -95,12 +87,12 @@ ipaclient_ntp_servers:  # "these are not the servers you are looking for... "
 ### BEGIN IdM Certificates ###
 certificates_idm: true
 
-ipa_server_fqdn: "idm.example.ca"
+ipa_server_fqdn: "{{ groups['idm_primary'][0] }}"
 force_regen: true
 ssl_private_key_passphrase: "{{ ssl_private_key_passphrase_vault }}"
 ssl_private_key_cipher: aes256
 ssl_private_key_size: 2048
-csr_email_address: "bobsurunkle@example.ca"
+csr_email_address: "bobsurunkle@{{ _global_domain_name }}"
 csr_organization_name: "Bob Surunkle"
 csr_organization_unit_name: "Example Lab"
 csr_country_name: "CA"

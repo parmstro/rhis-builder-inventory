@@ -12,21 +12,6 @@
 # for generating system certficates
 # via IdM
 
-satellite_hostname: "satellite"
-satellite_domain: "example.ca"
-satellite_fqdn: "{{ satellite_hostname }}.{{ satellite_domain }}"
-satellite_server_url: "https://{{ satellite_fqdn }}"
-
-satellite_username: "{{ satellite_username_vault }}"
-satellite_password: "{{ satellite_password_vault }}"
-
-satellite_initial_location: "Default Location"
-satellite_initial_organization: "Default Organization"
-satellite_location: "{{ satellite_initial_location }}"
-satellite_organization: "{{ satellite_initial_organization }}"
-
-satellite_validate_certs: true
-
 platform_version: "2.4-8"
 platform_arch: "x86_64"
 platform_installer: true
