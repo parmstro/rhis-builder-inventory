@@ -1,0 +1,37 @@
+---
+
+rhc_insights_state: "absent"
+rhc_enable_auto_update: false
+
+repository_ids:
+  - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-baseos-rpms"
+  - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-appstream-rpms"
+  - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-supplementary-rpms"
+  - "satellite-client-6-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
+
+idm_pre_dns_resolvers:  # e.g. replace with your own resolvers
+  - "8.8.8.8"
+  - "8.8.4.4"
+
+ipa_firewalld_zone: "public"
+# interface supporting the default ipv4 address
+ipa_prime_interface: "{{ ansible_interfaces | map('regex_replace', '^', 'ansible_') | map('extract', vars) | selectattr('ipv4', 'defined') | selectattr('ipv4.address', 'match', ansible_default_ipv4.address) | map(attribute='device') | first }}" # noqa yaml[line-length]
+ipa_firewalld_services:
+  - "freeipa-4"
+  - "freeipa-ldap"
+  - "freeipa-ldaps"
+  - "freeipa-replication"
+  - "freeipa-trust"
+
+ipa_required_umask: "0022"
+ipa_crypto_policy: "Default"
+# ipa_crypto_policy: "FuturE"
+
+# add any other hosts that you need to resolve
+# before IdM DNS comes up in your network here
+# These are simply test values
+etc_hosts_list:
+  - ip: "{{ _default_network }}.13"
+    fqdn: "provisioner.{{ _global_domain_name }}"
+  - ip: "{{ _default_network }}.12"
+    fqdn: "satellite1.{{ _global_domain_name }}"

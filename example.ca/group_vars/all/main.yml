@@ -1,33 +1,130 @@
-# variables for all hosts
+---
 
-debug_output: false
+# GLOBAL VARIABLES THAT APPLY TO ALL HOSTS
+_global_domain_name: "example.ca"
 
-# Satellite vars
-sat_organization: "Default Organization"
-sat_location: "Default Location"
-sat_validate_certs: true
-sat_server_url: "https://satellite.example.ca"
-sat_username: "{{ satellite_username_vault }}"
-sat_password: "{{ satellite_password_vault }}"
+_default_network: "192.168.140"
+_default_network_prefix: "22"
+_default_network_mask: "255.255.252.0"
 
-# IdM certificate config vars
-ipa_domain: example.ca
-ipa_server_fqdn: idm.example.ca
-ipa_realm: "{{ ipa_domain | upper }}"
-ipa_principal: "{{ ipa_principal_vault }}"
+timeservers:
+  - "time1.example.ca"
+  - "time2.example.ca"
+  - "time3.example.ca"
+
+#######################################################################################################################
+# Satellite vars used by all configurations
+
+satellite_fqdn: "{{ groups['sat_primary'][0] }}"
+satellite_domain: "{{ _global_domain_name }}"
+
+satellite_initial_location: "Default Location"
+satellite_initial_organization: "Default Organization"
+satellite_organization: "{{ satellite_initial_organization }}"
+satellite_location: "{{ satellite_initial_organization }}"
+
+satellite_server_url: "https://{{ satellite_fqdn }}"
+satellite_validate_certs: true
+
+satellite_username: "{{ satellite_username_vault }}"
+satellite_password: "{{ satellite_password_vault }}"
+satellite_use_gssapi: false
+
+vm_compute_resource: "vcenter.{{ _global_domain_name }}"
+
+search_dh_mac: "ff:ff:ff:ff:ff:ff"
+default_vm_mac: "00:50:56:ff:ff:ff"
+
+post_deploy_timeout: 600  # seconds
+use_sync_build: false
+discovered_hosts_resource: "discovered_hosts"
+discovered_hosts_search: "disk_count = 1 and memory > 32000"
+discovered_host_req_nic_count: 1  # we use > below so does not include lo
+
+host_build_comment: "Created by rhis-builder"
+deploy: true
+
+# Base network info
+_default_domain: "{{ _global_domain_name }}"
+_default_subnetname: "{{ _global_domain_name }}"
+_default_provision_iface: "eno1"
+_default_vm_provision_iface: "ens192"
+
+# Bond network
+_default_bond_subnetname: "bond_subnet"
+_default_bond_subnet_prefix: 23
+_default_bond_default_gateway: "{{ _default_network }}.1"
+_default_bond_iface: "bond0"
+_default_child_iface1: "enp2s0f0"
+_default_child_iface2: "enp2s0f1"
+
+#######################################################################################################################
+# IdM Base variables
+
+# ipaserver role variables used in multiple repos
+
+ipa_server_domain: "{{ _global_domain_name }}"
+ipaserver_domain: "{{ _global_domain_name }}"
+ipa_domain: "{{ _global_domain_name }}"
+ipa_server_realm: "{{ _global_domain_name | upper }}"
+ipaserver_realm: "{{ _global_domain_name | upper }}"
+ipa_realm: "{{ _global_domain_name | upper }}"
+
+ipa_server_fqdn: "{{ groups['idm_primary'][0] }}"
+ipaserver_fqdn: "{{ groups['idm_primary'][0] }}"
+
+# ipareplica role variables used in multiple repos
+ipareplicas: "{{ groups['ipa_replicas'] }}"
+ipareplica_domain: "{{ _global_domain_name }}"
+
+
+# ipaclient role variables used in multiple repos
+ipa_client_dns_servers: "{{ _default_network }}.5"
+ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
+
+ipa_client_domain: "{{ _global_domain_name }}"
+ipaclient_domain: "{{ ipa_server_domain }}"
+
+ipaclient_realm: "{{ ipa_server_domain | upper }}"
+
+ipa_client_configure_dns_resolver: true
+ipaclient_configure_dns_resolver: "{{ ipa_client_configure_dns_resolver }}"
+
+ipa_client_mkhomedir: true
+ipaclient_mkhomedir: "{{ ipa_client_mkhomedir }}"
+
+ipasssd_enable_dns_updates: true
+ipaclient_force_join: true # force rejoin of realm if we are rebuilding satellite without rebuilding IdM
+
+# we setup chronyd for all systems in our pre-install phase as there are conflicts when promoting clients to replicas
+# ipaclient_no_ntp: true
+
+# ipa credential names are not consistent across projects
+ipa_dm_password: "{{ ipa_dm_password_vault }}"
+ipadm_password: "{{ ipa_dm_password }}"
+
+ipa_admin_password: "{{ ipa_admin_password_vault }}"
+ipaadmin_password: "{{ ipa_admin_password_vault }}"
 ipa_password: "{{ ipa_password_vault }}"
+
+ipa_admin_principal: "{{ ipa_admin_principal_vault }}"
+ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
+ipa_principal: "{{ ipa_principal_vault }}"
+
+ipa_default_user_password: "{{ ipa_default_user_password_vault }}"
+
 force_regen: true
 crt_dir: "/etc/ipa/private"
 passfile: "{{ crt_dir }}/passout.txt"
 ssl_private_key_pem_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pem"
 ssl_private_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.key"
 ssl_private_key_passphrase: "{{ ssl_private_key_passphrase_vault }}"
-ssl_private_key_cipher: des3
-ssl_private_key_size: 2048
+ssl_private_key_cipher: "aes256"
+ssl_private_key_size: 4096
 ssl_public_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pub"
 ssl_public_key_format: PEM
 csr_path: "{{ crt_dir }}/{{ ansible_fqdn }}.csr"
-csr_email_address: "parmstro@example.ca"
+csr_email_address: "parmstro@{{ _global_domain_name }}"
 csr_organization_name: "Paul Armstrong"
 csr_organization_unit_name: "Red Lab"
 csr_country_name: "CA"
@@ -43,3 +140,226 @@ cockpit_key_path: "/etc/cockpit/ws-certs.d/z-{{ ansible_fqdn }}.cockpit.key"
 cockpit_bundle_path: "/etc/cockpit/ws-certs.d/z-{{ ansible_fqdn }}.cockpit.cert"
 cockpit_self_ca_crt: "/etc/cockpit/ws-certs.d/0-self-signed-ca.pem"
 cockpit_self_crt: "/etc/cockpit/ws-certs.d/0-self-signed.cert"
+
+# Replica Topology
+
+# the topology index is defined by the number of nodes (topology size) mutiplied by
+# the number of faulted nodes the topology will support (fault level) without losing redundancy
+# e.g. a BOX-X topology requires 4 nodes and will support any 2 nodes failing without losing redundancy = topology index 8
+# e.g. a BOX topology also requires 4 nodes, but will only support 1 node failing without potentially losing redundancy = topology index 4
+# a BOX results in complete isolation and a split brain state if nodes in opposite corners of the box are lost.
+# with 4 nodes, a BOX-X is preferred
+# this allows us to navigate the simple topology graph
+
+idmreplica_fault_level_max: 2            # the current maximum that you can set idmreplica_fault_level to
+idmreplica_fault_level: 2         # the number of faulted replica nodes you need to support
+
+# the topology graph
+idm_standard_topologies:
+  - name: two_node
+    index: 2
+    segments:
+      - left: 0
+        right: 1
+        state: "present"
+        suffix: "domain+ca"
+
+  - name: three_node
+    index: 3
+    segments:
+      - left: 0
+        right: 1
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 2
+        state: "present"
+        suffix: "domain+ca"
+      - left: 2
+        right: 0
+        state: "present"
+        suffix: "domain+ca"
+
+  - name: four_node_box
+    index: 4
+    segments:
+      - left: 0
+        right: 1
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 2
+        state: "present"
+        suffix: "domain+ca"
+      - left: 2
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+      - left: 3
+        right: 0
+        state: "present"
+        suffix: "domain+ca"
+
+  - name: four_node_box_x
+    index: 8
+    segments:
+      - left: 0
+        right: 1
+        state: "present"
+        suffix: "domain+ca"
+      - left: 0
+        right: 2
+        state: "present"
+        suffix: "domain+ca"
+      - left: 0
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 2
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+      - left: 2
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+
+  # max recommended replication agreements per node reached (5)
+  # more resilient to split brain conditions - single failure per site, 3 failures globally
+  # experimental
+  - name: six_node_geo # 3 sites - 2 nodes per site - box-x across all sites
+    index: 9
+    segments:
+      - left: 0
+        right: 1
+        state: "present"
+        suffix: "domain+ca"
+      - left: 0
+        right: 2
+        state: "present"
+        suffix: "domain+ca"
+      - left: 0
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+      - left: 0
+        right: 4
+        state: "present"
+        suffix: "domain+ca"
+      - left: 0
+        right: 5
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 2
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 4
+        state: "present"
+        suffix: "domain+ca"
+      - left: 1
+        right: 5
+        state: "present"
+        suffix: "domain+ca"
+      - left: 2
+        right: 3
+        state: "present"
+        suffix: "domain+ca"
+      - left: 2
+        right: 4
+        state: "present"
+        suffix: "domain+ca"
+      - left: 2
+        right: 5
+        state: "present"
+        suffix: "domain+ca"
+      - left: 3
+        right: 4
+        state: "present"
+        suffix: "domain+ca"
+      - left: 3
+        right: 5
+        state: "present"
+        suffix: "domain+ca"
+      - left: 4
+        right: 5
+        state: "present"
+        suffix: "domain+ca"
+
+  # experimental - subject to wide area split brain
+  # - name: eight_node_cubic
+  #   index: 32
+  #   segments:
+  #     - left: 0
+  #       right: 1
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 0
+  #       right: 2
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 0
+  #       right: 3
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 1
+  #       right: 2
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 1
+  #       right: 3
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 2
+  #       right: 3
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 4
+  #       right: 5
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 4
+  #       right: 6
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 4
+  #       right: 7
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 5
+  #       right: 6
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 5
+  #       right: 7
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 6          # six-seven
+  #       right: 7
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 0
+  #       right: 4
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 1
+  #       right: 5
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 2
+  #       right: 6
+  #       state: "present"
+  #       suffix: "domain+ca"
+  #     - left: 3
+  #       right: 7
+  #       state: "present"
+  #       suffix: "domain+ca"
