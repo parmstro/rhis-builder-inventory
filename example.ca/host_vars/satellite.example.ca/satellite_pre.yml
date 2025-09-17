@@ -8,7 +8,6 @@ async_delay: 30
 
 apply_standard_tuning: true
 
-
 # prerequisites
 cdn_organization_id: "{{ cdn_organization_id_vault }}"
 cdn_sat_activation_key: "{{ cdn_activation_key_vault }}"
@@ -29,11 +28,6 @@ sat_firewalld_services:
   - dns
   - tftp
 
-timeservers:
-  - "time1.example.ca"
-  - "time2.example.ca"
-  - "time3.example.ca"
-
 # Set this variable to false to skip IdM integration
 # Note: this probably means you aren't using Realms anywhere
 # unless they are AD realms, so check variable files referencing
@@ -45,35 +39,13 @@ satellite_pre_use_idm: true
 # to redistribute the keytab file to your capsules.
 skip_prepare_realm: false
 
-# IdM client vars
-ipa_admin_password: "{{ ipa_admin_password_vault }}"
-ipa_admin_principal: "{{ ipa_admin_principal_vault }}"
-ipa_server_fqdn: "idm.example.ca"
-ipa_server_domain: "example.ca"
-ipa_server_realm: "{{ ipa_server_domain | upper }}"
-ipa_client_domain: "{{ ipa_server_domain }}"
-ipa_client_configure_dns_resolver: true
+# Satellite specific vars used with IdM
 ipa_client_dns_servers: "192.168.140.5"
-ipa_client_mkhomedir: true
-ipasssd_enable_dns_updates: true
 ipa_dns_reverse_zone: "168.192.in-addr.arpa"
 ipa_dns_zone: "example.ca"
 ipa_default_bind_policy: "grant {{ ipa_server_realm }} krb5-self * A; grant {{ ipa_server_realm }} krb5-self * AAAA; grant {{ ipa_server_realm }} krb5-self * SSHFP;" # noqa yaml[line-length]
 ipa_default_bind_policy_reverse: "grant {{ ipa_server_realm }} krb5-subdomain {{ ipa_dns_reverse_zone }} PTR;"
 
-
-# ipaclient role vars: these do not follow standards
-ipaadmin_password: "{{ ipa_admin_password_vault }}"
-ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
-ipaserver_fqdn: "{{ ipa_server_fqdn }}"
-ipaclient_domain: "{{ ipa_server_domain }}"
-ipaclient_realm: "{{ ipa_server_domain | upper }}"
-ipaclient_configure_dns_resolver: "{{ ipa_client_configure_dns_resolver }}"
-ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
-ipaclient_mkhomedir: "{{ ipa_client_mkhomedir }}"
-ipaclient_force_join: true # force rejoin of realm if we are rebuilding satellite without rebuilding IdM
-
-# Satellite specific vars used with IdM
 ipa_generate_certs: true
 
 # this is the name of the user being passed to prepare realm

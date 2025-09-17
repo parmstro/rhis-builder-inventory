@@ -1,28 +1,6 @@
 ---
 
-ipa_server_fqdn: "idm.example.ca"
 ipa_client_dns_servers: "192.168.140.5"
-
-# These vault variables should be encrypted in your
-# rhisbuilder_vault.yml file
-
-ipa_admin_principal: "{{ ipa_admin_principal_vault }}"
-ipa_admin_password: "{{ ipa_admin_password_vault }}"
-
-
-# These variables get used outside of the redhat role, so are set here.
-
-ipa_server_domain: "example.ca"
-ipa_server_realm: "{{ ipa_server_domain | upper }}"
-
-# ipaserver role variables
-# Some variables deviate from our standard as they
-# are specified by the redhat.rhel_idm collection
-# infrequently changed variables
-
-ipaadmin_password: "{{ ipa_admin_password }}"
-ipadm_password: "{{ ipa_dm_password }}"
-
 
 # Control for building platform_hosts
 # There are test host lists, kvm hosts, aap hosts, container host, etc.. we build them all at different times
