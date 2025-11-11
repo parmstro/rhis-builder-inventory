@@ -44,7 +44,7 @@ idm_hbac_rules:
       - "ug-satellite-org-administrators"
       - "ug-satellite-operators"
     hosts:
-      - "satellite.example.ca"
+      - "satellite.{{ _global_domain_name }}"
     host_groups:
       - "hg-satellite-capsule-servers"
     hbac_services:

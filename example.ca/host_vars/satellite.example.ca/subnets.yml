@@ -1,7 +1,7 @@
 ---
 satellite_subnets:
-  - name: "example.ca"
-    description: "example.ca network"
+  - name: "{{ _global_domain_name }}"
+    description: "{{ _global_domain_name }} network"
     network_type: "IPv4"
     network: 192.168.140.0
     prefix: 22
@@ -31,7 +31,7 @@ satellite_subnets:
       - "{{ satellite_organization }}"
 
   - name: "bond_subnet"
-    description: "example.ca bond network"
+    description: "{{ _global_domain_name }} bond network"
     network_type: "IPv4"
     network: 192.168.142.0
     prefix: 22

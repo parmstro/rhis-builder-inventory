@@ -165,7 +165,6 @@ operating_systems:
     state: "present"
     architectures:
       - "x86_64"
-      - "aarch64"
     provisioning_templates:
       - "Kickstart default"
       - "Kickstart default finish"

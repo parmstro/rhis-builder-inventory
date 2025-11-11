@@ -5,7 +5,7 @@
 
 bond_test_hosts:
   - name: "bondtest1"
-    fqdn: "bondtest1.example.ca"
+    fqdn: "bondtest1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -47,7 +47,7 @@ bond_test_hosts:
         virtual: true
        # tag: "{{ _default_bond_vlan_tag_meta }}"
   - name: "bondtest2"
-    fqdn: "bondtest2.example.ca"
+    fqdn: "bondtest2.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"

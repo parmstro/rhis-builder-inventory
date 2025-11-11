@@ -10,12 +10,12 @@
 settings_general:
   - description: "The default administrator email address"
     settings_type: "string"
-#    default: "root@example.ca"
+#    default: "root@{{ _global_domain_name }}"
     updated_at: null
     id: "administrator"
     name: "administrator"
     full_name: "Administrator email address"
-    value: "root@example.ca"
+    value: "root@{{ _global_domain_name }}"
     category: "general"
     category_name: "General"
     readonly: false
@@ -25,12 +25,12 @@ settings_general:
 
 #   - description: "URL where your Foreman instance is reachable (see also Provisioning unattended_url)"
 #     settings_type: "string"
-# #    default: "https://satellite.example.ca"
+# #    default: "https://satellite.{{ _global_domain_name }}"
 #     updated_at: null
 #     id: "foreman_url"
 #     name: "foreman_url"
 #     full_name: "Foreman URL"
-#     value: "https://satellite.example.ca"
+#     value: "https://satellite.{{ _global_domain_name }}"
 #     category: "general"
 #     category_name: "General"
 #     readonly: false

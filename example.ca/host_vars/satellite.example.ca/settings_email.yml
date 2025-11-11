@@ -10,15 +10,15 @@ settings_email:
     full_name: "Email Reply Address"
     description: "Email reply address for emails that Satellite is sending"
     settings_type: "string"
-#    default: "satellite-noreply@example.ca"
-    value: "satellite-noreply@example.ca"
+#    default: "satellite-noreply@{{ _global_domain_name }}"
+    value: "satellite-noreply@{{ _global_domain_name }}"
 
   - name: "email_subject_prefix"
     full_name: "Email subject prefix"
     description: "Prefix to add to all outgoing email"
     settings_type: "string"
 #    default: "[satellite]"
-    value: "[satellite.example.ca]"
+    value: "[satellite.{{ _global_domain_name }}]"
 
 #   - name: "send_welcome_email"
 #     full_name: "Send welcome email"
@@ -52,7 +52,7 @@ settings_email:
     full_name: "SMTP address"
     description: "SMTP address to connect to"
     settings_type: "string"
-#    default: "smtp.example.ca"
+#    default: "smtp.{{ _global_domain_name }}"
     value: "smtp.gmail.com"
 
   - name: "smtp_port"
@@ -73,7 +73,7 @@ settings_email:
     full_name: "SMTP username"
     description: "Username to use to authenticate, if required"
     settings_type: "string"
-#    default: "user@example.ca"
+#    default: "user@{{ _global_domain_name }}"
     value: "{{ satellite_smtp_user_name_vault }}"
 
   - name: "smtp_password"

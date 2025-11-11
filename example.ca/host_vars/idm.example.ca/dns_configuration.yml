@@ -2,7 +2,7 @@
 
 # Set these if you are forwarding zones (you probably are not)
 # idm_dns_forward_zones:
-#   - name: "example.ca"
+#   - name: "{{ _global_domain_name }}"
 #     forwarders:
 #       - ip_address: "192.168.252.5"
 #       - ip_address: "192.168.252.6"
@@ -12,7 +12,7 @@
 # Set the bind policy for zones managed by the IdM server
 # The realm-capsule bind policy should be much more restrictive
 idm_dns_update_zones:
-  - name: "example.ca"
+  - name: "{{ _global_domain_name }}"
     foreman_proxy_BIND_update_policy: 'grant EXAMPLE.CA krb5-self * A; grant EXAMPLE.CA krb5-self * AAAA; grant EXAMPLE.CA krb5-self * SSHFP; grant realm-capsule\@EXAMPLE.CA wildcard * ANY;' # noqa yaml[line-length]
   - name: "168.192.in-addr.arpa"
     foreman_proxy_BIND_update_policy: 'grant EXAMPLE.CA krb5-subdomain 168.192.in-addr.arpa. PTR; grant realm-capsule\@EXAMPLE.CA wildcard * ANY;'
@@ -22,69 +22,69 @@ idm_dns_update_zones:
 # you probably want to add some standard records to the new DNS
 idm_dns_records:
   - name: "nas3"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.3"
     a_create_reverse: true
     state: "present"
 
   - name: "switch"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.2"
     state: "present"
 
   - name: "vcenter"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.30"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx1"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.31"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx2"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.32"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx3"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.33"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx4"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.34"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx5"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.35"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx6"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.36"
     a_create_reverse: true
     state: "present"
 
   - name: "c3esx7"
-    zone_name: "example.ca"
+    zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.37"
     a_create_reverse: true

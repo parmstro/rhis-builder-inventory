@@ -1,14 +1,14 @@
 ---
 # compute_profiles
 # yamllint disable rule:line-length
+
 # These values are very specific to a customer environment
 # Please take care to validate them carefully
 # This file generates compute profiles for both VMware and Azure
 
-vmware_cluster1_name: "chassis3"
-vmware_cluster1_path: "/Datacenters/example.ca/vm"
-vmware_cluster1_datastore: "NASAEX_VMS"
-vmware_cluster1_network: "VM Network"
+# NOTE: To minimize the amount of editing to this file we have templated
+# some of the configuration values to reduce error and maintenance. These
+# variables are defined in compute_resources.yml to increase internal consistency
 
 compute_profiles:
   - name: "SOE_Small"
@@ -47,7 +47,7 @@ compute_profiles:
               network: "{{ vmware_cluster1_network }}"
       - compute_resource: "Azure_Lab"
         vm_attrs:
-          resource_group: "rg_example_ca"
+          resource_group: "{{ azure1_resourcegroup1 }}"
           vm_size: "Standard_B2ms"
           platform: "Linux"
           username: "realm-capsule"
@@ -62,7 +62,7 @@ compute_profiles:
           nvidia_gpu_extension: "false"
           interfaces_attributes:
             0:
-              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/rg_example_ca/providers/Microsoft.Network/virtualNetworks/az_example_ca_vnet/subnets/az_example_ca_subnet"
+              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/{{ azure1_resourcegroup1 }}/providers/Microsoft.Network/virtualNetworks/{{ azure1_rg1_vnet1 }}/subnets/{{ azure1_rg1_vn1_subnet1 }}"
               public_ip: "None"
               private_ip: "true"
           volumes_attributes:
@@ -106,7 +106,7 @@ compute_profiles:
               network: "{{ vmware_cluster1_network }}"
       - compute_resource: "Azure_Lab"
         vm_attrs:
-          resource_group: "rg_example_ca"
+          resource_group: "{{ azure1_resourcegroup1 }}"
           vm_size: "Standard_B4ms"
           platform: "Linux"
           username: "realm-capsule"
@@ -121,7 +121,7 @@ compute_profiles:
           nvidia_gpu_extension: "false"
           interfaces_attributes:
             0:
-              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/rg_example_ca/providers/Microsoft.Network/virtualNetworks/az_example_ca_vnet/subnets/az_example_ca_subnet"
+              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/{{ azure1_resourcegroup1 }}/providers/Microsoft.Network/virtualNetworks/{{ azure1_rg1_vnet1 }}/subnets/{{ azure1_rg1_vn1_subnet1 }}"
               public_ip: "None"
               private_ip: "true"
           volumes_attributes:
@@ -165,7 +165,7 @@ compute_profiles:
               network: "{{ vmware_cluster1_network }}"
       - compute_resource: "Azure_Lab"
         vm_attrs:
-          resource_group: "rg_example_ca"
+          resource_group: "{{ azure1_resourcegroup1 }}"
           vm_size: "Standard_B8ms"
           platform: "Linux"
           username: "realm-capsule"
@@ -180,7 +180,7 @@ compute_profiles:
           nvidia_gpu_extension: "false"
           interfaces_attributes:
             0:
-              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/rg_example_ca/providers/Microsoft.Network/virtualNetworks/az_example_ca_vnet/subnets/az_example_ca_subnet"
+              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/{{ azure1_resourcegroup1 }}/providers/Microsoft.Network/virtualNetworks/{{ azure1_rg1_vnet1 }}/subnets/{{ azure1_rg1_vn1_subnet1 }}"
               public_ip: "None"
               private_ip: "true"
           volumes_attributes:

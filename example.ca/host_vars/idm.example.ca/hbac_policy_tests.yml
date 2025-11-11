@@ -15,12 +15,12 @@
 
 idm_hbac_policy_tests:
   - user: "bofh"                          # required
-    host: "idm.example.ca"                # required
+    host: "idm.{{ _global_domain_name }}"                # required
     service: "sshd"                       # required
     enabled: true                         # whether to include all enabled rules, optional, default is false
     disabled: false                       # whether to include all disabled rules, optional, default is false
   - user: "pfy-operator"
-    host: "idm.example.ca"
+    host: "idm.{{ _global_domain_name }}"
     service: "sshd"
     rules:
       - "hbacr-allow-prod-sysadmins-all-prod"

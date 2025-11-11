@@ -8,7 +8,7 @@
 
 global_parameters:
   - name: "ansible_controller_api_url"
-    value: "https://aapcontroller24.example.ca/api/v2"
+    value: "https://aapcontroller24.{{ _global_domain_name }}/api/v2"
     parameter_type: "string"
     hidden_value: false
     state: "present"
@@ -54,7 +54,7 @@ global_parameters:
     parameter_type: "boolean"
 
   - name: "grubmenu_pass"
-    value: "grub.pbkdf2.sha512.10000.513EB658A14D5090C45943245F4A77F1FC0220BE9931E1A7986AAC5A6E02EDFF8E7091B4BE33AE0FF2324D28FF92C58A4AFB7AAB8A39A61AE5197B2F96280062.3D80CE311344A666AED1E3882E41F4455EA8567FA75D9CF70313D0A7F5A6AB0CEB269491ECA20DCCC653A111C3E6BF59F49E0FDE9E62EED9AA75C168A10A2C18"
+    value: "enter value from grub2-mkpasswd-pbkdf2"
     parameter_type: "string"
     hidden_value: true
 

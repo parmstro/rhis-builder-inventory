@@ -14,7 +14,7 @@ satellite_users:
   - name: "bobsurunkle"
     firstname: "Bob"
     lastname: "Surunkle"
-    email: "bobsurunkle@example.ca"
+    email: "bobsurunkle@{{ _global_domain_name }}"
     description: "Uncle Bob"
     admin: "false"
     user_password: "random_password"  # not_a_secret

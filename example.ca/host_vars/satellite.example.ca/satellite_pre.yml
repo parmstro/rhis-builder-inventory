@@ -15,11 +15,12 @@ cdn_sat_activation_key: "{{ cdn_activation_key_vault }}"
 repository_ids:
   - rhel-9-for-x86_64-baseos-rpms
   - rhel-9-for-x86_64-appstream-rpms
-  - satellite-6.17-for-rhel-9-x86_64-rpms
-  - satellite-maintenance-6.17-for-rhel-9-x86_64-rpms
+  - satellite-6.18-for-rhel-9-x86_64-rpms
+  - satellite-maintenance-6.18-for-rhel-9-x86_64-rpms
 
 sat_firewalld_zone: "public"
-sat_firewalld_interface: "eno1"
+sat_firewalld_interface: "{{ ansible_default_ipv4.interface }}"
+sat_override_iface: ""
 sat_firewalld_services:
   - RH-Satellite-6
   - http
@@ -33,20 +34,45 @@ sat_firewalld_services:
 # unless they are AD realms, so check variable files referencing
 # realms, like hostgroups, realms, etc..
 satellite_pre_use_idm: true
+
+# use_non_idm_certs must be false if satellite_pre_use_idm is true
+# and vice versa
+# TODO: write precheck
+use_non_idm_certs: false
+
 # If you are integrating with IdM and you don't want to regenerate the
 # keytab file for your realm user (because you have capsules that are currently using it)
 # set skip_prepare_realm below to true. This will avoid having
 # to redistribute the keytab file to your capsules.
 skip_prepare_realm: false
+ipa_generate_certs: true
 
-# Satellite specific vars used with IdM
+# IdM client vars
+ipa_admin_password: "{{ ipa_admin_password_vault }}"
+ipa_admin_principal: "{{ ipa_admin_principal_vault }}"
+ipa_server_fqdn: "idm1.{{ _global_domain_name }}"
+ipa_server_domain: "{{ _global_domain_name }}"
+ipa_server_realm: "{{ ipa_server_domain | upper }}"
+ipa_client_domain: "{{ ipa_server_domain }}"
+ipa_client_configure_dns_resolver: true
+ipa_client_mkhomedir: true
+ipasssd_enable_dns_updates: true
 ipa_client_dns_servers: "192.168.140.5"
 ipa_dns_reverse_zone: "168.192.in-addr.arpa"
-ipa_dns_zone: "example.ca"
+ipa_dns_zone: "{{ _global_domain_name }}"
 ipa_default_bind_policy: "grant {{ ipa_server_realm }} krb5-self * A; grant {{ ipa_server_realm }} krb5-self * AAAA; grant {{ ipa_server_realm }} krb5-self * SSHFP;" # noqa yaml[line-length]
 ipa_default_bind_policy_reverse: "grant {{ ipa_server_realm }} krb5-subdomain {{ ipa_dns_reverse_zone }} PTR;"
 
-ipa_generate_certs: true
+# ipaclient role vars: these do not follow standards
+ipaadmin_password: "{{ ipa_admin_password_vault }}"
+ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
+ipaserver_fqdn: "{{ ipa_server_fqdn }}"
+ipaclient_domain: "{{ ipa_server_domain }}"
+ipaclient_realm: "{{ ipa_server_domain | upper }}"
+ipaclient_configure_dns_resolver: "{{ ipa_client_configure_dns_resolver }}"
+ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
+ipaclient_mkhomedir: "{{ ipa_client_mkhomedir }}"
+ipaclient_force_join: true # force rejoin of realm if we are rebuilding satellite without rebuilding IdM
 
 # this is the name of the user being passed to prepare realm
 foreman_proxy_realm_role_name: "Smart Proxy Host Manager"
@@ -58,12 +84,13 @@ foreman_proxy_bind_update_policy_reverse: "{{ ipa_default_bind_policy_reverse }}
 keytab_retrieval_password: "{{ ipa_admin_password_vault }}"
 keytab_retrieval_dn: "{{ ipa_keytab_dn }}"
 
-sat_ssl_rsa_key_pass: "{{ sat_ssl_rsa_key_pass_vault }}"
 sat_ssl_certs_dir: "/etc/ipa/private/{{ ansible_fqdn }}/"
+sat_ssl_rsa_key_pass: "{{ sat_ssl_rsa_key_pass_vault }}"
 sat_ssl_crt_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.crt"
 sat_ssl_key_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.key"
 sat_ssl_csr_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.csr"
-ipa_server_ca_path: "/etc/ipa/ca.crt"
+sat_ssl_ca_crt_path: "{{ ipa_server_ca_crt_path }}"
+ipa_server_ca_crt_path: "/etc/ipa/ca.crt"
 
 crt_service_type: "HTTP"
 crt_force_regen: true

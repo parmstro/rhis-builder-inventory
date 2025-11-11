@@ -22,8 +22,8 @@ settings_provisioning:
     full_name: "Unattended URL"
     description: "URL hosts will retrieve templates from during build, when it starts with https unattended/userdata controllers cannot be accessed via HTTP"
     settings_type: "string"
-#    default: "http://satellite.example.ca"
-    value: "http://satellite.example.ca"
+#    default: "http://satellite.{{ _global_domain_name }}"
+    value: "http://satellite.{{ _global_domain_name }}"
 
   - name: "safemode_render"
     full_name: "Safemode rendering"

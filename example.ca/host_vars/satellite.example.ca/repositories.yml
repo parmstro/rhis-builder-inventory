@@ -382,21 +382,6 @@ satellite_repositories:
     download_policy: "immediate"
     unprotected: false
 
-# CentOS 8 for convert2rhel demos
-  - name: "centos-8-appstream"
-    product: "CentOS Stream 9"
-    content_type: "yum"
-    gpg_key: "CentOS9OfficialGPG"
-    download_policy: "immediate"
-    unprotected: false
-
-  - name: "centos-8-baseos"
-    product: "CentOS Stream 9"
-    content_type: "yum"
-    gpg_key: "CentOS9OfficialGPG"
-    download_policy: "immediate"
-    unprotected: false
-
 # CentOS9 for convert2rhel demos
   - name: "centos-9-appstream"
     product: "CentOS Stream 9"

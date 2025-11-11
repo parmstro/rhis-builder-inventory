@@ -1,7 +1,7 @@
 ---
 
 hg_test_hosts:
-  - fqdn: "hg-x86-64-rhel8-metal1.example.ca"
+  - fqdn: "hg-x86-64-rhel8-metal1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -18,11 +18,11 @@ hg_test_hosts:
         managed: true
         primary: true
         provision: true
-        subnet: "example.ca"
+        subnet: "{{ _global_domain_name }}"
         mac: "54:b2:03:f1:0b:9f"
         ip: "192.168.140.201"
 
-  - fqdn: "hg-x86-64-rhel8-vm1.example.ca"
+  - fqdn: "hg-x86-64-rhel8-vm1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -39,7 +39,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "hg-x86-64-rhel9-metal1.example.ca"
+  - fqdn: "hg-x86-64-rhel9-metal1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -60,7 +60,7 @@ hg_test_hosts:
         mac: "54:b2:03:f1:0b:d2"
         ip: "192.168.140.202"
 
-  - fqdn: "hg-x86-64-rhel9-vm1.example.ca"
+  - fqdn: "hg-x86-64-rhel9-vm1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -76,7 +76,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-dev-cis2-1.example.ca"
+  - fqdn: "soe8-dev-cis2-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -87,7 +87,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-dev-jboss-1.example.ca"
+  - fqdn: "soe8-dev-jboss-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -98,7 +98,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-dev-lamp-1.example.ca"
+  - fqdn: "soe8-dev-lamp-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -109,7 +109,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-dev-wordpress-1.example.ca"
+  - fqdn: "soe8-dev-wordpress-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -120,7 +120,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-qa-jboss-1.example.ca"
+  - fqdn: "soe8-qa-jboss-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -131,7 +131,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-qa-lamp-1.example.ca"
+  - fqdn: "soe8-qa-lamp-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -142,7 +142,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe8-qa-wordpress-1.example.ca"
+  - fqdn: "soe8-qa-wordpress-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -153,7 +153,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-cis2-1.example.ca"
+  - fqdn: "soe9-dev-cis2-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -164,7 +164,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-jboss-1.example.ca"
+  - fqdn: "soe9-dev-jboss-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -175,7 +175,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-lamp-1.example.ca"
+  - fqdn: "soe9-dev-lamp-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -186,7 +186,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-wordpress-1.example.ca"
+  - fqdn: "soe9-dev-wordpress-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -197,7 +197,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-qa-jboss-1.example.ca"
+  - fqdn: "soe9-qa-jboss-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -208,7 +208,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-qa-lamp-1.example.ca"
+  - fqdn: "soe9-qa-lamp-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -219,7 +219,7 @@ hg_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-qa-wordpress-1.example.ca"
+  - fqdn: "soe9-qa-wordpress-1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"

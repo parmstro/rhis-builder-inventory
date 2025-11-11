@@ -8,10 +8,6 @@
 skip_sync: false
 skip_publish_all: false
 
-# repository sets are for this organization
-satellite_organization: "{{ satellite_initial_organization }}"
-satellite_location: "{{ satellite_initial_location }}"
-
 # Add additional content not needed for boostrap but still valuable and useful
 # Can be set to false to skip managemet of repos, CVs and CCVs
 repository_sets:
@@ -264,11 +260,11 @@ repository_sets:
     product: "Red Hat Ansible Automation Platform"
 
 ############## Satellite ##################
-# Satellite 6.16
-  - name: "Red Hat Satellite Capsule 6.17 for RHEL 9 x86_64 (RPMs)"
+# Satellite 6.18
+  - name: "Red Hat Satellite Capsule 6.18 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Satellite Capsule"
 
-  - name: "Red Hat Satellite Maintenance 6.17 for RHEL 9 x86_64 (RPMs)"
+  - name: "Red Hat Satellite Maintenance 6.18 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
 
 ############## JBoss EAP ##################

@@ -4,7 +4,7 @@
 
 capsule_hosts:
   - name: "capsule1"
-    fqdn: "capsule1.example.ca"
+    fqdn: "capsule1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -15,7 +15,7 @@ capsule_hosts:
     boot_ip: "192.168.252.81"
     crt_force_regen: false
   - name: "capsule2"
-    fqdn: "capsule2.example.ca"
+    fqdn: "capsule2.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"

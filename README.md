@@ -1,4 +1,10 @@
 # rhis-builder-inventory
+
+NOTE:
+The rhis-builder-inventory now contains a version.txt file. Its purpose is to allow users to recognize change and updates to the schema and to help align the sample data with the rhis-provisioner container. This capabiloty will be enhanced through releases with the intention of eventually providing configuration validation. As we consume a huge number of projects under rhis-builder this task will be ongoing.
+
+
+
 Provide the configuration definitions to the rhis-provisioner container for all RHIS repositories for a given Organization including:
 
 * external_tasks directory

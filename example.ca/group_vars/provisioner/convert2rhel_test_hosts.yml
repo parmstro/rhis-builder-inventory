@@ -3,7 +3,7 @@
 # Hosts to test convert2rhel content and workflows
 
 convert2rhel_test_hosts:
-  - fqdn: "centostest1.example.ca"
+  - fqdn: "centostest1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -13,7 +13,7 @@ convert2rhel_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "c2r_demo_host deleteme"
 
-  - fqdn: "centostest2.example.ca"
+  - fqdn: "centostest2.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -23,7 +23,7 @@ convert2rhel_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "c2r_demo_host deleteme"
 
-  - fqdn: "oeltest1.example.ca"
+  - fqdn: "oeltest1.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"
@@ -33,7 +33,7 @@ convert2rhel_test_hosts:
     mac: "00:50:56:ff:ff:ff"
     comment: "c2r_demo_host deleteme"
 
-  - fqdn: "oeltest2.example.ca"
+  - fqdn: "oeltest2.{{ _global_domain_name }}"
     delete_host: false
     organization: "Default Organization"
     location: "Default Location"

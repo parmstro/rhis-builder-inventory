@@ -1,6 +1,0 @@
----
-
-subscription_manifests:
-  - organization: "Default_Organization"
-    path: "root/bootstrap_manifest.zip"
-    state: "refreshed"

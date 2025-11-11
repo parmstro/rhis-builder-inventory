@@ -40,6 +40,6 @@ ipa_crypto_policy: "DeFaULt"
 # These are simply test values
 etc_hosts_list:
   - ip: "192.168.140.13"
-    fqdn: "provisioner.example.ca"
+    fqdn: "provisioner.{{ _global_domain_name }}"
   - ip: "192.168.140.12"
-    fqdn: "satellite.example.ca"
+    fqdn: "satellite.{{ _global_domain_name }}"

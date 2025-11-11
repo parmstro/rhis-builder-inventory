@@ -2,4 +2,4 @@
 # SCAP scan search query to scan a test host
 
 scan:
-  search_query: "name ^ linsql0.example.ca"
+  search_query: "name ^ linsql0.{{ _global_domain_name }}"

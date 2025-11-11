@@ -63,8 +63,8 @@ soe_qa_templates:
       vault_path: "vars/vault.yml"
       vars_path: "vars/main.yml"
       vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "example.ca"
-      datacenter_folder: "/example.ca/vm"
+      datacenter_name: "{{ _global_domain_name }}"
+      datacenter_folder: "/{{ _global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
         - name: qatestjboss2.{{ _global_domain_name }}
@@ -220,8 +220,8 @@ soe_qa_templates:
       vault_path: "vars/vault.yml"
       vars_path: "vars/main.yml"
       vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "example.ca"
-      datacenter_folder: "/example.ca/vm"
+      datacenter_name: "{{ _global_domain_name }}"
+      datacenter_folder: "/{{ _global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
         - name: qatestjboss2.{{ _global_domain_name }}
@@ -254,8 +254,8 @@ soe_qa_templates:
       vault_path: "vars/vault.yml"
       vars_path: "vars/main.yml"
       vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "example.ca"
-      datacenter_folder: "/example.ca/vm"
+      datacenter_name: "{{ _global_domain_name }}"
+      datacenter_folder: "/{{ _global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
         - name: qatestjboss2.{{ _global_domain_name }}

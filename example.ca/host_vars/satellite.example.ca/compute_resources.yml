@@ -16,6 +16,10 @@
 
 vcenter_service_username: "{{ vcenter_service_username_vault }}"
 vcenter_service_password: "{{ vcenter_service_password_vault }}"
+vmware_cluster1_name: "chassis3"
+vmware_cluster1_path: "/Datacenters/{{ _global_domain_name }}/vm"
+vmware_cluster1_datastore: "NASAEX_VMS"
+vmware_cluster1_network: "VM Network"
 
 azure1_tenant_id: "{{ azure1_tenant_id_vault }}"
 azure1_subscription_id: "{{ azure1_subscription_id_vault }}"
@@ -24,7 +28,9 @@ azure1_client_secret_id: "{{ azure1_client_secret_id_vault }}"
 azure1_client_secret: "{{ azure1_client_secret_vault }}"
 azure1_cloud: "azure"
 azure1_region: "Canada Central"
-azure1_resourcegroup1: "rg_parmstrong_ca"
+azure1_resourcegroup1: "rg1_example_ca"
+azure1_rg1_vnet1: "vn1_example_ca"
+azure1_rg1_vn1_subnet1: "sn_example_ca"
 
 aws1_access_key: "{{ aws1_access_key_vault }}"
 aws1_secret_key: "{{ aws1_secret_key_vault }}"
@@ -39,14 +45,14 @@ compute_resources:
     organizations: "{{ satellite_organization }}"
     provider_params:
       caching_enabled: false  # setting this to true currently causes some server faults.
-      datacenter: "example.ca"
-      url: "vcenter.example.ca"
+      datacenter: "{{ _global_domain_name }}"
+      url: "vcenter.{{ _global_domain_name }}"
       user: "{{ vcenter_service_username }}"
       password: "{{ vcenter_service_password }}"
 
   - name: "Azure_Lab"
     provider: "AzureRm"
-    description: "Example.ca Resource Group"
+    description: "{{ _global_domain_name }} Resource Group"
     locations: "{{ satellite_location }}"
     organizations: "{{ satellite_organization }}"
     images:

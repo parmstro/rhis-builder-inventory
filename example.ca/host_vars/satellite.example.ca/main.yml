@@ -1,3 +1,20 @@
 ---
 # This file holds the main satellite level variables.
 use_completion_logic: true
+
+satellite_fqdn: "{{ ansible_fqdn }}"
+satellite_domain: "{{ ansible_fqdn.split('.')[1:] | join('.') }}"
+satellite_username: "{{ satellite_username_vault }}"
+satellite_password: "{{ satellite_password_vault }}"
+
+satellite_admin_email: "admin@{{ satellite_domain }}"
+satellite_initial_location: "Default Location"
+satellite_initial_organization: "Default Organization"
+
+satellite_location: "{{ satellite_initial_location }}"
+satellite_organization: "{{ satellite_initial_organization }}"
+
+satellite_url: "https://{{ satellite_fqdn }}/"
+satellite_virtwho_username: "{{ satellite_virtwho_username_vault }}"
+satellite_virtwho_password: "{{ satellite_virtwho_password_vault }}"
+satellite_validate_certs: true
