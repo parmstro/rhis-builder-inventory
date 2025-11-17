@@ -185,6 +185,8 @@ settings_provisioning:
     description: "Global default PXEGrub2 template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades."
     settings_type: "string"
 #    default: "PXEGrub2 global default"
+# use this value  to support custom discovery facts
+#     value: "SOE PXEGrub2 Global Default"
     value: "PXEGrub2 global default"
 
   - name: "global_PXELinux"
@@ -192,6 +194,8 @@ settings_provisioning:
     description: "Global default PXELinux template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades."
     settings_type: "string"
 #    default: "PXELinux global default"
+# use this value  to support custom discovery facts
+#    value: "SOE PXELinux Global Default"
     value: "PXELinux global default"
 
   - name: "global_PXEGrub"
@@ -199,6 +203,8 @@ settings_provisioning:
     description: "Global default PXEGrub template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades."
     settings_type: "string"
 #    default: "PXEGrub global default"
+# use this value  to support custom discovery facts
+#    value: "SOE PXEGrub Global Default"
     value: "PXEGrub global default"
 
   - name: "global_iPXE"
@@ -206,6 +212,8 @@ settings_provisioning:
     description: "Global default iPXE template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades."
     settings_type: "string"
 #    default: "iPXE global default"
+# use this value  to support custom discovery facts
+#    value: "SOE iPXE Global Default"
     value: "iPXE global default"
 
   - name: "local_boot_PXEGrub2"
@@ -213,6 +221,8 @@ settings_provisioning:
     description: "Template that will be selected as PXEGrub2 default for local boot."
     settings_type: "string"
 #    default: "PXEGrub2 default local boot"
+ # use this value to support custom discovery facts
+#   value: "SOE PXEGrub2 Local Boot Default"
     value: "PXEGrub2 default local boot"
 
   - name: "local_boot_PXELinux"
