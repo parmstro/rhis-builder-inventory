@@ -16,12 +16,12 @@ repository_sets:
   - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
-      - releasever: "10.0"
+      - releasever: "10.1"
 
   - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
-      - releasever: "10.0"
+      - releasever: "10.1"
 
 # RHEL10 repos
   - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)"
@@ -61,12 +61,12 @@ repository_sets:
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
-      - releasever: "10.0"
+      - releasever: "10.1"
 
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
-      - releasever: "10.0"
+      - releasever: "10.1"
 
 # RHEL10_aarch64 repos
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS (RPMs)"
@@ -100,14 +100,14 @@ repository_sets:
   - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
+      - releasever: "9.7"
       - releasever: "9.6"
-      - releasever: "9.5"
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
+      - releasever: "9.7"
       - releasever: "9.6"
-      - releasever: "9.5"
 
 # RHEL9 repos
   - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
@@ -141,30 +141,30 @@ repository_sets:
   - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
-      - releasever: "9.6"
+      - releasever: "9.7"
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
-      - releasever: "9.6"
+      - releasever: "9.7"
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
-      - releasever: "9.6"
+      - releasever: "9.7"
 
 ############## RHEL 9 aarch64 ##################
 # RHEL9_aarch64 kickstart repos
   - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
-      - releasever: "9.6"
+      - releasever: "9.7"
       - releasever: "9.2"
 
   - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
-      - releasever: "9.6"
+      - releasever: "9.7"
       - releasever: "9.2"
 
 # RHEL9_aarch64 repos

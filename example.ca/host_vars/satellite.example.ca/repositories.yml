@@ -12,11 +12,11 @@
 satellite_repositories:
 
 # RHEL 10 x86_64
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.0"
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.1"
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.0"
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
@@ -53,11 +53,11 @@ satellite_repositories:
     download_policy: "immediate"
 
 # RHEL 10 ARM 64
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.0"
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.1"
     product: "Red Hat Enterprise Linux for ARM 64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.0"
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.1"
     product: "Red Hat Enterprise Linux for ARM 64"
     content_type: "yum"
     download_policy: "immediate"
@@ -89,6 +89,14 @@ satellite_repositories:
     download_policy: "immediate"
 
 # RHEL 9 x86_64
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
   - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
@@ -97,20 +105,12 @@ satellite_repositories:
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.5"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.6"  # for LEAPP
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.7"  # for LEAPP
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
@@ -118,7 +118,7 @@ satellite_repositories:
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.6"  # for LEAPP
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.7"  # for LEAPP
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
@@ -126,7 +126,7 @@ satellite_repositories:
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.6"  # for LEAPP
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.7"  # for LEAPP
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
@@ -146,11 +146,11 @@ satellite_repositories:
     download_policy: "immediate"
 
 # RHEL 9 ARM 64
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.6"
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
     product: "Red Hat Enterprise Linux for ARM 64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.6"
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
     product: "Red Hat Enterprise Linux for ARM 64"
     content_type: "yum"
     download_policy: "immediate"
@@ -291,11 +291,11 @@ satellite_repositories:
     download_policy: "immediate"
 
   # Red Hat Satellite Capsule
-  - name: "Red Hat Satellite Maintenance 6.17 for RHEL 9 x86_64 RPMs"
+  - name: "Red Hat Satellite Maintenance 6.18 for RHEL 9 x86_64 RPMs"
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Satellite Capsule 6.17 for RHEL 9 x86_64 RPMs"
+  - name: "Red Hat Satellite Capsule 6.18 for RHEL 9 x86_64 RPMs"
     product: "Red Hat Satellite Capsule"
     content_type: "yum"
     download_policy: "immediate"
