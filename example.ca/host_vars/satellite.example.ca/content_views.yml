@@ -18,6 +18,7 @@
 errata_end_date: "{{ ansible_date_time.date }}"
 skip_publish_all: false
 
+
 #######################################
 # REQUIRED CONTENT VIEWS WILL BE MARKED
 #######################################
@@ -247,9 +248,9 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.0"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.1"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.0"
+      - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream RPMs 10"
         product: "Red Hat Enterprise Linux for x86_64"
@@ -314,9 +315,9 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.0"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.1"
         product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.0"
+      - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.1"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream RPMs 10"
         product: "Red Hat Enterprise Linux for ARM 64"
@@ -385,9 +386,9 @@ content_views:
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.5"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
         product: "Red Hat Enterprise Linux for x86_64"
@@ -450,9 +451,9 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.6"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
         product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.6"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to work with RPi4++
         product: "Red Hat Enterprise Linux for ARM 64"
@@ -781,11 +782,11 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.6"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.6"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.6"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
         product: "Red Hat Enterprise Linux for x86_64"
