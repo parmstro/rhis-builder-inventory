@@ -18,11 +18,11 @@ clearpart --all
 
 ignoredisk --only-use=sda,sdb
 ## partitions for /boot
-part raid.01 --fstype="mdmember" --size=1024 --ondisk=sda
-part raid.02 --fstype="mdmember" --size=1024 --ondisk=sdb
+part raid.01 --fstype="mdmember" --size=2048 --ondisk=sda
+part raid.02 --fstype="mdmember" --size=2048 --ondisk=sdb
 ## partitions for /boot/efi
-part raid.11 --fstype="mdmember" --size=1024 --ondisk=sda
-part raid.12 --fstype="mdmember"  --size=1024 --ondisk=sdb
+part raid.11 --fstype="mdmember" --size=2048 --ondisk=sda
+part raid.12 --fstype="mdmember"  --size=2048 --ondisk=sdb
 ## partitions for /
 part raid.21 --fstype="mdmember"  --size=1 --grow --ondisk=sda
 part raid.22 --fstype="mdmember"  --size=1 --grow --ondisk=sdb
@@ -33,11 +33,11 @@ part raid.22 --fstype="mdmember"  --size=1 --grow --ondisk=sdb
 
 ignoredisk --only-use=vda,vdb
 ## partitions for /boot
-part raid.01 --fstype="mdmember" --size=1024 --ondisk=vda
-part raid.02 --fstype="mdmember" --size=1024 --ondisk=vdb
+part raid.01 --fstype="mdmember" --size=2048 --ondisk=vda
+part raid.02 --fstype="mdmember" --size=2048 --ondisk=vdb
 ## partitions for /boot/efi
-part raid.11 --fstype="mdmember" --size=1024 --ondisk=vda
-part raid.12 --fstype="mdmember"  --size=1024 --ondisk=vdb
+part raid.11 --fstype="mdmember" --size=2048 --ondisk=vda
+part raid.12 --fstype="mdmember"  --size=2048 --ondisk=vdb
 ## partitions for /
 part raid.21 --fstype="mdmember"  --size=1 --grow --ondisk=vda
 part raid.22 --fstype="mdmember"  --size=1 --grow --ondisk=vdb
@@ -48,11 +48,11 @@ part raid.22 --fstype="mdmember"  --size=1 --grow --ondisk=vdb
 
 ignoredisk --only-use={{ host.boot_disk }},{{ host.boot_disk_mirror }}
 ## partitions for /boot
-part raid.01 --fstype="mdmember" --size=1024 --ondisk={{ host.boot_disk }}
-part raid.02 --fstype="mdmember" --size=1024 --ondisk={{ host.boot_disk_mirror }}
+part raid.01 --fstype="mdmember" --size=2048 --ondisk={{ host.boot_disk }}
+part raid.02 --fstype="mdmember" --size=2048 --ondisk={{ host.boot_disk_mirror }}
 ## partitions for /boot/efi
-part raid.11 --fstype="mdmember" --size=1024 --ondisk={{ host.boot_disk }}
-part raid.12 --fstype="mdmember"  --size=1024 --ondisk={{ host.boot_disk_mirror }}
+part raid.11 --fstype="mdmember" --size=2048 --ondisk={{ host.boot_disk }}
+part raid.12 --fstype="mdmember"  --size=2048 --ondisk={{ host.boot_disk_mirror }}
 ## partitions for /
 part raid.21 --fstype="mdmember"  --size=1 --grow --ondisk={{ host.root_disk }}
 part raid.22 --fstype="mdmember"  --size=1 --grow --ondisk={{ host.root_disk_mirror }}

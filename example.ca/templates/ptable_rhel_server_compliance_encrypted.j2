@@ -15,7 +15,7 @@ clearpart --all
 # The actual password is needed by anaconda to encrypt the drive and save to the keyslot
 # We will handle this with a password rotation scheme at first boot
 
-part /boot --fstype ext4 --size=1024 --ondisk=<%= host_param('boot_disk') %>
+part /boot --fstype ext4 --size=2048 --ondisk=<%= host_param('boot_disk') %>
 part /boot/efi --fstype="efi" --size=2048 --ondisk=<%= host_param('boot_disk') %>
 part pv.01 --size=1 --grow --ondisk=<%= host_param('root_disk') %> --encrypted --passphrase <%= host_param('default_passphrase') %>
 <% pvs = [] -%>

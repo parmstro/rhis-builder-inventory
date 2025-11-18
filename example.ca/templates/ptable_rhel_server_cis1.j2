@@ -11,7 +11,7 @@ os_family: Redhat
 zerombr
 clearpart --all
 
-part /boot --fstype ext4 --size=1024 --ondisk=<%= host_param('boot_disk') %>
+part /boot --fstype ext4 --size=2048 --ondisk=<%= host_param('boot_disk') %>
 part /boot/efi --fstype="efi" --size=2048 --ondisk=<%= host_param('boot_disk') %>
 part pv.01 --size=1 --grow --ondisk=<%= host_param('root_disk') %>
 <% pvs = [] -%>
