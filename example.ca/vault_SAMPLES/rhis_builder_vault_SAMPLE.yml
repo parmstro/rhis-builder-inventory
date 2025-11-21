@@ -119,9 +119,10 @@ azure1_user_ssh_key: "a_public_ssh_key_for_the_login_user"                      
 
 # Secrets used for bootstrapping on VMware
 # Please see this KB article for the premissions need for a service account user https://access.redhat.com/solutions/1339483
-vcenter_username_vault: "Administrator@VSPHERE.LOCAL"                                              # notsecret
-vcenter_password_vault: "{{ default_environment_password_vault }}"                                 # notsecret
-
+vmware_vcenter_username_vault: "Administrator@VSPHERE.LOCAL"                                              # notsecret
+vmware_vcenter_password_vault: "{{ default_environment_password_vault }}"                                 # notsecret
+vmware_datacenter_name_vault: "{{ _global_domain_name }}"                                                         # notsecret
+vmware_vcenter_hostname_vault: "{{ groups['vmware_vcenter_hosts'][0] }}"
 
 ####################################################################
 # FOR PRODUCTION DEPLOYMENTS, set each password below individually #
@@ -132,12 +133,9 @@ vcenter_password_vault: "{{ default_environment_password_vault }}"              
 #####################################
 
 # for bootstrapping the base idm install system to redhat cdn
-idm_activationkey_vault: "{{ default_activation_key_vault }}"                                      # notsecret
+# use cdn_activation_key_vault
 
 # Note the redhat.rhel_idm roles use a different naming standard
-
-realm_admin_username_vault: "{{ default_admin_username_vault }}"                                   # notsecret
-realm_admin_password_vault: "{{ default_environment_password_vault }}"                             # notsecret
 
 ipa_admin_principal_vault: "{{ default_admin_username_vault }}"                                    # notsecret
 ipa_admin_password_vault: "{{ default_environment_password_vault }}"                               # notsecret
@@ -155,21 +153,14 @@ kvm_ssl_rsa_key_pass_vault: "{{ default_environment_password_vault }}"
 # Phase 3 - Satellite Install secrets
 #####################################
 
-# for bootstrapping the base satellite system to the redhat cdn
-sat_activationkey_vault: "{{ default_activation_key_vault }}"                                      # notsecret
-
 # Satellite administrator
-satellite_server_url_vault: "https://satellite.example.ca"                                         # notsecret
 satellite_username_vault: "{{ default_admin_username_vault }}"                                     # notsecret
 satellite_password_vault: "{{ default_environment_password_vault }}"                               # notsecret
-
-sat_ssl_rsa_key_pass_vault: "{{ default_environment_password_vault }}"                             # notsecret
-sat_inital_admin_username_vault: "{{ default_admin_username_vault }}"                              # notsecret
-sat_inital_admin_password_vault: "{{ default_environment_password_vault }}"                        # notsecret
+satellite_ssl_rsa_key_pass_vault: "{{ default_environment_password_vault }}"                             # notsecret
 
 # This is used to pull the keytab instead of recreating it
 # Only the DM by default can pull an existing user keytab
-ipa_keytab_dn: "cn=Directory Manager"                                                              # notsecret
+ipa_keytab_dn_vault: "cn=Directory Manager"                                                              # notsecret
 
 # Satellite Manifest creation secrets
 # These are required to create/pull the manifests for both Satellite and AAP Controller
@@ -197,7 +188,7 @@ manifest_subs_vault:
 
 # Satellite Remote Execution ssh user and keys
 # allows you to predefine the ssh keys for Satellite remote execution
-remote_execution_ssh_keys_vault: "{{ lookup('file', '/home/' + rhis_builder_default_user + '/.ssh/id_rsa.pub') }}"     # notsecret
+remote_execution_ssh_keys_vault: "{{ some value }}"     # notsecret
 remote_execution_ssh_user_vault: "{{ rhis_builder_default_user }}"                                 # notsecret
 # On AWS, the workflows by default add the SSH key to the user 'ec2-user'
 # remote_execution_ssh_user_vault: "ec2-user"                                                      # notsecret
@@ -218,7 +209,7 @@ vcenter_virtwho_password_vault: "{{ default_environment_password_vault }}"      
 
 # for virtwho to update satellite
 # permissions to update satellite with discovered vms and hypervisors
-satellite_virtwho_username_vault: "{{ sat_inital_admin_username_vault }}"                          # notsecret
+satellite_virtwho_username_vault: "{{ satellite_username_vault }}"                                 # notsecret
 satellite_virtwho_password_vault: "{{ default_environment_password_vault }}"                       # notsecret
 
 # satellite email secrets
@@ -238,6 +229,9 @@ default_provisioning_root_password_vault: "{{ default_environment_password_vault
 ansible_github_username_vault: "ansiblerunner@example.ca"                                          # notsecret
 ansible_github_gpat_vault: "github_pat_awer.......a.long.string........42aTtUaE"                   # notsecret
 
+# Note we have separate variables avaialble here
+# because the target environment may have AAP subs in a different account
+# If it does not, we simply point it to the already defined variable
 aap_cdn_username_vault: "{{ cdn_username_vault }}"                                                 # notsecret
 aap_cdn_password_vault: "{{ cdn_password_vault }}"                                                 # notsecret
 aap_cdn_account_number_vault: "{{ cdn_account_number_vault }}"                                     # notsecret
@@ -248,13 +242,15 @@ aap_controller_ssl_rsa_key_pass_vault: "eyJhbGciOiJSUzUxMiJ9"                   
 aap_admin_username_vault: "{{ default_admin_username_vault }}"                                     # notsecret
 aap_admin_password_vault: "{{ default_environment_password_vault }}"                               # notsecret
 aap_pg_password_vault: "eyJhbGciOiJSUzUxMiJ9"                                                      # notsecret
-aap_auth_ldap_bind_dn_vault: "uid=ldap-lookup,cn=users,cn=accounts,{{ aap_ldap_domain_map }}"      # notsecret
+aap_auth_ldap_bind_dn_vault: "uid=ldap-lookup,cn=users,cn=accounts,{{ _global_domain_cn }}"        # notsecret
 aap_auth_ldap_bind_password_vault: "{{ default_environment_password_vault }}"                      # notsecret
 
 redhat_registry_username_vault: "eyJhbGciOiJIUz|builder"                                           # notsecret
 redhat_registry_password_vault: "eyJhbGciOiJSUzUxMiJ9......a.long.string.......sEUxD01A"           # notsecret
 
 aap_hub_ssl_rsa_key_pass_vault: "eyJhbGciOiJSUzUxMiJ9"                                             # notsecret
+# Again if there is a separate login to access automation hub
+# Otherwise we can use the previously defined cdn credentials
 aap_registry_username_vault: "{{ cdn_username_vault }}"                                            # notsecret
 aap_registry_password_vault: "{{ cdn_password_vault }}"                                            # notsecret
 
@@ -268,6 +264,8 @@ private_hub_password_vault: "{{ default_environment_password_vault }}"          
 # automation hub token generated for standalone aap 2.4 automation hub
 private_automation_hub24_token_vault: "asdfasdfasdfasdfasdfasdfasdfasdf"                           # notsecret
 
+# Again if there is a separate login for "registry.redhat.io"
+# Otherwise we can use the previously defined cdn credentials
 containerhost_registry_vault: "registry.redhat.io"                                                 # notsecret
 containerhost_registry_username_vault: "{{ cdn_username_vault }}"                                  # notsecret
 containerhost_registry_password_vault: "{{ cdn_password_vault }}"                                  # notsecret
@@ -281,13 +279,6 @@ github_demo_gpat_vault: "ghp_withalongrandomstringof$tU!!"                      
 
 aap_idm_machine_username_vault: "{{ default_admin_username_vault }}"                               # notsecret
 aap_idm_machine_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
-
-satellite_organization_vault: "Default_Organization"                                               # notsecret
-satellite_location_vault: "Default_Location"                                                       # notsecret
-vmware_datacenter_name_vault: "example.ca"                                                         # notsecret
-vmware_vcenter_hostname_vault: "{{ vmware_vcenter_hostname_vault }}"                               # notsecret
-vmware_vcenter_username_vault: "{{ vcenter_username_vault }}"                                      # notsecret
-vmware_vcenter_password_vault: "{{ vcenter_password_vault }}"                                      # notsecret
 
 #####################################
 # rhis-builder-yubi vault

@@ -2,7 +2,7 @@
 # AAP Manifest variables
 
 aap_manifest_name: "{{ groups['aap_controllers'][0] }}"
-aap_manifest_destiny: "/tmp/{{ groups['aap_controllers'][0] }}.zip"
+aap_manifest_dest: "/tmp/{{ groups['aap_controllers'][0] }}.zip"
 aap_manifest_portal_url: "https://subscription.rhsm.redhat.com"
 aap_manifest_validate_certs: false
 aap_manifest_cdn_username: "{{ aap_cdn_username_vault }}"

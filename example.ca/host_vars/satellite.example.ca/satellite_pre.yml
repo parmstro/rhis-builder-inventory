@@ -82,10 +82,10 @@ foreman_proxy_bind_update_policy: "{{ ipa_default_bind_policy }}{{ foreman_proxy
 foreman_proxy_dns_update_policy_reverse: "grant {{ foreman_proxy_realm_principal }}\\@{{ ipa_server_realm }} wildcard * ANY;"
 foreman_proxy_bind_update_policy_reverse: "{{ ipa_default_bind_policy_reverse }}{{ foreman_proxy_dns_update_policy_reverse }}"
 keytab_retrieval_password: "{{ ipa_admin_password_vault }}"
-keytab_retrieval_dn: "{{ ipa_keytab_dn }}"
+keytab_retrieval_dn: "{{ ipa_keytab_dn_vault }}"
 
 sat_ssl_certs_dir: "/etc/ipa/private/{{ ansible_fqdn }}/"
-sat_ssl_rsa_key_pass: "{{ sat_ssl_rsa_key_pass_vault }}"
+satellite_ssl_rsa_key_pass: "{{ satellite_ssl_rsa_key_pass_vault }}"
 sat_ssl_crt_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.crt"
 sat_ssl_key_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.key"
 sat_ssl_csr_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.csr"

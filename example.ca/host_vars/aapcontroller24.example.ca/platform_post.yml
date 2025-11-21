@@ -4,7 +4,7 @@
 
 # AAP Manifest
 aap_manifest_name: "rhis_app_manifest"
-aap_manifest_destiny: "/tmp/rhis_aap_manifest.zip"
+aap_manifest_dest: "/tmp/rhis_aap_manifest.zip"
 aap_manifest_portal_url: "https://subscription.rhsm.redhat.com"
 aap_manifest_validate_certs: false
 aap_manifest_cdn_username: "{{ aap_cdn_username_vault }}"
