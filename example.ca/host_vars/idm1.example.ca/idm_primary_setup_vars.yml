@@ -2,7 +2,10 @@
 
 
 # commonly changed variables
-ipaserver_ip_addresses: "192.168.140.5"
+ipaserver_ip_addresses: "{{ _default_network }}.5"
+ipaserver_hostname: "{{ ansible_fqdn }}"
+ipaserver_forwarders:
+  - "8.8.8.8"
 
 ipaserver_forward_policy: "first"
 default_password: "{{ ipa_default_user_password }}"

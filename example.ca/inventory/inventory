@@ -1,15 +1,19 @@
+# This inventory is used for describing RHIS infrastructure nodes
+# Once AAP is up and running
+# most of the other environment nodes are managed through AAP inventories
 [provisioner]
 localhost
 
 [idm_primary]
-idm.example.ca
+idm1.example.ca
 
 [idm_replicas]
-idmr1.example.ca
-idmr2.example.ca
+idm2.example.ca
+idm3.example.ca
+idm4.example.ca
 
 [sat_primary]
-satellite.example.ca
+satellite1.example.ca
 
 [sat_capsule]
 capsule1.example.ca
@@ -29,16 +33,8 @@ aaphub24.example.ca
 # [aap_edacontrollers]
 # [aap_execution_nodes]
 # [aap_hop_nodes]
+# [aap_gateway_nodes]   # AAP 2.5 only
 
 [container_servers]
-containerhost1.example.ca
-containerhost2.example.ca
-
-# [aws_nodes]
-# [azure_nodes]
-# [baremetal_nodes]
-# [gcp_nodes]
-# [kvm_nodes]
-# [ocp_virt_nodes]
-# [openstack_nodes]
-# [vmware_nodes]
+quadlet1.example.ca
+quadlet2.example.ca

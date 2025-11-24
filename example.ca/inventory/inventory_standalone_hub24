@@ -5,8 +5,8 @@ localhost
 idm.example.ca
 
 [idm_replicas]
-idmr1.example.ca
-idmr2.example.ca
+idm2.example.ca
+idm3.example.ca
 
 [sat_primary]
 satellite.example.ca
@@ -31,14 +31,5 @@ aaphub24.example.ca
 # [aap_hop_nodes]
 
 [container_servers]
-containerhost1.example.ca
-containerhost2.example.ca
-
-# [aws_nodes]
-# [azure_nodes]
-# [baremetal_nodes]
-# [gcp_nodes]
-# [kvm_nodes]
-# [ocp_virt_nodes]
-# [openstack_nodes]
-# [vmware_nodes]
+quadlet1.example.ca
+quadlet2.example.ca
