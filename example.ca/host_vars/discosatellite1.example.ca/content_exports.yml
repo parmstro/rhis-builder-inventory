@@ -1,0 +1,43 @@
+---
+
+# content_exports definition
+# yamllint disable rule:line-length
+
+# destination server is valuable because rhis-provsioner will create a directory
+# in /var/lib/
+
+content_exports:
+  # - name: "Library"
+  #   type: "library"
+  #   organization: "{{ satellite_organization }}" # required - If supporting multiple organizations this can be set to an organization hosted on the satellite1.
+  #   format: "importable"
+  #   # ca_path: # we will use the ipa ca for rhis idm integrated satellites
+  #   chunk_size_gb: "2"  # format *must* be 'importable', 'syncable' format exports cannot be chunked (they are rpms)
+  #   destination_server: "satellite_disconnected.{{ _global_domain_name }}"
+  #   fail_on_missing_content: true
+  #   incremental: false
+
+  # Examples for Repo and content view exports
+  #
+  - name: "Repository"
+    type: "repository"
+    organization: "{{ satellite_organization }}" # required - If supporting multiple organizations this can be set to an organization hosted on the satellite1.
+    format: "importable"
+    product: "EPEL8"      # required
+    repository: "EPEL8"   # required
+    # ca_path: # we will use the ipa ca for rhis idm integrated satellites
+    chunk_size_gb: "2"  # format *must* be 'importable', 'syncable' format exports cannot be chunked (they are rpms)
+    destination_server: "discosatellite1.example.ca"
+    fail_on_missing_content: true
+    incremental: false
+  # - name: "Content_View_Version"
+  #   type: "cv_version"
+  #   organization: "{{ satellite_organization }}" # required - If supporting multiple organizations this can be set to an organization hosted on the satellite1.
+  #   format: "importable"
+  #   content_view: "SOE8"
+  #   content_view_version: "20.0"
+  #   # ca_path: # we will use the ipa ca for rhis idm integrated satellites
+  #   chunk_size_gb: "2"  # format *must* be 'importable', 'syncable' format exports cannot be chunked (they are rpms)
+  #   destination_server: "satellite_disconnected.example.ca"
+  #   fail_on_missing_content: true
+  #   incremental: false

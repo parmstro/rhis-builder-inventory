@@ -65,8 +65,8 @@ templates_soe_qa:
       vault_path: "vars/vault.yml"
       vars_path: "vars/main.yml"
       vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "parmstrong.ca"
-      datacenter_folder: "/parmstrong.ca/vm"
+      datacenter_name: "{{ _global_domain_name }}"
+      datacenter_folder: "/{{ _global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
         - name: qatestjboss2.{{ _global_domain_name }}
@@ -222,8 +222,8 @@ templates_soe_qa:
       vault_path: "vars/vault.yml"
       vars_path: "vars/main.yml"
       vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "parmstrong.ca"
-      datacenter_folder: "/parmstrong.ca/vm"
+      datacenter_name: "{{ _global_domain_name }}"
+      datacenter_folder: "/{{ _global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
         - name: qatestjboss2.{{ _global_domain_name }}
@@ -256,8 +256,8 @@ templates_soe_qa:
       vault_path: "vars/vault.yml"
       vars_path: "vars/main.yml"
       vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "parmstrong.ca"
-      datacenter_folder: "/parmstrong.ca/vm"
+      datacenter_name: "{{ _global_domain_name }}"
+      datacenter_folder: "/{{ _global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
         - name: qatestjboss2.{{ _global_domain_name }}

@@ -15,7 +15,7 @@ aap_platform_username: "{{ aap_admin_username_vault }}"
 aap_platform_password: "{{ aap_admin_password_vault }}"
 
 # AAP Authentication
-aap_ldap_domain_map: "dc=parmstrong,dc=ca"
+aap_ldap_domain_map: "dc=,dc=ca"
 aap_admin_username: "{{ aap_admin_username_vault }}"
 aap_admin_password: "{{ aap_admin_password_vault }}"
 

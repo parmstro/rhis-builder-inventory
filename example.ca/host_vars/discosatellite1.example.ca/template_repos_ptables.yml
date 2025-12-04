@@ -1,0 +1,22 @@
+---
+
+#
+
+template_repos_ptables:
+  - associate: "always"
+    branch: main
+    # ca_path:
+    dirname: "partition_table_templates"
+    filter: "soe*"
+    force: false
+    # http_proxy:
+    # http_proxy_policy:  none | global |selected
+    locations:
+      - "{{ satellite_location }}"
+    lock: false
+    negate: false
+    organizations:
+      - "{{ satellite_organization }}"
+    prefix: "rhis-"
+    repo: "https://example.com/repo.git"
+    verbose: false

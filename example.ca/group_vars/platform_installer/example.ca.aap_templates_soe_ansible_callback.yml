@@ -18,7 +18,7 @@ templates_soe_ansible_callback:
       sysmessage_type: "base"
       time_timedaemon: "chrony"
       time_timeservers:
-        - "time1.parmstrong.ca"
-        - "time2.parmstrong.ca"
-        - "time3.parmstrong.ca"
+        - "time1.example.ca"
+        - "time2.example.ca"
+        - "time3.example.ca"
       time_timezone: "America/Toronto"

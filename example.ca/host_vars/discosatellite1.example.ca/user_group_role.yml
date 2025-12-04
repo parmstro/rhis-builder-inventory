@@ -1,0 +1,149 @@
+---
+
+# Currently this is not behaving as documented.
+# Users are added.
+# Groups are added.
+# Roles are added.
+# Users are not added to groups
+# Roles are not added to groups
+# Role implementation is not documented clearly
+# Diagnosing issues... please stand by...
+
+# test users
+satellite_users:
+  - name: "bobsurunkle"
+    firstname: "Bob"
+    lastname: "Surunkle"
+    email: "bobsurunkle@{{ _global_domain_name }}"
+    description: "Uncle Bob"
+    admin: "false"
+    user_password: "random_password"  # not_a_secret
+    default_location: "Default Location"
+    default_organization: "Default Organization"
+    auth_source: "Internal"  # or "External"
+    timezone: "Toronto"
+    locale: "en_GB"
+    locations:
+      - "Default Location"
+    organizations:
+      - "Default Organization"
+    state: "present"  # not Ontario
+
+# satgroup-administrator will map to the Satellite admins group and administrator (all privileges) role
+# satgroup-compliance-auditor will need to view OSCAP Policy and Reports maps to Compliance Viewer
+# satgroup-compliance-manager will need to view, edit and upload OSCAP Policy and view Reports - maps to Compliance Viewer
+# satgroup-content-manager will need to manage subscriptions, repositories, products, content views, life cycles, errata, and containers
+# satgroup-org-administrator maps to Manager role
+# satgroup-site-administrator maps to Site Manager role
+# satgroup-sub-manager needs to see Red Hat Subscriptions and Manifests
+# satgroup-operator - combines a number of roles - BootStrap_User, Remote Execution User, Task Manager, Edit Hosts, Discovery Manager, Viewer
+
+# test user groups
+satellite_user_groups:
+  - name: "Operators"
+    admin: "false"
+    roles:
+      - "Operator"
+    users:
+      - "bobsurunkle"
+    state: "present"
+
+# test roles
+satellite_roles:
+  - name: "Operator"
+    state: present
+    description: "A default operator"
+    locations:
+      - "{{ satellite_location }}"
+    organizations:
+      - "{{ satellite_organization }}"
+    filters:
+      - resource_type: "AnsibleRole"
+        permissions:
+          - "view_ansible_roles"
+      - resource_type: "AnsibleVariable"
+        permissions:
+          - "view_ansible_variables"
+          - "edit_ansible_variables"
+      - resource_type: "Architecture"
+        permissions:
+          - "view_architectures"
+      - resource_type: "Audit"
+        permissions:
+          - "view_audit_logs"
+      - resource_type: "AuthSource"
+        permissions:
+          - "view_authenticators"
+          - "edit_authenticators"
+      - resource_type: "Bookmark"
+      - resource_type: "ComputeProfile"
+      - resource_type: "ComputeResource"
+      - resource_type: "ConfigReport"
+      - resource_type: "DiscoveryRule"
+      - resource_type: "Domain"
+      - resource_type: "ExternalUsergroup"
+        permissions:
+          - "view_external_usergroups"
+      - resource_type: "FactValue"
+      - resource_type: "Filter"
+      - resource_type: "Host"
+        permissions:
+          - "view_hosts"
+      - resource_type: "Hostgroup"
+      - resource_type: "Image"
+      - resource_type: "KeyPair"
+      - resource_type: "Location"
+      - resource_type: "LookupValue"
+      - resource_type: "MailNotification"
+      - resource_type: "Medium"
+      - resource_type: "Model"
+      - resource_type: "Operatingsystem"
+      - resource_type: "Organization"
+      - resource_type: "Parameter"
+      - resource_type: "PersonalAccessToken"
+      - resource_type: "Ptable"
+      - resource_type: "ProvisioningTemplate"
+      - resource_type: "ReportTemplate"
+      - resource_type: "Realm"
+      - resource_type: "Role"
+        permissions:
+          - "view_roles"
+      - resource_type: "Setting"
+        permissions:
+          - "view_settings"
+      - resource_type: "SshKey"
+      - resource_type: "Subnet"
+      - resource_type: "Usergroup"
+        permissions:
+          - "view_usergroups"
+      - resource_type: "User"
+        permissions:
+          - "view_users"
+      - resource_type: "ForemanTasks::Task"
+      - resource_type: "ForemanTasks::RecurringLogic"
+        permissions:
+          - "view_recurring_logics"
+      - resource_type: "JobTemplate"
+      - resource_type: "RemoteExecutionFeature"
+      - resource_type: "JobInvocation"
+      - resource_type: "TemplateInvocation"
+      - resource_type: "ForemanOpenscap::ArfReport"
+      - resource_type: "ForemanOpenscap::Policy"
+      - resource_type: "ForemanOpenscap::ScapContent"
+      - resource_type: "ForemanOpenscap::TailoringFile"
+      - resource_type: "Katello::ActivationKey"
+      - resource_type: "Katello::ContentView"
+      - resource_type: "Katello::ContentCredential"
+      - resource_type: "Katello::HostCollection"
+      - resource_type: "Katello::KTEnvironment"
+      - resource_type: "Katello::Product"
+      - resource_type: "Katello::Subscription"
+        permissions:
+          - "view_subscriptions"
+      - resource_type: "Katello::SyncPlan"
+      - resource_type: "Katello::AlternateContentSource"
+        permissions:
+          - "view_alternate_content_sources"
+      - resource_type: "InsightsHit"
+      - resource_type: "Template"
+      - resource_type: "ForemanVirtWhoConfigure::Config"
