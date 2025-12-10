@@ -18,3 +18,16 @@ satellite_url: "https://{{ satellite_fqdn }}/"
 satellite_virtwho_username: "{{ satellite_virtwho_username_vault }}"
 satellite_virtwho_password: "{{ satellite_virtwho_password_vault }}"
 satellite_validate_certs: true
+
+# Use the following variables if you are performing a disconnected installation
+# also you will want to examine the content_exports.yml and content_imports.yml configurations
+satellite_disconnected: false
+
+# satellite_disconnected_root: "/var/media"
+# satellite_os_iso_source: "rhel9_dvd.iso"
+# satellite_install_iso_source: "sat617_dvd.iso"
+# satellite_os_repo_mount: "{{ satellite_disconnected_root }}/rhel"
+# satellite_install_repo_mount: "{{ satellite_disconnected_root }}/satellite"
+# satellite_os_repo_template_name: "rhel_os_repo_file.j2"
+# satellite_os_repo_template_dest: "/etc/yum.repos.d/rhis_os_base.repo"
+# satellite_cdn_configuration_type: "export_sync"
