@@ -12,7 +12,7 @@ apply_standard_tuning: true
 cdn_organization_id: "{{ cdn_organization_id_vault }}"
 cdn_sat_activation_key: "{{ cdn_activation_key_vault }}"
 
-repository_ids:
+sat_repository_ids:
   - rhel-9-for-x86_64-baseos-rpms
   - rhel-9-for-x86_64-appstream-rpms
   - satellite-6.18-for-rhel-9-x86_64-rpms
