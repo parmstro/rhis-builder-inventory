@@ -1,0 +1,63 @@
+---
+# This file uses version 3 schema supporting AAP 2.4 on RHEL9
+
+version: 3
+
+images:
+  base_image:
+    name: "registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest"
+
+dependencies:
+  galaxy: requirements.yml
+  system: bindep.txt
+  
+  # https://access.redhat.com/solutions/7116301
+  python_interpreter:
+    package_system: python311
+    python_path: /usr/bin/python3.11
+  python: requirements.txt
+
+additional_build_steps:
+  prepend_galaxy:
+    # ENV ANSIBLE_GALAXY_SERVER_LIST ensures the recognition other ENV vars
+    # for the ALL CAPS names of the servers in the list, see below
+    #    - ENV ANSIBLE_GALAXY_SERVER_LIST=automation_hub,private_hub
+    # need to ensure private hub certificate for use with private hub
+    # see prepend_base
+    # ARG below must be exported in the shell of the user executing the build command
+    # and passed as --build-arg for the ansible-builder build command
+    # e.g. ansible-builder build --build-arg ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN
+    
+    {% if private_hub_url is defined %}
+- ENV ANSIBLE_GALAXY_SERVER_LIST=galaxy_base,private_hub,automation_hub
+    # Private hub
+    - ENV ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_URL="{{ private_hub_url }}"
+    - ENV ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_TOKEN="{{ private_hub_token }}"
+    
+    {% else %}
+    - ENV ANSIBLE_GALAXY_SERVER_LIST=galaxy_base,automation_hub
+    
+    {% endif %}
+
+    # Galaxy base url
+    - ENV ANSIBLE_GALAXY_SERVER_GALAXY_BASE_URL=https://galaxy.ansible.com/
+
+    # RH automation hub
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_URL=https://cloud.redhat.com/api/automation-hub/
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN="{{ automation_hub_token }}"
+    
+    
+  # adding the ca crt from IdM here allows it to be used
+  # later in the build process
+  prepend_base:
+    - ADD katello-server-ca.crt /etc/pki/ca-trust/source/anchors/katello-server-ca.crt
+    - RUN update-ca-trust
+  
+  append_final:
+  # python requests installed by pip uses certifi.py which uses its own trust store
+  # this causes foreman_ansible_modules to fail if the certificate store does not 
+  # include our foreman servers certificate. The OS based install of requests
+  # is configured to use the standard locations for certificate checking.
+  # So, install python3-requests from our OS distro
+     - RUN dnf install python3-requests.noarch
