@@ -198,8 +198,8 @@ templates_soe_qa:
       force_promote_all: true
       description: "Published by rhis-builder"
       satellite_validate_certs: true
-      source_lce: "SOE_Qualification"
-      target_lce: "SOE_Production"
+      source_lce: "Qualification"
+      target_lce: "Production"
       content_views:
         - name: "SOE8"
       composite_content_views:

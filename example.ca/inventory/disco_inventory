@@ -14,8 +14,8 @@ idm_replicas:
 
 sat_primary:
   hosts:  
-    satellite1.example.ca
-    # discosatellite1.example.ca
+    discosatellite1.example.ca
+    # satellite1.example.ca
 
 sat_capsule:
   hosts:

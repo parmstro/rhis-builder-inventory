@@ -122,11 +122,11 @@ templates_default_monthly_publish:
         - name: "SOE_AAP24"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "SOE_AAP25"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "SOE8_JBoss"
           environments:
             - "Library"
@@ -142,34 +142,34 @@ templates_default_monthly_publish:
         - name: "SOE8_EPEL"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "SOE9_EPEL"
           environments:
             - "Library"
-            - "SOE_Development"
-            - "SOE_Qualification"
-            - "SOE_Production"
+            - "Development"
+            - "Qualification"
+            - "Production"
         - name: "convert_CentOS2RHEL7"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "convert_OEL2RHEL7"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "LEAPP_7_2_8"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "LEAPP_8_2_9"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "SOE9_MSSQL"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"
         - name: "SOE9_POS"
           environments:
             - "Library"
-            - "SOE_Development"
+            - "Development"

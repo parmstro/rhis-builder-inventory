@@ -1,35 +1,75 @@
-[provisioner]
-localhost
+provisioner:
+  hosts:
+    localhost
 
-[idm_primary]
-idm.example.ca
+idm_primary:
+  hosts:
+    idm1.example.ca
 
-[idm_replicas]
-idm2.example.ca
-idm3.example.ca
+idm_replicas:
+  hosts:
+    idm2.example.ca
+    idm3.example.ca
+    idm4.example.ca
 
-[sat_primary]
-satellite.example.ca
+sat_primary:
+  hosts:  
+    satellite1.example.ca
+    # discosatellite1.example.ca
 
-[sat_capsule]
-capsule1.example.ca
-capsule2.example.ca
+sat_capsule:
+  hosts:
+    capsule1.example.ca
+    capsule2.example.ca
 
-[platform_installer]
-aaphub24.example.ca
+platform_installer:
+  hosts:
+    aaphub24.example.ca
 
-[aap_controllers]
-aapcontroller24.example.ca
+aap_controllers:
+  hosts:
+    aapcontroller24.example.ca
 
-# [aap_database]
+# aap_database:
 
-[aap_hubs]
-aaphub24.example.ca
+aap_hubs:
+  hosts:
+    aaphub24.example.ca
 
-# [aap_edacontrollers]
-# [aap_execution_nodes]
-# [aap_hop_nodes]
+# aap_edacontrollers:
+# aap_execution_nodes:
+# aap_hop_nodes:
 
-[container_servers]
-quadlet1.example.ca
-quadlet2.example.ca
+aap_hosts:
+  children:
+    aap_hubs:
+    aap_controllers:
+
+
+container_servers:
+  hosts:
+    quadlet1.example.ca
+    quadlet2.example.ca
+
+# aws_nodes:
+# azure_nodes:
+# baremetal_nodes:
+# gcp_nodes:
+# kvm_nodes:
+# ocp_virt_nodes:
+# openstack_nodes:
+vmware_vcenter_hosts:
+  hosts:
+    vcenter.example.ca
+
+vmware_esx_hosts:
+  hosts:
+    esx1.example.ca
+    esx2.example.ca
+    esx3.example.ca
+    esx4.example.ca
+    esx5.example.ca
+    esx6.example.ca
+    esx7.example.ca
+    esx8.example.ca
+    esx9.example.ca

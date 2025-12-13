@@ -41,11 +41,11 @@ inventories:
       satellite_password: '{{ satellite_password_vault }}'
       satellite_organization: '{{ satellite_initial_organization }}'
       satellite_location: '{{ satellite_initial_location }}'
-      vmware_datacenter_name: '{{ vmware_datacenter_name_vault }}'
-      vmware_vcenter_hostname: '{{ vmware_vcenter_hostname_vault }}'
-      vmware_vcenter_username: '{{ vmware_vcenter_username_vault }}'
-      vmware_vcenter_password: '{{ vmware_vcenter_password_vault }}'
-      vmware_validate_certs: false
+      vmware1_datacenter_name: '{{ vmware1_datacenter_name_vault }}'
+      vmware1_vcenter_hostname: '{{ vmware1_vcenter_hostname_vault }}'
+      vmware1_vcenter_username: '{{ vmware1_vcenter_username_vault }}'
+      vmware1_vcenter_password: '{{ vmware1_vcenter_password_vault }}'
+      vmware1_validate_certs: false
 
       disk_search_pattern: "sd.*"
 

@@ -1,3 +1,4 @@
 *.vscode
 parmstrong.ca
 *.tar
+*/vault/*.yml

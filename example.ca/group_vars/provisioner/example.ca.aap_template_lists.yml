@@ -1,9 +1,0 @@
----
-
-# list of template lists to process
-
-template_lists:
-  - "{{ vm_day_2_templates }}"
-  - "{{ soe_dev_templates }}"
-  - "{{ soe_qa_templates }}"
-  - "{{ convert_2_rhel_templates }}"

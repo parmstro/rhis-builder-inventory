@@ -25,4 +25,4 @@ aap_validate_certs: false
 ah_container_token: ""
 
 satellite_ansible_callback_config_key: "{{ satellite_ansible_callback_config_key_vault }}"
-cleanup_installer_keys: true
+cleanup_installer_keys: false

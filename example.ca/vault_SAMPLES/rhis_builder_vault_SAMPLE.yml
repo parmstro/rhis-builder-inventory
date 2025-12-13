@@ -119,10 +119,10 @@ azure1_user_ssh_key: "a_public_ssh_key_for_the_login_user"                      
 
 # Secrets used for bootstrapping on VMware
 # Please see this KB article for the premissions need for a service account user https://access.redhat.com/solutions/1339483
-vmware_vcenter_username_vault: "Administrator@VSPHERE.LOCAL"                                              # notsecret
-vmware_vcenter_password_vault: "{{ default_environment_password_vault }}"                                 # notsecret
-vmware_datacenter_name_vault: "{{ _global_domain_name }}"                                                         # notsecret
-vmware_vcenter_hostname_vault: "{{ groups['vmware_vcenter_hosts'][0] }}"
+vmware1_vcenter_username_vault: "Administrator@VSPHERE.LOCAL"                                              # notsecret
+vmware1_vcenter_password_vault: "{{ default_environment_password_vault }}"                                 # notsecret
+vmware1_datacenter_name_vault: "{{ _global_domain_name }}"                                                         # notsecret
+vmware1_vcenter_hostname_vault: "{{ groups['vmware_vcenter_hosts'][0] }}"
 
 ####################################################################
 # FOR PRODUCTION DEPLOYMENTS, set each password below individually #

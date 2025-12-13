@@ -46,7 +46,7 @@ templates_soe_dev:
       description: "Promoted by rhis-builder-pipelines"
       satellite_validate_certs: true
       source_lce: "Library"
-      target_lce: "SOE_Development"
+      target_lce: "Development"
       content_views:
         - name: "SOE8"
       composite_content_views:
@@ -250,8 +250,8 @@ templates_soe_dev:
       force_promote_all: true
       description: "Published by rhis-builder-pipelines"
       satellite_validate_certs: true
-      source_lce: "SOE_Development"
-      target_lce: "SOE_Qualification"
+      source_lce: "Development"
+      target_lce: "Qualification"
       content_views:
         - name: "SOE8"
       composite_content_views:
