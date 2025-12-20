@@ -45,7 +45,7 @@ collection_remotes:
         - community.mysql
         - community.network
         - community.postgresql
-        - community.vmware
+        - vmware.vmware
         - community.windows
     tls_validation: true
     download_concurrency: 10
