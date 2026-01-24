@@ -4,7 +4,7 @@
 rhc_insights_state: "absent"
 rhc_enable_auto_update: false
 
-repository_ids:
+idm_repository_ids:
   - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-baseos-rpms"
   - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-appstream-rpms"
   - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-supplementary-rpms"
