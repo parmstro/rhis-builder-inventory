@@ -35,7 +35,7 @@ redhat_manifests:
     generate: true
     organization: "Default Organization"
 #   source: org_name_versionstring.zip  # when you are providing your own manifest
-    path: "/root/to_my_manifest.zip"
+    path: "/root/bootstrap_manifest.zip"
     portal_url: "https://subscription.rhsm.redhat.com"
 #    repository_url:  # specify a url for alternate content source in Satellite
     state: present   # present | absent | refreshed
