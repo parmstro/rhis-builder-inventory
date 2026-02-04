@@ -351,16 +351,24 @@ satellite_repositories:
     download_policy: "immediate"
 
 # Red Hat Convert2RHEL utilities
-  - name: "convert2rhel7"
-    product: "convert2rhel"
+  - name: "Red Hat Client Tools for RHEL 7"
+    product: "Red Hat Client Tools for RHEL"
     content_type: "yum"
     gpg_key: "RedHatGPG"
     ssl_ca_cert: "RedHatSSL"
     download_policy: "immediate"
     unprotected: false
 
-  - name: "convert2rhel8"
-    product: "convert2rhel"
+  - name: "Red Hat Client Tools for RHEL 8"
+    product: "Red Hat Client Tools for RHEL"
+    content_type: "yum"
+    gpg_key: "RedHatGPG"
+    ssl_ca_cert: "RedHatSSL"
+    download_policy: "immediate"
+    unprotected: false
+
+  - name: "Red Hat Client Tools for RHEL 9"
+    product: "Red Hat Client Tools for RHEL"
     content_type: "yum"
     gpg_key: "RedHatGPG"
     ssl_ca_cert: "RedHatSSL"

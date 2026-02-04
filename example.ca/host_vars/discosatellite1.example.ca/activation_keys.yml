@@ -481,7 +481,7 @@ activation_keys:
     content_overrides:
       - label: "Default_Organization_CentOS79_CentOS79"
         override: "enabled"
-      - label: "Default_Organization_convert2rhel_convert2rhel7"
+      - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
         override: "enabled"
       - label: "Default_Organization_CentOS79_updates"
         override: "enabled"
@@ -506,7 +506,7 @@ activation_keys:
     content_overrides:
       - label: "Default_Organization_OEL79_OEL79"
         override: "enabled"
-      - label: "Default_Organization_convert2rhel_convert2rhel7"
+      - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
         override: "enabled"
       - label: "rhel-7-server-els-satellite-client-6-rpms"
         override: "enabled"
