@@ -38,5 +38,8 @@ containers:
         state: present
     state: started
     systemd: true
+    test_shell_command: "echo 'OcelotPantherJaguarBarnCat' | clevis encrypt tang '{\"url\":\"{{ ansible_fqdn }}:8080\"}' -y | clevis decrypt"
+    test_value: "OcelotPantherJaguarBarnCat"
+    test_expected_result: "OcelotPantherJaguarBarnCat"
     volume:
       - "tang-keys:/var/db/tang"
