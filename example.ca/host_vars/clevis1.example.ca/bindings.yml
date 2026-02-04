@@ -1,6 +1,48 @@
 nbde_client_bindings:
-  - device: /dev/sda2
+  - devices: []  # discover and bind all luks volumes, otherwise list
     encryption_password: "{{ nbde_encryption_password_vault }}"
-    servers:
-      - http://containerhost1.{{ _global_domain_name }}:8080
-      - http://containerhost2.{{ _global_domain_name }}:8080
+    type: "sss"  # allowable values "tang" or "sss"
+    required_pins: "1"
+    pins:
+      - type: "tang" # types "tang" or "tpm"
+        url: "http://{{ groups['container_hosts'][0] }}:8080"
+      - type: "tang"
+        url: "http://{{ groups['container_hosts'][1] }}:8080"
+
+# example with tpm
+# binding_json
+# "'{"t":2,"pins":{"tpm2":{"hash":"sha256","key":"rsa"},"tang":[{"url":"http://192.168.140.80.:8080","url":"http://192.168.140.81:8080"}]}}'"
+
+  # - devices: []  # discover and bind all luks volumes, otherwise list
+  #   encryption_password: "{{ nbde_encryption_password_vault }}"
+  #   type: "sss"
+  #   required_pins: "2"
+  #   pins:
+  #     - type: "tang" # types "tang" or "tpm2"
+  #       url: "http://{{ groups['container_hosts'][0] }}:8080"
+  #     - type: "tang"
+  #       url: "http://{{ groups['container_hosts'][1] }}:8080"
+  #     - type: "tpm2"
+  #       hash: "sha256"
+  #       key: "rsa"
+
+# TODO:
+# example with tpm and encrypt/reencrypt
+# binding_json
+# "'{"t":2,"pins":{"tpm2":{"hash":"sha256","key":"rsa"},"tang":[{"url":"http://192.168.140.80.:8080","url":"http://192.168.140.81:8080"}]}}'"
+
+  # - devices: [/dev/sdb]  # specific disk will be encrypted if it is not already encrypted
+  #   encryption_password: "{{ nbde_encryption_password_vault }}"
+  #   type: "sss"
+  #   required_pins: "2"
+  #   pins:
+  #     - type: "tang" # types "tang" or "tpm2"
+  #       url: "http://{{ groups['container_hosts'][0] }}:8080"
+  #     - type: "tang"
+  #       url: "http://{{ groups['container_hosts'][1] }}:8080"
+  #     - type: "tpm2"
+  #       hash: "sha256"
+  #       key: "rsa"
+
+# TODO:
+# example with random password and escrow
