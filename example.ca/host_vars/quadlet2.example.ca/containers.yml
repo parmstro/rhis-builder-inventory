@@ -7,7 +7,7 @@ containerhost_registry_password: "{{ containerhost_registry_password_vault }}"
 # e.g. tang
 containers:
   - name: "tang"
-    image: "rhel8/tang"   # we are using rhel 8.10 so rhel8 tang container
+    image: "rhel9/tang"   # we are using rhel 8.10 so rhel8 tang container
     id: "tang"
     tag: "latest"
     registry: "{{ containerhost_registry }}"
