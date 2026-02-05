@@ -1,0 +1,42 @@
+# These variables reference your secrets in an ansible vault file
+containerhost_registry: "{{ containerhost_registry_vault }}"
+containerhost_registry_username: "{{ containerhost_registry_username_vault }}"
+containerhost_registry_password: "{{ containerhost_registry_password_vault }}"
+
+# These variables define the containers that you want to deploy
+# e.g. tang
+containers:
+  - name: "tang"
+    image: "rhel8/tang"   # we are using rhel 8.10 so rhel8 tang container
+    id: "tang"
+    tag: "latest"
+    registry: "{{ containerhost_registry }}"
+    registry_username: "{{ containerhost_registry_username }}"
+    registry_password: "{{ containerhost_registry_password }}"
+    force: false
+    validate_certs: true
+    dependencies:
+      - clevis  # testing the service
+    detach: true
+    firewall:
+      - port: "8080/tcp"
+        zone: "public"
+        state: enabled
+    generate_systemd:
+      path: "/usr/lib/systemd/system/"
+      restart_policy: "on-failure"
+      time: 120
+      names: true
+      container_prefix: "rhis"
+      wants: "network-online.target"
+    publish:
+      - "8080:8080"
+    selinux_ports:
+      - ports: 8080
+        protocol: "tcp"
+        setype: "tangd_port_t"
+        state: present
+    state: started
+    systemd: true
+    volume:
+      - "tang-keys:/var/db/tang"

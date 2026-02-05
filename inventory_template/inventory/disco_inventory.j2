@@ -1,0 +1,75 @@
+provisioner:
+  hosts:
+    localhost
+
+idm_primary:
+  hosts:
+    idm1.{{ global_domain_name }}
+
+idm_replicas:
+  hosts:
+    idm2.{{ global_domain_name }}
+    idm3.{{ global_domain_name }}
+    idm4.{{ global_domain_name }}
+
+sat_primary:
+  hosts:  
+    discosatellite1.{{ global_domain_name }}
+    # satellite1.{{ global_domain_name }}
+
+sat_capsule:
+  hosts:
+    capsule1.{{ global_domain_name }}
+    capsule2.{{ global_domain_name }}
+
+platform_installer:
+  hosts:
+    aapcontroller24.{{ global_domain_name }}
+
+aap_controllers:
+  hosts:
+    aapcontroller24.{{ global_domain_name }}
+
+# aap_database:
+
+aap_hubs:
+  hosts:
+    aaphub24.{{ global_domain_name }}
+
+# aap_edacontrollers:
+# aap_execution_nodes:
+# aap_hop_nodes:
+
+aap_hosts:
+  children:
+    aap_hubs:
+    aap_controllers:
+
+
+container_servers:
+  hosts:
+    quadlet1.{{ global_domain_name }}
+    quadlet2.{{ global_domain_name }}
+
+# aws_nodes:
+# azure_nodes:
+# baremetal_nodes:
+# gcp_nodes:
+# kvm_nodes:
+# ocp_virt_nodes:
+# openstack_nodes:
+vmware_vcenter_hosts:
+  hosts:
+    vcenter.{{ global_domain_name }}
+
+vmware_esx_hosts:
+  hosts:
+    esx1.{{ global_domain_name }}
+    esx2.{{ global_domain_name }}
+    esx3.{{ global_domain_name }}
+    esx4.{{ global_domain_name }}
+    esx5.{{ global_domain_name }}
+    esx6.{{ global_domain_name }}
+    esx7.{{ global_domain_name }}
+    esx8.{{ global_domain_name }}
+    esx9.{{ global_domain_name }}

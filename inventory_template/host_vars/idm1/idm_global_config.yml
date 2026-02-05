@@ -1,0 +1,74 @@
+---
+# Set the global configuration for the realm
+# used with the idm_config role
+
+# add_sids requires IPA 4.9.8+ and SID generation to be activated.
+# idm_config_add_sids: false                                                  # Add SIDs for existing users and groups.
+
+idm_config_ca_renewal_master_server: "{{ groups['idm_primary'][0] }}"         # Renewal master for IPA certificate authority.
+idm_config_configstring_list:                                                 # Set extra hashes to generate in password plug-in
+  - "AllowNThash"
+  - "KDC:Disable Last Success"
+#  - "KDC:Disable Lockout"
+#  - "KDC:Disable Default Preauth for SPNs"
+
+idm_config_defaultgroup: "ipausers"                                           # Set the default group for new users
+idm_config_defaultshell: "/bin/bash"                                          # Set the default shell for new users
+idm_config_domain_resolution_order:                                           # Set list of domains to search for short name qualification
+  - "{{ ansible_domain }}"
+idm_config_emaildomain: "{{ ansible_domain }}"                                # Set the default e-mail domain
+idm_config_enable_migration: false
+idm_config_enable_sid: true                                                   # Cannot be disabled if it was activated e.g. during install trust-ad
+# idm_config_groupobjectclasses_list: []
+# idm_config_groupsearch_list: []
+idm_config_homedirectory: "/home"
+# idm_config_maxhostname:
+# idm_config_maxusername:
+# idm_config_netbios_name
+# idm_config_pac_type_list:      # list [ "MS-PAC", "PAD", "nfs:NONE" ]
+idm_config_pwdexpnotify: 14  # days notice of password change required
+idm_config_searchrecordslimit: 100   # max count of records to return
+idm_config_searchtimelimit: 10       # seconds
+idm_config_selinuxusermapdefault: "unconfined_u:s0-s0:c0.c1023"
+idm_config_selinuxusermaporder_list:  # ordered list - default is here - increasing priority (highest priority last)
+  - "guest_u:s0"
+  - "xguest_u:s0"
+  - "user_u:s0"
+  - "staff_u:s0-s0:c0.c1023"
+  - "sysadm_u:s0-s0:c0.c1023"
+  - "unconfined_u:s0-s0:c0.c1023"
+
+# By default, there is a per user Override
+# By default, password is implied if none are selected
+# LDAP only recognizes password and 2FA
+# Password + 2FA with kerberos requires armor ccache
+#
+# idm_config_auth_type_list:   # list - The default authentication types supported
+#   - disabled   # means per user Override is disabled
+#   - password
+#   - radius
+#   - otp
+#   - pkinit     # for smartcard
+#   - hardened   # SPAKE
+#   - idp        # identity provider
+#
+
+# idm_config_userobjectclasses_list:  # list - default user object classes
+#   - top
+#   - person
+#   - organizationalperson
+#   - inetorgperson
+#   - inetuser
+#   - posixaccount
+#   - krbprincipalaux
+#   - krbticketpolicyaux
+#   - ipaobject
+#   - ipasshuser
+
+# idm_config_usersearch_list:          # list - list of fields to search for user search
+#   - uid
+#   - givenname
+#   - sn
+#   - telephonenumber
+#   - ou
+#   - title

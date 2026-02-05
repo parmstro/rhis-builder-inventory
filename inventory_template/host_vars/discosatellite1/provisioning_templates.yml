@@ -1,0 +1,217 @@
+---
+# All of the templates that we need in a Satellite that aren't already installed.
+# Add your template files to the files directory of the Role
+# OR add them in this hostvars folder and adjust the path
+
+provisioning_templates:
+# snippets
+  - name: "soe_create_users_selinux"
+    type: "snippet"
+    locked: false
+    description: "Create default users based on satellite owner"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_create_users_selinux.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_disable_non_sat_repos"
+    type: "snippet"
+    locked: false
+    description: "Disable configured host repositories not provided by Satellite"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_disable_non_sat_repos.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_ensure_python"
+    type: "snippet"
+    locked: false
+    description: "Ensure that the proper OS python version is installed (RHEL8)"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_ensure_python.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_install_cockpit"
+    type: "snippet"
+    locked: false
+    description: "Ensure that the cockpit web UI is installed and enabled"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_install_cockpit.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE Kickstart Default custom packages"
+    type: "snippet"
+    locked: false
+    description: "Adding a list of standard SOE packages to be installed on every SOE image"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_kickstart_default_custom_packages.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  # this snippet now handles all the network config
+  - name: "soe_kickstart_network_interface"
+    type: "snippet"
+    locked: false
+    description: "SOE version"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_kickstart_network_interface.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_use_NBDE"
+    type: "snippet"
+    locked: false
+    description: "Enables Network Bound Disk Encryption for host. REQUIRES encrypted type ptable. REQUIRES active tang servers."
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_use_NBDE.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+# provisioning
+  - name: "OEM Kickstart Default"
+    type: "provision"
+    locked: false
+    description: "The default kickstart provided by theForeman/Satellite"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_oem_kickstart_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE Kickstart Default Finish"
+    type: "provision"
+    locked: false
+    description: "The default finish kickstart for image based provisioning of SOE systems"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_soe_kickstart_default_finish.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE Kickstart Default PXELinux"
+    type: "provision"
+    locked: false
+    description: "The default kickstart for PXE provisioning SOE systems"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_soe_kickstart_default_pxe_linux.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE Kickstart Default"
+    type: "provision"
+    locked: false
+    description: "The default kickstart for network based provisioning SOE systems"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_soe_kickstart_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE iPXE Global Default"
+    type: "ipxe"
+    locked: false
+    description: "RHIS iPXE for unknown systems - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "ipxe_template_soe_ipxe_global_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE PXELinux Global Default"
+    type: "pxelinux"
+    locked: false
+    description: "The default RHIS PXELinux for unknown systems - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "pxelinux_template_soe_pxelinux_global_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE PXEGrub Global Default"
+    type: "pxegrub"
+    locked: false
+    description: "Only for grub v1.0 - The default RHIS PXEGrub v1 for unknown systems - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "pxegrub_template_soe_pxegrub_global_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE PXEGrub2 Global Default"
+    type: "pxegrub2"
+    locked: false
+    description: "The default RHIS PXEGrub2 for unknown systems - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "pxegrub2_template_soe_pxegrub2_global_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "SOE PXEGrub2 Local Boot Default"
+    type: "pxegrub2"
+    locked: false
+    description: "The default RHIS PXEGrub2 for systems local booting - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "pxegrub2_template_soe_pxegrub2_default_local_boot.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_pxelinux_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXELinux - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxelinux_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_pxegrub_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXEGrub - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxegrub_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_pxegrub2_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXEGrub2 - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxegrub2_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"

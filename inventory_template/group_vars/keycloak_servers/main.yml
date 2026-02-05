@@ -1,0 +1,113 @@
+---
+
+# main variables for keycloak installation
+keycloak_admin_username: "admin"
+keycloak_admin_password: "{{ keycloak_admin_password_vault }}"
+
+keycloak_install_version: "26.0"
+keycloak_postgresql_install_version: "16"
+keycloak_openjdk_install_version: "21"
+
+keycloak_local_user: "keycloak"
+keycloak_db_user: "keycloakuser"
+keycloak_db_user_password: "{{ keycloak_db_user_password_vault }}"
+keycloak_install_dir: "/opt/{{ keycloak_installer_info.keycloak_installer_version }}"
+
+keycloak_installer_info:
+  keycloak_product: "Red Hat build of Keycloak"
+  keycloak_file_repo_name: "keycloak_files"
+  keycloak_destination_dir: "/opt"
+  keycloak_installer_version: "rhbk-26.0.14"
+
+register_satellite: true  # works for any rhsm target
+satellite_activation_keys:
+  - "SOE9_Keycloak_dev"
+
+# FOR NON-Satellite registered servers
+# 26.0.8 will support RHEL 9 SOE with postgresql 16
+keycloak_zipfile_upstream_url: "https://github.com/keycloak/keycloak/releases/download/26.0.8/keycloak-26.0.8.tar.gz"
+
+
+# fapolicyd role variables
+fapolicyd_setup_enable_service: true
+fapolicyd_setup_integrity: sha256
+fapolicyd_setup_trust: rpmdb,file
+fapolicyd_add_trusted_file:
+  - "{{ keycloak_install_dir }}"
+
+# firewalld ports and services
+firewalld_services:
+  - service: "https"
+    permanent: true
+    immediate: true
+    zone: "public"
+    state: "enabled"
+  - service: "postgresql"
+    permanent: true
+    immediate: true
+    zone: "public"
+    state: "enabled"
+firewalld_ports:
+  - port: "8080/tcp"
+    permanent: true
+    immediate: true
+    zone: "public"
+    state: "enabled"
+  - port: "7800/udp"
+    permanent: true
+    immediate: true
+    zone: "public"
+    state: "enabled"
+
+### BEGIN IdM Registration ONLY ###
+register_idm: true
+
+ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
+ipaadmin_password: "{{ ipa_admin_password_vault }}"
+ipaclient_domain: "{{ _global_domain_name }"
+ipaclient_mkhomedir: true
+ipaclient_ntp_servers:  # "Savage these are not the servers you are looking for... "
+  - "time.aws.ca"
+  - "time.chu.nrc.ca"
+  - "time.google.com"
+# ipaclient_ssh_trust_dns: true
+# ipasssd_enable_dns_updates: true
+### END IdM Registration ONLY ###
+
+### BEGIN NON-IdM Certificates ###
+# NOTE: If using non-IdM certs, set >>>>>>        certificates_idm: false
+# Set the following variables to point to your certificate files
+# ssl_private_key_path:
+# ssl_crt_path:
+# crt_service_type: "HTTP"
+# ca_path:
+### END NON-IdM Certificates ###
+
+
+### BEGIN IdM Certificates ###
+certificates_idm: true
+
+ipa_server_fqdn: "{{ groups['idm_primary'][0] }}"
+force_regen: true
+ssl_private_key_passphrase: "{{ ssl_private_key_passphrase_vault }}"
+ssl_private_key_cipher: aes256
+ssl_private_key_size: 2048
+csr_email_address: "bobsurunkle@{{ _global_domain_name }}"
+csr_organization_name: "Bob Surunkle"
+csr_organization_unit_name: "Surunkle Lab"
+csr_country_name: "CA"
+csr_state_or_province_name: "ON"
+csr_locality_name: "Cambridge"
+csr_digest: "aes256"
+
+### YOU SHOULD NOT HAVE TO CHANGE THESE ###
+crt_dir: "/etc/ipa/private"
+passfile: "{{ crt_dir }}/passout.txt"
+ssl_private_key_pem_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pem"
+ssl_private_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.key"
+ssl_public_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pub"
+ssl_public_key_format: PEM
+csr_path: "{{ crt_dir }}/{{ ansible_fqdn }}.csr"
+crt_service_type: "HTTP"
+ssl_crt_path: "{{ crt_dir }}/{{ ansible_fqdn }}.crt"
+### END IdM Certificates ###

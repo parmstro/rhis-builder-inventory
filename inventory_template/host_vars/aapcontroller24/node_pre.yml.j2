@@ -1,0 +1,115 @@
+---
+# aap controller prerequisite configuration file suitable for an AAP 2.5+
+#   - "RPM" deployment
+
+# time services are managed at deployment time in rhis
+# Provide time servers
+# time_servers:
+#   - time1.{{ global_domain_name }}
+#   - time2.{{ global_domain_name }}
+#   - time3.{{ global_domain_name }}
+{% raw %}
+platform_node_pre_preferred_boot_order: ["IP4", "IP6", "Red Hat"]
+platform_node_pre_reboot_on_finish: true
+platform_node_pre_reboot_timeout: 1  # in minutes
+
+platform_node_pre_storage:
+  - lv_name: "lv_var"
+    vg_name: "vg_root"
+    minimum_size: "60G"
+    state: present
+  - lv_name: "lv_home"
+    vg_name: "vg_root"
+    minimum_size: "30G"
+    state: present
+  - lv_name: "lv_var_tmp"
+    vg_name: "vg_root"
+    minimum_size: "6G"
+    state: present
+  - lv_name: "lv_tmp"
+    vg_name: "vg_root"
+    minimum_size: "6G"
+    state: present
+
+# for clustered deployment shared storage requirement, including firewall
+# platform_node_pre_shared_storage:
+#   - mountpoint:
+#     source:
+#     service_port:
+
+# inbound firewall ports for the hub nodes
+platform_node_pre_firewall:
+  - service: "ssh"
+    aap_source: "any"
+    aap_destination: "system"
+    aap_reason: "intallation"
+    state: "present"
+  - service: "http"
+    aap_source: "any"
+    aap_destination: "controllers"
+    aap_reason: "api"
+    state: "present"
+  - service: "https"
+    aap_source: "any"
+    aap_destination: "controllers"
+    aap_reason: "api"
+    state: "present"
+  - service: "cockpit"
+    aap_source: "any"
+    aap_destination: "system"
+    aap_reason: "management"
+    state: "present"
+  - service: "postgresql"
+    aap_source: "any"
+    aap_destination: "database"
+    reason: "database"
+    state: "present"
+  - service: "redis"
+    aap_source: "any"
+    aap_destination: "controllers"
+    aap_reason: "redis"
+    state: "present"
+  - port: "16379/tcp"
+    aap_source: "any"
+    aap_destination: "gateway"
+    aap_reason: "redis"
+    state: "present"
+  - port: "27199/tcp"
+    aap_source: "any"
+    aap_destination: "controllers"
+    aap_reason: "receptor"
+    state: "present"
+
+platform_ssl_certs_base_dir: "/etc/ipa/private"
+platform_node_pre_ssl_certs_dir: "{{ platform_ssl_certs_base_dir }}/{{ ansible_fqdn }}"
+platform_node_pre_cockpit_certs_dir: "/etc/cockpit/ws-certs.d/"
+
+# as this node is the installer, these are defined in platform_installer
+# platform_version: "2.5-5"
+# platform_arch: "x86_64"
+# platform_installer: true
+# platform_deployment_type: "rpm" # container, rpm, openshift
+# platform_topology: "growth"  # growth, enterprise, custom
+
+platform_node_pre_certificates:
+  - ssl_ca_cert_path: "/etc/ipa/ca.crt"
+    ssl_certs_dir: "{{ platform_node_pre_ssl_certs_dir }}"
+    ssl_cert_path: "{{ platform_node_pre_ssl_certs_dir }}/{{ ansible_fqdn }}.crt"
+    ssl_key_path: "{{ platform_node_pre_ssl_certs_dir }}/{{ ansible_fqdn }}.key"
+    ssl_passfile: "{{ platform_node_pre_ssl_certs_dir }}/passfile"
+    ssl_rsa_key_pass: "{{ aap_controller_ssl_rsa_key_pass_vault }}"
+    ssl_private_key_cipher: "aes256"
+    ssl_private_key_size: "4096"
+    ssl_private_key_pem_path: "{{ platform_node_pre_ssl_certs_dir }}/{{ ansible_fqdn }}.pem"
+    ssl_csr_path: "{{ platform_node_pre_ssl_certs_dir }}/{{ ansible_fqdn }}.csr"
+    ssl_crt_service_type: "HTTP"
+    ssl_crt_force_regen: true
+    csr_digest: "aes256"
+    csr_organization_name: "{{ ansible_domain | upper }}"
+    csr_organization_unit_name: "Lab"
+    csr_locality_name: "Hespeler"
+    csr_state_or_province_name: "ON"
+    csr_country_name: "CA"
+    csr_email_address: "admin@{{ ansible_domain }}"
+{% endraw %}
+...

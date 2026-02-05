@@ -1,0 +1,44 @@
+---
+
+# Hosts to test convert2rhel content and workflows
+
+convert2rhel_test_hosts:
+  - fqdn: "centostest1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_centos79_vm"
+    compute_resource: "VMware_Lab"
+    compute_profile: "2-Medium"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "c2r_demo_host deleteme"
+
+  - fqdn: "centostest2.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_centos79_vm"
+    compute_resource: "VMware_Lab"
+    compute_profile: "2-Medium"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "c2r_demo_host deleteme"
+
+  - fqdn: "oeltest1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_oel79_vm"
+    compute_resource: "VMware_Lab"
+    compute_profile: "2-Medium"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "c2r_demo_host deleteme"
+
+  - fqdn: "oeltest2.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_oel79_vm"
+    compute_resource: "VMware_Lab"
+    compute_profile: "2-Medium"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "c2r_demo_host deleteme"

@@ -1,0 +1,90 @@
+---
+# These values are very specific to a customer environment
+# Please take care to validate them carefully
+# This file generates compute resources for both VMware and Azure in the default organization
+# You can update the values of satellite_organization and satellite_location to recreate them in another org.
+
+# Compute resource types:
+# vmware
+# libvirt
+# ovirt
+# proxmox
+# EC2
+# AzureRm
+# GCE
+# Openstack
+{% raw %}
+vcenter_service_username: "{{ vcenter_service_username_vault }}"
+vcenter_service_password: "{{ vcenter_service_password_vault }}"
+vmware_cluster1_name: "chassis1"
+vmware_cluster1_path: "/Datacenters/{{ _global_domain_name }}/vm"
+vmware_cluster1_datastore: "NAS1_VMS"
+vmware_cluster1_network: "VM Network"
+
+
+azure1_tenant_id: "{{ azure1_tenant_id_vault }}"
+azure1_subscription_id: "{{ azure1_subscription_id_vault }}"
+azure1_client_id: "{{ azure1_client_id_vault }}"
+azure1_client_secret_id: "{{ azure1_client_secret_id_vault }}"
+azure1_client_secret: "{{ azure1_client_secret_vault }}"
+azure1_cloud: "azure"
+{% endraw %}azure1_region: "{{ rhis_azure_region }}"
+azure1_resourcegroup1: "rg1_{{ split_global_domain_name[0] }}_{{ split_global_domain_name[1] }}"
+azure1_rg1_vnet1: "vn1_{{ split_global_domain_name[0] }}_{{ split_global_domain_name[1] }}"
+azure1_rg1_vn1_subnet1: "sn1_{{ split_global_domain_name[0] }}_{{ split_global_domain_name[1] }}"
+{% raw %}
+aws1_access_key: "{{ aws1_access_key_vault }}"
+aws1_secret_key: "{{ aws1_secret_key_vault }}"
+aws1_gov_cloud: false
+{% endraw %}aws1_region: "{{ rhis_aws_region }}"
+{% raw %}
+compute_resources:
+  - name: "VMware_Lab"
+    provider: "vmware"
+    description: "Lab VCenter Server"
+    locations: "{{ satellite_location }}"
+    organizations: "{{ satellite_organization }}"
+    provider_params:
+      caching_enabled: false  # setting this to true currently causes some server faults.
+      datacenter: "{{ _global_domain_name }}"
+      url: "vcenter.{{ _global_domain_name }}"
+      user: "{{ vcenter_service_username }}"
+      password: "{{ vcenter_service_password }}"
+
+  - name: "Azure_Lab"
+    provider: "AzureRm"
+    description: "{{ _global_domain_name }} Resource Group"
+    locations: "{{ satellite_location }}"
+    organizations: "{{ satellite_organization }}"
+    images:
+      - name: "RHEL95_latest"
+        architecture: "x86_64"
+        operatingsystem: "RHEL 9.5"
+        image_username: "realm-capsule"
+        image_password: "{{ satellite_password }}"
+        uuid: "marketplace://RedHat:RHEL:9-lvm-gen2:latest"
+      - name: "ImageBuilderImage"
+        architecture: "x86_64"
+        operatingsystem: "RHEL 8.10"
+        image_username: "realm-capsule"
+        image_password: "{{ satellite_password }}"
+        uuid: "custom://composer-api-50f19253-239a-4478-b5c7-18ee052047df"
+    provider_params:
+      app_ident: "{{ azure1_client_id_vault }}"
+      cloud: "{{ azure1_cloud_vault }}"
+      password: "{{ azure1_client_secret_vault }}"
+      region: "{{ azure1_region_vault }}"
+      sub_id: "{{ azure1_subscription_id_vault }}"
+      tenant: "{{ azure1_tenant_id_vault }}"
+
+  - name: "AWS_Lab"
+    provider: "EC2"
+    description: "AWS EC2 Lab"
+    locations: "{{ satellite_location }}"
+    organizations: "{{ satellite_organization }}"
+    provider_params:
+      user: "{{ aws1_access_key }}"
+      password: "{{ aws1_secret_key }}"
+      region: "{{ aws1_region }}"
+{% endraw %}
+...

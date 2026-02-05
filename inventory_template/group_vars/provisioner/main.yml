@@ -1,0 +1,17 @@
+---
+
+ipa_client_dns_servers: "192.168.140.5"
+
+# Control for building platform_hosts
+# There are test host lists, kvm hosts, aap hosts, container host, etc.. we build them all at different times
+build_release_limit: 4  # a good number is the number of hypervisors, this should be adjusted to compensate for array write saturation.
+# 30 minutes is a lot of time, but I have slow storage devices for VMs, decrease this if you have a fast array. That is usually the bottleneck.
+build_release_timeout: 1800 # baremetal reliably builds in under 10 minutes - building 14 hosts at once was a non-issue.
+
+platform_hosts:
+  "{{ aap24_hosts }}"
+#  "{{ bond_test_hosts }}"
+#  "{{ capsule_hosts }}"
+#  "{{ convert2rhel_test_hosts }}"
+#  "{{ hg_test_hosts }}"
+#  "{{ kvm_hypervisor_test_hosts }}

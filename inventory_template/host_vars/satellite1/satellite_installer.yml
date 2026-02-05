@@ -1,0 +1,68 @@
+---
+
+# variables for a satellite installation
+
+foreman_proxy_realm_principal: "{{ foreman_proxy_realm_principal }}"
+dhcp_interface: "{{ ansible_facts.interfaces | select('match', '^(e)+') | list | first }}"
+satellite_tuning_size: "default"  # up to 5000 hosts   20 GiB RAM   4 Cores
+# satellite_tuning_size: "medium"   # up to 10000 hosts   32 GiB RAM   requires minimum 8 Cores
+# satellite_tuning_size: "large"     # up to 20000 hosts   64 GiB RAM  requires minimum  16 Cores
+# satellite_tuning_size: "extra-large"   # up to 60000 hosts   128 GiB RAM  requires minimum  32 Cores
+# satellite_tuning_size: "extra-extra-large"   # 60000+ hosts   256 GiB+ RAM  requires minimum 64+ Cores
+
+sat_installer_verbose: true
+sat_installer_options:
+  - '--skip-checks-i-know-better'
+  - '--foreman-foreman-service-puma-threads-min=16'  # recommended for every performance profile
+  - '--foreman-foreman-service-puma-threads-max=16'  # recommended for every performance profile
+  - '--foreman-foreman-service-puma-workers=16'   # recommended for minimum add 4 workers for each tuning size increase (test server 64GB RAM)
+  - '--foreman-dynflow-worker-instances 3'        # this is good for initial build as we want sync performance
+  - '--foreman-initial-organization "{{ satellite_initial_organization }}"'
+  - '--foreman-initial-location "{{ satellite_initial_location }}"'
+  - '--foreman-initial-admin-username "{{ satellite_username }}"'
+  - '--foreman-initial-admin-password "{{ satellite_password }}"'
+  - '--foreman-initial-admin-email "{{ satellite_admin_email }}"'
+  - '--foreman-initial-admin-first-name  "Satellite"'
+  - '--foreman-initial-admin-last-name  "Administrator"'
+  - '--tuning "{{ satellite_tuning_size }}"'
+  - '--enable-foreman-compute-ec2'
+  - '--enable-foreman-compute-libvirt'
+  - '--enable-foreman-compute-vmware'
+# We are integrating with IdM for DNS and identity
+  - '--foreman-ipa-authentication true'
+  - '--certs-server-ca-cert "/etc/ipa/ca.crt"'
+  - '--certs-server-cert "/etc/ipa/private/{{ satellite_fqdn }}/{{ satellite_fqdn }}.crt"'
+  - '--certs-server-key "/etc/ipa/private/{{ satellite_fqdn }}/{{ satellite_fqdn }}.key"'
+  - '--foreman-proxy-dns true'
+  - '--foreman-proxy-dns-managed false'
+  - '--foreman-proxy-dns-provider "nsupdate_gss"'
+  - '--foreman-proxy-dns-server "{{ ipa_server_fqdn }}"'
+  - '--foreman-proxy-dns-tsig-keytab "/etc/foreman-proxy/freeipa.keytab"'
+  - '--foreman-proxy-dns-tsig-principal "{{ foreman_proxy_realm_principal }}"'
+  - '--foreman-proxy-http true'
+  - '--foreman-proxy-realm true'
+  - '--foreman-proxy-realm-keytab "/etc/foreman-proxy/freeipa.keytab"'
+  - '--foreman-proxy-realm-principal "{{ foreman_proxy_realm_principal }}"'
+  - '--foreman-proxy-realm-provider  "freeipa"'
+# we will be kickstarting servers
+  - '--foreman-proxy-registration true'
+  - '--foreman-proxy-templates true'
+  - '--foreman-proxy-tftp true'
+  - '--foreman-proxy-plugin-discovery-install-images true'
+# We are enabling all content
+  - '--foreman-proxy-content-enable-ansible true'
+  - '--foreman-proxy-content-enable-deb true'
+  - '--foreman-proxy-content-enable-docker true'
+  - '--foreman-proxy-content-enable-file true'
+  - '--foreman-proxy-content-enable-yum true'
+#  - '--foreman-proxy-content-enable-ostree false' currently not supported
+# Comment the next 9 lines out if your environment use external DHCP
+  - '--foreman-proxy-dhcp true'
+  - '--foreman-proxy-dhcp-interface "{{ dhcp_interface }}"'
+  - '--foreman-proxy-dhcp-range "192.168.141.100 192.168.141.254"'
+  - '--foreman-proxy-dhcp-gateway "192.168.140.1"'
+  - '--foreman-proxy-dhcp-nameservers "192.168.140.5"'
+  - '--foreman-proxy-dhcp-option-domain "[{{ satellite_domain }}]"'
+  - '--foreman-proxy-dhcp-pxeserver "192.168.140.12"'
+  - '--foreman-proxy-dhcp-network "192.168.140.0"'
+  - '--foreman-proxy-dhcp-netmask "255.255.252.0"'

@@ -1,0 +1,36 @@
+---
+
+# These vault variables should be encrypted in your
+# rhisbuilder_vault.yml file
+
+register_to_satellite: true
+
+# commonly changed variables
+ipareplica_forwarders:
+  - "8.8.8.8"
+  - "8.8.4.4"
+ipareplica_forward_policy: "first"
+
+# infrequently changed variables
+ipareplica_install_packages: true
+
+ipareplica_setup_firewalld: false
+ipareplica_firewalld_zone: "public"
+
+ipareplica_no_host_dns: true
+ipareplica_mem_check: true
+
+ipareplica_setup_ca: true
+ipareplica_setup_adtrust: true
+ipareplica_setup_kra: true
+ipareplica_setup_dns: true
+
+# NOTE: setting ipaclient_no_dns will currently cause replica deployment to fail
+# do not set ipaclient_no_ntp, ipaclient_ntp_servers, ipaclient_ntp_pool - setting any of these variables
+# will cause replica deployment to fail with "NTP configuration cannot be updated during promotion"
+
+ipareplica_auto_reverse: true
+ipaclient_realm: "{{ _global_domain_name | upper }}"
+
+makehomedir: true
+sshtrustdns: true

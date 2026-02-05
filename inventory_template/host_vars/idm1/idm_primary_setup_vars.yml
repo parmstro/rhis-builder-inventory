@@ -1,0 +1,34 @@
+---
+
+
+# commonly changed variables
+ipaserver_ip_addresses: "{{ _default_network }}.5"
+ipaserver_hostname: "{{ ansible_fqdn }}"
+ipaserver_forwarders:
+  - "8.8.8.8"
+
+ipaserver_forward_policy: "first"
+default_password: "{{ ipa_default_user_password }}"
+
+# infrequently changed variables
+ipaadmin_password: "{{ ipa_admin_password }}"
+ipadm_password: "{{ ipa_dm_password }}"
+
+ipaserver_domain: "{{ ipa_server_domain }}"
+ipaserver_realm: "{{ ipa_server_realm }}"
+
+ipaserver_no_host_dns: true
+ipaserver_mem_check: false
+
+ipaserver_install_packages: false
+ipaserver_setup_firewalld: true
+
+ipaserver_setup_adtrust: false
+ipaserver_setup_kra: true
+ipaserver_setup_dns: true
+
+ipaserver_auto_reverse: true
+ipaserver_external_ca: false
+
+makehomedir: true
+sshtrustdns: true

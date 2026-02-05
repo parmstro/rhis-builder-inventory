@@ -1,0 +1,135 @@
+---
+
+# Ansible 2.4 growth deployment
+platform_hosts:
+  - fqdn: "aapcontroller24.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/aap_24"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+    compute_resource: "baremetal"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:6a"
+        ip: "192.168.140.14"
+
+
+  - fqdn: "aaphub24.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/aap_24"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+    compute_resource: "baremetal"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:46"
+        ip: "192.168.140.15"
+
+# AAP 2.5 Growth Deployment
+# platform_hosts:
+#   - fqdn: "aapcontroller1.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_metal/aap_25"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "baremetal"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.14"
+#   - fqdn: "aaphub1.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_metal/aap_25"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "baremetal"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.15"
+#   - fqdn: "aapdb.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "VMware_Lab"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.16"
+#   - fqdn: "aapgateway1.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "VMware_Lab"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.17"
+#   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
+#     delete_host: false
+#     organization: "Default Organization"
+#     location: "Default Location"
+#     hostgroup: "hg_x86_64_rhel9_vm/dev/aap_25_vm"
+#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
+#     compute_resource: "VMware_Lab"
+#     interfaces_attributes:
+#       - type: "interface"
+#         identifier: "{{ _default_provision_iface }}"
+#         domain: "{{ _default_domain }}"
+#         execution: true
+#         managed: true
+#         primary: true
+#         provision: true
+#         subnet: "{{ _default_subnetname }}"
+#         mac: ""
+#         ip: "192.168.140.18"

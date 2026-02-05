@@ -1,0 +1,296 @@
+---
+
+kvm_hypervisor_test_hosts:
+  - fqdn: "c3s2n1kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:d2"
+        ip: "192.168.140.41"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: "00:30:18:0c:d5:bf"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: "00:30:18:0c:d5:c0"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm1"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.41"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
+
+  - fqdn: "c3s2n2kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:6a"
+        ip: "192.168.140.42"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: "00:30:18:0c:d5:77"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: "00:30:18:0c:d5:78"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm2"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.42"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
+
+  - fqdn: "c3s2n3kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:46"
+        ip: "192.168.140.43"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: " 00:30:18:0c:d6:53"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: " 00:30:18:0c:d6:53"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm3"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.43"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
+
+  - fqdn: "c3s2n4kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:00:6f"
+        ip: "192.168.140.44"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: "00:30:18:0c:d5:9d"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: "00:30:18:0c:d5:9e"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm4"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.44"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
+
+  - fqdn: "c3s2n5kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:e3"
+        ip: "192.168.140.45"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: "00:30:18:0c:d5:79"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: "00:30:18:0c:d5:7a"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm5"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.45"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
+
+  - fqdn: "c3s2n6kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:00:cd"
+        ip: "192.168.140.46"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: "00:30:18:0c:d5:99"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: "00:30:18:0c:d5:9a"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm6"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.46"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
+
+  - fqdn: "c3s2n7kvm.{{ _default_domain }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:0b:ef"
+        ip: "192.168.140.47"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface1 }}"
+      #   mac: "00:30:18:cd:e4:28"
+      # - type: "interface"
+      #   identifier: "{{ _default_child_iface2 }}"
+      #   mac: "00:30:18:cd:e4:29"
+      # - type: "bond"
+      #   identifier: "{{ _default_bond_iface }}"
+      #   name: "kvm7"
+      #   domain: "{{ _default_domain }}"
+      #   execution: false
+      #   managed: true
+      #   primary: false
+      #   provision: false
+      #   ip: "192.168.142.47"
+      #   subnet: "{{ _default_bond_subnetname }}"
+      #   attached_devices:
+      #     - "{{ _default_child_iface1 }}"
+      #     - "{{ _default_child_iface2 }}"
+      #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+      #   mode: "802.3ad"
+      #   virtual: true
