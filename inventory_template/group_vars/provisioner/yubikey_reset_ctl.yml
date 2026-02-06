@@ -1,0 +1,7 @@
+---
+# Control Application Reset
+reset_fido: true
+reset_oauth: true
+reset_openpgp: true
+reset_otp: false
+reset_piv: true

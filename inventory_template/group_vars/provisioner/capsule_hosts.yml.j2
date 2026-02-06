@@ -1,0 +1,29 @@
+
+# The list of capsule servers to build for {{ global_domain_name }}
+# reference capsule_hosts to concatenate lists as necessary
+{% raw %}
+capsule_hosts:
+  - name: "capsule1"
+    fqdn: "capsule1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/satellite_capsule"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+    compute_resource: "baremetal"
+    mac: "94:c6:91:13:37:9e"
+    boot_ip: "192.168.252.81"
+    crt_force_regen: false
+  - name: "capsule2"
+    fqdn: "capsule2.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal/satellite_capsule"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+    compute_resource: "baremetal"
+    mac: "94:c6:91:a3:19:41"
+    boot_ip: "192.168.252.82"
+    crt_force_regen: false
+{% endraw %}
+...

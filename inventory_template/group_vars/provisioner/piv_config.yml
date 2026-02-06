@@ -1,0 +1,39 @@
+---
+# Settings for PIV Application configuration
+ipa_principal: "{{ ipa_principal_username_vault }}"
+ipa_password: "{{ ipa_principal_password_vault }}"
+
+piv_generate_random_key: true
+piv_mgmt_key_algorithm: "AES256"
+piv_mgmt_key_protect: false
+piv_mgmt_key_pin: "{{ piv_mgmt_pin_vault }}"
+piv_tmp_secure_dir: "{{ piv_secure_dir_vault }}"
+piv_tmp_private_key_file: "{{ piv_tmp_secure_dir }}/{{ piv_current_username }}-piv-9a-private.pem"
+piv_tmp_public_key_file: "{{ piv_tmp_secure_dir }}/{{ piv_current_username }}-piv-9a-public.pub"
+piv_tmp_csr_file: "{{ piv_tmp_secure_dir }}/{{ piv_current_username }}-piv-9a-request.csr"
+piv_tmp_certificate_file: "{{ piv_tmp_secure_dir }}/{{ piv_current_username }}-piv-9a-certificate.crt"
+piv_fips_enabled: false
+piv_pinpuk_default_retries: 5
+piv_pin_retries: "{{ piv_pinpuk_default_retries }}"
+piv_puk_retries: "{{ piv_pinpuk_default_retries }}"
+piv_random_password_generator: "python3 ~/piv_random.py"
+
+piv_private_key_passfile_path: "~/yubico/passfile"
+piv_rsa_private_key_size: 2048
+piv_rsa_private_key_outform: "PEM"
+piv_rsa_private_key_algorithm: "RSA"
+piv_rsa_private_key_cipher: "aes-256-cbc"
+piv_rsa_private_key_pubexp: 65537
+
+piv_certificate_profile: "caRSAUserCertSmartCard"
+piv_slot: "9a"
+piv_pin_policy: "DEFAULT"   # DEFAULT | NEVER | ONCE | ALWAYS
+piv_touch_policy: "DEFAULT" # DEFAULT | NEVER | ALWAYS | CACHED
+
+piv_secure_idm_store: true
+piv_vault_dir: "{{ piv_vault_dir_vault }}"
+piv_private_key_file: "{{ piv_vault_dir }}/{{ piv_current_username }}-piv-9a-private.pem"
+piv_public_key_file: "{{ piv_vault_dir }}/{{ piv_current_username }}-piv-9a-public.pub"
+piv_csr_file: "{{ piv_vault_dir }}/{{ piv_current_username }}-piv-9a-request.csr"
+piv_certificate_file: "{{ piv_vault_dir }}/{{ piv_current_username }}-piv-9a-certificate.crt"
+piv_current_username_vault_file: "{{ piv_vault_dir }}/{{ piv_current_username }}.vault"

@@ -1,0 +1,12 @@
+---
+
+# This file contains the vault secrets for rhis-builder-idm
+# Any globally necessary vault variables used by rhis-builder-idm will be noted here
+# and will be located in rhis-builer-vault.yml
+
+# All of the following are used in multiple projects, so are defined in rhis-builder-vault.yml
+# ipa_admin_principal_vault:
+# ipa_admin_password_vault:
+# ipa_dm_password_vault:
+# ipa_principal_username_vault:
+# ipa_principal_password_vault:

@@ -1,0 +1,18 @@
+---
+
+# Add your idp references here - e.g. Azure
+idm_idp_references:
+  - name: "azure_entra"
+    # auth_uri: "https://login.microsoftonline.com/e31d1058-5aa9-4838-9b40-9cbc02c6cd91/oauth2/v2.0/authorize"
+    # dev_auth_uri: "https://login.microsoftonline.com/e31d1058-5aa9-4838-9b40-9cbc02c6cd91/oauth2/v2.0/devicecode"
+    # keys_uri: "https://login.microsoftonline.com/common/discovery/v2.0/keys"
+    # token_uri: "https://login.microsoftonline.com/e31d1058-5aa9-4838-9b40-9cbc02c6cd91/oauth2/v2.0/token"
+    # userinfo_uri: "https://graph.microsoft.com/oidc/userinfo"
+    idp_organization: "{{ azure1_idp_domain_vault }}"
+    client_id: "{{ azure1_idp_app_id_vault }}"
+    secret: "{{ azure1_idp_secret_vault }}"
+    user_id_attribute: "email"
+    provider: "microsoft"
+    scope: "openid email"
+
+# Provide either the uris or a provider - Not both

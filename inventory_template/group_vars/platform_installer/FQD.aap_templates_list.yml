@@ -1,0 +1,12 @@
+---
+
+# list of template lists to process
+
+templates_list:
+  - "{{ templates_vm_day_2 }}"
+  - "{{ templates_soe_dev }}"
+  - "{{ templates_soe_qa }}"
+  - "{{ templates_convert_2_rhel }}"
+  - "{{ templates_default_monthly_publish }}"
+  - "{{ templates_soe_ansible_callback }}"
+  - "{{ templates_soe_imagebuilder }}"

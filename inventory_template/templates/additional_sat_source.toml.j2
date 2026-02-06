@@ -1,0 +1,11 @@
+
+id = "{{ source.repo_id }}"
+name = "{{ source.repo_name }}"
+url = "{{ source.repo_url }}"
+check_gpg = true
+check_ssl = true
+check_repogpg = true
+rhsm = true
+system = false
+type = "yum-baseurl"
+gpgkeys = ["file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"]

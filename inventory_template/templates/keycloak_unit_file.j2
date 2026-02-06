@@ -1,0 +1,44 @@
+[Unit]
+Description=Keycloak Server
+After=network.target
+
+[Service]
+Environment="JAVA_OPTS='-Djava.util.logging.manager=org.jboss.logmanager.LogManager'"
+Type=simple
+User={{ keycloak_local_user }}
+Group={{ keycloak_local_user }}
+WorkingDirectory={{ keycloak_install_dir }}
+ExecStart=+{{ keycloak_install_dir }}/bin/kc.sh start
+StandardOutput=journal
+StandardError=journal
+Restart=on-failure
+
+# SESandbox options
+DynamicUser=no
+PrivateUsers=true
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=true
+ProtectControlGroups=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectClock=yes
+ProtectHostname=true
+ProtectProc=invisible
+ReadOnlyPaths=/
+ReadWritePaths={{ keycloak_install_dir }}
+InaccessiblePaths=/boot
+CapabilityBoundingSet=
+NoNewPrivileges=true
+#MemoryDenyWriteExecute=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictNamespaces=true
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+AmbientCapabilities=
+DevicePolicy=closed
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,222 @@
+---
+{% raw %}
+# Set these if you are forwarding zones (you probably are not)
+# idm_dns_forward_zones:
+#   - name: "{{ _global_domain_name }}"
+#     forwarders:
+#       - ip_address: "10.10.10.5"
+#       - ip_address: "10.10.10.6"
+#     forward_policy: "only"
+#     skip_overlap_check: true
+
+# Set the bind policy for zones managed by the IdM server
+# The realm-capsule bind policy should be much more restrictive
+idm_dns_update_zones:
+  - name: "{{ _global_domain_name }}"
+    {% endraw %}foreman_proxy_BIND_update_policy: 'grant {{ global_domain_name | upper }} krb5-self * A; grant {{ global_domain_name | upper }} krb5-self * AAAA; grant {{ global_domain_name | upper }} krb5-self * SSHFP; grant realm-capsule\@{{ global_domain_name | upper }} wildcard * ANY;' # noqa yaml[line-length]
+  - name: "{{ default_network_reverse_dns_zone_name }}"
+    foreman_proxy_BIND_update_policy: 'grant {{ global_domain_name | upper }} krb5-subdomain {{ default_network_reverse_dns_zone_name }}. PTR; grant realm-capsule\@{{ global_domain_name | upper }} wildcard * ANY;'
+{% raw %}
+# you probably want to add some standard records to the new DNS
+idm_dns_records:
+  # Service records
+  - name: "_tcp._foreman"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "SRV"
+    srv_port: "443"
+    srv_priority: "0"
+    srv_weight: "100"
+    srv_target: "satellite1.{{ _global_domain_name }}."
+    state: "present"
+
+  # IP Address for non-registered hosts
+  - name: "router"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n1"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1009) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n2"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1010) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n3"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1011) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n4"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1012) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n5"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1013) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n6"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1014) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s1n7"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1015) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n1"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1016) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n2"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1017) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n3"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1018) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n4"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1019) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n5"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1020) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n6"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1021) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "c3s2n7"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1022) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "nas3"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(3) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "switch"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(2) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "vcenter"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(30) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx1"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(31) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx2"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(32) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx3"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(33) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx4"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(34) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx5"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(35) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx6"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(36) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx7"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(37) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx8"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(38) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+
+  - name: "esx9"
+    zone_name: "{{ _global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(39) }}"
+    {% raw %}a_create_reverse: true
+    state: "present"
+{% endraw %}
+...

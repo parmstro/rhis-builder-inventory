@@ -1,0 +1,23 @@
+---
+
+aap_organizations:
+  - name: "Default"
+    description: "The default organization"
+    default_environment: "satellite_ee"
+    galaxy_credentials:
+      - "Ansible Galaxy"
+      - "Automation_Hub"
+      - "Private_Hub_community"
+      - "Private_Hub_rh-certified"
+      - "Private_Hub_validated"
+    state: present
+
+#    instance_groups:
+#      - your_list_here
+#    mac_hosts:
+#    new_name:
+# notification_templates_approvals
+# notification_templates_error
+# notification_templates_started
+# notification_templates_success
+# request_timeout

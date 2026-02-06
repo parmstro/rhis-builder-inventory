@@ -1,0 +1,29 @@
+<%#
+name: RHEL_Server_CIS1
+description: This is a partition table for a basic server.  Minimum 50GB disk required.
+snippet: false
+model: Ptable
+os_family: Redhat
+-%>
+# This partition table meets minimum CIS1 requirements
+# NOTE: requires 1st disk = 50G
+
+zerombr
+clearpart --all
+
+part /boot --fstype ext4 --size=2048 --ondisk=<%= host_param('boot_disk') %>
+part /boot/efi --fstype="efi" --size=2048 --ondisk=<%= host_param('boot_disk') %>
+part pv.01 --size=1 --grow --ondisk=<%= host_param('root_disk') %>
+<% pvs = [] -%>
+<% if host_param('additional_disks') -%>
+<% host_param('additional_disks').each do |disk| -%>
+part pv.<%= disk[-3,3] %> --size=1 --grow --ondisk=<%= disk %>
+<% pvs.push("pv." + disk[-3,3]) -%>
+<% end -%>
+<% end %>
+
+volgroup vg_root pv.01 <%= pvs.join(' ') %>
+logvol swap    --vgname=vg_root --recommended --name=lv_swap
+logvol /tmp    --vgname=vg_root --size=4096   --name=lv_tmp  --fstype=xfs
+logvol /       --vgname=vg_root --size=32768  --name=lv_root --fstype=xfs
+logvol /home   --vgname=vg_root --size=10240  --name=lv_home --fstype=xfs

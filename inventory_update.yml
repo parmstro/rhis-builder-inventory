@@ -1,0 +1,159 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: Include inventory base variable via vars file
+      ansible.builtin.include_vars:
+        file: inventory_basevars.yml
+
+    - name: Wait for connection...and gather facts
+      ansible.builtin.setup:
+        gather_timeout: 60
+        gather_subset:
+          - "!all" # Prevents gathering all other facts
+          - "local" # Gathers only local facts
+      register: setup_result
+      ignore_errors: true
+      until: "setup_result is not failed"
+      retries: 10
+      delay: 10
+
+    - name: Debug setup_result fact
+      ansible.builtin.debug:
+        var: setup_result
+      # This task uses the facts gathered in the previous step
+
+    - name: "Create rhis-builder-inventory configuration directory for {{ global_domain_name }}"
+      ansible.builtin.file:
+        path: "{{ global_domain_name }}"
+        state: directory
+        mode: "0755"
+
+    - name: Split domain name
+      ansible.builtin.set_fact:
+        split_global_domain_name: "{{ global_domain_name | split('.') }}"
+
+    - name: Split timezone name
+      ansible.builtin.set_fact:
+        split_rhis_timezone: "{{ rhis_timezone | split('/') }}"
+
+    - name: Generate network address CIDR
+      ansible.builtin.set_fact:
+        target_net_cidr: "{{ default_network }}/{{ default_network_prefix }}"
+
+    - name: Target network type test variable
+      ansible.builtin.set_fact:
+        default_network_type_output: "{{ target_net_cidr | ansible.utils.ipaddr('private') }}"
+
+# Check network is part of a RFC1918 private network and determine type
+    - name: "Target network type test - 192.168.0.0/16 and 172.16.0.0/16"
+      when: (default_network_type_output | length != 0 and '192.168.0.0/16' | ansible.utils.network_in_network( target_net_cidr )) or
+            (default_network_type_output | length != 0 and '172.16.0.0/16' | ansible.utils.network_in_network( target_net_cidr ))
+      ansible.builtin.set_fact:
+        target_net_octets: "{{ default_network.split('.')[0:2] | join('.') }}"
+
+    - name: Target network type test - 10.0.0.0/8
+      when: default_network_type_output | length != 0 and '10.0.0.0/8' | ansible.utils.network_in_network( target_net_cidr )
+      ansible.builtin.set_fact:
+        target_net_octets: "{{ default_network.split('.')[0:1] | join('.') }}"
+
+    - name: Target network type confirmation
+      when: target_net_octets | length != 0
+      ansible.builtin.debug:
+        msg:
+          - "The default_network {{ default_network_type_output }} is a RFC1918 private network"
+          - "Octet split is {{ target_net_octets }}"
+
+    - name: Define reverse DNS zone name for the network
+      ansible.builtin.set_fact:
+        default_network_reverse_dns_zone_name: "{{ target_net_octets.split('.') | reverse | join('.') }}.in-addr.arpa"
+
+    - name: Print target network details
+      ansible.builtin.debug:
+        msg:
+          - "The default_network is: {{ default_network }}"
+          - "The target network CIDR for {{ default_network }} with prefix {{ default_network_prefix }} is: {{ target_net_cidr }}"
+          - "The reverse DNS zone name for the network is: {{ default_network_reverse_dns_zone_name }}"
+
+    - name: Sync directory with rsync (excluding jinja templates)
+      ansible.posix.synchronize:
+        src: ./inventory_template/
+        dest: "./{{ global_domain_name }}/"
+        delete: true # Remove files in dest not in src
+        recursive: true
+        rsync_opts:
+          - "--exclude=*.j2"
+          - "--exclude=host_vars"
+
+    - name: Copy jinja templates as-is without templating
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ global_domain_name }}/templates"
+        mode: "0755"
+        remote_src: true
+      loop: "{{ lookup('fileglob', 'inventory_template/templates/*.j2').split(',') }}"
+
+    - name: Find and register paths to host_vars hostnames directories
+      ansible.builtin.find:
+        paths: "inventory_template/host_vars"
+        file_type: directory
+      register: host_vars_source_directories
+
+    - name: Debug host_vars_source_directories fact
+      ansible.builtin.debug:
+        var: host_vars_source_directories
+
+    - name: "Create host_vars directory"
+      ansible.builtin.file:
+        path: "{{ global_domain_name }}/host_vars"
+        state: directory
+        mode: "0755"
+
+    - name: Configure individual host_vars directories with hostname.global_domain_name format
+      ansible.posix.synchronize:
+        src: "{{ item }}/"
+        dest: "./{{ global_domain_name }}{{ item | ansible.builtin.regex_replace('inventory_template', '') }}.{{ global_domain_name }}/"
+        delete: true # Remove files in dest not in src
+        recursive: true
+        rsync_opts:
+          - "--exclude=*.j2"
+      loop: "{{ host_vars_source_directories.files | map(attribute='path') | list }}"
+
+    - name: Find and register paths to jinja templates - part one
+      ansible.builtin.find:
+        paths: "inventory_template/files,inventory_template/group_vars,inventory_template/inventory,inventory_template/vault_SAMPLES"
+        recurse: true
+        patterns: "*.j2"
+      register: jinja_template_paths_1
+
+    - name: Debug jinja_template_paths_1 fact
+      ansible.builtin.debug:
+        var: jinja_template_paths_1
+
+    - name: Populate config files from jinja templates - part one
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "./{{ global_domain_name }}{{ item | ansible.builtin.regex_replace('inventory_template', '') | ansible.builtin.regex_replace('.j2', '') }}"
+        mode: "0755"
+      loop: "{{ jinja_template_paths_1.files | map(attribute='path') | list }}"
+
+    - name: Find and register paths to jinja templates - part two
+      ansible.builtin.find:
+        paths: "inventory_template/host_vars"
+        recurse: true
+        patterns: "*.j2"
+      register: jinja_template_paths_2
+
+    - name: Populate config files from jinja templates - part two
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "./{{ global_domain_name }}{{ item | ansible.builtin.regex_replace('inventory_template', '') |
+            ansible.builtin.regex_replace(((item | dirname).split('/') | last), ((item | dirname).split('/') | last) + '.' + global_domain_name) |
+            ansible.builtin.regex_replace('.j2', '') }}"
+        mode: "0755"
+      loop: "{{ jinja_template_paths_2.files | map(attribute='path') | list }}"
+
+
+...

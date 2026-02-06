@@ -1,0 +1,92 @@
+---
+
+# This file defines the HBAC policy for both the rhisam installation and user installations
+
+# Many services are created by default see end of this file
+idm_hbac_services:
+  - name: "tftp"
+    description: "trivial file transfer protocol - example hbac service"
+  - name: "bootp"
+    description: "bootstrap protocol - example hbac service"
+
+idm_hbac_service_groups:
+  - name: "hbacsg-boot-services"
+    description: "Boot services used for installing software - example hbac service group"
+    services:
+      - "tftp"
+      - "bootp"
+  - name: "hbacsg-webadmin-hbac-services"
+    description: "Access services required by web administrators"
+    services:
+      - "sshd"
+      - "su"
+      - "su-l"
+
+idm_hbac_rules:
+  - name: "hbacr-allow-prod-sysadmins-all-prod"
+    description: "System Administrator All Access Pass"
+    action: "hbacrule"
+    state: "present"
+    user_groups:
+      - "ug-admins"      # aka REALM admins
+      - "ug-prod-sysadmins"
+    host_groups:
+      - "hg-production"
+    servicecategory: "all"
+
+  - name: "hbacr-allow-satellite-boot-services"
+    description: "Allow boot services to Satellite servers"
+    action: "hbacrule"
+    state: "present"
+    users:
+      - "sat-admin"
+    user_groups:
+      - "ug-satellite-org-administrators"
+      - "ug-satellite-operators"
+    hosts:
+      - "satellite.{{ _global_domain_name }}"
+    host_groups:
+      - "hg-satellite-capsule-servers"
+    hbac_services:
+      - "sshd"
+    hbac_service_groups:
+      - "hbacsg-boot-services"
+
+  - name: "hbacr-allow-webadmins-webservers-ssh"
+    description: "Allow boot services to Satellite servers"
+    action: "hbacrule"
+    state: "present"
+    users:
+      - "poc-admin"
+    user_groups:
+      - "ug-web-server-administrators"
+    hosts:
+    host_groups:
+      - "hg-web-servers"
+    hbac_services:
+      - "sshd"
+    hbac_service_groups:
+      - "hbacsg-webadmin-hbac-services"
+
+###############################################################################
+#
+# IdM HBAC services created by default installation:
+#
+# crond
+# ftp
+# gdm
+# gdm-password
+# gssftp
+# kdm
+# login
+# proftpd
+# pure-ftpd
+# sshd
+# su
+# su-l  - su with login shell
+# sudo
+# sudo-i
+# systemd-user  - pam_systemd and systemd user@.service
+# vsftpd
+#
+###############################################################################

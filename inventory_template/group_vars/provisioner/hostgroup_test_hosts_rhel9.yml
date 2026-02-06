@@ -1,0 +1,130 @@
+---
+
+hg_test_hosts_rhel9:
+  - fqdn: "hg-x86-64-rhel9-metal1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    pxe_loader: "Grub2 UEFI"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "94:c6:91:a3:1b:79"                          # c1s1n4
+        ip: "{{ _default_network }}.202"
+
+  - fqdn: "hg-x86-64-rhel9-vm1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm"
+    lifecycle_environment: "Development"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+    content_view: "SOE9"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    ptable: "Kickstart default"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-dev-cis2-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_cis2"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-dev-jboss-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_jboss"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#   operatingsystem: "RHEL 9.7"
+#   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-dev-lamp-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_lamp"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-dev-wordpress-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_wordpress"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-qa-jboss-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_jboss"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-qa-lamp-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_lamp"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"
+
+  - fqdn: "soe9-qa-wordpress-1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_wordpress"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+#    operatingsystem: "RHEL 9.7"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"

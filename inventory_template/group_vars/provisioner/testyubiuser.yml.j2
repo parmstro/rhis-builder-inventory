@@ -1,0 +1,6 @@
+---
+# These values are required for each user
+piv_current_username: "testyubiuser"
+piv_current_user_csr_subject: "/CN=testyubiuser/DC={{ split_global_domain_name[0] }}/DC={{ split_global_domain_name[1] }}/emailAddress=testyubiuser@{{ global_domain_name }}"
+piv_current_realm: "{{ global_domain_name | upper }}"
+...

@@ -1,0 +1,50 @@
+---
+satellite_subnets:
+  - name: "{{ _global_domain_name }}"
+    description: "{{ _global_domain_name }} network"
+    network_type: "IPv4"
+    network: 192.168.140.0
+    prefix: 22
+    mask: 255.255.252.0
+    gateway: 192.168.140.1
+    dns_primary: 192.168.140.5
+    dns_secondary: 192.168.252.6
+    ipam: "Internal DB"
+    from_ip: 192.168.140.100
+    to_ip: 192.168.140.199
+    boot_mode: "Static"
+    discovery_capsule: "{{ satellite_fqdn }}"
+    tftp_capsule: "{{ satellite_fqdn }}"
+    dns_capsule: "{{ satellite_fqdn }}"
+    template_capsule: "{{ satellite_fqdn }}"
+    parameters:
+      - name: "Parameter1"
+        parameter_type: string
+        value: "theParameter"
+    remote_execution_capsules:
+      - "{{ satellite_fqdn }}"
+    domains:
+      - "{{ satellite_domain }}"
+    locations:
+      - "{{ satellite_location }}"
+    organizations:
+      - "{{ satellite_organization }}"
+
+  - name: "bond_subnet"
+    description: "{{ _global_domain_name }} bond network"
+    network_type: "IPv4"
+    network: 192.168.142.0
+    prefix: 22
+    mask: 255.255.252.0
+    gateway: 192.168.140.1
+    dns_primary: 192.168.140.5
+    dns_secondary: 192.168.140.6
+    ipam: "None"
+    boot_mode: "Static"
+    dns_capsule: "{{ satellite_fqdn }}"
+    domains:
+      - "{{ satellite_domain }}"
+    locations:
+      - "{{ satellite_location }}"
+    organizations:
+      - "{{ satellite_organization }}"

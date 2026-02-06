@@ -1,0 +1,92 @@
+---
+
+# The list of bond test hosts to build for {{ global_domain_name }}
+# reference capsule_hosts to concatenate lists as necessary
+{% raw %}
+bond_test_hosts:
+  - name: "bondtest1"
+    fqdn: "bondtest1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel8_metal"
+    kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+    compute_resource: "baremetal"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface_lab }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "c0:3f:d5:64:72:10"
+        ip: "192.168.142.66"
+      - type: "interface"
+        identifier: "{{ _default_child_iface1_lab }}"
+        mac: "00:30:18:c5:c3:e4"
+      - type: "interface"
+        identifier: "{{ _default_child_iface2_lab }}"
+        mac: "00:30:18:c5:c3:e5"
+      - type: "bond"
+        identifier: "{{ _default_bond_iface_lab }}"
+        name: "bondtest1bond0"
+        domain: "{{ _default_domain_lab }}"
+        execution: false
+        managed: true
+        primary: false
+        provision: false
+        ip: "192.168.142.66"
+        subnet: "{{ _default_bond_subnetname }}"
+        attached_devices:
+          - "{{ _default_child_iface1_lab }}"
+          - "{{ _default_child_iface2_lab }}"
+        bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+        mode: "802.3ad"
+        virtual: true
+       # tag: "{{ _default_bond_vlan_tag_meta }}"
+  - name: "bondtest2"
+    fqdn: "bondtest2.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    compute_resource: "baremetal"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface_lab }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "c0:3f:d5:64:72:10"
+        ip: "192.168.142.77"
+      - type: "interface"
+        identifier: "{{ _default_child_iface1_lab }}"
+        mac: "00:30:18:c5:c3:e4"
+      - type: "interface"
+        identifier: "{{ _default_child_iface2_lab }}"
+        mac: "00:30:18:c5:c3:e5"
+      - type: "bond"
+        identifier: "{{ _default_bond_iface_lab }}"
+        name: "bondtest2bond0"
+        domain: "{{ _default_domain_lab }}"
+        execution: false
+        managed: true
+        primary: false
+        provision: false
+        ip: "192.168.142.77"
+        subnet: "{{ _default_bond_subnetname }}"
+        attached_devices:
+          - "{{ _default_child_iface1_lab }}"
+          - "{{ _default_child_iface2_lab }}"
+        bond_options: "miimon=100 xmit_hash_policy=layer3+4"
+        mode: "802.3ad"
+        virtual: true
+       # tag: "{{ _default_bond_vlan_tag_meta }}"
+{% endraw %}
+...
