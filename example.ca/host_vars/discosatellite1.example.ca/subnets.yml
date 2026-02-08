@@ -48,3 +48,33 @@ satellite_subnets:
       - "{{ satellite_location }}"
     organizations:
       - "{{ satellite_organization }}"
+
+  # - name: "azure.{{ _global_domain_name }}"
+  #   description: "azure.{{ _global_domain_name }} network"
+  #   network_type: "IPv4"
+  #   network: "10.10.0.0"
+  #   prefix: "22"
+  #   mask: "255.255.252.0"
+  #   gateway: "10.10.0.1"
+  #   dns_primary: "10.10.0.5"
+  #   dns_secondary: "10.10.0.6"
+  #   ipam: "Internal DB"
+  #   from_ip: "10.10.0.100"
+  #   to_ip: "10.10.0.199"
+  #   boot_mode: "Static"
+  #   discovery_capsule: "{{ groups['sat_capsule'][0] }}"
+  #   tftp_capsule: "{{ groups['sat_capsule'][0] }}"
+  #   dns_capsule: "{{ groups['sat_capsule'][0] }}"
+  #   template_capsule: "{{ groups['sat_capsule'][0] }}"
+  #   parameters:
+  #     - name: "Parameter1"
+  #       parameter_type: string
+  #       value: "theParameter"
+  #   remote_execution_capsules:
+  #     - "{{ groups['sat_capsule'][0] }}"
+  #   domains:
+  #     - "{{ groups['sat_capsule'][0] }}"
+  #   locations:
+  #     - "{{ groups['sat_capsule'][0] }}"
+  #   organizations:
+  #     - "{{ groups['sat_capsule'][0] }}"

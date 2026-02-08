@@ -10,6 +10,15 @@
 # some of the configuration values to reduce error and maintenance. These
 # variables are defined in compute_resources.yml to increase internal consistency
 
+# The hypervisor/hyperscaler objects referenced in this file are assumed to exist already.
+# There are repos that are working on configuring these landing zones, they are currently works in progress.
+
+# WARNING: Networks, Datastores and other underlying hypervisor/hyperscaler resources
+# referenced in your compute profiles MUST already exist. Satellite will use supplied
+# credentials to log in and validate that they exist. If they do not,
+# the compute_profiles role will fail. We look forward to implementing creation of these
+# resources in the landing zone repositories in future
+
 compute_profiles:
   - name: "SOE_Small"
     compute_attributes:
@@ -18,9 +27,9 @@ compute_profiles:
           cpus: 1
           corespersocket: 1
           memory_mb: 4096
-          cluster: "{{ vmware_cluster1_name }}"
+          cluster: "{{ vmware1_cluster1_name }}"
           # resource_pool: "Resources"
-          path: "{{ vmware_cluster1_path }}"
+          path: "{{ vmware1_cluster1_path }}"
           guest_id: "rhel8_64Guest"
           hardware_version: "Default"
           memoryHotAddEnabled: true
@@ -39,12 +48,12 @@ compute_profiles:
               name: "Hard disk"
               mode: "persistent"
               controller_key: 1000
-              datastore: "{{ vmware_cluster1_datastore }}"
+              datastore: "{{ vmware1_cluster1_datastore }}"
               size_gb: 120
           interfaces_attributes:
             0:
               type: "VirtualVmxnet3"
-              network: "{{ vmware_cluster1_network }}"
+              network: "{{ vmware1_cluster1_network }}"
       - compute_resource: "Azure_Lab"
         vm_attrs:
           resource_group: "{{ azure1_resourcegroup1 }}"
@@ -77,9 +86,9 @@ compute_profiles:
           cpus: 1
           corespersocket: 1
           memory_mb: 8192
-          cluster: "{{ vmware_cluster1_name }}"
+          cluster: "{{ vmware1_cluster1_name }}"
           # resource_pool: "Resources"
-          path: "{{ vmware_cluster1_path }}"
+          path: "{{ vmware1_cluster1_path }}"
           guest_id: "rhel8_64Guest"
           hardware_version: "Default"
           memoryHotAddEnabled: true
@@ -98,12 +107,12 @@ compute_profiles:
               name: "Hard disk"
               mode: "persistent"
               controller_key: 1000
-              datastore: "{{ vmware_cluster1_datastore }}"
+              datastore: "{{ vmware1_cluster1_datastore }}"
               size_gb: 120
           interfaces_attributes:
             0:
               type: "VirtualVmxnet3"
-              network: "{{ vmware_cluster1_network }}"
+              network: "{{ vmware1_cluster1_network }}"
       - compute_resource: "Azure_Lab"
         vm_attrs:
           resource_group: "{{ azure1_resourcegroup1 }}"
@@ -136,9 +145,9 @@ compute_profiles:
           cpus: 2
           corespersocket: 1
           memory_mb: 16364
-          cluster: "{{ vmware_cluster1_name }}"
+          cluster: "{{ vmware1_cluster1_name }}"
           # resource_pool: "Resources"
-          path: "{{ vmware_cluster1_path }}"
+          path: "{{ vmware1_cluster1_path }}"
           guest_id: "rhel8_64Guest"
           hardware_version: "Default"
           memoryHotAddEnabled: true
@@ -157,12 +166,12 @@ compute_profiles:
               name: "Hard disk"
               mode: "persistent"
               controller_key: 1000
-              datastore: "{{ vmware_cluster1_datastore }}"
+              datastore: "{{ vmware1_cluster1_datastore }}"
               size_gb: 120
           interfaces_attributes:
             0:
               type: "VirtualVmxnet3"
-              network: "{{ vmware_cluster1_network }}"
+              network: "{{ vmware1_cluster1_network }}"
       - compute_resource: "Azure_Lab"
         vm_attrs:
           resource_group: "{{ azure1_resourcegroup1 }}"
