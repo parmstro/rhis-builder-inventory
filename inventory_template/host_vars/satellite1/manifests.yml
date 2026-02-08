@@ -1,0 +1,58 @@
+---
+
+# NOTE: This file replaces the previous redhat_manifests and subscription_manifests files.
+
+# The rhisam does not provide a manifest.
+# All manifest information must be provided by the user
+# A manifest may be provided in your files directory.
+# A manifest can be created.
+# The cdn_username user must have the appropriate permissions to create a manifest in the account.
+
+# If generate is true for a manifest in redhat_manifests
+# we will either create it or destroy it based on the value of state
+# if state is 'absent', we will destroy the manifest
+# if state is 'present', then subs must point to a valid dictionary
+# that uses the form of the example at the bottom of the file.
+# This data should always be encrypted in a vault file.
+#
+# If generate is false then organization, path and state are
+# the only required values and a valid manifest file name must be provided in source
+# we will look for it in your rhis configuration's files directory
+# WARNING: SENSITIVE DATA - IT IS STRONGLY RECOMMENDED THAT IT IS IN YOUR .gitignore
+# the default gitignore in rhis-builder-inventory has excludes all zip files in the files directory
+
+# If you are performing Day 2 Operations, you can set
+# generate to false AND
+# state to refreshed!
+# this will cause the tell the satellite to refresh the existing manifest from the CDN
+
+redhat_manifests:
+  - name: "{{ ansible_fqdn }}"
+    account: "{{ cdn_account_number_vault }}"
+    cdn_username: "{{ cdn_username_vault }}"
+    cdn_password: "{{ cdn_password_vault }}"
+    content_access_mode: "org_environment"  # SCA mode
+    generate: true
+    organization: "Default Organization"
+#   source: org_name_versionstring.zip  # when you are providing your own manifest
+    path: "/root/to_my_manifest.zip"
+    portal_url: "https://subscription.rhsm.redhat.com"
+#    repository_url:  # specify a url for alternate content source in Satellite
+    state: present   # present | absent | refreshed
+    subs: "{{ manifest_subs_vault }}"
+    validate_certs: true
+
+# example of subs dict NOTE: These are fake values and do not work
+# example.ca_subs_vault:
+#   - name: "Base"
+#     pool_id: "2c946ef78e8073d6018e86b1e0b375e8"                                                  # notsecret
+#     pool_state: present
+#     qty: 1000
+#   - name: "SatCapsule"
+#     pool_id: "2c94f4288e80762a018e42b358942df1"                                                   # notsecret
+#     pool_state: present
+#     qty: 1
+#   - name: "NonRHEL"
+#     pool_id: "2c94f6188e80422a042e85b2bb4b34ec"                                                   # notsecret
+#     pool_state: present
+#     qty: 10

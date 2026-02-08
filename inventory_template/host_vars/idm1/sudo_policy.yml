@@ -1,0 +1,67 @@
+---
+
+# This file defines the sudo policy for the idm deployment
+# sudo commands are invidual commands that a user should be able to use
+# sudo command groups are groups of sudo commands that we may want to assign together
+# sudo rules define the 'who' gets to access on 'which hosts' to perform 'what commands' as 'which users'
+#  - it also defines sudo options and the priority of a given rule w.r.t. other rules.
+
+idm_sudo_commands:
+  - name: "systemctl start httpd"
+    description: "Start the httpd service"
+    state: "present"                             # default when omitted - set to absent to delete the command
+  - name: "systemctl stop httpd"
+    description: "Stop the httpd service"
+  - name: "systemctl restart httpd"
+    description: "Restart the httpd service"
+
+idm_sudo_command_groups:
+  - name: "scg-webserver-service-control"
+    description: "Commands to control web server service"
+    state: "present"                                          # default when omitted - set to absent to delete the command group
+    commands:
+      - "systemctl start httpd"
+      - "systemctl stop httpd"
+      - "systemctl restart httpd"
+
+idm_sudo_rules:
+  - name: "poc_admins"
+    state: "present"              # default when omitted - set to absent to delete the rule
+    action: "sudorule"            # default when omitted - set to memeber to act on lists in the rule
+    order: "1"
+    description: "Sudo rules for administrators for POC or demo"
+    sudo_options:                 # admins god-mode
+      - "!authenticate"
+    user_groups:                  # admins god-mode
+      - "admins"
+    host_category: "all"
+    command_category: "all"       # use this to enable unrestricted access to all privileged commands  - HANDLE WITH CARE
+    runas_user_category: "all"
+    runas_group_category: "all"   # impersonate any groups (default)
+
+  - name: "sr-webadmin-sudo-rules"
+    state: "present"              # default when omitted - set to absent to delete the rule
+    action: "sudorule"            # default when omitted - set to memeber to act on lists in the rule
+    order: "42"
+    description: "Sudo rules for webserver administrators group"
+#    sudo_options:                 # a list of sudo options
+#      - "!authenticate"
+#    user_category: "all"    # Use this to specify anyone
+#    users:                  # use this to list individual users
+#      - "bob"
+#      - "alice"
+    user_groups:            # use this to list user groups
+      - "ug-web-server-administrators"
+#    hosts:                  # use this to list individual hosts
+    host_groups:            # use this to list host groups
+      - "hg-webservers"
+#   command_category: "all"  # use this to enable unrestricted access to all privileged commands  - HANDLE WITH CARE
+#    allow_commands:         # use this to list individual commands that you want to allow the use of
+    allow_command_groups:   # use this to list the command groups that you want to allow the use of
+      - "scg-webserver-service-control"
+#    deny_commands:          # use this to list individual commands that you want to deny the use of
+#    deny_command_groups:    # use this to list the command groups that you want to deny the use of
+#    runas_user_category: "all"
+#   runas_users:             # use this to list the individual users able to be impersonated
+#    runas_group_category: "all"  # impersonate any groups (default)
+#   runas_groups:            # the list of groups able to be impersonated using the sudo commands.

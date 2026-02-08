@@ -1,0 +1,41 @@
+---
+# Tested 2025-11-16 - Success
+
+hg_test_hosts_rhel10:
+  - fqdn: "hg-x86-64-rhel10-metal1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel10_metal"
+#    operatingsystem: "RHEL 10.1"
+#    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    compute_resource: "baremetal"
+    comment: "rhis_test_host deleteme"
+    pxe_loader: "Grub2 UEFI"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "94:c6:91:a3:1d:fb"                          # c1s1n5
+        ip: "{{ _default_network }}.203"
+
+  - fqdn: "hg-x86-64-rhel10-vm1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel10_vm"
+    lifecycle_environment: "Development"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+    content_view: "SOE10"
+#    operatingsystem: "RHEL 10.1"
+#    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    ptable: "Kickstart default"
+    pxe_loader: "Grub2 UEFI"
+    mac: "00:50:56:ff:ff:ff"
+    comment: "rhis_test_host deleteme"

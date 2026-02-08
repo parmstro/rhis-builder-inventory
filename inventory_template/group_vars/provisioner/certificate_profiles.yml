@@ -1,0 +1,11 @@
+idm_certificate_profiles:
+  - idmcp_profile_name: "caRSAUserCertSmartCard"
+    idmcp_cfg_path: "{{ playbook_dir }}/files/caRSAUserCertSmartCard.cfg"
+    idmcp_descripion: "User RSA Certs for smartcards"
+    idmcp_store: "TRUE"
+    idmcp_state: updated
+  - idmcp_profile_name: "caECCUserCertSmartCard"
+    idmcp_cfg_path: "{{ playbook_dir }}/files/caECCUserCertSmartCard.cfg"
+    idmcp_descripion: "User ECC Certs for smartcards"
+    idmcp_store: "TRUE"
+    idmcp_state: present

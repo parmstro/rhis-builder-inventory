@@ -1,0 +1,14 @@
+---
+# AAP Manifest variables
+
+redhat_manifest:
+  name: "{{ ansible_fqdn }}"
+  account: "{{ cdn_account_number_vault }}"
+  cdn_username: "{{ cdn_username_vault }}"
+  cdn_password: "{{ cdn_password_vault }}"
+  content_access_mode: "org_environment"  # SCA mode
+  path: "/tmp/aapcontroller.{{ _global_domain_name }}.zip"
+  portal_url: "https://subscription.rhsm.redhat.com"
+  state: present
+  subs: "{{ aap_subs_vault }}"
+  validate_certs: false

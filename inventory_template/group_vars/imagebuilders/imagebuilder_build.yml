@@ -1,0 +1,27 @@
+osbuild_config_dir: "/etc/osbuild-composer/repositories"
+osbuild_toml_dir: "/etc/osbuild-composer/toml"
+repo_file: "/etc/yum.repos.d/redhat.repo"
+
+# target_activationkey: "bootstrap9"
+target_activationkey: "SOE9_JBoss"
+target_organization: "Default_Organization"
+target_arch: "x86_64"
+
+target_cloud_repos: |
+    ,
+    {
+      "name": "google-compute-engine",
+      "baseurl": "https://packages.cloud.google.com/yum/repos/google-compute-engine-el9-x86_64-stable",
+      "check_gpg": false,
+      "image_type_tags": [
+        "gce"
+      ]
+    },
+    {
+      "name": "google-cloud-sdk",
+      "baseurl": "https://packages.cloud.google.com/yum/repos/cloud-sdk-el9-x86_64",
+      "check_gpg": false,
+      "image_type_tags": [
+        "gce"
+      ]
+    }

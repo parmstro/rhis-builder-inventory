@@ -1,0 +1,146 @@
+<%#
+name: SOE Kickstart Default Finish
+snippet: false
+model: ProvisioningTemplate
+kind: finish
+oses:
+- AlmaLinux
+- CentOS
+- CentOS_Stream
+- Fedora
+- Rocky
+
+description: |
+  This Finish Template has been customized to support NBDE and Satellite 6.12
+  A finish template executed at the end of the image based provisioning
+  using the image without user data. Foreman connects to the VM over SSH
+  and runs the script rendered from this template. It is meant to be run
+  on RPM based distributons.
+
+  This template accepts the following parameters:
+  - bootloader-append: string (default="nofb quiet splash=quiet")
+  - use-ntp: boolean (default depends on OS release)
+  - ntp-server: string (default=undef)
+  - package_upgrade: boolean (default=true)
+  - salt_master: string (default=undef)
+  - enable-remote-execution-pull: boolean (default=false)
+-%>
+
+<%
+  is_fedora = @host.operatingsystem.name == 'Fedora'
+  rhel_compatible = @host.operatingsystem.family == 'Redhat' && @host.operatingsystem.name != 'Fedora'
+  os_major = @host.operatingsystem.major.to_i
+  os_minor = @host.operatingsystem.minor.to_i
+  salt_enabled = host_param('salt_master') ? true : false
+  chef_enabled = @host.respond_to?(:chef_proxy) && @host.chef_proxy
+%>
+
+# ##### Begin Rendering Information #####
+# This kickstart file was rendered from the Foreman provisioning template "<%= @template_name %>".
+# for <%= @host %> running <%= @host.operatingsystem.name %> <%= os_major %> <%= @arch %>
+# Organization: <%= @host.organization %>
+# Location: <%= @host.location %>
+<%
+if plugin_present?('katello')
+-%>
+# Lifecycle environment: <%= @host.single_lifecycle_environment %>
+# Content View: <%= @host.single_content_view %>
+# Content Source: <%= @host.content_source %>
+<% end -%>
+# ##### End Rendering Information #####
+
+<%= snippet_if_exists(template_name + " custom pre") -%>
+
+<% if @host.provision_method == 'image' && root_pass.present? -%>
+# Install the root password
+echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
+<% end -%>
+
+hostnamectl set-hostname <%= @host.name %>
+# Set firewall zone drifting to no asap
+<% if (is_fedora && os_major <= 29) || (rhel_compatible && os_major <= 8) -%>
+  sed -i s/^AllowZoneDrifting=yes/AllowZoneDrifting=no/g /etc/firewalld/firewalld.conf
+<% end -%>
+
+<% if host_param_true?('use_foreman_users') %>
+  <%= snippet 'soe_create_users_selinux' %>
+<% end -%>
+
+<%= snippet 'ntp' %>
+
+<%= snippet 'yum_proxy' %>
+
+<% if rhel_compatible && host_param_true?('disable-non-sat-repos') -%>
+<%= snippet 'soe_disable_non_sat_repos' -%>
+<% end -%>
+
+<% if rhel_compatible && host_param_true?('enable-epel') -%>
+<%= snippet 'epel' -%>
+<% end -%>
+
+<%= snippet 'redhat_register' %>
+subscription-manager refresh
+subscription-manager repos 
+
+<%= snippet 'soe_ensure_python' %>
+
+<% if (is_fedora && os_major > 29) || (rhel_compatible && os_major > 6) -%>
+<%= snippet 'soe_install_cockpit' %>
+<% end -%>
+
+<%= snippet 'remote_execution_ssh_keys' %>
+<%= snippet 'blacklist_kernel_modules' %>
+
+<% if host_enc['parameters']['realm'] && @host.realm && (@host.realm.realm_type == 'FreeIPA' || @host.realm.realm_type == 'Red Hat Identity Management') -%>
+  <% if (rhel_compatible && os_major = 8) -%>
+    # yum module enable and yum module install to pull in the idm client
+    dnf -y module enable idm:client
+  <% end -%>
+<%= snippet 'freeipa_register' %>
+<% end -%>
+
+<% if host_param_true?('use_NBDE') %>
+  <%= snippet 'soe_use_NBDE' %>
+<% end -%>
+
+<% unless host_param_false?('package_upgrade') -%>
+# update all the base packages from the updates repository
+if [ -f /usr/bin/dnf ]; then
+  dnf -y update
+else
+  yum -t -y update
+fi
+<% end -%>
+
+<% if plugin_present?('katello') && host_param_true?('enable-remote-execution-pull') -%>
+<%= save_to_file('/root/remote_execution_pull_setup.sh', snippet('remote_execution_pull_setup'), verbatim: true) %>
+chmod +x /root/remote_execution_pull_setup.sh
+/root/remote_execution_pull_setup.sh
+<% end -%>
+
+<% if chef_enabled %>
+<%= snippet 'chef_client' %>
+<% end -%>
+
+<% if salt_enabled %>
+<%= snippet 'saltstack_setup' %>
+<% end -%>
+
+<%= snippet('ansible_provisioning_callback') %>
+
+<%= snippet_if_exists(template_name + " custom post") -%>
+
+<% if host_param_true?('host_registration_insights') -%>
+<%= snippet 'insights' -%>
+<% end -%>
+
+# This is a image based deployment, we must reset master keys
+<% if host_param_true?('use_NBDE') && @host.provision_method == 'image' %>
+<%= snippet 'nbde_key_reset' -%>
+<% end -%>
+
+sync
+
+<%= snippet 'schedule_reboot' -%>
+
+exit 0

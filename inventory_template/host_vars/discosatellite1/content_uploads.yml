@@ -1,0 +1,17 @@
+---
+
+# content_uploads definition
+
+content_uploads:
+  - name: "Custom Upload"
+    organization: "Default Organization"
+    product: "MyCustomProduct"
+    repository: "MyCustomRepo"
+    repository_type: "yum"
+    # ostree_repository_name: "some_value" # only valid once OSTree support is turned back on...
+    upload_from_provisioner: true  # if you set this to true, you must provide a source or by default it well look in 'files'
+    source_directory: "" # this will get prepended to the path of each src_file below for the copy operation
+    target_directory: "/var/lib/pulp/imports/upload_files" # this will get prepended to the path of each src_file below for the upload operation
+    src_files: # A list of source paths, these can be any file path resolvable by the satellite host (remote/target e.g. ansible_fqdn)
+      - "bear-4.1-1.noarch.rpm"
+      - "test-srpm01-1.0-1.src.rpm"

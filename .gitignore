@@ -3,3 +3,4 @@ parmstrong.ca
 *.tar
 */vault/*.yml
 */files/.*
+.ansible

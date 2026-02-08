@@ -1,0 +1,15 @@
+---
+
+# content_imports definition
+# This is a sample of the required data for an import
+# If you use content_exports role in rhis-provsioner, it generates this file for you
+# and stores the file on the source satellite at
+# /var/lib/pulp/exports/{{ content_export.destination_server }}/content_import.yml
+# This is especially useful if you are exporting groups of repos or content content_views
+# it creates the list of imports for you so it is with the content that you want to export!
+
+# content_imports:
+#   - name: "Repository EPEL8"
+#     type: "repository"
+#     import_path: "/var/lib/pulp/imports/Default_Organization/some_sample/1.0/2025-12-02T23-12-29-00-00"
+#     metadata_file: "/var/lib/pulp/imports/Default_Organization/some_sample/1.0/2025-12-02T23-12-29-00-00/metadata.json"

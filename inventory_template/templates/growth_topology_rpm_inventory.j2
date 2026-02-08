@@ -1,0 +1,138 @@
+# This is the Ansible Automation Platform growth installer inventory file
+# Please consult the docs if you are unsure what to add
+# For all optional variables please consult the included README.md
+# or the Red Hat documentation:
+# https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation
+
+# This section is for your platform gateway hosts
+# -----------------------------------------------------
+[automationgateway]
+{% if groups['aap_gateways'] is defined %}
+{% for host in groups['aap_gateways'] %}
+{{ host }}
+{% endfor %}
+{% endif %}
+
+# This section is for your automation controller hosts
+# -----------------------------------------------------
+[automationcontroller]
+{% if groups['aap_controllers'] is defined %}
+{% for host in groups['aap_controllers'] %}
+{{ host }}
+{% endfor %}
+{% endif %}
+
+# This section is for your automation hub hosts
+# -----------------------------------------------------
+[automationhub]
+{% if groups['aap_hubs'] is defined %}
+{% for host in groups['aap_hubs'] %}
+{{ host }}
+{% endfor %}
+{% endif %}
+
+
+# This section is for your Event-Driven Ansible controller hosts
+# -----------------------------------------------------
+[automationedacontroller]
+{% if groups['aap_edacontrollers'] is defined %}
+{% for host in groups['aap_edacontrollers'] %}
+{{ host }}
+{% endfor %}
+{% endif %}
+
+# This section is for the Ansible Automation Platform database
+# -----------------------------------------------------
+[database]
+{% if groups['aap_database'] is defined %}
+{% for host in groups['aap_database'] %}
+{{ host }}
+{% endfor %}
+{% endif %}
+
+# Common variables
+# -----------------------------------------------------
+[all:vars]
+admin_password="{{ platform_installer_config.aap_platform_password }}"
+custom_ca_cert="{{ platform_installer_config.aap_custom_ca_crt }}"
+redis_mode="{{ platform_installer_config.aap_redis_mode }}"
+
+# Registry variables
+# -----------------------------------------------------
+registry_url="{{ platform_installer_config.aap_registry_url }}"
+registry_username="{{ platform_installer_config.aap_registry_username }}"
+registry_password="{{ platform_installer_config.aap_registry_password }}"
+
+# Database server variables
+# -----------------------------------------------------
+pg_host="{{ platform_installer_config.aap_pg_host }}"
+pg_port="{{ platform_installer_config.aap_pg_port }}"
+pg_database="{{ platform_installer_config.aap_pg_database }}"
+pg_username="{{ platform_installer_config.aap_pg_username }}"
+pg_password="{{ platform_installer_config.aap_pg_username }}"
+pg_sslmode="{{ platform_installer_config.aap_pg_sslmode }}"  # set to 'verify-full' for client-side enforced SSL
+postgres_use_ssl="{{ platform_installer_config.aap_pg_use_ssl }}"
+postgres_ssl_cert="{{ platform_installer_config.aap_pg_ssl_crt }}"
+postgres_ssl_key="{{ platform_installer_config.aap_pg_ssl_key }}"
+
+
+# Automation controller
+# -----------------------------------------------------
+controller_admin_password="{{ platform_installer_config.aap_platform_password }}"
+controller_pg_host="{{ ansible_fqdn }}"
+controller_pg_password="{{ platform_installer_config.aap_pg_password }}"
+automationedacontroller_controller_verify_ssl="{{ platform_installer_config.aap_controller_verify_ssl }}"
+automationedacontroller_ssl_cert="{{ platform_installer_config.aap_controller_ssl_crt }}"
+automationedacontroller_ssl_key="{{ platform_installer_config.aap_controller_ssl_key }}"
+web_server_ssl_cert="{{ platform_installer_config.aap_controller_ssl_crt }}"
+web_server_ssl_key="{{ platform_installer_config.aap_controller_ssl_key }}"
+
+# Automation hub
+# -----------------------------------------------------
+{% if (groups['aap_hubs'] | length) > 0 %}
+automationhub_admin_password="{{ platform_installer_config.aap_platform_password }}"
+automationhub_pg_host="{{ platform_installer_config.aap_pg_host }}"
+automationhub_pg_port="{{ platform_installer_config.aap_pg_port }}"
+automationhub_pg_database="{{ platform_installer_config.aap_hub_pg_database }}"
+automationhub_pg_username="{{ platform_installer_config.aap_hub_pg_username }}"
+automationhub_pg_password="{{ platform_installer_config.aap_hub_pg_password }}"
+automationhub_pg_sslmode="{{ platform_installer_config.aap_pg_sslmode }}" 
+automationhub_disable_https="{{ platform_installer_config.aap_hub_disable_https }}"
+automationhub_ssl_validate_certs="{{ platform_installer_config.aap_hub_verify_ssl }}"
+automationhub_ssl_cert="{{ platform_installer_config.aap_hub_ssl_crt }}"
+automationhub_ssl_key="{{ platform_installer_config.aap_hub_ssl_key }}"
+{% endif %}
+
+# Event-Driven Ansible controller
+# -----------------------------------------------------
+{% if (groups['aap_edacontrollers'] | length) > 0 %}
+automationedacontroller_admin_password="{{ platform_installer_config.aap_platform_password }}"
+automationedacontroller_pg_host="{{ platform_installer_config.aap_pg_host }}"
+automationedacontroller_pg_port="{{ platform_installer_config.aap_pg_port }}"
+automationedacontroller_pg_database="{{ platform_installer_config.aap_edacontroller_pg_database }}"
+automationedacontroller_pg_username="{{ platform_installer_config.aap_edacontroller_pg_username }}"
+automationedacontroller_pg_password="{{ platform_installer_config.aap_edacontroller_pg_password }}"
+automationedacontroller_pg_sslmode="{{ platform_installer_config.aap_pg_sslmode }}"
+automationedacontroller_controller_verify_ssl="{{ platform_installer_config.aap_edacontroller_verify_ssl }}"
+automationedacontroller_ssl_cert="{{ platform_installer_config.aap_edacontroller_ssl_crt }}"
+automationedacontroller_ssl_key="{{ platform_installer_config.aap_edacontroller_ssl_key }}"
+{% endif %}
+
+# Platform gateway
+# -----------------------------------------------------
+{% if (groups['aap_gateways'] | length) > 0 %}
+automationgateway_admin_password="{{ platform_installer_config.aap_platform_password }}"
+automationgateway_pg_host="{{ platform_installer_config.aap_pg_host }}"
+automationgateway_pg_port="{{ platform_installer_config.aap_pg_port }}"
+automationgateway_pg_database="{{ platform_installer_config.aap_gateway_pg_database }}"
+automationgateway_pg_username="{{ platform_installer_config.aap_gateway_pg_username }}"
+automationgateway_pg_password="{{ platform_installer_config.aap_gateway_pg_password }}"
+automationgateway_pg_sslmode="{{ platform_installer_config.aap_pg_sslmode }}"
+automationgateway_ssl_cert="{{ platform_installer_config.aap_gateway_ssl_crt }}"
+automationgateway_ssl_key="{{ platform_installer_config.aap_gateway_ssl_key }}"
+{% endif %}
+
+# -----------------------------------------------------
+# The main automation gateway URL that clients will connect to (e.g. https://<load balancer host>).
+# If not specified, the first node in the [automationgateway] group will be used when needed.
+# automationgateway_main_url = ''

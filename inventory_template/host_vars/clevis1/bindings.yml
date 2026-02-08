@@ -1,0 +1,6 @@
+nbde_client_bindings:
+  - device: /dev/sda2
+    encryption_password: "{{ nbde_encryption_password_vault }}"
+    servers:
+      - http://containerhost1.{{ _global_domain_name }}:8080
+      - http://containerhost2.{{ _global_domain_name }}:8080

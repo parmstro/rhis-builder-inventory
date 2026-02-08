@@ -1,0 +1,131 @@
+---
+
+# These are the global parameters that provide defaults for all the
+# provisioning templates that we import. Override the default parameters in the hostgroups
+
+# Tell the YAML linter to ignore long lines
+# yamllint disable rule:line-length
+
+global_parameters:
+  - name: "ansible_controller_api_url"
+    value: "https://aapcontroller24.{{ _global_domain_name }}/api/v2"
+    parameter_type: "string"
+    hidden_value: false
+    state: "present"
+
+  - name: "ansible_host_config_key"
+    value: "{{ satellite_ansible_callback_config_key_vault }}"
+    parameter_type: "string"
+    hidden_value: false
+    state: "present"
+
+  - name: "ansible_job_template_id"
+    value: 13
+    parameter_type: "integer"
+    hidden_value: false
+    state: "present"
+
+  - name: "ansible_roles_check_mode"
+    value: false
+    parameter_type: "boolean"
+    hidden_value: false
+    state: "present"
+
+  - name: "ansible_tower_provisioning"
+    value: false
+    parameter_type: "boolean"
+    hidden_value: false
+    state: "present"
+
+  - name: "enable-epel"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "enable-remote-execution-pull"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "fips_enabled"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "encrypt_grub"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "grubmenu_pass"
+    value: "enter value from grub2-mkpasswd-pbkdf2"
+    parameter_type: "string"
+    hidden_value: true
+
+  - name: "host_packages"
+    value: "vim"
+    parameter_type: "string"
+
+  - name: "host_registration_insights"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "host_registration_remote_execution"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "install_environment_group"
+    value: "server-product-environment"
+    parameter_type: "string"
+
+  - name: "install_reboot_kexec"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "network_zone"
+    value: "public"
+    parameter_type: "string"
+
+  - name: "package_upgrade"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "redhat_install_agent"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "redhat_install_host_tools"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "redhat_install_host_tracer_tools"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "remote_execution_create_user"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "remote_execution_effective_user_method"
+    value: "sudo"
+    parameter_type: "string"
+
+  - name: "remote_execution_ssh_keys"
+    value: "{{ remote_execution_ssh_keys_vault }}"
+    parameter_type: "string"
+
+  - name: "remote_execution_ssh_user"
+    value: "{{ remote_execution_ssh_user_vault }}"
+    parameter_type: "string"
+
+  - name: "remove_default_passphrase"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "use_foreman_users"
+    value: true
+    parameter_type: "boolean"
+
+  - name: "use_graphical_installer"
+    value: false
+    parameter_type: "boolean"
+
+  - name: "use_ntp"
+    value: false
+    parameter_type: "boolean"
