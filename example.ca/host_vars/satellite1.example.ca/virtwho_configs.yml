@@ -7,7 +7,7 @@ satellite_virtwho_password: "{{ satellite_virtwho_password_vault }}"
 vcenter_virtwho_username: "{{ vcenter_virtwho_username_vault }}"
 vcenter_virtwho_password: "{{ vcenter_virtwho_password_vault }}"
 
-virtwho_configs_rhisam:
+virtwho_configs:
   - foreman_virt_who_configure_config:
       name: "VMware"
       hypervisor_type: "esx"

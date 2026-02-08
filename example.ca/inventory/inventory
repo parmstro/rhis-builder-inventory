@@ -1,40 +1,40 @@
 provisioner:
   hosts:
-    localhost
+    localhost:
 
 idm_primary:
   hosts:
-    idm1.example.ca
+    idm1.example.ca:
 
 idm_replicas:
   hosts:
-    idm2.example.ca
-    idm3.example.ca
-    idm4.example.ca
+    idm2.example.ca:
+    idm3.example.ca:
+    idm4.example.ca:
 
 sat_primary:
   hosts:  
-    satellite1.example.ca
-    # discosatellite1.example.ca
+    satellite1.example.ca:
+    # discosatellite1.example.ca:
 
 sat_capsule:
   hosts:
-    capsule1.example.ca
-    capsule2.example.ca
+    capsule1.example.ca:
+    capsule2.example.ca:
 
 platform_installer:
   hosts:
-    aapcontroller24.example.ca
+    aapcontroller24.example.ca:
 
 aap_controllers:
   hosts:
-    aapcontroller24.example.ca
+    aapcontroller24.example.ca:
 
 # aap_database:
 
 aap_hubs:
   hosts:
-    aaphub24.example.ca
+    aaphub24.example.ca:
 
 # aap_edacontrollers:
 # aap_execution_nodes:
@@ -48,8 +48,8 @@ aap_hosts:
 
 container_servers:
   hosts:
-    quadlet1.example.ca
-    quadlet2.example.ca
+    quadlet1.example.ca:
+    quadlet2.example.ca:
 
 # aws_nodes:
 # azure_nodes:
@@ -60,16 +60,16 @@ container_servers:
 # openstack_nodes:
 vmware_vcenter_hosts:
   hosts:
-    vcenter.example.ca
+    vcenter.example.ca:
 
 vmware_esx_hosts:
   hosts:
-    esx1.example.ca
-    esx2.example.ca
-    esx3.example.ca
-    esx4.example.ca
-    esx5.example.ca
-    esx6.example.ca
-    esx7.example.ca
-    esx8.example.ca
-    esx9.example.ca
+    esx1.example.ca:
+    esx2.example.ca:
+    esx3.example.ca:
+    esx4.example.ca:
+    esx5.example.ca:
+    esx6.example.ca:
+    esx7.example.ca:
+    esx8.example.ca:
+    esx9.example.ca:

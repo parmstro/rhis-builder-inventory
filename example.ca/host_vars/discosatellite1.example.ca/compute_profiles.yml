@@ -62,7 +62,7 @@ compute_profiles:
           nvidia_gpu_extension: "false"
           interfaces_attributes:
             0:
-              network: "/subscriptions/{{ azure1_subscription_id_vault }}/resourceGroups/{{ azure1_resourcegroup1 }}/providers/Microsoft.Network/virtualNetworks/{{ azure1_rg1_vnet1 }}/subnets/{{ azure1_rg1_vn1_subnet1 }}"
+              network: "/subscriptions/24ed9aea-b17b-4193-a137-29f19a947277/resourceGroups/rg1_example_ca/providers/Microsoft.Network/virtualNetworks/vn1_example_ca/subnets/sn1_example_ca"
               public_ip: "None"
               private_ip: "true"
           volumes_attributes:

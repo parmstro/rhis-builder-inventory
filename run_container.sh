@@ -100,7 +100,8 @@ if [[ $groupvarsdir == "" || $hostvarsdir == "" || $inventorydir == "" ]]; then
 else
   echo "Mounting custom configuration"
 
-  podman run -it -v $inventorydir:/rhis/vars/external_inventory:Z \
+  podman run -it --rm \
+                 -v $inventorydir:/rhis/vars/external_inventory:Z \
                  -v $externaltasksdir:/rhis/vars/external_tasks:Z \
                  -v $filesdir:/rhis/vars/files:Z \
                  -v $groupvarsdir:/rhis/vars/group_vars:Z \
@@ -109,6 +110,7 @@ else
                  -v $varsdir:/rhis/vars/vars:Z \
                  -v $secretsdir:/rhis/vars/vault:Z \
                  --hostname provisioner \
+                 --name rhis-builder \
                  $path/rhis-provisioner-9-$ansiblever:latest
   
   # Quietly restore the SELinux context 

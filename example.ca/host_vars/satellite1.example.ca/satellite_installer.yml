@@ -30,11 +30,11 @@ sat_installer_options:
   - '--foreman-proxy-plugin-remote-execution-script-install-key true'
 # IDM authentication (we will be able to login with IdM credentials and remote execution)
 # rex requires client.keytab for the ssh user to be in appropriate path - see satellite_pre.yml
-  - '--foreman-proxy-plugin-remote-execution-script-ssh-kerberos-auth {{ rex_kerberos_enabled }}'
-  - '--foreman-ipa-authentication {{ satellite_pre_use_idm }}'
+  - '--foreman-proxy-plugin-remote-execution-script-ssh-kerberos-auth true'
+  - '--foreman-ipa-authentication true'
 # HTTPS Certificates for foreman (see satellite_pre.yml variable file)
   - '--certs-server-ca-cert "{{ sat_ssl_ca_crt_path }}"'
-  - '--certs-server-cert "{{ sat_ssl_ca_crt_path }}"'
+  - '--certs-server-cert "{{ sat_ssl_crt_path }}"'
   - '--certs-server-key "{{ sat_ssl_key_path }}"'
 # BEGIN Content integrations
   - '--foreman-proxy-content-enable-ansible true'

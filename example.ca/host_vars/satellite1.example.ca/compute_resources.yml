@@ -1,6 +1,11 @@
 ---
+
 # These values are very specific to a customer environment
 # Please take care to validate them carefully
+# There are required permissions for the accounts for satellite to deploy to hypervisors/hyperscalers
+# Please ensure that you read the relevant KB articles and configure these accounts appropriately
+# The hypervisor/hyperscaler objects referenced in this file are assumed to exist already.
+# There are repos that are working on configuring these landing zones, they are currently works in progress.
 # This file generates compute resources for both VMware and Azure in the default organization
 # You can update the values of satellite_organization and satellite_location to recreate them in another org.
 
@@ -14,12 +19,12 @@
 # GCE
 # Openstack
 
-vcenter_service_username: "{{ vcenter_service_username_vault }}"
-vcenter_service_password: "{{ vcenter_service_password_vault }}"
-vmware_cluster1_name: "chassis3"
-vmware_cluster1_path: "/Datacenters/{{ _global_domain_name }}/vm"
-vmware_cluster1_datastore: "NASAEX_VMS"
-vmware_cluster1_network: "VM Network"
+vmware1_vcenter_username: "{{ vmware1_vcenter_username_vault }}"
+vmware1_vcenter_password: "{{ vmware1_vcenter_password_vault }}"
+vmware1_cluster1_name: "chassis3"
+vmware1_cluster1_path: "/Datacenters/{{ _global_domain_name }}/vm"
+vmware1_cluster1_datastore: "NASAEX_VMS"
+vmware1_cluster1_network: "VM Network"
 
 azure1_tenant_id: "{{ azure1_tenant_id_vault }}"
 azure1_subscription_id: "{{ azure1_subscription_id_vault }}"
@@ -30,7 +35,7 @@ azure1_cloud: "azure"
 azure1_region: "Canada Central"
 azure1_resourcegroup1: "rg1_example_ca"
 azure1_rg1_vnet1: "vn1_example_ca"
-azure1_rg1_vn1_subnet1: "sn_example_ca"
+azure1_rg1_vn1_subnet1: "sn1_example_ca"
 
 aws1_access_key: "{{ aws1_access_key_vault }}"
 aws1_secret_key: "{{ aws1_secret_key_vault }}"
@@ -47,8 +52,8 @@ compute_resources:
       caching_enabled: false  # setting this to true currently causes some server faults.
       datacenter: "{{ _global_domain_name }}"
       url: "vcenter.{{ _global_domain_name }}"
-      user: "{{ vcenter_service_username }}"
-      password: "{{ vcenter_service_password }}"
+      user: "{{ vmware1_vcenter_username }}"
+      password: "{{ vmware1_vcenter_password }}"
 
   - name: "Azure_Lab"
     provider: "AzureRm"
@@ -56,9 +61,9 @@ compute_resources:
     locations: "{{ satellite_location }}"
     organizations: "{{ satellite_organization }}"
     images:
-      - name: "RHEL95_latest"
+      - name: "RHEL97_latest"
         architecture: "x86_64"
-        operatingsystem: "RHEL 9.5"
+        operatingsystem: "RHEL 9.7"
         image_username: "realm-capsule"
         image_password: "{{ satellite_password }}"
         uuid: "marketplace://RedHat:RHEL:9-lvm-gen2:latest"

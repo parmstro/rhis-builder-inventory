@@ -20,7 +20,7 @@ global_parameters:
     state: "present"
 
   - name: "ansible_job_template_id"
-    value: 13
+    value: 125
     parameter_type: "integer"
     hidden_value: false
     state: "present"
@@ -31,101 +31,180 @@ global_parameters:
     hidden_value: false
     state: "present"
 
+  - name: "ansible_tower_api_url"
+    value: "https://aapcontroller24.{{ _global_domain_name }}/api/v2"
+    parameter_type: "string"
+    hidden_value: false
+    state: "present"
+
   - name: "ansible_tower_provisioning"
     value: false
     parameter_type: "boolean"
     hidden_value: false
     state: "present"
 
+  - name: "binding_json"
+    value: '{"t":1, "pins":{"tang":[{"url":"http://quadlet1.example.ca:8080"},{"url":"http://quadlet2.example.ca:8080"}]}}'
+    parameter_type: "json"
+    state: "present"
+
+  - name: "binding_type"
+    value: 'sss'
+    parameter_type: "string"
+    state: "present"
+
+  - name: "default_passphrase"
+    value: "temporary_secret"
+    parameter_type: "string"
+    state: "present"
+
+  - name: "enable_cloud_remediations"
+    value: true
+    parameter_type: "boolean"
+    state: "present"
+
   - name: "enable-epel"
     value: false
     parameter_type: "boolean"
+    state: "present"
+
+  - name: "enable-puppet5"
+    value: false
+    parameter_type: "boolean"
+    state: "present"
 
   - name: "enable-remote-execution-pull"
     value: false
     parameter_type: "boolean"
+    state: "present"
+
+  - name: "encrypt-grub"
+    value: false
+    parameter_type: "boolean"
+    state: "present"
+
+  - name: "enc_target_drives"
+    value: '["/dev/sda"]'
+    parameter_type: "array"
+    state: "present"
 
   - name: "fips_enabled"
     value: false
     parameter_type: "boolean"
-
-  - name: "encrypt_grub"
-    value: false
-    parameter_type: "boolean"
+    state: "present"
 
   - name: "grubmenu_pass"
-    value: "enter value from grub2-mkpasswd-pbkdf2"
+    value: "grub.pbkdf2.sha512.10000.6C3099CF3023248A0ED04D63544281662D0F875E49ABEFBA1C3E84069742292E5CC93A5C1055879FA72401FE9764E578CDC9C21CE8AF4AC5E31139B8E2B3CBE6.18C25D6B1A3089B02D08C4F60664EE12C1AE9A3A6A2ECD312D39D7EA6CFF24D8861D1676C302C956EA88F771046A73C7838F6526383B7857367F20D09AA81297"
     parameter_type: "string"
     hidden_value: true
+    state: "present"
 
   - name: "host_packages"
     value: "vim"
     parameter_type: "string"
+    state: "present"
 
   - name: "host_registration_insights"
     value: true
     parameter_type: "boolean"
+    state: "present"
+
+  - name: "host_registration_lightspeed"
+    value: true
+    parameter_type: "boolean"
+    state: "present"
+
+  - name: "host_registration_insights_inventory"
+    value: true
+    parameter_type: "boolean"
+    state: "present"
+
+  - name: "host_registration_lightspeed_inventory"
+    value: true
+    parameter_type: "boolean"
+    state: "present"
 
   - name: "host_registration_remote_execution"
     value: true
     parameter_type: "boolean"
+    state: "present"
 
   - name: "install_environment_group"
     value: "server-product-environment"
     parameter_type: "string"
+    state: "present"
 
   - name: "install_reboot_kexec"
     value: false
     parameter_type: "boolean"
+    state: "present"
 
   - name: "network_zone"
     value: "public"
     parameter_type: "string"
+    state: "present"
 
   - name: "package_upgrade"
     value: true
     parameter_type: "boolean"
+    state: "present"
 
   - name: "redhat_install_agent"
     value: false
     parameter_type: "boolean"
+    state: "present"
 
   - name: "redhat_install_host_tools"
     value: true
     parameter_type: "boolean"
+    state: "present"
 
   - name: "redhat_install_host_tracer_tools"
     value: true
     parameter_type: "boolean"
+    state: "present"
 
   - name: "remote_execution_create_user"
     value: true
     parameter_type: "boolean"
+    state: "present"
 
   - name: "remote_execution_effective_user_method"
     value: "sudo"
     parameter_type: "string"
+    state: "present"
 
   - name: "remote_execution_ssh_keys"
     value: "{{ remote_execution_ssh_keys_vault }}"
     parameter_type: "string"
+    state: "present"
 
   - name: "remote_execution_ssh_user"
     value: "{{ remote_execution_ssh_user_vault }}"
     parameter_type: "string"
+    state: "present"
 
   - name: "remove_default_passphrase"
-    value: true
+    value: false
     parameter_type: "boolean"
+    state: "present"
 
   - name: "use_foreman_users"
     value: true
     parameter_type: "boolean"
+    state: "present"
 
   - name: "use_graphical_installer"
     value: false
     parameter_type: "boolean"
+    state: "present"
+
+  - name: "use_NBDE"
+    value: false
+    parameter_type: "boolean"
+    state: "present"
 
   - name: "use_ntp"
     value: false
     parameter_type: "boolean"
+    state: "present"
