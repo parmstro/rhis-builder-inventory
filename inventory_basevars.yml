@@ -1,0 +1,17 @@
+---
+
+# GLOBAL VARIABLES THAT APPLY TO ALL HOSTS
+global_domain_name: "savage.test"
+
+default_network: "192.168.140.0"
+default_network_prefix: "22"
+default_network_mask: "255.255.252.0"
+
+rhis_primary_city: "Greenville"
+rhis_primary_state: "South Carolina"
+rhis_timezone: "America/New_York"
+rhis_locale: "en_US"
+
+rhis_aws_region: "us-east-2"
+rhis_azure_region: "East US 2"
+...
