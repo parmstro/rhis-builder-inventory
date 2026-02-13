@@ -3,7 +3,7 @@
 # GLOBAL VARIABLES THAT APPLY TO ALL HOSTS
 _global_domain_name: "{{ global_domain_name }}"
 
-_default_network: "{{ default_network }}"
+_default_network: "{{ default_network.split('.')[0:3] | join('.') }}"
 _default_network_prefix: "{{ default_network_prefix }}"
 _default_network_mask: "{{ default_network_mask }}"
 {% raw %}
