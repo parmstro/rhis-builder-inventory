@@ -155,5 +155,22 @@
         mode: "0755"
       loop: "{{ jinja_template_paths_2.files | map(attribute='path') | list }}"
 
+    - name: Find and register paths to group_vars platform_installer FQD files
+      ansible.builtin.find:
+        paths: "{{ global_domain_name }}/group_vars/platform_installer"
+        file_type: file
+      register: group_vars_platform_installer_paths
 
+    - name: "Create {{ global_domain_name }} platform_installer files from FQD interim files"
+      ansible.builtin.file:
+        src: "{{ item }}"
+        dest: "{{ item | ansible.builtin.regex_replace('FQD', global_domain_name) }}"
+        state: hard
+      loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
+
+    - name: Remove interim FQD platform_installer files
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
 ...
