@@ -447,9 +447,9 @@ activation_keys:
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
-      - label: "Default_Organization_CentOS79_CentOS79"
+      - label: "Default_Organization_centos_79_CentOS79"
         override: "enabled"
-      - label: "Default_Organization_CentOS79_updates"
+      - label: "Default_Organization_centos_79_updates"
         override: "enabled"
     content_view: "CentOS79"
     lifecycle_environment: "Development"
@@ -464,7 +464,7 @@ activation_keys:
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
-      - label: "Default_Organization_OEL79_OEL79"
+      - label: "Default_Organization_oel_79_OEL79"
         override: "enabled"
     content_view: "OEL79"
     lifecycle_environment: "Development"
@@ -479,11 +479,11 @@ activation_keys:
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
-      - label: "Default_Organization_CentOS79_CentOS79"
+      - label: "Default_Organization_centos_79_CentOS79"
         override: "enabled"
-      - label: "Default_Organization_convert2rhel_convert2rhel7"
+      - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
         override: "enabled"
-      - label: "Default_Organization_CentOS79_updates"
+      - label: "Default_Organization_centos_79_updates"
         override: "enabled"
       - label: "rhel-7-server-els-satellite-client-6-rpms"
         override: "enabled"
@@ -504,9 +504,9 @@ activation_keys:
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
-      - label: "Default_Organization_OEL79_OEL79"
+      - label: "Default_Organization_oel_79_OEL79"
         override: "enabled"
-      - label: "Default_Organization_convert2rhel_convert2rhel7"
+      - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
         override: "enabled"
       - label: "rhel-7-server-els-satellite-client-6-rpms"
         override: "enabled"

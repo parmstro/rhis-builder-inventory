@@ -1,5 +1,6 @@
 ---
 
+register_to_satellite: false
 
 # commonly changed variables
 ipaserver_ip_addresses: "{{ _default_network }}.5"

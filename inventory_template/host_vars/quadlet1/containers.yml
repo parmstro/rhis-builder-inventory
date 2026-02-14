@@ -7,7 +7,7 @@ containerhost_registry_password: "{{ containerhost_registry_password_vault }}"
 # e.g. tang
 containers:
   - name: "tang"
-    image: "rhel8/tang"   # we are using rhel 8.10 so rhel8 tang container
+    image: "rhel9/tang"
     id: "tang"
     tag: "latest"
     registry: "{{ containerhost_registry }}"
@@ -38,5 +38,8 @@ containers:
         state: present
     state: started
     systemd: true
+    test_shell_command: "echo 'OcelotPantherJaguarBarnCat' | clevis encrypt tang '{\"url\":\"{{ ansible_fqdn }}:8080\"}' -y | clevis decrypt"
+    test_value: "OcelotPantherJaguarBarnCat"
+    test_expected_result: "OcelotPantherJaguarBarnCat"
     volume:
       - "tang-keys:/var/db/tang"

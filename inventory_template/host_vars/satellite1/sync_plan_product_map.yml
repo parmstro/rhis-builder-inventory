@@ -54,7 +54,7 @@ product_plans:
     organization: "{{ satellite_organization }}"
 
 # convert2RHEL utilities
-  - name: "convert2rhel"
+  - name: "Red Hat Client Tools for RHEL"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 

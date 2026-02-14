@@ -16,12 +16,13 @@ satellite_template_repos:
     force: true                    # force update of locked templates
     locations: "['Default Location']"
     organizations: "['Default Organization']"
-  - name: "gonoph imagemode repo"
-    repo_url: "https://github.com/gonoph/satellite-templates.git"
-    dirname: "partition_table_templates"
-    branch: "main"
-    associate: "new"
-    locked: true
-    force: true                    # force update of locked templates
-    locations: "['Default Location']"
-    organizations: "['Default Organization']"
+  # this is broken or private
+  # - name: "gonoph imagemode repo"
+  #   repo_url: "https://github.com/gonoph/satellite-templates.git"
+  #   dirname: "partition_table_templates"
+  #   branch: "main"
+  #   associate: "new"
+  #   locked: true
+  #   force: true                    # force update of locked templates
+  #   locations: "['Default Location']"
+  #   organizations: "['Default Organization']"

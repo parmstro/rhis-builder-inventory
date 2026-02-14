@@ -223,8 +223,8 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "convert2rhel7"
-        product: "convert2rhel"
+      - name: "Red Hat Client Tools for RHEL 7"
+        product: "Red Hat Client Tools for RHEL"
     environments:
       - "Library"
 
@@ -234,8 +234,19 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "convert2rhel7"
-        product: "convert2rhel"
+      - name: "Red Hat Client Tools for RHEL 8"
+        product: "Red Hat Client Tools for RHEL"
+    environments:
+      - "Library"
+
+  - name: "convert2rhel9"
+    desc: "convert2rhel utilities for EL8 conversions"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Client Tools for RHEL 9"
+        product: "Red Hat Client Tools for RHEL"
     environments:
       - "Library"
 

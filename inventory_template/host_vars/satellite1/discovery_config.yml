@@ -1,0 +1,20 @@
+---
+
+# Use this file if you are going perform
+# - custom fact evaluation during system discovery
+# - discovery remastering
+
+rhis_discovery_custom_facts_enable: true
+rhis_discovery_custom_facts_file: "boot/discovery_facts.zip"
+rhis_discovery_pxelinux_template: "prov_template_snippet_soe_pxelinux_discovery.j2"
+rhis_discovery_pxegrub_template: "prov_template_snippet_soe_pxegrub_discovery.j2"
+rhis_discovery_pxegrub2_template: "prov_template_snippet_soe_pxegrub2_discovery.j2"
+rhis_discovery_ipxe_global_default_template: "ipxe_template_soe_ipxe_global_default.j2"
+rhis_discovery_pxegrub_global_default_template: "pxegrub_template_soe_pxegrub_global_default.j2"
+rhis_discovery_pxegrub2_global_default_template: "pxegrub2_template_soe_pxegrub2_global_default.j2"
+rhis_discovery_pxegrub2_default_local_boot_template: "pxegrub2_template_soe_pxegrub2_default_local_boot.j2"
+rhis_discovery_pxelinux_global_default_template: "pxelinux_template_soe_pxelinux_global_default.j2"
+
+# requires updates to provisioning templates to load templates into satellite
+# requires changes to system setting to ensure our templates are configured
+# requires rebuild PXE default to be called.

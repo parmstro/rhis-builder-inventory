@@ -11,9 +11,14 @@ locations:
 -%>
 <%#
 This template expects the following host paramaters to be set in the hostgroup
-use_NBDE
-default_passphrase
-tang_server
+
+boolean  use_NBDE                     (true)
+string   default_passphrase           (your_secret)
+boolean  remove_default_passphrase	  (false)
+array    enc_target_drives            (["/dev/sda","/dev/sdb"])
+string   binding_json                 ({"t":1, "pins":{"tang":[{"url":"http://c1containers.parmstrong.ca:8080"},{"url":"http://tang1.parmstrong.ca:8080"}]}})
+string   binding_type                 ("sss")
+
 
 This template uses the following variables from Kickstart Default
 iface
@@ -32,24 +37,58 @@ iface
   <% if @host.operatingsystem.major.to_i == 9 %>
   yum -y install clevis clevis-dracut clevis-luks clevis-systemd clevis-udisks2  clevis-pin-tpm2 cockpit-storaged
   <% end -%>
+  # get the list of encrypted drives
+  # debug
   
-# ask tang for a 
+  blkid -o device -t TYPE=cyrpto_LUKS
+  
+  echo "Get the list of encryted drives"
+
+  discovered_drives=$(sudo blkid -t TYPE=crypto_LUKS -o device)
+
+  echo
+  echo "Drives to be bound:"
+  echo $discovered_drives
+  
+  # ask tang servers for pin to see if they are up
   echo "Requesting tang pin"
-  curl -sfg <%= host_param('tang_URL') %>/adv -o adv.jws
-  echo "tang pin acquired"
+  <% data_hash = JSON.parse(host_param('binding_json')) %>
+  <% data_hash['pins']['tang'].each do |tang_srv| %>
+    curl -fg <%= tang_srv['url'] %>/adv -o adv.jws
+  <% end %>
+  echo "tang pins acquired"
   
   echo "Binding LUKS volume to tang"
-
-  <% if host_param('enc_target_drive') != "" %>
-    clevis luks bind -y -f -k - -d <%= host_param('enc_target_drive') %> tang '{"url":"<%= host_param('tang_URL') %>"}' <<< <%= host_param('default_passphrase') %>
-  <% else %>
-    clevis luks bind -y -f -k - -d <%= discovered_drive %> tang '{"url":"<%= host_param('tang_URL') %>"}' <<< <%= host_param('default_passphrase') %>
+  <% if host_param('enc_target_drives').empty? %>
+  for drv in $discovered_drives
+  do
+    clevis luks bind -y -f -k - -d $drv <%= host_param('binding_type') %> '<%= host_param('binding_json') %>' <<< <%= host_param('default_passphrase') %>
+  done
   <% end -%>
   
-  echo "Check binding... volume tang server:"
-  clevis luks list -d <%= host_param('enc_target_drive') %>
-  echo "Binding completed"
+  <% if ! host_param('enc_target_drives').empty? %>
+    <% host_param('enc_target_drives').each do |drv| %>
+      echo "Binding drive <%= drv %>"
+      clevis luks bind -y -f -k - -d <%= drv %> <%= host_param('binding_type') %> '<%= host_param('binding_json') %>' <<< <%= host_param('default_passphrase') %>
+    <% end %>
+  <% end -%>
   
+  <% if host_param('enc_target_drives').empty? %>
+  echo "Check bindings... "
+  for drv in $discovered_drives
+  do
+    echo "Checking drive $drv"
+    clevis luks list -d $drv
+  done
+  <% end -%>
+  <% if ! host_param('enc_target_drives').empty? %>
+    <% host_param('enc_target_drives').each do |drv| %>
+  echo "Checking drive <%= drv %>"
+  clevis luks list -d <%= drv %>
+    <% end %>
+  <% end -%>
+  
+  echo "Binding completed"
   
   echo "Regenerate initramfs to include clevis"
   echo "Getting CURRENT_GRUB_CMDLINE_LINUX"
@@ -66,16 +105,24 @@ iface
   <% end -%>
   echo "initramfs regenerated"
   
-  
+  <% if host_param('remove_default_passphrase') %>
   echo "removing default_passphrase from volume"
-  <% if host_param_true?('remove_default_passphrase') %>
-    <% if host_param('enc_target_drive') != "" %>
-      cryptsetup luksRemoveKey <%= host_param('enc_target_drive') %> <<< <%= host_param('default_passphrase') %>
-    <% else %>
-      cryptsetup luksRemoveKey <%= discovered_drive %> <<< <%= host_param('default_passphrase') %>
-    <% end -%>
+    <% if host_param('enc_target_drives').empty? %>
+  for drv in $discovered_drives
+  do
+  echo "Removing default passphrase for drive <%= drv %>"
+  cryptsetup luksRemoveKey $drv <<< <%= host_param('default_passphrase') %>
   echo "default_passphrase key removed"
+  done
+    <% elsif ! host_param('enc_target_drives').empty? %>
+      <% host_param('enc_target_drives').each do |drv| %>
+  echo "Removing default passphrase for drive <%= drv %>"
+  cryptsetup luksRemoveKey <%= drv %> <<< <%= host_param('default_passphrase') %>
+  echo "default_passphrase key removed"
+      <% end %>
+    <% end -%>
   <% end -%>
+  
   echo "exiting luks binding to tang server"
   echo "###################################"
   echo " "
