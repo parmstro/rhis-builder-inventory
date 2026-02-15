@@ -49,13 +49,13 @@
 
 # Check network is part of a RFC1918 private network and determine type
     - name: "Target network type test - 192.168.0.0/16 and 172.16.0.0/16"
-      when: (default_network_type_output | length != 0 and '192.168.0.0/16' | ansible.utils.network_in_network( target_net_cidr )) or
-            (default_network_type_output | length != 0 and '172.16.0.0/16' | ansible.utils.network_in_network( target_net_cidr ))
+      when: (default_network_type_output | length != 0 and '192.168.0.0/16' | ansible.utils.network_in_network(target_net_cidr)) or
+            (default_network_type_output | length != 0 and '172.16.0.0/16' | ansible.utils.network_in_network(target_net_cidr))
       ansible.builtin.set_fact:
         target_net_octets: "{{ default_network.split('.')[0:2] | join('.') }}"
 
     - name: Target network type test - 10.0.0.0/8
-      when: default_network_type_output | length != 0 and '10.0.0.0/8' | ansible.utils.network_in_network( target_net_cidr )
+      when: default_network_type_output | length != 0 and '10.0.0.0/8' | ansible.utils.network_in_network(target_net_cidr)
       ansible.builtin.set_fact:
         target_net_octets: "{{ default_network.split('.')[0:1] | join('.') }}"
 
@@ -161,11 +161,12 @@
         file_type: file
       register: group_vars_platform_installer_paths
 
-    - name: "Create {{ global_domain_name }} platform_installer files from FQD interim files"
+    - name: "Create platform_installer files from FQD interim files - {{ global_domain_name }}"
       ansible.builtin.file:
         src: "{{ item }}"
         dest: "{{ item | ansible.builtin.regex_replace('FQD', global_domain_name) }}"
         state: hard
+        mode: "0755"
       loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
 
     - name: Remove interim FQD platform_installer files
@@ -173,4 +174,21 @@
         path: "{{ item }}"
         state: absent
       loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
+
+    - name: Find and register paths to jinja bash templates
+      ansible.builtin.find:
+        paths: "inventory_template/scripts"
+        recurse: true
+        patterns: "*.j2"
+      register: jinja_bash_template_paths
+
+    - name: "Populate rhis container runtime scripts from jinja templates - {{ global_domain_name }}"
+      ansible.builtin.template:
+        src: "{{ item }}"
+        dest: "./{{ item |
+          ansible.builtin.regex_replace('inventory_template/scripts', '') |
+          ansible.builtin.regex_replace('template', global_domain_name) |
+          ansible.builtin.regex_replace('.j2', '') }}"
+        mode: "0755"
+      loop: "{{ jinja_bash_template_paths.files | map(attribute='path') | list }}"
 ...

@@ -1,0 +1,11 @@
+#!/bin/bash
+./run_container.sh --secrets-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/vault' \
+                   --external-tasks-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/external_tasks' \
+                   --files-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/files' \
+                   --group-vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/group_vars' \
+                   --host-vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/host_vars' \
+                   --inventory-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/inventory' \
+                   --templates-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/templates' \
+                   --vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ global_domain_name }}/vars' \
+                   --container-registry 'quay.io' \
+                   --container-repo 'parmstro'

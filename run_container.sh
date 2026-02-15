@@ -113,13 +113,15 @@ else
                  --name rhis-builder \
                  $path/rhis-provisioner-9-$ansiblever:latest
   
-  # Quietly restore the SELinux context 
-  restorecon -FRq $externaltasksdir
-  restorecon -FRq $filesdir
-  restorecon -FRq $groupvarsdir
-  restorecon -FRq $hostvarsdir
-  restorecon -FRq $inventorydir
-  restorecon -FRq $secretsdir
-  restorecon -FRq $templatesdir
-  restorecon -FRq $varsdir
+  if [ "$(uname)" == "Linux" ]; then
+    # Quietly restore the SELinux context 
+    restorecon -FRq $externaltasksdir
+    restorecon -FRq $filesdir
+    restorecon -FRq $groupvarsdir
+    restorecon -FRq $hostvarsdir
+    restorecon -FRq $inventorydir
+    restorecon -FRq $secretsdir
+    restorecon -FRq $templatesdir
+    restorecon -FRq $varsdir
+  fi
 fi
