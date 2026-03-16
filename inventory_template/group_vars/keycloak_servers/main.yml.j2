@@ -1,5 +1,5 @@
 ---
-
+{% raw %}
 # main variables for keycloak installation
 keycloak_admin_username: "admin"
 keycloak_admin_password: "{{ keycloak_admin_password_vault }}"
@@ -66,11 +66,11 @@ ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
 ipaadmin_password: "{{ ipa_admin_password_vault }}"
 ipaclient_domain: "{{ _global_domain_name }"
 ipaclient_mkhomedir: true
-ipaclient_ntp_servers:  # "these are not the servers you are looking for... "
-  - "time.aws.ca"
-  - "time.chu.nrc.ca"
-  - "time.google.com"
-# ipaclient_ssh_trust_dns: true
+{% endraw %}ipaclient_ntp_servers:
+{% for rhis_time_server_num in rhis_time_servers %}
+  - "{{ rhis_time_server_num }}"
+{% endfor %}
+{% raw %}# ipaclient_ssh_trust_dns: true
 # ipasssd_enable_dns_updates: true
 ### END IdM Registration ONLY ###
 
@@ -111,3 +111,6 @@ csr_path: "{{ crt_dir }}/{{ ansible_fqdn }}.csr"
 crt_service_type: "HTTP"
 ssl_crt_path: "{{ crt_dir }}/{{ ansible_fqdn }}.crt"
 ### END IdM Certificates ###
+{% endraw %}
+...
+

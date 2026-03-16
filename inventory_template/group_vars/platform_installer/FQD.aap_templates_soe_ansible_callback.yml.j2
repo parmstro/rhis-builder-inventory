@@ -19,8 +19,8 @@ templates_soe_ansible_callback:
       time_timedaemon: "chrony"
       time_timeservers:
 {% endraw %}
-        - "time1.{{ global_domain_name }}"
-        - "time2.{{ global_domain_name }}"
-        - "time3.{{ global_domain_name }}"
+{% for rhis_time_server_num in rhis_time_servers %}
+        - "{{ rhis_time_server_num }}"
+{% endfor %}
       time_timezone: "{{ rhis_timezone }}"
 ...

@@ -12,6 +12,12 @@ rhis_primary_state: "South Carolina"
 rhis_timezone: "America/New_York"
 rhis_locale: "en_US"
 
+rhis_time_servers:
+  - "0.rhel.pool.ntp.org"
+  - "1.rhel.pool.ntp.org"
+  - "2.rhel.pool.ntp.org"
+  - "3.rhel.pool.ntp.org"
+
 rhis_aws_region: "us-east-2"
 rhis_azure_region: "East US 2"
 ...
