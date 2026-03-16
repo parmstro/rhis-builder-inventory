@@ -4,11 +4,11 @@
 # idm_dns_forward_zones:
 #   - name: "{{ _global_domain_name }}"
 #     forwarders:
-#       - ip_address: "10.10.10.5"
-#       - ip_address: "10.10.10.6"
+#       {% endraw %}- ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(10) }}"
+#       - ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(11) }}"
 #     forward_policy: "only"
 #     skip_overlap_check: true
-
+{% raw %}
 # Set the bind policy for zones managed by the IdM server
 # The realm-capsule bind policy should be much more restrictive
 idm_dns_update_zones:
