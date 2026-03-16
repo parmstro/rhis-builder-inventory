@@ -6,12 +6,12 @@ _global_domain_name: "{{ global_domain_name }}"
 _default_network: "{{ default_network.split('.')[0:3] | join('.') }}"
 _default_network_prefix: "{{ default_network_prefix }}"
 _default_network_mask: "{{ default_network_mask }}"
-{% raw %}
 
-timeservers:
-  - "time1.{{ _global_domain_name }}"
-  - "time2.{{ _global_domain_name }}"
-  - "time3.{{ _global_domain_name }}"
+_default_timeservers:
+{% for rhis_time_server_num in rhis_time_servers %}
+  - "{{ rhis_time_server_num }}"
+{% endfor %}
+{% raw %}timeserver: "{{ _default_timeservers }}"
 
 #######################################################################################################################
 # Satellite vars used by all configurations
@@ -80,8 +80,8 @@ ipareplica_domain: "{{ _global_domain_name }}"
 
 
 # ipaclient role variables used in multiple repos
-ipa_client_dns_servers: "{{ _default_network }}.5"
-ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
+{% endraw %}ipa_client_dns_servers: "{{ target_net_cidr | ansible.utils.next_nth_usable(10) }}"
+{% raw %}ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
 
 ipa_client_domain: "{{ _global_domain_name }}"
 ipaclient_domain: "{{ ipa_server_domain }}"
