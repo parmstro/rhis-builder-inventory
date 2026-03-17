@@ -114,9 +114,13 @@ ipa_principal: "{{ ipa_principal_vault }}"
 
 ipa_default_user_password: "{{ ipa_default_user_password_vault }}"
 
+# Default location and values for certificate generation on any host
+# integrated into Identity Management
+
 force_regen: true
 crt_dir: "/etc/ipa/private"
-passfile: "{{ crt_dir }}/passout.txt"
+private_crt_dir: "{{ crt_dir }}"
+passfile: "{{ private_crt_dir }}/passout.txt"
 ssl_private_key_pem_path: "{{ crt_dir }}/{{ ansible_fqdn }}.pem"
 ssl_private_key_path: "{{ crt_dir }}/{{ ansible_fqdn }}.key"
 ssl_private_key_passphrase: "{{ ssl_private_key_passphrase_vault }}"
