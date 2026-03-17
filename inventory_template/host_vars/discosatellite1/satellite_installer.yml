@@ -1,6 +1,6 @@
 ---
 
-# variables for a satellite installation
+# variables for a Disconnected Satellite installation WITHOUT IdM integration
 
 foreman_proxy_realm_principal: "{{ foreman_proxy_realm_principal }}"
 dhcp_interface: "{{ ansible_facts.interfaces | select('match', '^(e)+') | list | first }}"
