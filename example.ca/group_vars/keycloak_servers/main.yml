@@ -64,12 +64,14 @@ register_idm: true
 
 ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
 ipaadmin_password: "{{ ipa_admin_password_vault }}"
-ipaclient_domain: "{{ _global_domain_name }"
+ipaclient_domain: "{{ _global_domain_name }}"
 ipaclient_mkhomedir: true
 ipaclient_ntp_servers:  # "these are not the servers you are looking for... "
-  - "time.aws.ca"
-  - "time.chu.nrc.ca"
-  - "time.google.com"
+  - "0.rhel.pool.ntp.org"
+  - "1.rhel.pool.ntp.org"
+  - "2.rhel.pool.ntp.org"
+  - "3.rhel.pool.ntp.org"
+
 # ipaclient_ssh_trust_dns: true
 # ipasssd_enable_dns_updates: true
 ### END IdM Registration ONLY ###

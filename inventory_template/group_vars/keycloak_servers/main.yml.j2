@@ -64,7 +64,7 @@ register_idm: true
 
 ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
 ipaadmin_password: "{{ ipa_admin_password_vault }}"
-ipaclient_domain: "{{ _global_domain_name }"
+ipaclient_domain: "{{ _global_domain_name }}"
 ipaclient_mkhomedir: true
 {% endraw %}ipaclient_ntp_servers:
 {% for rhis_time_server_num in rhis_time_servers %}
