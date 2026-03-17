@@ -1,0 +1,24 @@
+---
+
+capsule_ssl_rsa_key_pass: "{{ capsule_ssl_rsa_key_pass_vault }}"
+capsules_use_idm: true
+
+satellite_capsules:
+  - fqdn: "{{ groups['sat_capsules'][0] }}"
+    crt_force_regen: true
+    download_policy: "inherit"
+    lifecycle_environments:
+      - "Development"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "Azure"                 # from locations.yml
+  - fqdn: "{{ groups['sat_capsules'][0] }}"
+    crt_force_regen: true
+    download_policy: "inherit"
+    lifecycle_environments:
+      - "Development"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "AWS"                    # from locations.yml

@@ -1,0 +1,30 @@
+---
+
+# All satellite_* core variables are set in group_vars/all/main.yml
+# capsule_pre variables
+
+capsule_pre_activation_key: "satellite_capsule"
+capsule_pre_disable_cockpit: true
+
+# for building the capsules we override some volume sizes
+volume:
+  lv_name: "lv_var"
+  vg_name: "vg_root"
+  minimum_size: "110G"
+  state: present
+
+capsule_pre_time_servers: "{{ timeservers }}"
+
+capsule_pre_selinux_state: "enforcing"
+capsule_pre_selinux_policy: "targeted"
+
+capsule_pre_firewalld_config:
+  - service: "RH-Satellite-6-capsule"
+    state: "enabled"
+    zone: "public"
+
+capsule_pre_repositories:
+  - "rhel-9-for-x86_64-baseos-rpms"
+  - "rhel-9-for-x86_64-appstream-rpms"
+  - "satellite-capsule-6.18-for-rhel-9-x86_64-rpms"
+  - "satellite-maintenance-6.18-for-rhel-9-x86_64-rpms"

@@ -1,2 +1,12 @@
 ---
 # Add additional organization here
+
+# satellite_organizations:
+#   - name: "Finance"
+#     description: "A sample organization for testing"
+#     label: "Finance"
+#     parameters:
+#       - name: "Sample_Org_Parameter"
+#         parameter_type: "string"
+#         value: "This parameter is assigned at the organization level"
+#     state: present

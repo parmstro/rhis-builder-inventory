@@ -22,6 +22,11 @@ sat_capsule:
     capsule1.example.ca
     capsule2.example.ca
 
+sat_trusted_hosts:
+  children:
+    sat_primary:
+    sat_capsule:
+
 platform_installer:
   hosts:
     aaphub24.example.ca
