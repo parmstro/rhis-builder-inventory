@@ -22,12 +22,12 @@ satellite_users:
     default_organization: "Default Organization"
     auth_source: "Internal"  # or "External"
     timezone: "Toronto"
-    locale: "en_GB"
+    locale: "en"
     locations:
       - "Default Location"
     organizations:
       - "Default Organization"
-    state: "present"  # not Ontario
+    state: "present"  # not Ontario or South Carolina
 
 # satgroup-administrator will map to the Satellite admins group and administrator (all privileges) role
 # satgroup-compliance-auditor will need to view OSCAP Policy and Reports maps to Compliance Viewer
@@ -46,6 +46,19 @@ satellite_user_groups:
       - "Operator"
     users:
       - "bobsurunkle"
+    state: "present"
+
+  - name: "Administrators"
+    admin: "true"
+    state: "present"
+
+# auth_source: "External" == FreeIPA/Red Hat Identity Manager login
+# for FreeIPA/IdM the user is created automatically
+# user groups external
+satellite_user_groups_external:
+  - auth_source_group_name: "ug-satellite-administrators"
+    auth_source: "External"
+    sat_usergroup: "Administrators"
     state: "present"
 
 # test roles
@@ -147,3 +160,4 @@ satellite_roles:
       - resource_type: "InsightsHit"
       - resource_type: "Template"
       - resource_type: "ForemanVirtWhoConfigure::Config"
+...
