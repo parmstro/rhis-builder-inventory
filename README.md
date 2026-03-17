@@ -1,5 +1,44 @@
 # rhis-builder-inventory
 
+<<<<<<< Updated upstream
+=======
+### Getting started fast
+---
+You need a system with git and podman tools.
+VSCode is very helpful.
+Having ansible language, ansible linter and wolfmah's ansible-vault inline is also super useful.
+
+We are currently running fedora and rhel 9.latest systems. Your mileage may vary.
+
+Get this repository:
+```
+wget https://github.com/parmstro/rhis-builder-inventory/archive/refs/heads/main.zip
+unzip main.zip
+mv rhis-builder-inventory-main rhis-builder-inventory   # rename it for convenience
+cd rhis-builder-inventory
+git init -b main                                        # you should ensure that the branch is main
+git add * --all
+git commit -m "Initial commit"
+git remote add origin https://github.com/<your_org_or_login>/rhis-builder-inventory.git  # or whatever your url is
+git remote -v
+git push -u origin main
+```
+
+Review and edit inventory_basevars.yml file, then run the inventory_update shell script.
+```
+./inventory_update.sh
+```
+inventory_update.sh will build a new directory for your domain under the executing directory. The directory will contain the customized version of the sample RHIS build configuration based on the parameters you have provided in inventory_basevars.yml.
+This is not meant to be a full customization facility yet, but rather a way to help you get started quickly in your own environment.
+
+The inventory_update script will also create a custom script to pull and launch the rhis-provisioner container and connect to your inventory. 
+
+See the 
+
+See below for information on customizing your build further.
+
+## What is in this repository
+>>>>>>> Stashed changes
 NOTE:
 The rhis-builder-inventory now contains a version.txt file. Its purpose is to allow users to recognize change and updates to the schema and to help align the sample data with the rhis-provisioner container. This capabiloty will be enhanced through releases with the intention of eventually providing configuration validation. As we consume a huge number of projects under rhis-builder this task will be ongoing.
 
