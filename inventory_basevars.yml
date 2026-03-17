@@ -1,4 +1,10 @@
 ---
+# WARNING: Networks, Datastores and other underlying hypervisor/hyperscaler resources
+# referenced in your configurations MUST already exist.
+# Satellite, in particular, will use supplied credentials to log in and validate that
+# resource referenced in your compute resources and compute profiles exist. If they do not,
+# the compute_profiles role will fail. We look forward to implementing creation of these
+# resources in the landing zone repositories in future
 
 # GLOBAL VARIABLES THAT APPLY TO ALL HOSTS
 global_domain_name: "savage.test"
@@ -10,7 +16,7 @@ default_network_mask: "255.255.252.0"
 rhis_primary_city: "Greenville"
 rhis_primary_state: "South Carolina"
 rhis_timezone: "America/New_York"
-rhis_locale: "en_US"
+rhis_locale: "en"
 
 rhis_time_servers:
   - "0.rhel.pool.ntp.org"
