@@ -22,12 +22,12 @@ satellite_users:
     default_organization: "Default Organization"
     auth_source: "Internal"  # or "External"
     timezone: "Toronto"
-    locale: "en_GB"
+    locale: "en_US"
     locations:
       - "Default Location"
     organizations:
       - "Default Organization"
-    state: "present"  # not Ontario
+    state: "present"  # not Ontario or South Carolina
 
 # satgroup-administrator will map to the Satellite admins group and administrator (all privileges) role
 # satgroup-compliance-auditor will need to view OSCAP Policy and Reports maps to Compliance Viewer
@@ -147,3 +147,4 @@ satellite_roles:
       - resource_type: "InsightsHit"
       - resource_type: "Template"
       - resource_type: "ForemanVirtWhoConfigure::Config"
+...

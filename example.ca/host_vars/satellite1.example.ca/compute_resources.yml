@@ -1,5 +1,4 @@
 ---
-
 # These values are very specific to a customer environment
 # Please take care to validate them carefully
 # There are required permissions for the accounts for satellite to deploy to hypervisors/hyperscalers
@@ -32,15 +31,15 @@ azure1_client_id: "{{ azure1_client_id_vault }}"
 azure1_client_secret_id: "{{ azure1_client_secret_id_vault }}"
 azure1_client_secret: "{{ azure1_client_secret_vault }}"
 azure1_cloud: "azure"
-azure1_region: "Canada Central"
+azure1_region: "East US 2"
 azure1_resourcegroup1: "rg1_example_ca"
 azure1_rg1_vnet1: "vn1_example_ca"
-azure1_rg1_vn1_subnet1: "sn1_example_ca"
+azure1_rg1_vn1_subnet1: "sn_example_ca"
 
 aws1_access_key: "{{ aws1_access_key_vault }}"
 aws1_secret_key: "{{ aws1_secret_key_vault }}"
 aws1_gov_cloud: false
-aws1_region: "ca-central-1"
+aws1_region: "us-east-2"
 
 compute_resources:
   - name: "VMware_Lab"
@@ -90,3 +89,4 @@ compute_resources:
       user: "{{ aws1_access_key }}"
       password: "{{ aws1_secret_key }}"
       region: "{{ aws1_region }}"
+...

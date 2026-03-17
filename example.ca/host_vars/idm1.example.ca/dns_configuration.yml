@@ -146,6 +146,7 @@ idm_dns_records:
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
     ip_address: "192.168.140.2"
+    a_create_reverse: true
     state: "present"
 
   - name: "vcenter"
@@ -207,13 +208,14 @@ idm_dns_records:
   - name: "esx8"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.8"
+    ip_address: "192.168.140.38"
     a_create_reverse: true
     state: "present"
 
   - name: "esx9"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.9"
+    ip_address: "192.168.140.39"
     a_create_reverse: true
     state: "present"
+...

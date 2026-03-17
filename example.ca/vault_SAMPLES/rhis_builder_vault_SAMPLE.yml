@@ -27,7 +27,7 @@ rhis_builder_default_user: "ansiblerunner"                                      
 
 # aliasing the user
 default_environment_username_vault: "{{ rhis_builder_default_user }}"                              # notsecret
-default_environment_password_vault: "rhisfromscratch"   # Change this!!                            # notsecret
+default_environment_password_vault: "eyJhbGciOiJIUz"                   # Change this!!                            # notsecret
 
 # The default_admin_username_vault variable is what is expected for the admin user
 # for IdM, Satellite, and AAP installations. Technically not a secret.
@@ -88,7 +88,7 @@ aws1_account_id_vault: "an_account_id"                                          
 aws1_access_key_vault: "an_access_key"                                                             # notsecret
 aws1_secret_key_vault: "a_generated_secret"                                                        # notsecret
 aws1_gov_cloud_vault: false                                                                        # notsecret
-aws1_region_vault: "ca-central-1"                                                                  # notsecret
+aws1_region_vault: "us-east-2"                                                                  # notsecret
 
 # Default password for cloud-init when deploying
 # For simplicity of POC environments, we reference the default_environment_password_vault
@@ -109,15 +109,14 @@ azure1_client_id_vault: "your_guid_here"                                        
 azure1_client_secret_desc_vault: "SomeName"                                                        # notsecret
 azure1_client_secret_id_vault: "your_guid_here"                                                    # notsecret
 azure1_client_secret_vault: "a_long_generated_random_string"                                       # notsecret
-azure1_region_vault: "canadacentral"                                                               # notsecret
-azure1_resource_group_vault: "rg_example_ca"                                                # notsecret
-azure1_user_ssh_key: "a_public_ssh_key_for_the_login_user"                                         # notsecret
+azure1_region_vault: "canadacentral"                                                    # notsecret
+azure1_resource_group_vault: "az_canada_central_rg"                                                # notsecret
+azure1_user_ssh_key: "a_public_ssh_key_for_the_login_user"                                # notsecret
 
 # This is for configuring Azure IDP authentication with Identity Management
 azure1_idp_secret_vault: "idp_auth_secret_goes_here"
 azure1_idp_secret_id_vault: "idp_auth_secret_guid_identifier_goes_here"
 azure1_idp_app_id_vault: "idp_auth_app_id_guid_goes_here" # same as client id
-
 
 #####################################
 # rhis-builder-vmwarelz vault
@@ -175,7 +174,7 @@ ipa_keytab_dn_vault: "cn=Directory Manager"                                     
 
 # I am updating FAM/redhat.satellite to support searching by contract and SKU
 
-cdn_username_vault: "user@example.ca"                                                              # notsecret
+cdn_username_vault: "user@example.ca"                                    # notsecret
 cdn_password_vault: "eyJhbGciOiJIUz"                                                               # notsecret
 cdn_account_number_vault: "5258694"                                                                # notsecret
 cdn_organization_id_vault: "an_organization_number_from_the_CDN"                                   # notsecret
@@ -233,7 +232,7 @@ default_provisioning_root_password_vault: "{{ default_environment_password_vault
 # Phase 4 - AAP Secrets
 ############################################
 
-ansible_github_username_vault: "ansiblerunner@example.ca"                                          # notsecret
+ansible_github_username_vault: "ansiblerunner@example.ca"                            # notsecret
 ansible_github_gpat_vault: "github_pat_awer.......a.long.string........42aTtUaE"                   # notsecret
 
 # Note we have separate variables avaialble here
@@ -281,8 +280,8 @@ satellite_ansible_callback_config_key_vault: "203520146d360cdeb39436e7c76aa22e" 
 
 # RHISPost Secrets
 # Used to pull and push to github as necessary for demo projects
-github_demo_username_vault: "user@example.ca"                                                      # notsecret
-github_demo_gpat_vault: "ghp_withalongrandomstringof$tU!!"                                         # notsecret
+github_demo_username_vault: "user@example.ca"                               # notsecret
+github_demo_gpat_vault: "ghp_withalongrandomstringof$tU!!"                             # notsecret
 
 aap_idm_machine_username_vault: "{{ default_admin_username_vault }}"                               # notsecret
 aap_idm_machine_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
@@ -294,3 +293,4 @@ piv_mgmt_pin_vault: "123498"                                                    
 piv_mgmt_fips_pin_vault: "12349876"                                                                # notsecret
 piv_secure_dir_vault: "/root/yubico"                                                               # notsecret
 piv_vault_dir_vault: "/root/vault"                                                                 # notsecret
+...

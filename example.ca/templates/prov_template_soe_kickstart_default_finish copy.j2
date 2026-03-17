@@ -27,8 +27,10 @@ description: |
 -%>
 
 <%
+  is_fedora = @host.operatingsystem.name == 'Fedora'
   rhel_compatible = @host.operatingsystem.family == 'Redhat' && @host.operatingsystem.name != 'Fedora'
   os_major = @host.operatingsystem.major.to_i
+  os_minor = @host.operatingsystem.minor.to_i
   salt_enabled = host_param('salt_master') ? true : false
   chef_enabled = @host.respond_to?(:chef_proxy) && @host.chef_proxy
 %>

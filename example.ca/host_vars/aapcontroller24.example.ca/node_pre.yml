@@ -111,3 +111,4 @@ platform_node_pre_certificates:
     csr_state_or_province_name: "ON"
     csr_country_name: "CA"
     csr_email_address: "admin@{{ ansible_domain }}"
+...

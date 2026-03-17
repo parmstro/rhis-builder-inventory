@@ -66,3 +66,4 @@ redhat_manifests:
 #     pool_id: "2c94f6188e80762a018e85b2bb4b3dec"                                                   # notsecret
 #     pool_state: present
 #     qty: 100
+...

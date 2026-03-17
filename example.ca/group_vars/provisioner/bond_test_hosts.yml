@@ -88,3 +88,4 @@ bond_test_hosts:
         mode: "802.3ad"
         virtual: true
        # tag: "{{ _default_bond_vlan_tag_meta }}"
+...
