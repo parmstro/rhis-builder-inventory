@@ -1,0 +1,25 @@
+---
+
+# Quay container registry host configuration
+# Secrets are sourced from the vault file
+
+# Quay server hostname - clients use this to reach the registry
+quay_server_hostname: "quay1.{{ global_domain_name }}"
+
+# Ports published to the host
+quay_http_port: 8080
+quay_https_port: 8443
+
+# URL scheme - use "https" with TLS certs in the config volume,
+# or "http" with quay_external_tls_termination: true for reverse proxy
+quay_preferred_url_scheme: "https"
+quay_external_tls_termination: false
+
+# Feature toggles
+quay_feature_security_scanner: true
+quay_feature_repo_mirror: true
+quay_feature_mailing: false
+
+# Optional superuser accounts (uncomment and populate)
+# quay_superusers:
+#   - quayadmin

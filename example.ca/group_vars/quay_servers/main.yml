@@ -1,0 +1,45 @@
+---
+
+# Group variables for Red Hat Quay container registry servers
+
+# Registry authentication (registry.redhat.io requires login)
+quay_registry: "registry.redhat.io"
+quay_registry_username: "{{ containerhost_registry_username_vault }}"
+quay_registry_password: "{{ containerhost_registry_password_vault }}"
+
+# Secrets from vault
+quay_pg_password: "{{ quay_pg_password_vault }}"
+quay_database_secret_key: "{{ quay_database_secret_key_vault }}"
+quay_session_secret_key: "{{ quay_session_secret_key_vault }}"
+quay_security_scanner_psk: "{{ quay_security_scanner_psk_vault }}"
+
+# Red Hat Quay container images
+quay_image: "registry.redhat.io/quay/quay-rhel9"
+quay_image_tag: "v3.16"
+clair_image: "registry.redhat.io/quay/clair-rhel9"
+clair_image_tag: "v3.16"
+postgres_image: "registry.redhat.io/rhel9/postgresql-16"
+postgres_image_tag: "latest"
+redis_image: "registry.redhat.io/rhel9/redis-7"
+redis_image_tag: "latest"
+
+# Storage paths on the host
+quay_config_dir: "/srv/containers/quay/config"
+quay_clair_config_dir: "/srv/containers/quay/clair-config"
+quay_quadlet_dir: "/etc/containers/systemd"
+
+# Storage backend
+quay_storage_backend: "LocalStorage"
+quay_storage_path: "/datastorage/registry"
+
+# Clair resource limits
+quay_clair_cpus: 2
+quay_clair_postgres_cpus: 2
+quay_clair_postgres_max_connections: 300
+
+# Repo mirror settings
+quay_repo_mirror_interval: 30
+quay_repo_mirror_tls_verify: true
+
+# Firewall
+quay_firewall_zone: "public"
