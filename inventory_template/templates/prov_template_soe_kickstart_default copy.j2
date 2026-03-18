@@ -262,6 +262,16 @@ chvt 3
 (
 logger "Starting anaconda <%= @host %> postinstall"
 
+logger "Ensure RPM GPG Keys are updated"
+<% if rhel_compatible -%>
+# update all the base packages from the updates repository
+if [ -f /usr/bin/dnf ]; then
+  dnf -y update redhat-release
+else
+  yum -t -y update redhat-release
+fi
+<% end -%>
+
 # Set firewall zone drifting to no asap
 <% if (is_fedora && os_major <= 29) || (rhel_compatible && os_major <= 8) -%>
   sed -i s/^AllowZoneDrifting=yes/AllowZoneDrifting=no/g /etc/firewalld/firewalld.conf

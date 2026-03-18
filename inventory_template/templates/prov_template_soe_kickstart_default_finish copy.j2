@@ -56,6 +56,16 @@ if plugin_present?('katello')
 echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 <% end -%>
 
+logger "Ensure RPM GPG Keys are updated"
+<% if rhel_compatible -%>
+# update all the base packages from the updates repository
+if [ -f /usr/bin/dnf ]; then
+  dnf -y update redhat-release
+else
+  yum -t -y update redhat-release
+fi
+<% end -%>
+
 hostnamectl set-hostname <%= @host.name %>
 # Set firewall zone drifting to no asap
 <% if (is_fedora && os_major <= 29) || (rhel_compatible && os_major <= 8) -%>
