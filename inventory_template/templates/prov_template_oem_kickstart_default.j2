@@ -244,6 +244,10 @@ chvt 3
 (
 logger "Starting anaconda <%= @host %> postinstall"
 
+<%= snippet 'redhat_register' %>
+subscription-manager refresh
+subscription-manager repos 
+
 logger "Ensure RPM GPG Keys are updated"
 <% if rhel_compatible -%>
 # update all the base packages from the updates repository
@@ -261,8 +265,6 @@ fi
 <% if rhel_compatible && host_param_true?('enable-epel') -%>
 <%= snippet 'epel' -%>
 <% end -%>
-
-<%= snippet 'redhat_register' if rhel_compatible && !use_rhsm -%>
 
 <% if host_enc['parameters']['realm'] && @host.realm && (@host.realm.realm_type == 'FreeIPA' || @host.realm.realm_type == 'Red Hat Identity Management') -%>
 <%= snippet 'freeipa_register' %>

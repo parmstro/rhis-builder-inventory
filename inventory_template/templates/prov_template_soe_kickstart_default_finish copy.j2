@@ -56,6 +56,10 @@ if plugin_present?('katello')
 echo 'root:<%= root_pass -%>' | /usr/sbin/chpasswd -e
 <% end -%>
 
+<%= snippet 'redhat_register' %>
+subscription-manager refresh
+subscription-manager repos 
+
 logger "Ensure RPM GPG Keys are updated"
 <% if rhel_compatible -%>
 # update all the base packages from the updates repository
@@ -87,10 +91,6 @@ hostnamectl set-hostname <%= @host.name %>
 <% if rhel_compatible && host_param_true?('enable-epel') -%>
 <%= snippet 'epel' -%>
 <% end -%>
-
-<%= snippet 'redhat_register' %>
-subscription-manager refresh
-subscription-manager repos 
 
 <%= snippet 'soe_ensure_python' %>
 

@@ -258,6 +258,10 @@ chvt 3
 (
 logger "Starting anaconda <%= @host %> postinstall"
 
+<%= snippet 'redhat_register' %>
+subscription-manager refresh
+subscription-manager repos 
+
 logger "Ensure RPM GPG Keys are updated"
 <% if rhel_compatible -%>
 # update all the base packages from the updates repository
@@ -288,10 +292,6 @@ fi
 <% if rhel_compatible && host_param_true?('enable-epel') -%>
 <%= snippet 'epel' -%>
 <% end -%>
-
-<%= snippet 'redhat_register' %>
-subscription-manager refresh
-subscription-manager repos 
 
 <%= snippet 'soe_ensure_python' %>
 
