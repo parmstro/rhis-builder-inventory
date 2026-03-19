@@ -3,7 +3,7 @@
 aap_organizations:
   - name: "Default"
     description: "The default organization"
-    default_environment: "satellite_ee"
+    default_environment: "satellite_ee_9"
     galaxy_credentials:
       - "Ansible Galaxy"
       - "Automation_Hub"

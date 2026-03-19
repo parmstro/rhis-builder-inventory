@@ -7,7 +7,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "TheAutomationController"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "create_hosts.yml"
     become_enabled: true
     credentials:
@@ -67,7 +67,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -90,7 +90,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -106,7 +106,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -129,7 +129,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -144,7 +144,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -159,7 +159,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -175,7 +175,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -190,7 +190,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -209,7 +209,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -224,7 +224,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -239,7 +239,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -254,7 +254,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
@@ -269,7 +269,7 @@ templates_convert_2_rhel:
     organization: "Default"
     inventory: "convert2rhel_pipeline_inventory"
     project: "rhis-builder-convert2rhel"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "run_role.yml"
     become_enabled: true
     credentials:

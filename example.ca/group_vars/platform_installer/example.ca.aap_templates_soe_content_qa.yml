@@ -7,7 +7,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "create_hosts.yml"
     become_enabled: true
     credentials:
@@ -55,7 +55,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_create_snapshot.yml"
     become_enabled: true
     credentials:
@@ -88,7 +88,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "SOE_qa_pipeline_inventory"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "testcontent/jboss-standalone/main.yml"
     limit: "JBoss"
     become_enabled: true
@@ -110,7 +110,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "SOE_qa_pipeline_inventory"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "testcontent/jboss-standalone/deploymenttest.yml"
     limit: "JBoss"
     become_enabled: true
@@ -132,7 +132,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "SOE_qa_pipeline_inventory"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "testcontent/lamp_simple/main.yml"
     limit: "LAMP"
     become_enabled: true
@@ -146,7 +146,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "SOE_qa_pipeline_inventory"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "testcontent/lamp_simple/deploymenttest.yml"
     limit: "LAMP"
     become_enabled: true
@@ -160,7 +160,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "SOE_qa_pipeline_inventory"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "testcontent/wordpress-nginx/main.yml"
     limit: "WordPress"
     become_enabled: true
@@ -174,7 +174,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "SOE_qa_pipeline_inventory"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "testcontent/wordpress-nginx/deploymenttest.yml"
     limit: "WordPress"
     become_enabled: true
@@ -188,7 +188,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "promote_only.yml"
     become_enabled: true
     credentials:
@@ -212,7 +212,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_delete_snapshot.yml"
     become_enabled: true
     credentials:
@@ -245,7 +245,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_power_off_vm.yml"
     become_enabled: true
     credentials:
@@ -270,7 +270,7 @@ templates_soe_qa:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "delete_hosts.yml"
     become_enabled: true
     credentials:

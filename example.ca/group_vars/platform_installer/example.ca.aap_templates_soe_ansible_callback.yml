@@ -7,7 +7,7 @@ templates_soe_ansible_callback:
     organization: "Default"
     inventory: "satellite.{{ _global_domain_name }}"
     project: "rhis-builder-day-2-ops"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "post_provisioning_base.yml"
     become_enabled: true
     host_config_key: "{{ satellite_ansible_callback_config_key }}"

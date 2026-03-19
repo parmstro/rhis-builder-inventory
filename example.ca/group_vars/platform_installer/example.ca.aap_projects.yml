@@ -10,7 +10,7 @@ projects:
     organization: "Default"
     credential: "ansible_github"
     description: "various Day 2 Operations automations"
-    default_env: "satellite_ee"
+    default_env: "satellite_ee_9"
     scm_type: "git"
     scm_branch: "main"
     scm_clean: true
@@ -25,7 +25,7 @@ projects:
     organization: "Default"
     credential: "ansible_github"
     description: "demo SOE pipeline"
-    default_env: "satellite_ee"
+    default_env: "satellite_ee_9"
     scm_type: "git"
     scm_branch: "main"
     scm_clean: true
@@ -40,7 +40,7 @@ projects:
     organization: "Default"
     credential: "ansible_github"
     description: "demo convert2RHEL pipeline"
-    default_env: "satellite_ee"
+    default_env: "satellite_ee_9"
     scm_type: "git"
     scm_branch: "main"
     scm_clean: true
@@ -55,7 +55,7 @@ projects:
     organization: "Default"
     credential: "ansible_github"
     description: "Image Builder Tools for cloud images"
-    default_env: "satellite_ee"
+    default_env: "satellite_ee_9"
     scm_type: "git"
     scm_branch: "main"
     scm_clean: true

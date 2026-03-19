@@ -7,7 +7,7 @@ templates_default_monthly_publish:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "publish_only.yml"
     become_enabled: true
     credentials:

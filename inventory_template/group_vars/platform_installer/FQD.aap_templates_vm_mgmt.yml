@@ -7,7 +7,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_create_snapshot.yml"
     become_enabled: true
     credentials:
@@ -40,7 +40,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_power_off_vm.yml"
     become_enabled: true
     credentials:
@@ -65,7 +65,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_power_on_vm.yml"
     become_enabled: true
     credentials:
@@ -90,7 +90,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_reboot_guest_os.yml"
     become_enabled: true
     credentials:
@@ -115,7 +115,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_remove_all_snapshots.yml"
     become_enabled: true
     credentials:
@@ -149,7 +149,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_restart_vm.yml"
     become_enabled: true
     credentials:
@@ -174,7 +174,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_revert_snapshot.yml"
     become_enabled: true
     credentials:
@@ -208,7 +208,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_shutdown_guest_os.yml"
     become_enabled: true
     credentials:
@@ -233,7 +233,7 @@ templates_vm_day_2:
     organization: "Default"
     inventory: "TheProvisioner"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "vmware/vmw_suspend_vm.yml"
     become_enabled: true
     credentials:

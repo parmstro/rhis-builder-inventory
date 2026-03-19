@@ -7,7 +7,7 @@ templates_soe_imagebuilder:
     organization: "Default"
     inventory: "satellite.{{ _global_domain_name }}"
     project: "rhis-builder-imagebuilder"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "detect_imagebuilder9.yml"
     become_enabled: true
     credentials:
@@ -29,7 +29,7 @@ templates_soe_imagebuilder:
     organization: "Default"
     inventory: "satellite.{{ _global_domain_name }}"
     project: "rhis-builder-pipelines"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "create_hosts.yml"
     become_enabled: true
     credentials:
@@ -59,7 +59,7 @@ templates_soe_imagebuilder:
     organization: "Default"
     inventory: "satellite.{{ _global_domain_name }}"
     project: "rhis-builder-imagebuilder"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "deploy_imagebuilder9.yml"
     become_enabled: true
     credentials:
@@ -74,7 +74,7 @@ templates_soe_imagebuilder:
     organization: "Default"
     inventory: "satellite.{{ _global_domain_name }}"
     project: "rhis-builder-imagebuilder"
-    execution_environment: "satellite_ee"
+    execution_environment: "satellite_ee_9"
     playbook: "config_imagebuilder_build.yml"
     become_enabled: true
     credentials:

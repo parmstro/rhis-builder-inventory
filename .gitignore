@@ -1,6 +1,7 @@
 *.vscode
 parmstrong.ca
 *.tar
-*/vault/*.yml
+*/example.ca/vault/*.yml
 */files/.*
 .ansible
+example.ca/vault/rhis_builder_vault.yml
