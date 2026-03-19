@@ -1,0 +1,9 @@
+---
+- name: Configure individual AAP host_vars directories with hostname.global_domain_name format
+  ansible.builtin.include_tasks: "process_host_vars_directories_aap.yml"
+  when: system_info.key | regex_replace('^(.{3}).*$', '\\1') == "aap"
+
+- name: Configure individual host_vars directories with hostname.global_domain_name format
+  ansible.builtin.include_tasks: "process_host_vars_directories_common.yml"
+  when: system_info.key | regex_replace('^(.{3}).*$', '\\1') != "aap"
+...

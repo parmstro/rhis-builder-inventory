@@ -24,6 +24,18 @@ rhis_time_servers:
   - "2.rhel.pool.ntp.org"
   - "3.rhel.pool.ntp.org"
 
+rhis_aap_release_version: "2.4"
+
+rhis_system_count:
+  satellite: 1
+  discosatellite: 1
+  capsule:   2
+  idm: 1
+  aapcontroller: 1
+  aaphub: 1
+  quadlet: 2
+  clevis: 1
+
 rhis_aws_region: "us-east-2"
 rhis_azure_region: "East US 2"
 ...
