@@ -1,0 +1,9 @@
+---
+- name: Populate config files from jinja templates for AAP host_vars directories
+  ansible.builtin.include_tasks: "process_host_vars_jinja_templates_aap.yml"
+  when: system_info.key | regex_replace('^(.{3}).*$', '\\1') == "aap"
+
+- name: Populate config files from jinja templates for common host_vars directories
+  ansible.builtin.include_tasks: "process_host_vars_jinja_templates_common.yml"
+  when: system_info.key | regex_replace('^(.{3}).*$', '\\1') != "aap"
+...

@@ -1,0 +1,22 @@
+---
+- name: "Create {{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }} host_vars directory"
+  ansible.builtin.file:
+    path: "{{ global_domain_name }}/host_vars/{{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ range(0, system_info.value | int) | list }}"
+
+- name: "Defining {{ system_info.key }} host_vars directory Config as Code definitions"
+  #debug:
+  #  msg:
+  #    - "rsync {{ system_info.key }} template to {{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}"
+  #    - "{{ system_info.key | regex_replace('^(.{3}).*$', '\\1') }}"
+  ansible.posix.synchronize:
+    src: "inventory_template/host_vars/{{ system_info.key }}/"
+    dest: "./{{ global_domain_name }}/host_vars/{{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}/"
+    delete: true # Remove files in dest not in src
+    recursive: true
+    rsync_opts:
+      - "--exclude=*.j2"
+  loop: "{{ range(0, system_info.value | int) | list }}"
+...

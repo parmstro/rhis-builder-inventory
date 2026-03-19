@@ -1,0 +1,21 @@
+---
+- name: "Find and register paths to jinja templates - part two for {{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}"
+  ansible.builtin.find:
+    paths: "inventory_template/host_vars/{{ system_info.key }}"
+    recurse: true
+    patterns: "*.j2"
+  loop: "{{ range(0, system_info.value | int) | list }}"
+  register: jinja_template_paths_2
+
+- name: "Track jinja_template_paths common systems"
+  ansible.builtin.debug:
+    msg: "Common system: {{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}"
+  loop: "{{ range(0, system_info.value | int) | list }}"
+
+- name: Populate config files from jinja templates - part two
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "./{{ global_domain_name }}/host_vars/{{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}/{{ item | basename | ansible.builtin.regex_replace('.j2', '') }}"
+    mode: "0755"
+  loop: "{{ jinja_template_paths_2.results | map(attribute='files') | flatten | map(attribute='path') | list }}"
+...
