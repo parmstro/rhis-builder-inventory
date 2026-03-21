@@ -287,6 +287,20 @@ aap_idm_machine_username_vault: "{{ default_admin_username_vault }}"            
 aap_idm_machine_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
 
 #####################################
+# rhis-builder-quay vault
+#####################################
+# Quay container registry secrets
+# Generate these with the following commands:
+#   python3 -c "import secrets; print(secrets.token_hex(16))"  (for pg password)
+#   python3 -c "import uuid; print(uuid.uuid4())"              (for db secret and session key)
+#   python3 -c "import secrets; print(secrets.token_hex(32))"  (for scanner PSK)
+
+quay_pg_password_vault: "eyJhbGciOiJIUz"                                                              # notsecret
+quay_database_secret_key_vault: "00000000-0000-0000-0000-000000000000"                                 # notsecret
+quay_session_secret_key_vault: "00000000-0000-0000-0000-000000000001"                                  # notsecret
+quay_security_scanner_psk_vault: "eyJhbGciOiJIUzeyJhbGciOiJIUzeyJhbGciOiJIUz00000000"                  # notsecret
+
+#####################################
 # rhis-builder-yubi vault
 #####################################
 piv_mgmt_pin_vault: "123498"                                                                       # notsecret

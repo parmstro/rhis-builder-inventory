@@ -17,10 +17,15 @@ sat_primary:
     discosatellite1.{{ global_domain_name }}
     # satellite1.{{ global_domain_name }}
 
-sat_capsule:
+sat_capsules:
   hosts:
     capsule1.{{ global_domain_name }}
     capsule2.{{ global_domain_name }}
+
+sat_trusted_hosts:
+  children:
+    sat_primary:
+    sat_capsules:
 
 platform_installer:
   hosts:
