@@ -114,6 +114,23 @@ activation_keys:
     purpose_usage: "Production"
     service_level: "Premium"
 
+  - name: "satellite_capsule"
+    state: "present"
+    description: "Activate a Satellite Capsule Server"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "satellite-capsule-6.18-for-rhel-9-x86_64-rpms"
+        override: "enabled"
+      - label: "satellite-maintenance-6.18-for-rhel-9-x86_64-rpms"
+        override: "enabled"
+    content_view: "Default Organization View"
+    lifecycle_environment: "Library"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Production"
+    service_level: "Premium"
+
   - name: "SOE9_dev_aap_24"
     state: "present"
     description: "Activate a RHEL 9 AAP 2.4 system in development"
