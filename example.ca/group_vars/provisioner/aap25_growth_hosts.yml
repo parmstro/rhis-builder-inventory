@@ -3,6 +3,7 @@
 # AAP 2.5 Growth Deployment
 
 aap25_growth_hosts:
+
   - name: "aapcontroller1"
     fqdn: "aapcontroller1.{{ _global_domain_name }}"
     delete_host: false
@@ -11,6 +12,13 @@ aap25_growth_hosts:
     hostgroup: "hg_x86_64_rhel9_metal/aap9_25"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
+    parameters:
+      - name: "boot_disk"
+        type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        type: "string"
+        value: "/dev/nvme0n1"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -22,6 +30,7 @@ aap25_growth_hosts:
         subnet: "{{ _default_subnetname }}"
         mac: ""
         ip: "192.168.140.14"
+
   - fqdn: "aaphub1.{{ _global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
@@ -29,6 +38,13 @@ aap25_growth_hosts:
     hostgroup: "hg_x86_64_rhel9_metal/aap9_25"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
+    parameters:
+      - name: "boot_disk"
+        type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        type: "string"
+        value: "/dev/nvme0n1"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -40,6 +56,7 @@ aap25_growth_hosts:
         subnet: "{{ _default_subnetname }}"
         mac: ""
         ip: "192.168.140.15"
+
   - fqdn: "aapdb.{{ _global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
@@ -58,6 +75,7 @@ aap25_growth_hosts:
         subnet: "{{ _default_subnetname }}"
         mac: ""
         ip: "192.168.140.16"
+
   - fqdn: "aapgateway1.{{ _global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
@@ -76,6 +94,7 @@ aap25_growth_hosts:
         subnet: "{{ _default_subnetname }}"
         mac: ""
         ip: "192.168.140.17"
+
   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
