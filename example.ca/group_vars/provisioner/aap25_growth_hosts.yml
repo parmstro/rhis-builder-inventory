@@ -1,7 +1,7 @@
 ---
 
 # AAP 2.5 Growth Deployment
-{% raw %}
+
 aap25_growth_hosts:
   - name: "aapcontroller1"
     fqdn: "aapcontroller1.{{ _global_domain_name }}"
@@ -94,5 +94,4 @@ aap25_growth_hosts:
         subnet: "{{ _default_subnetname }}"
         mac: ""
         ip: "192.168.140.18"
-{% endraw %}
 ...

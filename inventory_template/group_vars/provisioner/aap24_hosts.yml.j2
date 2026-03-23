@@ -3,12 +3,12 @@
 # Ansible 2.4 growth deployment
 {% raw %}
 aap24_hosts:
-  - name: "aapcontroller24"
-    fqdn: "aapcontroller24.{{ _global_domain_name }}"
+  - name: "aapcontroller1"
+    fqdn: "aapcontroller1.{{ _global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap_24"
+    hostgroup: "hg_x86_64_rhel9_metal/aap9_24"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
     interfaces_attributes:
@@ -23,13 +23,13 @@ aap24_hosts:
         mac: "54:b2:03:f1:0b:6a"
         ip: "192.168.140.14"
 
-  - name: "aaphub24"
-    fqdn: "aaphub24.{{ _global_domain_name }}"
+  - name: "aaphub1"
+    fqdn: "aaphub1.{{ _global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap_24"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.5"
+    hostgroup: "hg_x86_64_rhel9_metal/aap9_24"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
     interfaces_attributes:
       - type: "interface"
