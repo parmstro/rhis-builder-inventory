@@ -66,12 +66,10 @@ ipaadmin_principal: "{{ ipa_admin_principal_vault }}"
 ipaadmin_password: "{{ ipa_admin_password_vault }}"
 ipaclient_domain: "{{ _global_domain_name }}"
 ipaclient_mkhomedir: true
-ipaclient_ntp_servers:  # "these are not the servers you are looking for... "
-  - "0.rhel.pool.ntp.org"
-  - "1.rhel.pool.ntp.org"
-  - "2.rhel.pool.ntp.org"
-  - "3.rhel.pool.ntp.org"
-
+ipaclient_ntp_servers:
+  - "time1.parmstrong.ca"
+  - "time2.parmstrong.ca"
+  - "time3.parmstrong.ca"
 # ipaclient_ssh_trust_dns: true
 # ipasssd_enable_dns_updates: true
 ### END IdM Registration ONLY ###
@@ -96,7 +94,7 @@ ssl_private_key_cipher: aes256
 ssl_private_key_size: 2048
 csr_email_address: "bobsurunkle@{{ _global_domain_name }}"
 csr_organization_name: "Bob Surunkle"
-csr_organization_unit_name: "Example Lab"
+csr_organization_unit_name: "Surunkle Lab"
 csr_country_name: "CA"
 csr_state_or_province_name: "ON"
 csr_locality_name: "Cambridge"
@@ -113,3 +111,5 @@ csr_path: "{{ crt_dir }}/{{ ansible_fqdn }}.csr"
 crt_service_type: "HTTP"
 ssl_crt_path: "{{ crt_dir }}/{{ ansible_fqdn }}.crt"
 ### END IdM Certificates ###
+...
+
