@@ -1,7 +1,6 @@
 ---
 
-# vars file for platform_post
-
+# vars file for rhis_post
 satellite_url: "https://{{ groups['sat_primary'][0] }}"
 
 rhis_default_git_dest: "~/rhis_ee_repos"
@@ -24,6 +23,7 @@ aap_admin_password: "{{ aap_admin_password_vault }}"
 active_controller: "{{ groups['aap_controllers'][0] }}"
 active_aap_hub: "{{ groups['aap_hubs'][0] }}"
 aap_validate_certs: false
+aap_hub_validate_certs: false
 ah_container_token: ""
 
 satellite_ansible_callback_config_key: "{{ satellite_ansible_callback_config_key_vault }}"
