@@ -1,5 +1,4 @@
 *.vscode
-parmstrong.ca
 *.tar
 */example.ca/vault/*.yml
 */files/.*
