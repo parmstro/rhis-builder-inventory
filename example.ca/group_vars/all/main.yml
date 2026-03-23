@@ -7,11 +7,11 @@ _default_network: "192.168.140"
 _default_network_prefix: "22"
 _default_network_mask: "255.255.252.0"
 
-
-timeservers:
-  - "time1.{{ _global_domain_name }}"
-  - "time2.{{ _global_domain_name }}"
-  - "time3.{{ _global_domain_name }}"
+_default_timeservers:
+  - "time1.parmstrong.ca"
+  - "time2.parmstrong.ca"
+  - "time3.parmstrong.ca"
+timeserver: "{{ _default_timeservers }}"
 
 #######################################################################################################################
 # Satellite vars used by all configurations
@@ -22,9 +22,10 @@ satellite_domain: "{{ _global_domain_name }}"
 satellite_initial_location: "Default Location"
 satellite_initial_organization: "Default Organization"
 satellite_organization: "{{ satellite_initial_organization }}"
-satellite_location: "{{ satellite_initial_organization }}"
+satellite_location: "{{ satellite_initial_location }}"
 
 satellite_server_url: "https://{{ satellite_fqdn }}"
+satellite_url: "https://{{ satellite_fqdn }}"
 satellite_validate_certs: true
 
 satellite_username: "{{ satellite_username_vault }}"
@@ -80,7 +81,7 @@ ipareplica_domain: "{{ _global_domain_name }}"
 
 
 # ipaclient role variables used in multiple repos
-ipa_client_dns_servers: "{{ _default_network }}.5"
+ipa_client_dns_servers: "192.168.140.10"
 ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
 
 ipa_client_domain: "{{ _global_domain_name }}"
