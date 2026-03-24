@@ -37,7 +37,7 @@ sat_trusted_hosts:
 platform_installer:
   hosts:
 {% for num in range(1, rhis_system_count.aapcontroller + 1) %}
-    aapcontroller{{ num }}.{{ global_domain_name }}
+    aaphub{{ num }}.{{ global_domain_name }}
 {% endfor %}
 
 aap_controllers:
