@@ -5,6 +5,12 @@ workflow_c2r_pipeline:
   description: "Automate convert2rhel pipeline for OEL and CentOS applications"
   organization: "Default"
   state: present
+  notification_templates_approvals:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_success:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_error:
+    - "RedHatGCA_NotifySlack"
   workflow_nodes:
     - identifier: "Prerequisites"
       unified_job_template:
@@ -175,3 +181,5 @@ workflow_c2r_pipeline:
         failure_nodes: []
         always_nodes: []
         credentials: []
+
+...
