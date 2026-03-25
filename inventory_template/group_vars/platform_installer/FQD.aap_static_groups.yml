@@ -47,14 +47,14 @@ static_groups:
   - name: "controller"
     description: "The automation controller"
     hosts:
-      - "aapcontroller24.{{ _global_domain_name }}"
+      - "{{ groups['aap_controllers'][0] }}"
     inventory: "TheAutomationController"
     state: present
 
   - name: "provisioner"
     description: "An alias for the automation controller"
     hosts:
-      - "aapcontroller24.{{ _global_domain_name }}"
+      - "{{ groups['aap_controllers'][0] }}"
     inventory: "TheProvisioner"
     state: present
 
@@ -127,3 +127,5 @@ static_groups:
       - "qatestwordpress2.{{ _global_domain_name }}"
     inventory: "SOE_qa_pipeline_inventory"
     state: present
+
+...
