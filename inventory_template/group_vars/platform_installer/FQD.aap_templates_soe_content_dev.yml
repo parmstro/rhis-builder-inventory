@@ -13,21 +13,39 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
-      force_publish_all: true
+      force_publish_all: false
       skip_publish_all: false
+      enable_debug_logging: false
       description: "Published by rhis-builder-pipelines"
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       content_views:
-        - name: "EPEL8"
+        - name: "EPEL9"
           date_filter_name: "Include_Errata_By_Date"
-        - name: "JBoss8EAP74"
+          publication_threshold_hours: 24
+          force_publish: false
+        - name: "JBoss9EAP74"
           date_filter_name: "Include_Errata_By_Date"
-        - name: "SOE8"
+          publication_threshold_hours: 24
+          force_publish: false
+        - name: "JBoss9EAP8"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
+        - name: "SOE9"
+          date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
       composite_content_views:
-        - name: "SOE8_JBoss"
-        - name: "SOE8_EPEL"
+        - name: "SOE9_JBoss"
+          publication_threshold_hours: 24
+          force_publish: false
+        - name: "SOE9_EPEL"
+          publication_threshold_hours: 24
+          force_publish: false
 
   - name: "Dev2PromoteToDev"
     description: "Promote the SOE Content for JBoss, LAMP and Wordpress to Development"
@@ -41,17 +59,21 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       force_promote_all: true
+      enable_debug_logging: false
       description: "Promoted by rhis-builder-pipelines"
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       source_lce: "Library"
       target_lce: "Development"
       content_views:
-        - name: "SOE8"
+        - name: "SOE9"
       composite_content_views:
-        - name: "SOE8_JBoss"
-        - name: "SOE8_EPEL"
+        - name: "SOE9_JBoss"
+        - name: "SOE9_EPEL"
 
   - name: "Dev3DeployTestServers"
     description: "Deploy JBoss, LAMP and Wordpress test machines to Development"
@@ -65,41 +87,61 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.9"
+      enable_debug_logging: false
       host_build_comment: "Created by ansible for content test"
       deploy: true
       post_deploy_timeout: 600  # seconds
-      use_sync_build: false
-      enable_debug_logging: false
+      use_sync_build: false     # true will wait for each server
+      build_release_limit: 10   # will release builds in groups
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       platform_hosts:
         - fqdn: "testjboss2.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
-          hostgroup: "hg_x86_64_rhel8_vm/dev/soe_jboss"
-          kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
+          hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_jboss"
+          activation_keys: "SOE9_dev_JBoss"
+          lifecycle_environment: "Development"
+          content_view: "SOE9"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           mac: "00:50:56:ff:ff:ff"
+          comment: "rhis_test_host deleteme"
         - fqdn: "testlamp2.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
-          hostgroup: "hg_x86_64_rhel8_vm/dev/soe_lamp"
-          kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
+          hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_lamp"
+          activation_keys: "SOE9_dev"
+          lifecycle_environment: "Development"
+          content_view: "SOE9"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           mac: "00:50:56:ff:ff:ff"
+          comment: "rhis_test_host deleteme"
         - fqdn: "testwordpress2.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
-          hostgroup: "hg_x86_64_rhel8_vm/dev/soe_wordpress"
-          kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
+          hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_wordpress"
+          activation_keys: "SOE9_dev_EPEL"
+          lifecycle_environment: "Development"
+          content_view: "SOE9"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           mac: "00:50:56:ff:ff:ff"
+          comment: "rhis_test_host deleteme"
 
   - name: "Dev4SnapshotTestServers"
     description: "Deploy JBoss, LAMP and Wordpress test machines to Development"
@@ -113,13 +155,10 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_vmware1"
     variables:
-      vault_path: "vars/vault.yml"
-      vars_path: "vars/main.yml"
-      vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "{{ _global_domain_name }}"
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
-      vmware_validate_certs: true
+      datacenter_folder: "/parmstrong.ca/vm"
+      vmware_validate_certs: false
       host_list:
         - name: testjboss2.{{ _global_domain_name }}
           snap_name: testjboss2.original
@@ -148,13 +187,22 @@ templates_soe_dev:
       - "idm_machine"
       - "default_vault"
     variables:
-      jboss_deploy_standalone: true
+      ansible_python_interpreter: /usr/bin/python3.9
       http_port: 8080
       https_port: 8443
-      sample_app_git_repo: "https://github.com/parmstro/jboss-eap-quickstarts.git"
-      sample_app_root: "/samples/jboss"
-      sample_app_dir: "kitchensink/"
-      app_fingerprint: "/samples/jboss/c0df90d8-5173-4e65-bc82-88b6033fc6a0"
+      sample_app_git_repo: https://github.com/parmstro/jboss-eap-quickstarts.git
+      sample_app_git_version: "8.0.x"
+      sample_app_root: /samples/jboss
+      sample_app_dir: kitchensink/
+      app_fingerprint: /samples/jboss/c0df90d8-5173-4e65-bc82-88b6033fc6a0
+      jboss_version_repo: "jb-eap-8.1-for-rhel-9-x86_64-rpms"
+      jboss_eap_group: "@jboss-eap8"
+      jboss_eap_service: "eap8-standalone.service"
+      jboss_home: "/opt/rh/eap8/root/usr/share/wildfly"
+      jboss_standalone_conf_path: "/etc/opt/rh/eap8/wildfly/eap8-standalone.conf"
+      maven_group: "@maven:3.9"
+      jboss_deploy_standalone: true
+      server_config: "standalone"
 
   - name: "Dev5.1.2TestJBoss"
     description: "Test JBoss application"
@@ -170,10 +218,12 @@ templates_soe_dev:
       - "idm_machine"
       - "default_vault"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.9"
       jboss_deploy_standalone: true
       http_port: 8080
       https_port: 8443
       sample_app_git_repo: "https://github.com/parmstro/jboss-eap-quickstarts.git"
+      sample_app_git_version: "8.0.x"
       sample_app_root: "/samples/jboss"
       sample_app_dir: "kitchensink/"
       app_fingerprint: "/samples/jboss/c0df90d8-5173-4e65-bc82-88b6033fc6a0"
@@ -191,6 +241,11 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+    variables:
+      ansible_python_interpreter: "/usr/bin/python3.9"
+      mysql_bind_address_ipv4: "0.0.0.0"
+      mysql_port: "3306"
+      mysql_port_protocol: "tcp"
 
   - name: "Dev5.2.2TestLAMP"
     description: "Test LAMP stack application"
@@ -205,6 +260,8 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+    variables:
+      ansible_python_interpreter: "/usr/bin/python3.9"
 
   - name: "Dev5.3.1BuildWordpress"
     description: "Build WordPress application"
@@ -219,6 +276,22 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+    variables:
+      ansible_python_interpreter: "/usr/bin/python3.9"
+      epel_rpms_repo_name: "Default_Organization_EPEL9_EPEL9"
+      wp_version: "6.8.3"
+      wp_url: "https://en-ca.wordpress.org/wordpress-6.8.3-en_CA.tar.gz"
+      wp_checksum: "sha1:https://en-ca.wordpress.org/wordpress-6.8.3-en_CA.tar.gz.sha1"
+      nginx_bind_address: "0.0.0.0"
+      nginx_port: 80
+      nginx_port_protocol: "tcp"
+      server_hostname: "testwordpress2.parmstrong.ca"
+      acm_nginx_conf_file: "acm.conf"
+      mysql_bind_address_ipv4: "0.0.0.0"
+      mysql_port: "3306"
+      mysql_port_protocol: "tcp"
+      auto_up_disable: false
+      core_update_level: true
 
   - name: "Dev5.3.2TestWordpress"
     description: "Test WordPress application"
@@ -233,6 +306,8 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+    variables:
+      ansible_python_interpreter: "/usr/bin/python3.9"
 
   - name: "Dev6PromoteToQA"
     description: "Promote the SOE Content for JBoss, LAMP and Wordpress machines to Qualification"
@@ -246,17 +321,21 @@ templates_soe_dev:
     credentials:
       - idm_machine
       - default_vault
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       force_promote_all: true
+      enable_debug_logging: false
       description: "Published by rhis-builder-pipelines"
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       source_lce: "Development"
       target_lce: "Qualification"
       content_views:
-        - name: "SOE8"
+        - name: "SOE9"
       composite_content_views:
-        - name: "SOE8_JBoss"
-        - name: "SOE8_EPEL"
+        - name: "SOE9_JBoss"
+        - name: "SOE9_EPEL"
 
   - name: "Dev7DeleteSnapshots"
     description: "Delete test machine snapshots"
@@ -270,13 +349,10 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_vmware1"
     variables:
-      vault_path: "vars/vault.yml"
-      vars_path: "vars/main.yml"
-      vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "{{ _global_domain_name }}"
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
-      vmware_validate_certs: true
+      datacenter_folder: "/parmstrong.ca/vm"
+      vmware_validate_certs: false
       host_list:
         - name: testjboss2.{{ _global_domain_name }}
           snap_name: testjboss2.original
@@ -303,14 +379,11 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_vmware1"
     variables:
-      enable_debug_logging: true
-      vault_path: "vars/vault.yml"
-      vars_path: "vars/main.yml"
-      vcenter_hostname: "vcenter.{{ _global_domain_name }}"
-      datacenter_name: "{{ _global_domain_name }}"
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
-      vmware_validate_certs: true
+      enable_debug_logging: false
+      datacenter_folder: "/parmstrong.ca/vm"
+      vmware_validate_certs: false
       host_list:
         - name: testjboss2.{{ _global_domain_name }}
         - name: testlamp2.{{ _global_domain_name }}
@@ -328,9 +401,15 @@ templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
-      enable_debug_logging: true
+      enable_debug_logging: false
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
+      satellite_validate_certs: true
       host_list:
         - name: testjboss2.{{ _global_domain_name }}
         - name: testlamp2.{{ _global_domain_name }}
         - name: testwordpress2.{{ _global_domain_name }}
+
+...
