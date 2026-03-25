@@ -1,8 +1,8 @@
 # Use public servers from the pool.ntp.org project.
 # Please consider joining the pool (http://www.pool.ntp.org/join.html).
 #
-{%  for timeserver in timeservers -%}
-server {{ timeserver }} iburst
+{%  for rhis_time_server_num in _default_timeservers -%}
+server {{ rhis_time_server_num }} iburst
 {% endfor %}
 
 # Record the rate at which the system clock gains/losses time.
