@@ -5,10 +5,10 @@
 # time services are managed at deployment time in rhis
 # Provide time servers
 # time_servers:
-#   - time1.{{ global_domain_name }}
-#   - time2.{{ global_domain_name }}
-#   - time3.{{ global_domain_name }}
-{% raw %}
+#   - time1.example.ca
+#   - time2.example.ca
+#   - time3.example.ca
+
 platform_node_pre_preferred_boot_order: ["IP4", "IP6", "Red Hat"]
 platform_node_pre_reboot_on_finish: true
 platform_node_pre_reboot_timeout: 1  # in minutes
@@ -99,5 +99,4 @@ platform_node_pre_certificates:
     csr_state_or_province_name: "ON"
     csr_country_name: "CA"
     csr_email_address: "admin@{{ ansible_domain }}"
-{% endraw %}
 ...
