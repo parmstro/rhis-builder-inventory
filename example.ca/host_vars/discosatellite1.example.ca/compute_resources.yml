@@ -32,6 +32,7 @@ azure1_region: "East US 2"
 azure1_resourcegroup1: "rg1_example_ca"
 azure1_rg1_vnet1: "vn1_example_ca"
 azure1_rg1_vn1_subnet1: "sn1_example_ca"
+azure1_user_ssh_key: "{{ azure1_user_ssh_key_vault }}"
 
 aws1_access_key: "{{ aws1_access_key_vault }}"
 aws1_secret_key: "{{ aws1_secret_key_vault }}"
