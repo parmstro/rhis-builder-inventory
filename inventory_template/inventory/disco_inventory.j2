@@ -6,22 +6,29 @@ idm_primary:
   hosts:
     idm1.{{ global_domain_name }}
 
+{% if rhis_system_count.idm is defined and rhis_system_count.idm > 1 %}
 idm_replicas:
   hosts:
-    idm2.{{ global_domain_name }}
-    idm3.{{ global_domain_name }}
-    idm4.{{ global_domain_name }}
+{% for num in range(2, rhis_system_count.idm +1) %}
+    idm{{ num }}.{{ global_domain_name }}
+{% endfor %}
 
+{% endif %}
 sat_primary:
   hosts:  
+{% for num in range(1, rhis_system_count.discosatellite + 1) %}
     discosatellite1.{{ global_domain_name }}
     # satellite1.{{ global_domain_name }}
+{% endfor %}
 
+{% if rhis_system_count.capsule is defined and rhis_system_count.capsule > 0 %}
 sat_capsules:
   hosts:
-    capsule1.{{ global_domain_name }}
-    capsule2.{{ global_domain_name }}
+{% for num in range(1, rhis_system_count.capsule + 1) %}
+    capsule{{ num }}.{{ global_domain_name }}
+{% endfor %}
 
+{% endif %}
 sat_trusted_hosts:
   children:
     sat_primary:
@@ -29,18 +36,28 @@ sat_trusted_hosts:
 
 platform_installer:
   hosts:
-    aapcontroller24.{{ global_domain_name }}
+{% for num in range(1, rhis_system_count.aapcontroller + 1) %}
+    aapcontroller{{ num }}.{{ global_domain_name }}
+{% endfor %}
 
 aap_controllers:
   hosts:
-    aapcontroller24.{{ global_domain_name }}
+{% for num in range(1, rhis_system_count.aapcontroller + 1) %}
+    aapcontroller{{ num }}.{{ global_domain_name }}
+{% endfor %}
 
-# aap_database:
+# aap_databases:
+#   hosts:
+#     aapdb.{{ global_domain_name }}
 
+{% if rhis_system_count.aaphub is defined and rhis_system_count.aaphub > 0 %}
 aap_hubs:
   hosts:
-    aaphub24.{{ global_domain_name }}
+{% for num in range(1, rhis_system_count.aaphub + 1) %}
+    aaphub{{ num }}.{{ global_domain_name }}
+{% endfor %}
 
+{% endif %}
 # aap_edacontrollers:
 # aap_execution_nodes:
 # aap_hop_nodes:
@@ -50,16 +67,22 @@ aap_hosts:
     aap_hubs:
     aap_controllers:
 
-
+{% if rhis_system_count.quadlet is defined %}
 container_servers:
   hosts:
-    quadlet1.{{ global_domain_name }}
-    quadlet2.{{ global_domain_name }}
+{% for num in range(1, rhis_system_count.quadlet + 1) %}
+    quadlet{{ num }}.{{ global_domain_name }}
+{% endfor %}
+{% endif %}
 
+{% if rhis_system_count.quay is defined %}
 quay_servers:
   hosts:
-    quay1.{{ global_domain_name }}
+{% for num in range(1, rhis_system_count.quay + 1) %}
+    quay{{ num }}.{{ global_domain_name }}
+{% endfor %}
 
+{% endif %}
 # aws_nodes:
 # azure_nodes:
 # baremetal_nodes:
