@@ -1,7 +1,7 @@
 ---
 
 inventories:
-  - name: "satellite.{{ _global_domain_name }}"
+  - name: "{{ groups['sat_primary'][0] }}"
     description: "demo satellite inventory"
     organization: "Default"
     state: present
@@ -86,3 +86,5 @@ inventories:
         - vg: vg_root
           lv: lv_var_tmp
           size: 1G
+
+...

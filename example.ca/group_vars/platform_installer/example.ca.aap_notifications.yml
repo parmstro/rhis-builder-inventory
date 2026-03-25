@@ -1,0 +1,54 @@
+---
+
+aap_notifications:
+  - name: "RedHatGCA_NotifySlack"
+    descritpion: "Sample Slack Notifier"
+    organization: "Default"
+    state: present
+    validate_certs: true
+    notification_type: "slack"
+    notification_configuration:
+      targets:
+        - "#rhis_notify"
+      token: "{{ redhatgca_notify_slack_token_vault }}"
+
+## notification_types
+#  - awssns
+#  - email
+#  - grafana
+#  - irc
+#  - mattermost
+#  - pagerduty
+#  - rocketchat
+#  - slack
+#  - twilio
+#  - webhook
+
+## notification_configuration fields
+#  - username (the mail server username)
+#  - sender (the sender email address)
+#  - recipients (the recipients email addresses)
+#  - use_tls (the TLS trigger)
+#  - host (the mail server host)
+#  - use_ssl (the SSL trigger)
+#  - password (the mail server password)
+#  - port (the mail server port)
+#  - channels (the destination Slack channels)
+#  - token (the access token)
+#  - account_token (the Twillio account token)
+#  - from_number (the source phone number)
+#  - to_numbers (the destination phone numbers)
+#  - account_sid (the Twillio account SID)
+#  - subdomain (the PagerDuty subdomain)
+#  - service_key (the PagerDuty service/integration API key)
+#  - client_name (the PagerDuty client identifier)
+#  - message_from (the label to be shown with the notification)
+#  - color (the notification color)
+#  - notify (the notify channel trigger)
+#  - url (the target URL)
+#  - headers (the HTTP headers as JSON string)
+#  - server (the IRC server address)
+#  - nickname (the IRC nickname)
+#  - targets (the destination channels or users)
+
+...
