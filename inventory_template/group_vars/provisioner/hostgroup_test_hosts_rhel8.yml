@@ -3,8 +3,8 @@
 hg_test_hosts_rhel8:
   - fqdn: "hg-x86-64-rhel8-metal1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_metal"
 #    operatingsystem: "RHEL 8.10"
 #    kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
@@ -25,8 +25,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "hg-x86-64-rhel8-vm1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm"
     activation_keys: "SOE8_dev"
     lifecycle_environment: "Development"
@@ -42,8 +42,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-dev-cis2-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_cis2"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
@@ -55,8 +55,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-dev-jboss-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_jboss"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
@@ -68,8 +68,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-dev-lamp-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
@@ -81,8 +81,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-dev-wordpress-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/dev/soe8_dev_wordpress"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
@@ -94,8 +94,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-qa-jboss-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/qa/soe8_qa_jboss"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
@@ -107,8 +107,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-qa-lamp-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/qa/soe8_qa_lamp"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
@@ -120,8 +120,8 @@ hg_test_hosts_rhel8:
 
   - fqdn: "soe8-qa-wordpress-1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_vm/qa/soe8_qa_wordpress"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"

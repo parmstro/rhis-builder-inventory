@@ -13,10 +13,10 @@ aap24_hosts:
     compute_resource: "baremetal"
     parameters:
       - name: "boot_disk"
-        type: "string"
+        parameter_type: "string"
         value: "/dev/nvme0n1"
       - name: "root_disk"
-        type: "string"
+        parameter_type: "string"
         value: "/dev/nvme0n1"
     interfaces_attributes:
       - type: "interface"
@@ -40,10 +40,10 @@ aap24_hosts:
     compute_resource: "baremetal"
     parameters:
       - name: "boot_disk"
-        type: "string"
+        parameter_type: "string"
         value: "/dev/nvme0n1"
       - name: "root_disk"
-        type: "string"
+        parameter_type: "string"
         value: "/dev/nvme0n1"
     interfaces_attributes:
       - type: "interface"

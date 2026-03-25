@@ -3,8 +3,8 @@
 kvm_hypervisor_test_hosts:
   - fqdn: "c3s2n1kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -45,8 +45,8 @@ kvm_hypervisor_test_hosts:
 
   - fqdn: "c3s2n2kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -87,8 +87,8 @@ kvm_hypervisor_test_hosts:
 
   - fqdn: "c3s2n3kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -129,8 +129,8 @@ kvm_hypervisor_test_hosts:
 
   - fqdn: "c3s2n4kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -171,8 +171,8 @@ kvm_hypervisor_test_hosts:
 
   - fqdn: "c3s2n5kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -213,8 +213,8 @@ kvm_hypervisor_test_hosts:
 
   - fqdn: "c3s2n6kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -255,8 +255,8 @@ kvm_hypervisor_test_hosts:
 
   - fqdn: "c3s2n7kvm.{{ _default_domain }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"

@@ -1,29 +1,36 @@
+---
 
-# The list of capsule servers to build for {{ global_domain_name }}
-# reference capsule_hosts to concatenate lists as necessary
+# The list of capsule servers
+
 {% raw %}
 capsule_hosts:
+
   - name: "capsule1"
     fqdn: "capsule1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/satellite_capsule"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
-    mac: "94:c6:91:13:37:9e"
-    boot_ip: "192.168.252.81"
-    crt_force_regen: false
-  - name: "capsule2"
-    fqdn: "capsule2.{{ _global_domain_name }}"
-    delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
-    hostgroup: "hg_x86_64_rhel9_metal/satellite_capsule"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    mac: "94:c6:91:a3:19:41"
-    boot_ip: "192.168.252.82"
-    crt_force_regen: false
+    parameters:
+      - name: "boot_disk"
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "54:b2:03:f1:00:cd"
+        ip: "{{ _default_network }}.81"
+
 {% endraw %}
 ...

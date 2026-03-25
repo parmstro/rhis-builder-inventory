@@ -1,15 +1,15 @@
 ---
+# The list of capsule servers to build for example.ca
+# reference capsule_hosts to concatenate lists as necessary
 
-# Ansible 2.4 growth deployment
-{% raw %}
-aap24_hosts:
+quadlet_hosts:
 
-  - name: "aapcontroller1"
-    fqdn: "aapcontroller1.{{ _global_domain_name }}"
+  - name: "quadlet1"
+    fqdn: "quadlet1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap9_24"
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
     parameters:
@@ -19,6 +19,9 @@ aap24_hosts:
       - name: "root_disk"
         parameter_type: "string"
         value: "/dev/nvme0n1"
+      - name: "host_packages"
+        parameter_type: "string"
+        value: "vim container-tools"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -28,15 +31,15 @@ aap24_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:6a"
-        ip: "192.168.140.14"
+        mac: "54:b2:03:f1:00:6f"
+        ip: "{{ _default_network }}.71"
 
-  - name: "aaphub1"
-    fqdn: "aaphub1.{{ _global_domain_name }}"
+  - name: "quadlet2"
+    fqdn: "quadlet2.{{ _global_domain_name }}"
     delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap9_24"
+    organization: "Default Organization"
+    location: "Default Location"
+    hostgroup: "hg_x86_64_rhel9_metal"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
     parameters:
@@ -46,6 +49,9 @@ aap24_hosts:
       - name: "root_disk"
         parameter_type: "string"
         value: "/dev/nvme0n1"
+      - name: "host_packages"
+        parameter_type: "string"
+        value: "vim container-tools"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -55,7 +61,7 @@ aap24_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:46"
-        ip: "192.168.140.15"
-{% endraw %}
+        mac: "54:b2:03:f1:0b:e3"
+        ip: "{{ _default_network }}.72"
+
 ...
