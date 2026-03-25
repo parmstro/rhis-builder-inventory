@@ -1,0 +1,171 @@
+---
+
+workflow_test_vmware_plays_pipeline:
+  name: "test_vmware_plays_pipeline"
+  description: "Automate testing of vmware actions"
+  organization: "Default"
+  state: present
+  notification_templates_approvals:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_success:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_error:
+    - "RedHatGCA_NotifySlack"
+  workflow_nodes:
+    - identifier: "Build Test VMs"
+      unified_job_template:
+        name: "Dev3DeployTestServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwarePowerOffVM"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwarePowerOffVM"
+      unified_job_template:
+        name: "VMwarePowerOffVM"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwarePowerOnVM"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwarePowerOnVM"
+      unified_job_template:
+        name: "VMwarePowerOnVM"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareRestartVM"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareRestartVM"
+      unified_job_template:
+        name: "VMwareRestartVM"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareCreateSnapshot"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareCreateSnapshot"
+      unified_job_template:
+        name: "VMwareCreateSnapshot"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareRebootGuestOS"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareRebootGuestOS"
+      unified_job_template:
+        name: "VMwareRebootGuestOS"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareSuspendVM"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareSuspendVM"
+      unified_job_template:
+        name: "VMwareSuspendVM"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareUnsuspend"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareUnsuspend"
+      unified_job_template:
+        name: "VMwarePowerOnVM"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareRevertSnaps"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareRevertSnaps"
+      unified_job_template:
+        name: "VMwareRevertSnaps"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwarePowerOnAfterRevert"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwarePowerOnAfterRevert"
+      unified_job_template:
+        name: "VMwarePowerOnVM"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareRemoveAllSnaps"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareRemoveAllSnaps"
+      unified_job_template:
+        name: "VMwareRemoveAllSnaps"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "VMwareShutdownGuestOS"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "VMwareShutdownGuestOS"
+      organization: "Default"
+      unified_job_template:
+        name: "VMwareShutdownGuestOS"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "Delete Test Servers"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "Delete Test Servers"
+      organization: "Default"
+      unified_job_template:
+        name: "Dev8SDeleteTestServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
