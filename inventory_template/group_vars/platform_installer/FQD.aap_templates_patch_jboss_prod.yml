@@ -1,0 +1,90 @@
+---
+
+# This is a work in progress - warning
+
+templates_patch_jboss_prod:
+  - name: "PJP1_begin_upgrade"
+    description: "Ensure upgrade prequisites"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheProvisioner"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee_9"
+    playbook: "run_task.yml"
+    become_enabled: true
+    credentials:
+      - "default_machine"
+      - "default_vault"
+    variables:
+      task_path: "testcontent/jboss-standalone/tasks"
+      task_name: "begin_upgrade"
+      snow_incident:
+        short_description: "Patching JBoss on jbossprod2.parmstrong.ca"
+        description: "Monthly patching operations for JBoss and underlying database on jbossprod2.parmstrong.ca"
+        urgency: 2
+        impact: 2
+        state: 2
+        caller_id: "operations"
+        assigned_to: "ansiblerunner"
+        assignment_group: "ansible"
+        sys_id: "dfdacec8-27f8-4d49-9c26-d9486a2767ef"
+
+  - name: "PJP2.1_app_health_check"
+    description: "Validate application health"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheProvisioner"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee_9"
+
+    playbook: "run_task.yml"
+    become_enabled: true
+    credentials:
+      - "default_machine"
+      - "default_vault"
+    variables:
+      task_path: "testcontent/jboss-standalone/tasks"
+      task_name: "app_health_check"
+      ansible_python_interpreter: "/usr/bin/python3.9"
+      jboss_deploy_standalone: true
+      http_port: 8080
+      https_port: 8443
+      sample_app_git_repo: "https://github.com/parmstro/jboss-eap-quickstarts.git"
+      sample_app_git_version: "8.0.x"
+      sample_app_root: "/samples/jboss"
+      sample_app_dir: "kitchensink/"
+      app_fingerprint: "/samples/jboss/c0df90d8-5173-4e65-bc82-88b6033fc6a0"
+
+  - name: "PJP2.2_node_health_check"
+    description: "Validate system health"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheProvisioner"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee_9"
+    playbook: "run_task.yml"
+    become_enabled: true
+    credentials:
+      - "default_machine"
+      - "default_vault"
+    variables:
+      task_path: "testcontent/jboss-standalone/tasks"
+      task_name: "app_health_check"
+
+  - name: "PJP3_enable_maintenance_page"
+    description: "Validate system health"
+    job_type: "run"
+    organization: "Default"
+    inventory: "TheProvisioner"
+    project: "rhis-builder-pipelines"
+    execution_environment: "satellite_ee_9"
+    playbook: "run_task.yml"
+    become_enabled: true
+    credentials:
+      - "default_machine"
+      - "default_vault"
+    variables:
+      task_path: "testcontent/jboss-standalone/tasks"
+      task_name: "enable_maintenance_page"
+
+...
