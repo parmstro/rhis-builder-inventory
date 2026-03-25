@@ -11,53 +11,101 @@ templates_convert_2_rhel:
     playbook: "create_hosts.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       host_build_comment: "Created by rhis-builder-aap for convert2RHEL demo"
       deploy: true
       post_deploy_timeout: 600  # seconds
-      use_sync_build: false
-      enable_debug_logging: false
+      use_sync_build: false     # true will wait for each server
+      build_release_limit: 10   # will release builds in groups
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       platform_hosts:
         - fqdn: "centosdemo1.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
           hostgroup: "hg_x86_64_centos79_vm"
+          activation_keys: "convert_CentOS2RHEL7"
+          lifecycle_environment: "Development"
+          content_view: "CentOS79"
+          content_source: "{{ groups['sat_primary'][0] }}"
+          domain: "{{ satellite_domain }}"
+          subnet: "{{ _global_domain_name }}"
+          realm: "{{ satellite_domain | upper }}"
+          architecture: "x86_64"
+          operatingsystem: "CentOS79"
+          media: "CentOS 7 mirror"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
-
         - fqdn: "centosdemo2.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
           hostgroup: "hg_x86_64_centos79_vm"
+          activation_keys: "convert_CentOS2RHEL7"
+          lifecycle_environment: "Development"
+          content_view: "CentOS79"
+          content_source: "{{ groups['sat_primary'][0] }}"
+          domain: "{{ satellite_domain }}"
+          subnet: "{{ _global_domain_name }}"
+          realm: "{{ satellite_domain | upper }}"
+          architecture: "x86_64"
+          operatingsystem: "CentOS79"
+          media: "CentOS 7 mirror"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
-
         - fqdn: "oeldemo1.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
           hostgroup: "hg_x86_64_oel79_vm"
+          activation_keys: "convert_OEL2RHEL7"
+          lifecycle_environment: "Development"
+          content_view: "CentOS79"
+          content_source: "{{ groups['sat_primary'][0] }}"
+          domain: "{{ satellite_domain }}"
+          subnet: "{{ _global_domain_name }}"
+          realm: "{{ satellite_domain | upper }}"
+          architecture: "x86_64"
+          operatingsystem: "OracleLinux 7.9"
+          media: "OEL79"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
-
         - fqdn: "oeldemo2.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
           hostgroup: "hg_x86_64_oel79_vm"
+          activation_keys: "convert_OEL2RHEL7"
+          lifecycle_environment: "Development"
+          content_view: "CentOS79"
+          content_source: "{{ groups['sat_primary'][0] }}"
+          domain: "{{ satellite_domain }}"
+          subnet: "{{ _global_domain_name }}"
+          realm: "{{ satellite_domain | upper }}"
+          architecture: "x86_64"
+          operatingsystem: "OracleLinux 7.9"
+          media: "OEL79"
+          ptable: "Kickstart default"
+          pxe_loader: "Grub2 UEFI"
           compute_resource: "VMware_Lab"
-          compute_profile: "2-Medium"
+          compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
 
@@ -71,17 +119,17 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _global_domain_name }}_rhsm"
     variables:
       role_name: "c2r_analyze"
       analysis_convert2rhel_preconv_opts: "--els"
       analysis_convert2rhel_eus: "false"
       common_convert2rhel_repo_satellite: "true"
-      # these are required but may be empty strings
-      rhsm_username: ""
-      rhsm_password: ""
-      rhsm_org: ""
+      # uses an rhis_rhsm_operator credential type
+      # supply the activation key per template
       rhsm_activation_key: ""
 
   - name: "c2r_report_export"
@@ -94,8 +142,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_report_export"
       report_directory: "/tmp/c2r_reports/"
@@ -110,17 +159,17 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _global_domain_name }}_rhsm"
     variables:
       role_name: "c2r_convert"
       common_convert2rhel_repo_satellite: "true"
       convert_convert2rhel_opts: "--els"
       convert_reboot_requested: "true"
-      # these are required but may be empty strings
-      rhsm_username: ""
-      rhsm_password: ""
-      rhsm_org: ""
+      # uses an rhis_rhsm_operator credential type
+      # supply the activation key per template
       rhsm_activation_key: ""
 
   - name: "c2r_preconvert_remediate"
@@ -133,8 +182,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_preconvert_remediate"
 
@@ -148,8 +198,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_post_remediate"
 
@@ -163,8 +214,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_post_validate"
       validate_convert2rhel_target_release: "7.9"
@@ -179,8 +231,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_prereq_cdn"
 
@@ -194,8 +247,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_prereq_sat"
       centos_host_pre_convert_sat_activationkey: "convertCentOS2RHEL7"
@@ -213,8 +267,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_vmware1"
     variables:
       role_name: "c2r_snapshot_cleanup"
 
@@ -228,7 +283,7 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
     variables:
       role_name: "c2r_snapshot_create"
@@ -243,8 +298,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_vmware1"
     variables:
       role_name: "c2r_snapshot_prepare"
 
@@ -258,8 +314,9 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_vmware1"
     variables:
       role_name: "c2r_snapshot_remove"
 
@@ -273,7 +330,10 @@ templates_convert_2_rhel:
     playbook: "run_role.yml"
     become_enabled: true
     credentials:
-      - "idm_machine"
+      - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       role_name: "c2r_snapshot_revert"
+
+...
