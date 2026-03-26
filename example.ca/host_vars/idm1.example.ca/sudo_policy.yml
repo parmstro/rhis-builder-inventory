@@ -14,6 +14,13 @@ idm_sudo_commands:
     description: "Stop the httpd service"
   - name: "systemctl restart httpd"
     description: "Restart the httpd service"
+  - name: "systemctl start pulp"
+    description: "Start the pulp service"
+    state: "present"                             # default when omitted - set to absent to delete the command
+  - name: "systemctl stop pulp"
+    description: "Stop the pulp service"
+  - name: "systemctl restart pulp"
+    description: "Restart the pulp service"
 
 idm_sudo_command_groups:
   - name: "scg-webserver-service-control"
