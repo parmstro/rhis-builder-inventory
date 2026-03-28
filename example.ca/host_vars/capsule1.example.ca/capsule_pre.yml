@@ -7,7 +7,7 @@ capsule_pre_activation_key: "satellite_capsule"
 capsule_pre_disable_cockpit: true
 
 # for building the capsules we override some volume sizes
-capsule_data_volume:
+volume:
   lv_name: "lv_var"
   vg_name: "vg_root"
   minimum_size: "110G"

@@ -11,7 +11,7 @@
 #       - "{{ satellite_organization }}"
 #     locations:
 #       - "DisconnectedDC1"                 # from locations.yml
-#   - fqdn: "{{ groups['sat_capsules'][0] }}"
+#   - fqdn: "{{ groups['sat_capsules'][1] }}"
 #     crt_force_regen: true
 #     download_policy: "inherit"
 #     lifecycle_environments:

@@ -22,7 +22,7 @@ satellite_users:
     default_organization: "Default Organization"
     auth_source: "Internal"  # or "External"
     timezone: "Toronto"
-    locale: "en_US"
+    locale: "en"
     locations:
       - "Default Location"
     organizations:
@@ -47,6 +47,34 @@ satellite_user_groups:
     users:
       - "bobsurunkle"
     state: "present"
+
+  - name: "ComplianceAuditor"
+    admin: "false"
+    roles:
+      - "Viewer"
+      - "Compliance viewer"
+      - "Create ARF report"
+    state: "present"
+
+
+  - name: "Administrators"
+    admin: "true"
+    state: "present"
+
+# auth_source: "External" == FreeIPA/Red Hat Identity Manager login
+# for FreeIPA/IdM the user is created automatically
+# user groups external
+satellite_user_groups_external:
+  - auth_source_group_name: "ug-satellite-administrators"
+    auth_source: "External"
+    sat_usergroup: "Administrators"
+    state: "present"
+
+  - auth_source_group_name: "ug-satellite-compliance-auditors"
+    auth_source: "External"
+    sat_usergroup: "Administrators"
+    state: "present"
+
 
 # test roles
 satellite_roles:
