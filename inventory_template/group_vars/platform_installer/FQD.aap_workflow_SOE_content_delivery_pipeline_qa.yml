@@ -4,6 +4,12 @@ workflow_soe_content_delivery_pipeline_qa:
   name: "SOE_ContentDeliveryPipeline_QA"
   description: "SOE content delivery pipeline for the Development Lifecycle"
   organization: "Default"
+  notification_templates_approvals:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_success:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_error:
+    - "RedHatGCA_NotifySlack"
   state: present
   workflow_nodes:
     - identifier: "DeployQA"
@@ -166,3 +172,5 @@ workflow_soe_content_delivery_pipeline_qa:
         failure_nodes: []
         always_nodes: []
         credentials: []
+
+...

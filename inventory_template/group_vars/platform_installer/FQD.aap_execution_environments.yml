@@ -24,7 +24,7 @@ exec_envs:
     git_force: true
   - name: "satellite_ee_8"
     credential: "aaphub24_containers"
-    base_image: "registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel8:1.0.0-377"
+    base_image: "registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel8:latest"
     image: "{{ groups['aap_hubs'][0] }}/satellite_ee_8"
     ansible_requirements_template: "satellite_ee_8.requirements.yml.j2"
     python_requirements_template: "satellite_ee_8.requirements.txt.j2"
@@ -38,3 +38,5 @@ exec_envs:
     git_dest: "{{ rhis_default_git_dest }}"
     git_clone: true
     git_force: true
+
+...

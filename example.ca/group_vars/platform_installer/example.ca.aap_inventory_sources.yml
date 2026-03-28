@@ -1,7 +1,7 @@
 ---
 
 inventory_sources:
-  - name: "satellite.{{ _global_domain_name }}"
+  - name: "{{ groups['sat_primary'][0] }}"
     credential: "prod_satellite"
     description: "production satellite inventory source"
     execution_environment: "satellite_ee_9"
@@ -16,3 +16,5 @@ inventory_sources:
       want_params: true
     state: "present"
     update_on_launch: true
+
+...

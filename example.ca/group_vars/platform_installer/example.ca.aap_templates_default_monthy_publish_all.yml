@@ -13,84 +13,123 @@ templates_default_monthly_publish:
     credentials:
       - "default_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       force_publish_all: true
       skip_publish_all: false
       description: "Published by rhis-builder-pipelines"
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       content_views:
         - name: "AAP24_Files"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "AAP24_RPMs"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "AAP25_Files"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "AAP25_RPMs"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "bootc_containers"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "CentOS79"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "CentOS_S9"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "convert2rhel7"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "convert2rhel8"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "EPEL8"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "EPEL9"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "JBoss8EAP74"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "JBoss9EAP74"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "LEAPP_2_RHEL8"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "LEAPP_2_RHEL9"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "mssqlserver2022_rhel9"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
         - name: "OEL79"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "SOE7"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
@@ -98,6 +137,8 @@ templates_default_monthly_publish:
             - "Production"
         - name: "SOE8"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
@@ -105,6 +146,8 @@ templates_default_monthly_publish:
             - "Production"
         - name: "SOE9"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
@@ -112,6 +155,8 @@ templates_default_monthly_publish:
             - "Production"
         - name: "SOE9_aarch64"
           date_filter_name: "Include_Errata_By_Date"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
@@ -120,56 +165,82 @@ templates_default_monthly_publish:
 
       composite_content_views:
         - name: "SOE_AAP24"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "SOE_AAP25"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "SOE8_JBoss"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
             - "Qualification"
             - "Production"
         - name: "SOE9_JBoss"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
             - "Qualification"
             - "Production"
         - name: "SOE8_EPEL"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "SOE9_EPEL"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
             - "Qualification"
             - "Production"
         - name: "convert_CentOS2RHEL7"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "convert_OEL2RHEL7"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "LEAPP_7_2_8"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "LEAPP_8_2_9"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "SOE9_MSSQL"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
         - name: "SOE9_POS"
+          publication_threshold_hours: 24
+          force_publish: false
           environments:
             - "Library"
             - "Development"
+
+...

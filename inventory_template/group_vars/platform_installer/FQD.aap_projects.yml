@@ -65,3 +65,5 @@ projects:
     scm_url: "{{ _g_base_scm_url }}/rhis-builder-imagebuilder.git"
     state: present
     validate_certs: "{{ aap_validate_certs }}"
+
+...

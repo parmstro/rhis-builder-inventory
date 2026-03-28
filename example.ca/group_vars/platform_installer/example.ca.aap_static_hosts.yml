@@ -1,19 +1,19 @@
 ---
 
 static_hosts:
-  - name: "satellite.{{ _global_domain_name }}"
+  - name: "{{ groups['sat_primary'][0] }}"
     description: "The satellite server"
     enabled: true
     inventory: "TheSatellite"
     state: present
 
-  - name: "aapcontroller24.{{ _global_domain_name }}"
+  - name: "{{ groups['aap_controllers'][0] }}"
     description: "The AAP Controller server"
     enabled: true
     inventory: "TheAutomationController"
     state: present
 
-  - name: "aapcontroller24.{{ _global_domain_name }}"
+  - name: "{{ groups['aap_controllers'][0] }}"
     description: "An alias for the AAP Controller server"
     enabled: true
     inventory: "TheProvisioner"
@@ -166,3 +166,5 @@ static_hosts:
       compute_profile: "2-Medium"
       mac: "00:50:56:ff:ff:ff"
       comment: "c2r_demo_host deleteme"
+
+...

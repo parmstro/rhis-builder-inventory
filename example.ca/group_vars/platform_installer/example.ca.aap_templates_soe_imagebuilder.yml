@@ -5,7 +5,7 @@ templates_soe_imagebuilder:
     description: "Determine if imagebuilder system exists"
     job_type: "run"
     organization: "Default"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     project: "rhis-builder-imagebuilder"
     execution_environment: "satellite_ee_9"
     playbook: "detect_imagebuilder9.yml"
@@ -13,10 +13,10 @@ templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
-      satellite_username: "sat_readonly"
-      satellite_password: "redhat"
-      satellite_url: "gr"
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       host:
         fqdn: "imagebuilder9.{{ _global_domain_name }}"
@@ -27,7 +27,7 @@ templates_soe_imagebuilder:
     description: "Deploy an imagebuilder system if it does not exist"
     job_type: "run"
     organization: "Default"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     project: "rhis-builder-pipelines"
     execution_environment: "satellite_ee_9"
     playbook: "create_hosts.yml"
@@ -35,12 +35,15 @@ templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       host_build_comment: "Created by rhis-builder"
       deploy: true
       post_deploy_timeout: 600  # seconds
       use_sync_build: false
-      enable_debug_logging: false
+      build_release_limit: 10   # will release builds in groups
+      satellite_organization: "{{ satellite_organization }}"
+      satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       platform_hosts:
         - fqdn: "imagebuilder9.{{ _global_domain_name }}"
@@ -57,7 +60,7 @@ templates_soe_imagebuilder:
     description: "Determine if imagebuilder system exists"
     job_type: "run"
     organization: "Default"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     project: "rhis-builder-imagebuilder"
     execution_environment: "satellite_ee_9"
     playbook: "deploy_imagebuilder9.yml"
@@ -65,6 +68,7 @@ templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       fqdn: "imagebuilder9.{{ _global_domain_name }}"
 
@@ -72,7 +76,7 @@ templates_soe_imagebuilder:
     description: "Determine if imagebuilder system exists"
     job_type: "run"
     organization: "Default"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     project: "rhis-builder-imagebuilder"
     execution_environment: "satellite_ee_9"
     playbook: "config_imagebuilder_build.yml"
@@ -80,6 +84,7 @@ templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_satellite"
     variables:
       fqdn: "imagebuilder9.{{ _global_domain_name }}"
       osbuild_config_dir: "/etc/osbuild-composer/repositories"
@@ -88,3 +93,5 @@ templates_soe_imagebuilder:
       target_activationkey: "SOE9_JBoss"
       target_organization: "Default_Organization"
       target_arch: "x86_64"
+
+...

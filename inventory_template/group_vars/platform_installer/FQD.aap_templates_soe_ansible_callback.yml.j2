@@ -5,7 +5,7 @@ templates_soe_ansible_callback:
     description: "Satellite build invoked Ansible Callback"
     job_type: "run"
     organization: "Default"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     project: "rhis-builder-day-2-ops"
     execution_environment: "satellite_ee_9"
     playbook: "post_provisioning_base.yml"
@@ -14,6 +14,31 @@ templates_soe_ansible_callback:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _global_domain_name }}_idm"
+    variables:
+      sysmessage_type: "base"
+      time_timedaemon: "chrony"
+      time_timeservers:
+{% endraw %}
+{% for rhis_time_server_num in rhis_time_servers %}
+        - "{{ rhis_time_server_num }}"
+{% endfor %}
+      time_timezone: "{{ rhis_timezone }}"
+  - name: "SOE_Base_Ansible_Callback_Survey"
+    description: "Satellite build invoked Ansible Callback"
+    job_type: "run"
+    organization: "Default"
+    inventory: "{{ groups['sat_primary'][0] }}"
+    project: "rhis-builder-day-2-ops"
+    execution_environment: "satellite_ee_9"
+    playbook: "post_provisioning_base.yml"
+    become_enabled: true
+    ask_limit_on_launch: true
+    host_config_key: "{{ satellite_ansible_callback_config_key }}"
+    credentials:
+      - "idm_machine"
+      - "default_vault"
+      - "rhis_{{ _global_domain_name }}_idm"
     variables:
       sysmessage_type: "base"
       time_timedaemon: "chrony"

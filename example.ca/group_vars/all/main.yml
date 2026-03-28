@@ -2,6 +2,7 @@
 
 # GLOBAL VARIABLES THAT APPLY TO ALL HOSTS
 _global_domain_name: "example.ca"
+_global_domain_cn: "dc=example,dc=ca"
 
 _default_network: "192.168.140"
 _default_network_prefix: "22"
