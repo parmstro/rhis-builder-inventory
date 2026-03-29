@@ -5,7 +5,7 @@ description: This snippet disables all non-Satellite repos currently enabled on 
 snippet: true
 model: ProvisioningTemplate
 organizations:
-- Default Organization
+- {{ satellite_organization }}
 -%>
 <%#
 This template accepts the following parameters:

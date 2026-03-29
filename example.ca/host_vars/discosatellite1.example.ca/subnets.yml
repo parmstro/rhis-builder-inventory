@@ -33,7 +33,7 @@ satellite_subnets:
   - name: "bond_subnet"
     description: "{{ _global_domain_name }} bond network"
     network_type: "IPv4"
-    network: 192.168.142.0
+    network: {{ _default_bond_network }}.0
     prefix: "{{ _default_network_prefix }}"
     mask: "{{ _default_network_mask }}"
     gateway: "{{ _default_network }}.1"

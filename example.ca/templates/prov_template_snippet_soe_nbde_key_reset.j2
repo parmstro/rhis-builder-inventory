@@ -4,9 +4,9 @@ description: "This snippet reencrypts luks encrypted drives for newly deployed i
 snippet: true
 model: ProvisioningTemplate
 organizations:
-- Default Organization
+- {{ satellite_organization }}
 locations:
-- Default Location
+- {{ satellite_location }}
 -%>
 <%#
 This template expects the following host paramaters to be set in the hostgroup

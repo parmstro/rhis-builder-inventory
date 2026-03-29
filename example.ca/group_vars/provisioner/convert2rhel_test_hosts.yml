@@ -5,8 +5,8 @@
 convert2rhel_test_hosts:
   - fqdn: "centostest1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_centos79_vm"
     compute_resource: "VMware_Lab"
     compute_profile: "2-Medium"
@@ -15,8 +15,8 @@ convert2rhel_test_hosts:
 
   - fqdn: "centostest2.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_centos79_vm"
     compute_resource: "VMware_Lab"
     compute_profile: "2-Medium"
@@ -25,8 +25,8 @@ convert2rhel_test_hosts:
 
   - fqdn: "oeltest1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_oel79_vm"
     compute_resource: "VMware_Lab"
     compute_profile: "2-Medium"
@@ -35,8 +35,8 @@ convert2rhel_test_hosts:
 
   - fqdn: "oeltest2.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_oel79_vm"
     compute_resource: "VMware_Lab"
     compute_profile: "2-Medium"

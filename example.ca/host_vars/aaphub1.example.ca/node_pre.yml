@@ -3,11 +3,6 @@
 #   - "RPM" deployment
 
 # time services are managed at deployment time in rhis
-# Provide time servers
-# time_servers:
-#   - time1.example.ca
-#   - time2.example.ca
-#   - time3.example.ca
 
 platform_node_pre_preferred_boot_order: ["IP4", "IP6", "Red Hat"]
 platform_node_pre_reboot_on_finish: true

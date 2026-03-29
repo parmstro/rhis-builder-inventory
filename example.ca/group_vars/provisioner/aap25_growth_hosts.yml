@@ -1,8 +1,35 @@
 ---
 
 # AAP 2.5 Growth Deployment
+# DEFINE MAC if you require sepcific hosts
 
 aap25_growth_hosts:
+
+  - fqdn: "aaphub1.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
+    hostgroup: "hg_x86_64_rhel9_metal/aap9_25"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    compute_resource: "baremetal"
+    parameters:
+      - name: "boot_disk"
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: ""
+        ip: "{{ _default_network }}.14"
 
   - name: "aapcontroller1"
     fqdn: "aapcontroller1.{{ _global_domain_name }}"
@@ -29,33 +56,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.14"
-
-  - fqdn: "aaphub1.{{ _global_domain_name }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap9_25"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    parameters:
-      - name: "boot_disk"
-        parameter_type: "string"
-        value: "/dev/nvme0n1"
-      - name: "root_disk"
-        parameter_type: "string"
-        value: "/dev/nvme0n1"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: ""
-        ip: "192.168.140.15"
+        ip: "{{ _default_network }}.15"
 
   - fqdn: "aapdb.{{ _global_domain_name }}"
     delete_host: false
@@ -74,7 +75,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.16"
+        ip: "{{ _default_network }}.16"
 
   - fqdn: "aapgateway1.{{ _global_domain_name }}"
     delete_host: false
@@ -93,7 +94,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.17"
+        ip: "{{ _default_network }}.17"
 
   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
     delete_host: false
@@ -112,5 +113,6 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.18"
+        ip: "{{ _default_network }}.18"
+
 ...

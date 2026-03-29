@@ -111,8 +111,8 @@ static_hosts:
     variables:
       fqdn: "centosdemo1.{{ _global_domain_name }}"
       delete_host: false
-      organization: "Default Organization"
-      location: "Default Location"
+      organization: "{{ satellite_organization }}"
+      location: "{{ satellite_location }}"
       hostgroup: "hg_x86_64_centos79_vm"
       compute_resource: "VMware_Lab"
       compute_profile: "2-Medium"
@@ -127,8 +127,8 @@ static_hosts:
     variables:
       fqdn: "centosdemo2.{{ _global_domain_name }}"
       delete_host: false
-      organization: "Default Organization"
-      location: "Default Location"
+      organization: "{{ satellite_organization }}"
+      location: "{{ satellite_location }}"
       hostgroup: "hg_x86_64_centos79_vm"
       compute_resource: "VMware_Lab"
       compute_profile: "2-Medium"
@@ -143,8 +143,8 @@ static_hosts:
     variables:
       fqdn: "oeldemo1.{{ _global_domain_name }}"
       delete_host: false
-      organization: "Default Organization"
-      location: "Default Location"
+      organization: "{{ satellite_organization }}"
+      location: "{{ satellite_location }}"
       hostgroup: "hg_x86_64_oel79_vm"
       compute_resource: "VMware_Lab"
       compute_profile: "2-Medium"
@@ -159,8 +159,8 @@ static_hosts:
     variables:
       fqdn: "oeldemo2.{{ _global_domain_name }}"
       delete_host: false
-      organization: "Default Organization"
-      location: "Default Location"
+      organization: "{{ satellite_organization }}"
+      location: "{{ satellite_location }}"
       hostgroup: "hg_x86_64_oel79_vm"
       compute_resource: "VMware_Lab"
       compute_profile: "2-Medium"

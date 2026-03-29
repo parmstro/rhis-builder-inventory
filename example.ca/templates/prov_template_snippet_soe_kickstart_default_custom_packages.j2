@@ -4,9 +4,9 @@ description: Add custom packages to build
 snippet: true
 model: ProvisioningTemplate
 organizations:
-- Default Organization
+- {{ satellite_organization }}
 locations:
-- Default Location
+- {{ satellite_location }}
 -%>
 bash-completion
 net-tools

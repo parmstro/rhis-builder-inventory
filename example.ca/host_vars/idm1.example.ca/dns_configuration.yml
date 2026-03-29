@@ -33,7 +33,7 @@ idm_dns_records:
   - name: "router"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.1"
+    ip_address: "{{ _default_network }}.1"
     a_create_reverse: true
     state: "present"
 
@@ -138,84 +138,84 @@ idm_dns_records:
   - name: "nas3"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.3"
+    ip_address: "{{ _default_network }}.3"
     a_create_reverse: true
     state: "present"
 
   - name: "switch"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.2"
+    ip_address: "{{ _default_network }}.2"
     a_create_reverse: true
     state: "present"
 
   - name: "vcenter"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.30"
+    ip_address: "{{ _default_network }}.30"
     a_create_reverse: true
     state: "present"
 
   - name: "esx1"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.31"
+    ip_address: "{{ _default_network }}.31"
     a_create_reverse: true
     state: "present"
 
   - name: "esx2"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.32"
+    ip_address: "{{ _default_network }}.32"
     a_create_reverse: true
     state: "present"
 
   - name: "esx3"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.33"
+    ip_address: "{{ _default_network }}.33"
     a_create_reverse: true
     state: "present"
 
   - name: "esx4"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.34"
+    ip_address: "{{ _default_network }}.34"
     a_create_reverse: true
     state: "present"
 
   - name: "esx5"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.35"
+    ip_address: "{{ _default_network }}.35"
     a_create_reverse: true
     state: "present"
 
   - name: "esx6"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.36"
+    ip_address: "{{ _default_network }}.36"
     a_create_reverse: true
     state: "present"
 
   - name: "esx7"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.37"
+    ip_address: "{{ _default_network }}.37"
     a_create_reverse: true
     state: "present"
 
   - name: "esx8"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.38"
+    ip_address: "{{ _default_network }}.38"
     a_create_reverse: true
     state: "present"
 
   - name: "esx9"
     zone_name: "{{ _global_domain_name }}"
     record_type: "A"
-    ip_address: "192.168.140.39"
+    ip_address: "{{ _default_network }}.39"
     a_create_reverse: true
     state: "present"
 ...
