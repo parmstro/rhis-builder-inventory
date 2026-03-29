@@ -18,16 +18,16 @@ satellite_users:
     description: "Uncle Bob"
     admin: "false"
     user_password: "random_password"  # not_a_secret
-    default_location: "Default Location"
-    default_organization: "Default Organization"
+    default_location: "{{ satellite_location }}"
+    default_organization: "{{ satellite_organization }}"
     auth_source: "Internal"  # or "External"
 {% endraw %}
     timezone: "{{ split_rhis_timezone[1] }}"
     locale: "{{ rhis_locale }}"{% raw %}
     locations:
-      - "Default Location"
+      - "{{ satellite_location }}"
     organizations:
-      - "Default Organization"
+      - "{{ satellite_organization }}"
     state: "present"  # not Ontario or South Carolina
 
 # satgroup-administrator will map to the Satellite admins group and administrator (all privileges) role

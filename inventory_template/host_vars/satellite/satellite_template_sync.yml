@@ -5,16 +5,16 @@ satellite_template_repos:
     branch: "main"
     associate: "always"
     force: "true"                    # force update of locked templates
-    locations: "['Default Location']"
-    organizations: "['Default Organization']"
+    locations: "['{{ satellite_location }}']"
+    organizations: "['{{ satellite_organization }}']"
   - name: "theforeman offical report templates"
     repo_url: "https://github.com/theforeman/foreman.git"
     dirname: "app/views/unattended/report_templates"
     branch: "3.14-stable"
     associate: "new"
     force: "false"                    # force update of locked templates
-    locations: "['Default Location']"
-    organizations: "['Default Organization']"
+    locations: "['{{ satellite_location }}']"
+    organizations: "['{{ satellite_organization }}']"
 
   # This is broken or private
   # - name: "gonoph imagemode repo"
@@ -24,5 +24,5 @@ satellite_template_repos:
   #   associate: "new"
   #   locked: true
   #   force: true                    # force update of locked templates
-  #   locations: "['Default Location']"
-  #   organizations: "['Default Organization']"
+  #   locations: "['{{ satellite_location }}']"
+  #   organizations: "['{{ satellite_organization }}']"

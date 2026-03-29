@@ -48,8 +48,8 @@ templates_soe_imagebuilder:
       platform_hosts:
         - fqdn: "imagebuilder9.{{ _global_domain_name }}"
           delete_host: false
-          organization: "Default Organization"
-          location: "Default Location"
+          organization: "{{ satellite_organization }}"
+          location: "{{ satellite_location }}"
           hostgroup: "hg_x86_64_rhel9_vm/dev"
           kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.4"
           compute_resource: "VMware_Lab"
