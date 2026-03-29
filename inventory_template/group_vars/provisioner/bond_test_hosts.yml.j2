@@ -22,7 +22,7 @@ bond_test_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "c0:3f:d5:64:72:10"
-        ip: "192.168.142.66"
+        ip: "{{ _default_bond_network }}.66"
       - type: "interface"
         identifier: "{{ _default_child_iface1_lab }}"
         mac: "00:30:18:c5:c3:e4"
@@ -37,7 +37,7 @@ bond_test_hosts:
         managed: true
         primary: false
         provision: false
-        ip: "192.168.142.66"
+        ip: "{{ _default_bond_network }}.66"
         subnet: "{{ _default_bond_subnetname }}"
         attached_devices:
           - "{{ _default_child_iface1_lab }}"
@@ -64,7 +64,7 @@ bond_test_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "c0:3f:d5:64:72:10"
-        ip: "192.168.142.77"
+        ip: "{{ _default_bond_network }}.77"
       - type: "interface"
         identifier: "{{ _default_child_iface1_lab }}"
         mac: "00:30:18:c5:c3:e4"
@@ -79,7 +79,7 @@ bond_test_hosts:
         managed: true
         primary: false
         provision: false
-        ip: "192.168.142.77"
+        ip: "{{ _default_bond_network }}.77"
         subnet: "{{ _default_bond_subnetname }}"
         attached_devices:
           - "{{ _default_child_iface1_lab }}"
