@@ -1,6 +1,6 @@
 ---
 
-ipa_client_dns_servers: "192.168.140.5"
+ipa_client_dns_servers: "{{ _default_network }}.5"
 
 # Control for building platform_hosts
 # There are test host lists, kvm hosts, aap hosts, container host, etc.. we build them all at different times
