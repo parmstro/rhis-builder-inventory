@@ -1,4 +1,7 @@
 ---
+
+# yamllint disable rule:line-length
+
 - name: "Find and register paths to jinja templates - part two for {{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}"
   ansible.builtin.find:
     paths: "inventory_template/host_vars/{{ system_info.key }}"
