@@ -16,7 +16,7 @@ idm_replicas:
 {% endif %}
 sat_primary:
   hosts:  
-{% for num in range(1, rhis_system_count.discosatellite + 1) %}
+{% for num in range(1, rhis_system_count.satellite + 1) %}
     satellite{{ num }}.{{ global_domain_name }}
     # discosatellite{{ num }}.{{ global_domain_name }}
 {% endfor %}
