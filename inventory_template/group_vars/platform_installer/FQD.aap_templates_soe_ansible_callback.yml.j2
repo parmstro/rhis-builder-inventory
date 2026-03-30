@@ -24,6 +24,7 @@ templates_soe_ansible_callback:
         - "{{ rhis_time_server_num }}"
 {% endfor %}
       time_timezone: "{{ rhis_timezone }}"
+{% raw %}
   - name: "SOE_Base_Ansible_Callback_Survey"
     description: "Satellite build invoked Ansible Callback"
     job_type: "run"
