@@ -9,37 +9,34 @@ idm_primary:
 idm_replicas:
   hosts:
     idm2.example.ca
-    idm3.example.ca
-    idm4.example.ca
 
 sat_primary:
   hosts:  
     satellite1.example.ca
     # discosatellite1.example.ca
 
-sat_capsule:
+sat_capsules:
   hosts:
     capsule1.example.ca
-    capsule2.example.ca
 
 sat_trusted_hosts:
   children:
     sat_primary:
-    sat_capsule:
+    sat_capsules:
 
 platform_installer:
   hosts:
-    aaphub24.example.ca
+    aaphub1.example.ca
 
 aap_controllers:
   hosts:
-    aapcontroller24.example.ca
+    aapcontroller1.example.ca
 
 # aap_database:
 
 aap_hubs:
   hosts:
-    aaphub24.example.ca
+    aaphub1.example.ca
 
 # aap_edacontrollers:
 # aap_execution_nodes:

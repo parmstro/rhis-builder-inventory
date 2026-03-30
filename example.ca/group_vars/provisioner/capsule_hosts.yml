@@ -7,8 +7,8 @@ capsule_hosts:
   - name: "capsule1"
     fqdn: "capsule1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal/satellite_capsule"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"

@@ -7,7 +7,7 @@
   loop: "{{ range(0, system_info.value | int) | list }}"
 
 - name: "Defining {{ system_info.key }}{{ rhis_aap_release_version_concat }} host_vars directory Config as Code definitions"
-  #debug:
+  # debug:
   #  msg:
   #    - "rsync {{ system_info.key }}{{ rhis_aap_release_version_concat }} template to {{ system_info.key }}{{ item | int + 1 }}.{{ global_domain_name }}"
   #    - "{{ system_info.key | regex_replace('^(.{3}).*$', '\\1') }}"

@@ -13,9 +13,9 @@ idm_repository_ids:
 # TODO: Change this to handle a list instead
 # NOTE: existing configurations will need to move to list when this changes.
 
-timeserver1: "192.168.252.8"
-timeserver2: "192.168.252.7"
-timeserver3: "192.168.252.9"
+timeserver1: "0.rhel.pool.ntp.org"
+timeserver2: "1.rhel.pool.ntp.org"
+timeserver3: "2.rhel.pool.ntp.org"
 
 idm_pre_dns_resolvers:  # e.g. replace with your own resolvers
   - 8.8.8.8
@@ -39,7 +39,7 @@ ipa_crypto_policy: "DeFaULt"
 # before IdM DNS comes up in your network here
 # These are simply test values
 etc_hosts_list:
-  - ip: "192.168.140.13"
+  - ip: "{{ _default_network }}.13"
     fqdn: "provisioner.{{ _global_domain_name }}"
-  - ip: "192.168.140.12"
+  - ip: "{{ _default_network }}.12"
     fqdn: "satellite.{{ _global_domain_name }}"

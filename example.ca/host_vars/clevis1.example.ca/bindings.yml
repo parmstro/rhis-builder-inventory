@@ -11,7 +11,7 @@ nbde_client_bindings:
 
 # example with tpm
 # binding_json
-# "'{"t":2,"pins":{"tpm2":{"hash":"sha256","key":"rsa"},"tang":[{"url":"http://192.168.140.80.:8080","url":"http://192.168.140.81:8080"}]}}'"
+# "'{"t":2,"pins":{"tpm2":{"hash":"sha256","key":"rsa"},"tang":[{"url":"http://{{ _default_network }}.80.:8080","url":"http://{{ _default_network }}.81:8080"}]}}'"
 
   # - devices: []  # discover and bind all luks volumes, otherwise list
   #   encryption_password: "{{ nbde_encryption_password_vault }}"
@@ -29,7 +29,7 @@ nbde_client_bindings:
 # TODO:
 # example with tpm and encrypt/reencrypt
 # binding_json
-# "'{"t":2,"pins":{"tpm2":{"hash":"sha256","key":"rsa"},"tang":[{"url":"http://192.168.140.80.:8080","url":"http://192.168.140.81:8080"}]}}'"
+# "'{"t":2,"pins":{"tpm2":{"hash":"sha256","key":"rsa"},"tang":[{"url":"http://{{ _default_network }}.80.:8080","url":"http://{{ _default_network }}.81:8080"}]}}'"
 
   # - devices: [/dev/sdb]  # specific disk will be encrypted if it is not already encrypted
   #   encryption_password: "{{ nbde_encryption_password_vault }}"

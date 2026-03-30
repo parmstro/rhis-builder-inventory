@@ -29,7 +29,7 @@ aap24_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "54:b2:03:f1:0b:6a"
-        ip: "192.168.140.14"
+        ip: "{{ _default_network }}.14"
 
   - name: "aaphub1"
     fqdn: "aaphub1.{{ _global_domain_name }}"
@@ -56,6 +56,6 @@ aap24_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "54:b2:03:f1:0b:46"
-        ip: "192.168.140.15"
+        ip: "{{ _default_network }}.15"
 {% endraw %}
 ...

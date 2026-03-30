@@ -7,6 +7,10 @@ _default_network: "{{ default_network.split('.')[0:3] | join('.') }}"
 _default_network_prefix: "{{ default_network_prefix }}"
 _default_network_mask: "{{ default_network_mask }}"
 
+_default_bond_network: "{{ default_bond_network.split('.')[0:3] | join('.') }}"
+_default_bond_network_prefix: "{{ default_bond_network_prefix }}"
+_default_bond_network_mask: "{{ default_bond_network_mask }}"
+
 _default_timeservers:
 {% for rhis_time_server_num in rhis_time_servers %}
   - "{{ rhis_time_server_num }}"

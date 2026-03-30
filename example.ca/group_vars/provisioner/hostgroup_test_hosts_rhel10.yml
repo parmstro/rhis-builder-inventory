@@ -4,8 +4,8 @@
 hg_test_hosts_rhel10:
   - fqdn: "hg-x86-64-rhel10-metal1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel10_metal"
 #    operatingsystem: "RHEL 10.1"
 #    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
@@ -26,8 +26,8 @@ hg_test_hosts_rhel10:
 
   - fqdn: "hg-x86-64-rhel10-vm1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel10_vm"
     lifecycle_environment: "Development"
     compute_resource: "VMware_Lab"

@@ -29,7 +29,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.14"
+        ip: "{{ _default_network }}.14"
 
   - fqdn: "aaphub1.{{ _global_domain_name }}"
     delete_host: false
@@ -55,7 +55,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.15"
+        ip: "{{ _default_network }}.15"
 
   - fqdn: "aapdb.{{ _global_domain_name }}"
     delete_host: false
@@ -74,7 +74,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.16"
+        ip: "{{ _default_network }}.16"
 
   - fqdn: "aapgateway1.{{ _global_domain_name }}"
     delete_host: false
@@ -93,7 +93,7 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.17"
+        ip: "{{ _default_network }}.17"
 
   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
     delete_host: false
@@ -112,6 +112,6 @@ aap25_growth_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: ""
-        ip: "192.168.140.18"
+        ip: "{{ _default_network }}.18"
 {% endraw %}
 ...

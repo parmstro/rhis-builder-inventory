@@ -31,7 +31,7 @@ redhat_manifests:
       {% endraw %}source: "discosatellite1.{{ global_domain_name }}_manifest.zip"
       {% raw %}path: "/root/bootstrap_manifest.zip"
       generate: false
-      organization: "Default Organization"
+      organization: "{{ satellite_organization }}"
       state: present
 
 #
@@ -41,7 +41,7 @@ redhat_manifests:
 #     cdn_password: "{{ cdn_password_vault }}"
 #     content_access_mode: "org_environment"  # SCA mode
 #     generate: true
-#     organization: "Default Organization"
+#     organization: "{{ satellite_organization }}"
 #     source: org_name_versionstring.zip  # when you are providing your own manifest
 #     path: "/root/bootstrap_manifest.zip"
 #     portal_url: "https://subscription.rhsm.redhat.com"

@@ -1,7 +1,5 @@
 # rhis-builder-inventory
 
-<<<<<<< Updated upstream
-=======
 ### Getting started fast
 ---
 You need a system with git and podman tools.
@@ -38,7 +36,6 @@ See the
 See below for information on customizing your build further.
 
 ## What is in this repository
->>>>>>> Stashed changes
 NOTE:
 The rhis-builder-inventory now contains a version.txt file. Its purpose is to allow users to recognize change and updates to the schema and to help align the sample data with the rhis-provisioner container. This capabiloty will be enhanced through releases with the intention of eventually providing configuration validation. As we consume a huge number of projects under rhis-builder this task will be ongoing.
 

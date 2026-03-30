@@ -19,7 +19,7 @@ settings_discovery:
 #     full_name: "Discovery organization"
 #     settings_type: "string"
 # #    default: ""
-#     value: "Default Organization"
+#     value: "{{ satellite_organization }}"
 #     description: "The default organization to place discovered hosts in"
 
 #   - name: "discovery_fact"

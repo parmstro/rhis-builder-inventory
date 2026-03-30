@@ -7,8 +7,8 @@ bond_test_hosts:
   - name: "bondtest1"
     fqdn: "bondtest1.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel8_metal"
     kickstart_repository: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
     compute_resource: "baremetal"
@@ -22,7 +22,7 @@ bond_test_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "c0:3f:d5:64:72:10"
-        ip: "192.168.142.66"
+        ip: "{{ _default_bond_network }}.66"
       - type: "interface"
         identifier: "{{ _default_child_iface1_lab }}"
         mac: "00:30:18:c5:c3:e4"
@@ -37,7 +37,7 @@ bond_test_hosts:
         managed: true
         primary: false
         provision: false
-        ip: "192.168.142.66"
+        ip: "{{ _default_bond_network }}.66"
         subnet: "{{ _default_bond_subnetname }}"
         attached_devices:
           - "{{ _default_child_iface1_lab }}"
@@ -49,8 +49,8 @@ bond_test_hosts:
   - name: "bondtest2"
     fqdn: "bondtest2.{{ _global_domain_name }}"
     delete_host: false
-    organization: "Default Organization"
-    location: "Default Location"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
     hostgroup: "hg_x86_64_rhel9_metal"
     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
     compute_resource: "baremetal"
@@ -64,7 +64,7 @@ bond_test_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "c0:3f:d5:64:72:10"
-        ip: "192.168.142.77"
+        ip: "{{ _default_bond_network }}.77"
       - type: "interface"
         identifier: "{{ _default_child_iface1_lab }}"
         mac: "00:30:18:c5:c3:e4"
@@ -79,7 +79,7 @@ bond_test_hosts:
         managed: true
         primary: false
         provision: false
-        ip: "192.168.142.77"
+        ip: "{{ _default_bond_network }}.77"
         subnet: "{{ _default_bond_subnetname }}"
         attached_devices:
           - "{{ _default_child_iface1_lab }}"

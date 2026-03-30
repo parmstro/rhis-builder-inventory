@@ -3,7 +3,7 @@ name: soe_ensure_python
 snippet: true
 model: ProvisioningTemplate
 organizations:
-- Default Organization
+- {{ satellite_organization }}
 -%>
 <% if @host.operatingsystem.family == 'Redhat' && @host.operatingsystem.major.to_i == 8 %>
 # updated to add 3.9 for ansiblecore
