@@ -1,6 +1,6 @@
 ---
 
-templates_soe_qa:
+aap_job_templates_soe_qa:
   - name: "QA1DeployQATestServers"
     description: "Deploy JBoss, LAMP and Wordpress test machines to Qualification"
     job_type: "run"

@@ -9,6 +9,16 @@
 #   - time2.{{ global_domain_name }}
 #   - time3.{{ global_domain_name }}
 {% raw %}
+satellite_username: "{{ satellite_username_vault }}"
+satellite_password: "{{ satellite_password_vault }}"
+
+# backwards compatibility
+satellite_admin_username: "{{ satellite_username_vault }}"
+satellite_admin_password: "{{ satellite_password_vault }}"
+
+satellite_url: "https://{{ groups['sat_primary'][0] }}"
+satellite_server_url: "{{ satellite_url }}"
+
 platform_node_pre_preferred_boot_order: ["IP4", "IP6", "Red Hat"]
 platform_node_pre_reboot_on_finish: true
 platform_node_pre_reboot_timeout: 1  # in minutes

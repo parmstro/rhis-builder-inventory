@@ -1,6 +1,6 @@
 ---
 
-workflow_c2r_pipeline:
+aap_workflow_template_c2r_pipeline:
   name: "c2r_pipeline"
   description: "Automate convert2rhel pipeline for OEL and CentOS applications"
   organization: "Default"

@@ -1,6 +1,6 @@
 ---
 
-templates_convert_2_rhel:
+aap_job_templates_convert_2_rhel:
   - name: "c2r_deploy_test_servers"
     description: "Deploy convert2RHEL test machines to Development"
     job_type: "run"

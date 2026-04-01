@@ -1,6 +1,6 @@
 ---
 
-static_hosts:
+aap_static_hosts:
   - name: "{{ groups['sat_primary'][0] }}"
     description: "The satellite server"
     enabled: true

@@ -5,7 +5,7 @@ _g_git_url: "https://github.com"
 _g_git_user: "parmstro"
 _g_base_scm_url: "{{ _g_git_url }}/{{ _g_git_user }}"
 
-projects:
+aap_projects:
   - name: "rhis-builder-day-2-ops"
     organization: "Default"
     credential: "ansible_github"

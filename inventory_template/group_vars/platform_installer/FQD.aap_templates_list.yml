@@ -2,13 +2,13 @@
 
 # list of template lists to process
 
-templates_list:
-  - "{{ templates_vm_day_2 }}"
-  - "{{ templates_soe_dev }}"
-  - "{{ templates_soe_qa }}"
-  - "{{ templates_convert_2_rhel }}"  # totally broken with new ansible-core and current versions of collections
-  - "{{ templates_default_monthly_publish }}"
-  - "{{ templates_soe_ansible_callback }}"
-  - "{{ templates_soe_imagebuilder }}"
+aap_job_templates_list:
+  - "{{ aap_job_templates_vm_day_2 }}"
+  - "{{ aap_job_templates_soe_dev }}"
+  - "{{ aap_job_templates_soe_qa }}"
+  - "{{ aap_job_templates_convert_2_rhel }}"  # totally broken with new ansible-core and current versions of collections
+  - "{{ aap_job_templates_default_monthly_publish }}"
+  - "{{ aap_job_templates_soe_ansible_callback }}"
+  - "{{ aap_job_templates_soe_imagebuilder }}"
 
 ...

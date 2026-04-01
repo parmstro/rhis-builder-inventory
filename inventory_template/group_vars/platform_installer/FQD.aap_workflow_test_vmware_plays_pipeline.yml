@@ -1,6 +1,6 @@
 ---
 
-workflow_test_vmware_plays_pipeline:
+aap_workflow_template_test_vmware_plays_pipeline:
   name: "test_vmware_plays_pipeline"
   description: "Automate testing of vmware actions"
   organization: "Default"

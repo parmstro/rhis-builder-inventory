@@ -24,7 +24,7 @@ platform_installer_config:
   topology: "{{ platform_topology }}"
   aap_product: "Red Hat Ansible Automation Platform"
   aap_file_repo_name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
-  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.4-13.1-x86_64.tar.gz"
+  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.4-14-x86_64.tar.gz"
   aap_destination_dir: "/root/ansible_installer"
   # Installer Template
   # All

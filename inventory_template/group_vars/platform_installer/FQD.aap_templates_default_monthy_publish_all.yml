@@ -1,6 +1,6 @@
 ---
 
-templates_default_monthly_publish:
+aap_job_templates_default_monthly_publish:
   - name: "MonthlyPublishContent"
     description: "Publish all SOE Content"
     job_type: "run"

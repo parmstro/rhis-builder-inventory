@@ -1,6 +1,6 @@
 ---
 
-static_groups:
+aap_static_groups:
 # SOE Dev testing inventory static groups
   - name: "JBoss"
     description: "Main group for JBoss test servers"

@@ -1,6 +1,6 @@
 ---
 
-templates_vm_day_2:
+aap_job_templates_vm_day_2:
   - name: "VMwareCreateSnapshot"
     description: "Snaphot JBoss, LAMP and Wordpress test machines to Development"
     job_type: "run"
