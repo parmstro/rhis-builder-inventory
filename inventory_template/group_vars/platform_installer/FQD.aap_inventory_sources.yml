@@ -1,6 +1,6 @@
 ---
 
-inventory_sources:
+aap_inventory_sources:
   - name: "{{ groups['sat_primary'][0] }}"
     credential: "prod_satellite"
     description: "production satellite inventory source"

@@ -1,6 +1,6 @@
 ---
 
-templates_soe_dev:
+aap_job_templates_soe_dev:
   - name: "Dev1PublishContent"
     description: "Publish the SOE Content for JBoss, LAMP and Wordpress"
     job_type: "run"

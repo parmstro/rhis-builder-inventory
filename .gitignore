@@ -3,4 +3,8 @@
 */example.ca/vault/*.yml
 */files/.*
 .ansible
+example.ca_inventory_basevars.yml
+example.ca
 example.ca/vault/rhis_builder_vault.yml
+deployments/
+savage.test*

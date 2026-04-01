@@ -2,7 +2,7 @@
 
 # This is a work in progress - warning
 
-templates_patch_jboss_prod:
+aap_job_templates_patch_jboss_prod:
   - name: "PJP1_begin_upgrade"
     description: "Ensure upgrade prequisites"
     job_type: "run"

@@ -1,6 +1,6 @@
 ---
 
-templates_soe_imagebuilder:
+aap_job_templates_soe_imagebuilder:
   - name: "detect_imagebuilder9"
     description: "Determine if imagebuilder system exists"
     job_type: "run"

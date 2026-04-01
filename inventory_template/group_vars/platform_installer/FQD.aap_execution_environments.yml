@@ -1,10 +1,10 @@
 ---
 
 # Ansible execution environments
-exec_envs:
+aap_execution_environments:
   - name: "satellite_ee_9"
     credential: "aaphub24_containers"
-    base_image: "registry.redhat.io/ansible-automation-platform-24/ee-supported-rhel9:latest"
+    base_image: "registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest"
     image: "{{ groups['aap_hubs'][0] }}/satellite_ee_9"
     ansible_requirements_template: "satellite_ee_9.requirements.yml.j2"
     python_requirements_template: "satellite_ee_9.requirements.txt.j2"

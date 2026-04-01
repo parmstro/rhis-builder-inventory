@@ -1,6 +1,6 @@
 ---
 
-workflow_soe_content_delivery_pipeline_qa:
+aap_workflow_template_soe_content_delivery_pipeline_qa:
   name: "SOE_ContentDeliveryPipeline_QA"
   description: "SOE content delivery pipeline for the Development Lifecycle"
   organization: "Default"
