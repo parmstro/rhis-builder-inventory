@@ -43,25 +43,25 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  - fqdn: "c3s2n2kvm.{{ _default_domain }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    comment: "rhis_test_host deleteme"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:6a"
-        ip: "{{ _default_network }}.42"
+  # - fqdn: "c3s2n2kvm.{{ _default_domain }}"
+  #   delete_host: false
+  #   organization: "{{ satellite_organization }}"
+  #   location: "{{ satellite_location }}"
+  #   hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+  #   compute_resource: "baremetal"
+  #   comment: "rhis_test_host deleteme"
+  #   interfaces_attributes:
+  #     - type: "interface"
+  #       identifier: "{{ _default_provision_iface }}"
+  #       domain: "{{ _default_domain }}"
+  #       execution: true
+  #       managed: true
+  #       primary: true
+  #       provision: true
+  #       subnet: "{{ _default_subnetname }}"
+  #       mac: "54:b2:03:f1:0b:6a"
+  #       ip: "{{ _default_network }}.42"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: "00:30:18:0c:d5:77"
@@ -85,25 +85,25 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  - fqdn: "c3s2n3kvm.{{ _default_domain }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    comment: "rhis_test_host deleteme"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:46"
-        ip: "{{ _default_network }}.43"
+  # - fqdn: "c3s2n3kvm.{{ _default_domain }}"
+  #   delete_host: false
+  #   organization: "{{ satellite_organization }}"
+  #   location: "{{ satellite_location }}"
+  #   hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+  #   compute_resource: "baremetal"
+  #   comment: "rhis_test_host deleteme"
+  #   interfaces_attributes:
+  #     - type: "interface"
+  #       identifier: "{{ _default_provision_iface }}"
+  #       domain: "{{ _default_domain }}"
+  #       execution: true
+  #       managed: true
+  #       primary: true
+  #       provision: true
+  #       subnet: "{{ _default_subnetname }}"
+  #       mac: "54:b2:03:f1:0b:46"
+  #       ip: "{{ _default_network }}.43"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: " 00:30:18:0c:d6:53"
@@ -127,25 +127,25 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  - fqdn: "c3s2n4kvm.{{ _default_domain }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    comment: "rhis_test_host deleteme"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:00:6f"
-        ip: "{{ _default_network }}.44"
+  # - fqdn: "c3s2n4kvm.{{ _default_domain }}"
+  #   delete_host: false
+  #   organization: "{{ satellite_organization }}"
+  #   location: "{{ satellite_location }}"
+  #   hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+  #   compute_resource: "baremetal"
+  #   comment: "rhis_test_host deleteme"
+  #   interfaces_attributes:
+  #     - type: "interface"
+  #       identifier: "{{ _default_provision_iface }}"
+  #       domain: "{{ _default_domain }}"
+  #       execution: true
+  #       managed: true
+  #       primary: true
+  #       provision: true
+  #       subnet: "{{ _default_subnetname }}"
+  #       mac: "54:b2:03:f1:00:6f"
+  #       ip: "{{ _default_network }}.44"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: "00:30:18:0c:d5:9d"
@@ -169,25 +169,25 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  - fqdn: "c3s2n5kvm.{{ _default_domain }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    comment: "rhis_test_host deleteme"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:e3"
-        ip: "{{ _default_network }}.45"
+  # - fqdn: "c3s2n5kvm.{{ _default_domain }}"
+  #   delete_host: false
+  #   organization: "{{ satellite_organization }}"
+  #   location: "{{ satellite_location }}"
+  #   hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+  #   compute_resource: "baremetal"
+  #   comment: "rhis_test_host deleteme"
+  #   interfaces_attributes:
+  #     - type: "interface"
+  #       identifier: "{{ _default_provision_iface }}"
+  #       domain: "{{ _default_domain }}"
+  #       execution: true
+  #       managed: true
+  #       primary: true
+  #       provision: true
+  #       subnet: "{{ _default_subnetname }}"
+  #       mac: "54:b2:03:f1:0b:e3"
+  #       ip: "{{ _default_network }}.45"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: "00:30:18:0c:d5:79"
@@ -211,25 +211,25 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  - fqdn: "c3s2n6kvm.{{ _default_domain }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    comment: "rhis_test_host deleteme"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:00:cd"
-        ip: "{{ _default_network }}.46"
+  # - fqdn: "c3s2n6kvm.{{ _default_domain }}"
+  #   delete_host: false
+  #   organization: "{{ satellite_organization }}"
+  #   location: "{{ satellite_location }}"
+  #   hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+  #   compute_resource: "baremetal"
+  #   comment: "rhis_test_host deleteme"
+  #   interfaces_attributes:
+  #     - type: "interface"
+  #       identifier: "{{ _default_provision_iface }}"
+  #       domain: "{{ _default_domain }}"
+  #       execution: true
+  #       managed: true
+  #       primary: true
+  #       provision: true
+  #       subnet: "{{ _default_subnetname }}"
+  #       mac: "54:b2:03:f1:00:cd"
+  #       ip: "{{ _default_network }}.46"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: "00:30:18:0c:d5:99"
@@ -253,25 +253,25 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  - fqdn: "c3s2n7kvm.{{ _default_domain }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    comment: "rhis_test_host deleteme"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:ef"
-        ip: "{{ _default_network }}.47"
+  # - fqdn: "c3s2n7kvm.{{ _default_domain }}"
+  #   delete_host: false
+  #   organization: "{{ satellite_organization }}"
+  #   location: "{{ satellite_location }}"
+  #   hostgroup: "hg_x86_64_rhel9_metal/kvm_host"
+  #   kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+  #   compute_resource: "baremetal"
+  #   comment: "rhis_test_host deleteme"
+  #   interfaces_attributes:
+  #     - type: "interface"
+  #       identifier: "{{ _default_provision_iface }}"
+  #       domain: "{{ _default_domain }}"
+  #       execution: true
+  #       managed: true
+  #       primary: true
+  #       provision: true
+  #       subnet: "{{ _default_subnetname }}"
+  #       mac: "54:b2:03:f1:0b:ef"
+  #       ip: "{{ _default_network }}.47"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: "00:30:18:cd:e4:28"
