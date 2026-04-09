@@ -102,6 +102,18 @@ ssl_private_key_pem_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.pem"
 ssl_public_key_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.pub"
 ssl_public_key_format: "PEM"
 
+libvirt_client_private_key_pem_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.pem" # noqa: var-naming[no-role-prefix]
+libvirt_client_key_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.key" # noqa: var-naming[no-role-prefix]
+libvirt_client_csr_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.csr" # noqa: var-naming[no-role-prefix]
+libvirt_client_crt_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.crt" # noqa: var-naming[no-role-prefix]
+libvirt_client_crt_service_type: "libvirtclient" # noqa: var-naming[no-role-prefix]
+
+libvirt_server_private_key_pem_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.pem" # noqa: var-naming[no-role-prefix]
+libvirt_server_key_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.key" # noqa: var-naming[no-role-prefix]
+libvirt_server_csr_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.csr" # noqa: var-naming[no-role-prefix]
+libvirt_server_crt_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.crt" # noqa: var-naming[no-role-prefix]
+libvirt_server_crt_service_type: "libvirt" # noqa: var-naming[no-role-prefix]
+
 csr_digest: "aes256"
 csr_organization_name: "{{ ansible_domain | upper }}"
 csr_organization_unit_name: "Demo Lab"
