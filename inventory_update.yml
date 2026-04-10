@@ -5,11 +5,26 @@
   gather_facts: false
 
   tasks:
-    - name: Include inventory base variable via vars file
-      ansible.builtin.include_vars:
-        file: inventory_basevars.yml
 
-    - name: Wait for connection...and gather facts
+    - name: "Generating with requested basevars file"
+      ansible.builtin.debug:
+        var: basevars_file
+
+    - name: "Validate the basevars_file"
+      ansible.builtin.stat:
+        path: "{{ basevars_file }}"
+      register: bvf
+
+    - name: "Assertion"
+      ansible.builtin.assert:
+        that: bvf.stat.exists
+        fail_msg: "The specified basevars_file: {{ basevars_file }} was not found."
+
+    - name: "Include inventory base variable via vars file"
+      ansible.builtin.include_vars:
+        file: "{{ basevars_file }}"
+
+    - name: "Wait for connection...and gather facts"
       ansible.builtin.setup:
         gather_timeout: 60
         gather_subset:
@@ -26,9 +41,13 @@
         var: setup_result
       # This task uses the facts gathered in the previous step
 
+    - name: "Setup the deployments directory"
+      ansible.builtin.set_fact:
+        deployment_dir: "deployments/{{ global_domain_name }}"
+
     - name: "Create rhis-builder-inventory configuration directory for {{ global_domain_name }}"
       ansible.builtin.file:
-        path: "{{ global_domain_name }}"
+        path: "{{ deployment_dir }}"
         state: directory
         mode: "0755"
 
@@ -85,17 +104,18 @@
     - name: Sync directory with rsync (excluding jinja templates)
       ansible.posix.synchronize:
         src: ./inventory_template/
-        dest: "./{{ global_domain_name }}/"
+        dest: "./{{ deployment_dir }}/"
         delete: true # Remove files in dest not in src
         recursive: true
         rsync_opts:
           - "--exclude=*.j2"
           - "--exclude=host_vars"
+          - "--exclude=vault"
 
     - name: Copy jinja templates as-is without templating
       ansible.builtin.copy:
         src: "{{ item }}"
-        dest: "{{ global_domain_name }}/templates"
+        dest: "{{ deployment_dir }}/templates"
         mode: "0755"
         remote_src: true
       loop: "{{ lookup('fileglob', 'inventory_template/templates/*.j2').split(',') }}"
@@ -112,7 +132,7 @@
 
     - name: "Create host_vars directory"
       ansible.builtin.file:
-        path: "{{ global_domain_name }}/host_vars"
+        path: "{{ deployment_dir }}/host_vars"
         state: directory
         mode: "0755"
 
@@ -137,7 +157,7 @@
     - name: Populate config files from jinja templates - part one
       ansible.builtin.template:
         src: "{{ item }}"
-        dest: "./{{ global_domain_name }}{{ item | ansible.builtin.regex_replace('inventory_template', '') | ansible.builtin.regex_replace('.j2', '') }}"
+        dest: "./{{ deployment_dir }}{{ item | ansible.builtin.regex_replace('inventory_template', '') | ansible.builtin.regex_replace('.j2', '') }}"
         mode: "0755"
       loop: "{{ jinja_template_paths_1.files | map(attribute='path') | list }}"
 
@@ -150,7 +170,7 @@
 
     - name: Find and register paths to group_vars platform_installer FQD files
       ansible.builtin.find:
-        paths: "{{ global_domain_name }}/group_vars/platform_installer"
+        paths: "{{ deployment_dir }}/group_vars/platform_installer"
         file_type: file
       register: group_vars_platform_installer_paths
 
@@ -184,4 +204,15 @@
           ansible.builtin.regex_replace('.j2', '') }}"
         mode: "0755"
       loop: "{{ jinja_bash_template_paths.files | map(attribute='path') | list }}"
+
+    - name: "Create the vault directory"
+      ansible.builtin.file:
+        path: "{{ deployment_dir }}/vault"
+        state: directory
+        mode: "0700"
+
+    - name: "Congratulations"
+      ansible.builtin.debug:
+        msg: "Your deployment configuration can be found at {{ deployment_dir }}"
+
 ...
