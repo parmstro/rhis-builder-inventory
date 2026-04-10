@@ -37,7 +37,6 @@ satellite_pre_use_idm: false
 
 # use_non_idm_certs must be false if satellite_pre_use_idm is true
 # and vice versa
-# TODO: write precheck
 use_non_idm_certs: false
 
 # If you are integrating with IdM and you don't want to regenerate the
@@ -84,6 +83,10 @@ foreman_proxy_bind_update_policy_reverse: "{{ ipa_default_bind_policy_reverse }}
 keytab_retrieval_password: "{{ ipa_admin_password_vault }}"
 keytab_retrieval_dn: "{{ ipa_keytab_dn }}"
 
+# IdM certificate Satellite service configuration
+crt_service_type: "HTTP"
+crt_force_regen: true
+
 sat_ssl_certs_dir: "/etc/ipa/private/{{ ansible_fqdn }}/"
 sat_ssl_rsa_key_pass: "{{ sat_ssl_rsa_key_pass_vault }}"
 sat_ssl_crt_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.crt"
@@ -92,15 +95,26 @@ sat_ssl_csr_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.csr"
 sat_ssl_ca_crt_path: "{{ ipa_server_ca_crt_path }}"
 ipa_server_ca_crt_path: "/etc/ipa/ca.crt"
 
-crt_service_type: "HTTP"
-crt_force_regen: true
-
+# IdM certificate private/public key config
 passfile: "{{ sat_ssl_certs_dir }}passfile"
 ssl_private_key_cipher: "aes256"
 ssl_private_key_size: 4096
 ssl_private_key_pem_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.pem"
 ssl_public_key_path: "{{ sat_ssl_certs_dir }}{{ ansible_fqdn }}.pub"
 ssl_public_key_format: "PEM"
+
+# IdM CSR data
+csr_digest: "aes256"
+csr_organization_name: "{{ ansible_domain | upper }}"
+csr_organization_unit_name: "Demo Lab"
+csr_locality_name: "Hespeler"
+csr_state_or_province_name: "ON"
+csr_country_name: "CA"
+csr_email_address: "admin@{{ ansible_domain }}"
+
+# libvirt certificates for qemu+tls integration
+host_ssl_certs_dir: "{{ sat_ssl_certs_dir }}"
+libvirt_non_idm_ca_crt_path: "{{ sat_ssl_certs_dir }}.libvirt.non_idm_ca.crt"
 
 libvirt_client_private_key_pem_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.pem" # noqa: var-naming[no-role-prefix]
 libvirt_client_key_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.key" # noqa: var-naming[no-role-prefix]
@@ -113,11 +127,3 @@ libvirt_server_key_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.ser
 libvirt_server_csr_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.csr" # noqa: var-naming[no-role-prefix]
 libvirt_server_crt_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.crt" # noqa: var-naming[no-role-prefix]
 libvirt_server_crt_service_type: "libvirt" # noqa: var-naming[no-role-prefix]
-
-csr_digest: "aes256"
-csr_organization_name: "{{ ansible_domain | upper }}"
-csr_organization_unit_name: "Demo Lab"
-csr_locality_name: "Hespeler"
-csr_state_or_province_name: "ON"
-csr_country_name: "CA"
-csr_email_address: "admin@{{ ansible_domain }}"
