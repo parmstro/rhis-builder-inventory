@@ -11,6 +11,13 @@ hg_test_hosts_rhel9:
     compute_resource: "baremetal"
     comment: "rhis_test_host deleteme"
     pxe_loader: "Grub2 UEFI"
+    parameters:
+      - name: "boot_disk"
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
