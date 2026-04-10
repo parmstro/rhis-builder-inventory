@@ -53,6 +53,22 @@ compute_resources:
       user: "{{ vcenter_service_username }}"
       password: "{{ vcenter_service_password }}"
 
+  - name: "KVM1_Lab"
+    provider: "libvirt"
+    description: "Lab KVM Server"
+    locations: "{{ satellite_location }}"
+    organizations: "{{ satellite_organization }}"
+    provider_params:
+      url: "qemu+tls://kvm1.{{ _global_domain_name }}/system"
+
+  - name: "KVM2_Lab"
+    provider: "libvirt"
+    description: "Lab KVM Server"
+    locations: "{{ satellite_location }}"
+    organizations: "{{ satellite_organization }}"
+    provider_params:
+      url: "qemu+tls://kvm2.{{ _global_domain_name }}/system"
+
   - name: "Azure_Lab"
     provider: "AzureRm"
     description: "{{ _global_domain_name }} Resource Group"
