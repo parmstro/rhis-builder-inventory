@@ -1,6 +1,0 @@
----
-
-# The authentication source configuration
-auth_source_fqdn: "{{ groups['idm_primary'][0] }}"
-auth_source_username: "{{ ipa_principal_username_vault }}"
-auth_source_password: "{{ ipa_principal_password_vault }}"
