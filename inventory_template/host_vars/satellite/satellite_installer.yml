@@ -73,7 +73,7 @@ sat_installer_options:
 # BEGIN DHCP Integration
   - '--foreman-proxy-dhcp true'
   - '--foreman-proxy-dhcp-interface "{{ dhcp_interface }}"'
-  - '--foreman-proxy-dhcp-range "{{ _default_network }}.100 "{{ _default_network }}.254"'
+  - '--foreman-proxy-dhcp-range "{{ _default_network }}.100 {{ _default_network }}.254"'
   - '--foreman-proxy-dhcp-gateway "{{ _default_network }}.1"'
   - '--foreman-proxy-dhcp-nameservers "{{ _default_network }}.5"'
   - '--foreman-proxy-dhcp-option-domain "[{{ satellite_domain }}]"'

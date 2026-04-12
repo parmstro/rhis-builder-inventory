@@ -114,6 +114,7 @@ csr_email_address: "admin@{{ ansible_domain }}"
 
 # libvirt certificates for qemu+tls integration
 host_ssl_certs_dir: "{{ sat_ssl_certs_dir }}"
+host_ssl_rsa_key_pass: "{{ sat_ssl_rsa_key_pass }}"
 libvirt_non_idm_ca_crt_path: "{{ sat_ssl_certs_dir }}.libvirt.non_idm_ca.crt"
 
 libvirt_client_private_key_pem_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.client.pem" # noqa: var-naming[no-role-prefix]
