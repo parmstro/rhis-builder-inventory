@@ -2,7 +2,7 @@
 # Please consult the docs if you are unsure what to add
 # For all optional variables please consult the included README.md
 # or the Red Hat documentation:
-# https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation
+# https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/html/containerized_installation
 
 # This section is for your platform gateway hosts
 # -----------------------------------------------------
@@ -43,6 +43,9 @@ registry_username="{{ platform_installer_config.aap_registry_username }}"
 registry_password="{{ platform_installer_config.aap_registry_password }}"
 
 redis_mode=standalone
+bundle_install=true
+# The bundle directory must include /bundle in the path
+bundle_dir='{{ lookup("ansible.builtin.env", "PWD") }}/bundle'
 
 # Platform gateway
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-gateway-variables
@@ -57,6 +60,7 @@ gateway_pg_password="{{ platform_installer_config.aap_pg_password }}"
 controller_admin_password="{{ platform_installer_config.aap_platform_password }}"
 controller_pg_host="{{ ansible_fqdn }}"
 controller_pg_password="{{ platform_installer_config.aap_pg_password }}"
+controller_percent_memory_capacity=0.5
 
 # Automation hub
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-hub-variables
@@ -64,6 +68,7 @@ controller_pg_password="{{ platform_installer_config.aap_pg_password }}"
 hub_admin_password="{{ platform_installer_config.aap_platform_password }}"
 hub_pg_host="{{ ansible_fqdn }}"
 hub_pg_password="{{ platform_installer_config.aap_pg_password }}"
+hub_seed_collections=true
 
 # Event-Driven Ansible controller
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#event-driven-ansible-controller

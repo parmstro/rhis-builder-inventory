@@ -12,45 +12,46 @@
 # for generating system certficates
 # via IdM
 
-platform_version: "2.4"
+platform_version: "2.6"
 platform_arch: "x86_64"
 platform_installer: true
-platform_deployment_type: "rpm" # container, rpm, openshift
-platform_topology: "standalone_hub"  # growth, enterprise, custom, standalone, standalone_hub
+platform_deployment_type: "container" # container, rpm, openshift
+platform_topology: "growth"  # growth, enterprise, custom, standalone
 
 platform_installer_config:
   # RHIS
   deployment_type: "{{ platform_deployment_type }}"
   topology: "{{ platform_topology }}"
   aap_product: "Red Hat Ansible Automation Platform"
-  aap_file_repo_name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
-  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.4-14-x86_64.tar.gz"
+  aap_file_repo_name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
+  aap_bundle_file: "ansible-automation-platform-containerized-setup-bundle-2.6-7-x86_64.tar.gz"
   aap_destination_dir: "/root/ansible_installer"
-
   # Installer Template
   # All
-  aap_platform_username: "admin"
-  aap_platform_password: "{{ aap_admin_password_vault }}"
+  aap_admin_username: "admin"
+  aap_admin_password: "{{ aap_admin_password_vault }}"
   aap_custom_ca_crt: "/etc/ipa/ca.crt"
   aap_redis_mode: "standalone"
-
   # Registry
   aap_registry_url: "registry.redhat.io"
   aap_registry_username: "{{ aap_registry_username_vault }}"
   aap_registry_password: "{{ aap_registry_password_vault }}"
-
   # Database
-  # aap_pg_host: "" # empty string == localhost
-  # aap_pg_port: "" # empty string == localhost
+  aap_pg_host: "" # empty string == localhost
+  aap_pg_port: 5432
   aap_pg_database: "awx"
   aap_pg_username: "awx"
   aap_pg_password: "{{ aap_pg_password_vault }}"
   aap_pg_sslmode: "prefer"
   aap_pg_use_ssl: true
-  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
-  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
-
+  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
   # Automation Controller
-  aap_hub_verify_ssl: true
-  aap_hub_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
-  aap_hub_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
+  aap_controller_verify_ssl: true
+  aap_controller_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_controller_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+  aap_web_server_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_web_server_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+
+  aap_platform_username: "{{ aap_admin_username }}"
+  aap_platform_password: "{{ aap_admin_password }}"

@@ -66,7 +66,7 @@ satellite_hostgroups:
 
   - name: "dev"
     parent: "hg_x86_64_rhel10_vm"
-    description: "RHEL 10 SOE vm hostgroup for Qualification"
+    description: "RHEL 10 SOE vm hostgroup for Development"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     compute_resource: "VMware_Lab"
@@ -96,6 +96,23 @@ satellite_hostgroups:
         hidden_value: false
         parameter_type: "string"
         value: "/dev/sda"
+
+  # - name: "rhel10_edge_manager_vm"
+  #   parent: "hg_x86_64_rhel10_vm/dev"
+  #   description: "RHEL 10 vm for Edge Manager host deployments"
+  #   organization: "{{ satellite_organization }}"
+  #   locations: "{{ satellite_location }}"
+  #   compute_resource: "VMware_Lab"
+  #   compute_profile: "SOE_Medium"
+  #   content_source: "{{ groups['sat_primary'][0] }}"
+  #   lifecycle_environment: "Development"
+  #   content_view: "SOE10_EdgeManager"
+  #   activation_keys: "SOE10_dev_edge_manager"
+  #   ansible_roles:
+  #     - theforeman.foreman_scap_client
+  #   ptable: "RHEL_Server_Compliance"
+  #   pxe_loader: "Grub2 UEFI"
+  #   root_pass: "{{ satellite_password }}"
 
   - name: "qa"
     parent: "hg_x86_64_rhel10_vm"
@@ -130,6 +147,36 @@ satellite_hostgroups:
         parameter_type: "string"
         value: "/dev/sda"
 
+  - name: "aap10_26"
+    parent: "hg_x86_64_rhel10_metal"
+    description: "Baremetal hostgroup for RHEL 10 AAP 2.6 deployments"
+    organization: "{{ satellite_organization }}"
+    locations: "{{ satellite_location }}"
+    content_source: "{{ groups['sat_primary'][0] }}"
+    lifecycle_environment: "Development"
+    content_view: "SOE10_AAP26"
+    activation_keys: "SOE10_dev_aap_26"
+    openscap_capsule: "{{ satellite_fqdn }}"
+    ansible_roles:
+      - theforeman.foreman_scap_client
+    domain: "{{ satellite_domain }}"
+    subnet: "{{ _global_domain_name }}"
+    realm: "{{ satellite_domain | upper }}"
+    architecture: "x86_64"
+    operatingsystem: "RHEL 10.1"
+    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    ptable: "RHEL_Server_Compliance"
+    pxe_loader: "Grub2 UEFI"
+    root_pass: "{{ satellite_password }}"
+    parameters:
+      - name: "boot_disk"
+        hidden_value: false
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        hidden_value: false
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
 
 # RHEL9
   - name: "hg_x86_64_rhel9_metal"
@@ -187,11 +234,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
       - name: "kvm_host_enabled"
         hidden_value: false
         parameter_type: "boolean"
@@ -199,7 +246,7 @@ satellite_hostgroups:
 
   - name: "aap9_24"
     parent: "hg_x86_64_rhel9_metal"
-    description: "Baremetal hostgroup for AAP 2.4 deployments"
+    description: "Baremetal hostgroup for RHEL9 AAP 2.4 deployments"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     content_source: "{{ groups['sat_primary'][0] }}"
@@ -222,21 +269,21 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
 
-  - name: "aap9_25"
+  - name: "aap9_26"
     parent: "hg_x86_64_rhel9_metal"
-    description: "Baremetal hostgroup for AAP 2.5 deployments"
+    description: "Baremetal hostgroup for RHEL9 AAP 2.6 deployments"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     content_source: "{{ groups['sat_primary'][0] }}"
     lifecycle_environment: "Development"
-    content_view: "SOE9_AAP25"
-    activation_keys: "SOE9_dev_aap_25"
+    content_view: "SOE9_AAP26"
+    activation_keys: "SOE9_dev_aap_26"
     openscap_capsule: "{{ satellite_fqdn }}"
     ansible_roles:
       - theforeman.foreman_scap_client
@@ -253,11 +300,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
 
   - name: "satellite_capsule"
     parent: "hg_x86_64_rhel9_metal"
@@ -282,11 +329,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
 
   - name: "hg_x86_64_rhel9_vm"
     description: "RHEL 9 SOE vm hostgroup"
@@ -355,17 +402,34 @@ satellite_hostgroups:
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
 
-  - name: "aap9_25_vm"
+  - name: "aap9_26_vm"
     parent: "hg_x86_64_rhel9_vm/dev"
-    description: "RHEL 9 vm for AAP 2.5 host deployments"
+    description: "RHEL 9 vm for AAP 2.6 host deployments"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     compute_resource: "VMware_Lab"
     compute_profile: "SOE_Medium"
     content_source: "{{ groups['sat_primary'][0] }}"
     lifecycle_environment: "Development"
-    content_view: "SOE9_AAP25"
-    activation_keys: "SOE9_dev_aap_25"
+    content_view: "SOE9_AAP26"
+    activation_keys: "SOE9_dev_aap_26"
+    ansible_roles:
+      - theforeman.foreman_scap_client
+    ptable: "RHEL_Server_Compliance"
+    pxe_loader: "Grub2 UEFI"
+    root_pass: "{{ satellite_password }}"
+
+  - name: "rhel9_edge_manager_vm"
+    parent: "hg_x86_64_rhel9_vm/dev"
+    description: "RHEL 9 vm for Edge Manager host deployments"
+    organization: "{{ satellite_organization }}"
+    locations: "{{ satellite_location }}"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+    content_source: "{{ groups['sat_primary'][0] }}"
+    lifecycle_environment: "Development"
+    content_view: "SOE9_EdgeManager"
+    activation_keys: "SOE9_dev_edge_manager"
     ansible_roles:
       - theforeman.foreman_scap_client
     ptable: "RHEL_Server_Compliance"
@@ -521,11 +585,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "/dev/nvme0n1"
 
   - name: "hg_x86_64_rhel8_vm"
     description: "RHEL 8 SOE vm hostgroup"

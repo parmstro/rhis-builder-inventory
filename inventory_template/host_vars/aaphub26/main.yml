@@ -1,0 +1,9 @@
+---
+
+ah_api_path_prefix: "galaxy"
+# ah_api_token: "{{ ah_api_token_vault }}"
+ah_password: "{{ ah_password_vault }}"
+ah_username: "{{ ah_username_vault }}"
+ah_update_interval_sec: 1
+ah_request_timeout_sec: 60
+ah_validate_certs: true

@@ -12,7 +12,7 @@
 # for generating system certficates
 # via IdM
 
-platform_version: "2.4"
+platform_version: "2.6"
 platform_arch: "x86_64"
 platform_installer: true
 platform_deployment_type: "rpm" # container, rpm, openshift
@@ -23,8 +23,8 @@ platform_installer_config:
   deployment_type: "{{ platform_deployment_type }}"
   topology: "{{ platform_topology }}"
   aap_product: "Red Hat Ansible Automation Platform"
-  aap_file_repo_name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
-  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.4-14-x86_64.tar.gz"
+  aap_file_repo_name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
+  aap_bundle_file: "ansible-automation-platform-setup-bundle-2.6-7-x86_64.tar.gz"
   aap_destination_dir: "/root/ansible_installer"
 
   # Installer Template

@@ -28,10 +28,10 @@ satellite_initial_organization: "Default Organization"
 satellite_organization: "{{ satellite_initial_organization }}"
 satellite_location: "{{ satellite_initial_location }}"
 
-# 
+#
 satellite_url: "https://{{ satellite_fqdn }}"
 satellite_server_url: "{{ satellite_url }}"  # deprecated
-satellite_validate_certs: true
+satellite_validate_certs: false
 
 satellite_username: "{{ satellite_username_vault }}"
 satellite_password: "{{ satellite_password_vault }}"

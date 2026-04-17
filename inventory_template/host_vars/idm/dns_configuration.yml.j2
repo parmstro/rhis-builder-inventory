@@ -14,8 +14,12 @@
 idm_dns_update_zones:
   - name: "{{ _global_domain_name }}"
     {% endraw %}foreman_proxy_BIND_update_policy: 'grant {{ global_domain_name | upper }} krb5-self * A; grant {{ global_domain_name | upper }} krb5-self * AAAA; grant {{ global_domain_name | upper }} krb5-self * SSHFP; grant realm-capsule\@{{ global_domain_name | upper }} wildcard * ANY;' # noqa yaml[line-length]
+    allow_sync_ptr: true
+    dynamic_update: true
   - name: "{{ default_network_reverse_dns_zone_name }}"
     foreman_proxy_BIND_update_policy: 'grant {{ global_domain_name | upper }} krb5-subdomain {{ default_network_reverse_dns_zone_name }}. PTR; grant realm-capsule\@{{ global_domain_name | upper }} wildcard * ANY;'
+    allow_sync_ptr: true
+    dynamic_update: true
 {% raw %}
 # you probably want to add some standard records to the new DNS
 idm_dns_records:

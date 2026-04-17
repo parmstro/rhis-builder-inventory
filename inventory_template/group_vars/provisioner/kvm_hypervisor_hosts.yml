@@ -1,7 +1,7 @@
 ---
 
-kvm_hypervisor_test_hosts:
-  - fqdn: "c3s2n1kvm.{{ _default_domain }}"
+kvm_hypervisor_hosts:
+  - fqdn: "kvm1.{{ _default_domain }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -50,7 +50,7 @@ kvm_hypervisor_test_hosts:
       #   mode: "802.3ad"
       #   virtual: true
 
-  # - fqdn: "c3s2n2kvm.{{ _default_domain }}"
+  # - fqdn: "kvm2.{{ _default_domain }}"
   #   delete_host: false
   #   organization: "{{ satellite_organization }}"
   #   location: "{{ satellite_location }}"
@@ -99,7 +99,7 @@ kvm_hypervisor_test_hosts:
   #     #   mode: "802.3ad"
   #     #   virtual: true
 
-  # - fqdn: "c3s2n3kvm.{{ _default_domain }}"
+  # - fqdn: "kvm3.{{ _default_domain }}"
   #   delete_host: false
   #   organization: "{{ satellite_organization }}"
   #   location: "{{ satellite_location }}"
@@ -148,7 +148,7 @@ kvm_hypervisor_test_hosts:
   #     #   mode: "802.3ad"
   #     #   virtual: true
 
-  # - fqdn: "c3s2n4kvm.{{ _default_domain }}"
+  # - fqdn: "kvm4.{{ _default_domain }}"
   #   delete_host: false
   #   organization: "{{ satellite_organization }}"
   #   location: "{{ satellite_location }}"
@@ -197,7 +197,7 @@ kvm_hypervisor_test_hosts:
   #     #   mode: "802.3ad"
   #     #   virtual: true
 
-  # - fqdn: "c3s2n5kvm.{{ _default_domain }}"
+  # - fqdn: "kvm5.{{ _default_domain }}"
   #   delete_host: false
   #   organization: "{{ satellite_organization }}"
   #   location: "{{ satellite_location }}"
@@ -246,7 +246,7 @@ kvm_hypervisor_test_hosts:
   #     #   mode: "802.3ad"
   #     #   virtual: true
 
-  # - fqdn: "c3s2n6kvm.{{ _default_domain }}"
+  # - fqdn: "kvm6.{{ _default_domain }}"
   #   delete_host: false
   #   organization: "{{ satellite_organization }}"
   #   location: "{{ satellite_location }}"
@@ -295,7 +295,7 @@ kvm_hypervisor_test_hosts:
   #     #   mode: "802.3ad"
   #     #   virtual: true
 
-  # - fqdn: "c3s2n7kvm.{{ _default_domain }}"
+  # - fqdn: "kvm7.{{ _default_domain }}"
   #   delete_host: false
   #   organization: "{{ satellite_organization }}"
   #   location: "{{ satellite_location }}"

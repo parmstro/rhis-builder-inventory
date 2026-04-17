@@ -9,6 +9,8 @@
 # The following are some examples.
 # For custom products we can set these via the product definition as well
 
+####  NOTE: If you are configuring a disconnected satellite all exported repos must be immediate mode
+
 satellite_repositories:
 
 # RHEL 10 x86_64
@@ -51,6 +53,11 @@ satellite_repositories:
     product: "Red Hat Enterprise Linux for x86_64"
     content_type: "yum"
     download_policy: "immediate"
+
+  # - name: "Red Hat Edge Manager 1.0 for RHEL 10 x86_64 RPMs"
+  #   product: "Red Hat Edge Manager"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
 
 # RHEL 10 ARM 64
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.1"
@@ -133,6 +140,11 @@ satellite_repositories:
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - High Availability RPMs 9"
     product: "Red Hat Enterprise Linux High Availability for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Edge Manager 1.0 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Edge Manager"
     content_type: "yum"
     download_policy: "immediate"
 
@@ -305,7 +317,11 @@ satellite_repositories:
     product: "Red Hat Ansible Automation Platform"
     content_type: "file"
     download_policy: "immediate"
-  - name: "Red Hat Ansible Automation Platform 2.5 for RHEL 9 x86_64 Files"
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "file"
+    download_policy: "immediate"
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 Files"
     product: "Red Hat Ansible Automation Platform"
     content_type: "file"
     download_policy: "immediate"
@@ -314,7 +330,11 @@ satellite_repositories:
     product: "Red Hat Ansible Automation Platform"
     content_type: "yum"
     download_policy: "immediate"
-  - name: "Red Hat Ansible Automation Platform 2.5 for RHEL 9 x86_64 RPMs"
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 RPMs"
     product: "Red Hat Ansible Automation Platform"
     content_type: "yum"
     download_policy: "immediate"
@@ -351,16 +371,24 @@ satellite_repositories:
     download_policy: "immediate"
 
 # Red Hat Convert2RHEL utilities
-  - name: "convert2rhel7"
-    product: "convert2rhel"
+  - name: "Red Hat Client Tools for RHEL 7"
+    product: "Red Hat Client Tools for RHEL"
+    content_type: "yum"
+    gpg_key: "RedHatGPG"
+    ssl_ca_cert: "RedHatSSL"
+    download_policy: "on_demand"
+    unprotected: false
+
+  - name: "Red Hat Client Tools for RHEL 8"
+    product: "Red Hat Client Tools for RHEL"
     content_type: "yum"
     gpg_key: "RedHatGPG"
     ssl_ca_cert: "RedHatSSL"
     download_policy: "immediate"
     unprotected: false
 
-  - name: "convert2rhel8"
-    product: "convert2rhel"
+  - name: "Red Hat Client Tools for RHEL 9"
+    product: "Red Hat Client Tools for RHEL"
     content_type: "yum"
     gpg_key: "RedHatGPG"
     ssl_ca_cert: "RedHatSSL"

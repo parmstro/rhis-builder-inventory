@@ -5,7 +5,7 @@ aap_inventory_sources:
     credential: "prod_satellite"
     description: "production satellite inventory source"
     execution_environment: "satellite_ee_9"
-    inventory: "satellite.{{ _global_domain_name }}"
+    inventory: "{{ groups['sat_primary'][0] }}"
     organization: "Default"
     overwrite: true
     source: "satellite6"
