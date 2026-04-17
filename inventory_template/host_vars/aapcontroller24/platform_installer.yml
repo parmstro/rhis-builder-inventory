@@ -12,7 +12,7 @@
 # for generating system certficates
 # via IdM
 
-platform_version: "2.4-8"
+platform_version: "2.4"
 platform_arch: "x86_64"
 platform_installer: true
 platform_deployment_type: "rpm" # container, rpm, openshift
