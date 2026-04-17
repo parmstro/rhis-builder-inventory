@@ -33,7 +33,7 @@ product_plans:
     plan: "nightly_infra"
     organization: "{{ satellite_organization }}"
 
-# AAP 2.4 and 2.5
+# AAP 2.4 and 2.6
   - name: "Red Hat Ansible Automation Platform"
     plan: "nightly_infra"
     organization: "{{ satellite_organization }}"

@@ -56,6 +56,10 @@ repository_sets:
     repository_list:
       - releasever: "10"
 
+# # RHEL10 Edge Manager
+#   - name: "Red Hat Edge Manager 1.0 for RHEL 10 x86_64 (RPMs)"
+#     product: "Red Hat Edge Manager"
+
 ############## RHEL 10 aarch64 ##################
 # RHEL10_aarch64 kickstart repos
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS (Kickstart)"
@@ -136,6 +140,11 @@ repository_sets:
     product: "Red Hat Enterprise Linux High Availability for x86_64"
     repository_list:
       - releasever: "9"
+
+# RHEL9 Edge Manager
+
+  - name: "Red Hat Edge Manager 1.0 for RHEL 9 x86_64 (RPMs)"
+    product: "Red Hat Edge Manager"
 
 # RHEL9 repos for LEAPP_8_2_9
   - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
@@ -246,17 +255,23 @@ repository_sets:
       - releasever: "8.10"
 
 ############## AAP ##################
-# Ansible Automation Platform 2.4 and 2.5
+# Ansible Automation Platform 2.4 and 2.6
   - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 (Files)"
     product: "Red Hat Ansible Automation Platform"
 
   - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Ansible Automation Platform"
 
-  - name: "Red Hat Ansible Automation Platform 2.5 for RHEL 9 x86_64 (Files)"
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 (Files)"
     product: "Red Hat Ansible Automation Platform"
 
-  - name: "Red Hat Ansible Automation Platform 2.5 for RHEL 9 x86_64 (RPMs)"
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 (RPMs)"
+    product: "Red Hat Ansible Automation Platform"
+
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 (Files)"
+    product: "Red Hat Ansible Automation Platform"
+
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 (RPMs)"
     product: "Red Hat Ansible Automation Platform"
 
 ############## Satellite ##################
