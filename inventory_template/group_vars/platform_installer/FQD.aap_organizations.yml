@@ -6,9 +6,10 @@ aap_organizations:
     default_environment: "satellite_ee_9"
     galaxy_credentials:
       - "Ansible Galaxy"
-      - "Automation_Hub"
+      - "Automation_Hub_validated"
+      - "Automation_Hub_rh_certified"
       - "Private_Hub_community"
-      - "Private_Hub_rh-certified"
+      - "Private_Hub_rh_certified"
       - "Private_Hub_validated"
     state: present
 
