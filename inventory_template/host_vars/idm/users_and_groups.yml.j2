@@ -164,5 +164,22 @@ idm_user_groups:
     description: "Non-production System Administrators"
   - name: "ug-web-server-administrators"
     description: "Web Server Administrators"
+    - name: "ug-ocp-cluster-admins"
+    description: "OpenShift Cluster Administrators"
+    group_list:
+      - admins
+    user_list:
+      - "poc-admin"
+      - "msavage"
+      - "rgoodson"
+      - "redbeard"
+  - name: "ug-ocp-project-admins"
+    description: "OpenShift Admin Role binding for project admins"
+    group_list:
+      - ug-admins
+  - name: "ug-ocp-developers"
+    description: "OpenShift Edit Role binding for developers"
+  - name: "ug-ocp-viewers"
+    description: "OpenShift View Role binding for user access"
 {% endraw %}
 ...

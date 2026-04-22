@@ -1,0 +1,16 @@
+---
+
+idm_send_new_user_notifications: false
+idm_reply_address: "idm-noreply@{{ _global_domain_name }}"
+idm_email_subject_prefix: "[{{ groups['idm_primary'][0] }}] - Welcome to the {{ _global_domain_name | upper }} IdM Realm"
+idm_notification_delivery_method: "SMTP"
+idm_smtp_address: "smtp.gmail.com"
+idm_smtp_port: 587
+idm_smtp_user_name: "{{ idm_smtp_user_name_vault }}"
+idm_smtp_password: "{{ idm_smtp_password_vault }}"
+idm_smtp_authentication: "{{ idm_smtp_authentication }}"
+idm_new_user_file: "encrypted.txt"
+
+# Not yet implemented
+# idm_sendmail_arguments: "-i"
+# idm_sendmail_location: "/usr/sbin/sendmail"

@@ -4,3 +4,8 @@
 
 content_imports:
   - name: "Library"
+    type: "library"   # or "repository" or "cv_version"  The metadata.json has all the required info for the type
+#    ca_path:  "/etc/ipa/ca.crt" #  We will default to the ca for an IdM registered satellite.
+#    metadata: "{fake_key:fake_value}"   # provide the raw metadata as json
+#    metadata_file: "metadata.json"  # provide the path to metadata.json, defaults to being metadata.json in the path below
+    import_path: "/var/lib/pulp/imports/Default_Organization/1.0/"   #  Required - this path must be readable by pulp with the proper SELinux context

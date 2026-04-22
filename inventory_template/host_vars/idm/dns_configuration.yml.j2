@@ -1,4 +1,15 @@
 ---
+
+# yamllint disable rule:line-length
+# Global config is not dependent on zone_name
+idm_dns_global_configuration:
+  action: "dnsconfig"
+  forwarders:
+    - "8.8.8.8"
+    - "8.8.4.4"
+  allow_sync_ptr: true
+  forward_policy: only
+
 {% raw %}
 # Set these if you are forwarding zones (you probably are not)
 # idm_dns_forward_zones:
@@ -11,7 +22,7 @@
 {% raw %}
 # Set the bind policy for zones managed by the IdM server
 # The realm-capsule bind policy should be much more restrictive
-idm_dns_update_zones:
+idm_dns_zones:
   - name: "{{ _global_domain_name }}"
     {% endraw %}foreman_proxy_BIND_update_policy: 'grant {{ global_domain_name | upper }} krb5-self * A; grant {{ global_domain_name | upper }} krb5-self * AAAA; grant {{ global_domain_name | upper }} krb5-self * SSHFP; grant realm-capsule\@{{ global_domain_name | upper }} wildcard * ANY;' # noqa yaml[line-length]
     allow_sync_ptr: true
