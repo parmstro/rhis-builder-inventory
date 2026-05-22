@@ -29,9 +29,7 @@ Review and edit inventory_basevars.yml file, then run the inventory_update shell
 inventory_update.sh will build a new directory for your domain under the executing directory. The directory will contain the customized version of the sample RHIS build configuration based on the parameters you have provided in inventory_basevars.yml.
 This is not meant to be a full customization facility yet, but rather a way to help you get started quickly in your own environment.
 
-The inventory_update script will also create a custom script to pull and launch the rhis-provisioner container and connect to your inventory. 
-
-See the 
+The inventory_update script will also create a custom script to pull and launch the rhis-provisioner container and connect to your inventory.
 
 See below for information on customizing your build further.
 
