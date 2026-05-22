@@ -8,5 +8,6 @@
                    --inventory-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/inventory' \
                    --templates-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/templates' \
                    --vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/vars' \
+                   --ssh-dir '/home/{{ ansible_user }}/.ssh' \
                    --container-registry 'quay.io' \
                    --container-repo 'parmstro'

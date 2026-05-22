@@ -9,7 +9,7 @@ inventorydir=""
 secretsdir=""
 templatesdir=""
 varsdir=""
-sshdir=""
+sshdir="/home/ansiblerunner/.ssh/"
 registry="quay.io"
 repo="parmstro"
 
@@ -51,6 +51,10 @@ while [[ "$#" -gt 0 ]]; do
             secretsdir="$2"
             shift # Shift past the value
             ;;
+        -S|--ssh-dir)
+            sshdir="$2"
+            shift # Shift past the value
+            ;;
         -t|--templates-dir)
             templatesdir="$2"
             shift # Shift past the value
@@ -75,11 +79,14 @@ echo "group-vars-dir: $groupvarsdir"
 echo "host-vars-dir: $hostvarsdir"
 echo "inventory-dir: $inventorydir"
 echo "secrets-dir: $secretsdir"
+echo "ssh-dir: $sshdir"
 echo "templates-dir: $templatesdir"
 echo "vars-dir: $varsdir"
 echo "ansible-ver: $ansiblever"
 echo "registry: $registry"
 echo "repo: $repo"
+echo "NOTE: files added to any of the diretories will not be accessible."
+echo "      You must restart the container to access new files."
 
 if [[ $secretsdir == "" ]]; then
   echo "ERROR: A secrets directory is required - exiting."
@@ -109,6 +116,7 @@ else
                  -v $templatesdir:/rhis/vars/templates:Z \
                  -v $varsdir:/rhis/vars/vars:Z \
                  -v $secretsdir:/rhis/vars/vault:Z \
+                 -v $sshdir:/root/.ssh:Z \
                  --hostname provisioner \
                  --name rhis-builder \
                  $path/rhis-provisioner-9-$ansiblever:latest
@@ -121,6 +129,7 @@ else
     restorecon -FRq $hostvarsdir
     restorecon -FRq $inventorydir
     restorecon -FRq $secretsdir
+    restorecon -FRq $sshdir
     restorecon -FRq $templatesdir
     restorecon -FRq $varsdir
   fi
