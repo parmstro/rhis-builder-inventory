@@ -8,5 +8,6 @@
                    --inventory-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/inventory' \
                    --templates-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/templates' \
                    --vars-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/vars' \
+                   --ssh-dir '/home/ansiblerunner/.ssh' \
                    --container-registry 'quay.io' \
                    --container-repo 'parmstro'
