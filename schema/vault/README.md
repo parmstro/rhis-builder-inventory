@@ -58,6 +58,6 @@ ansible-vault view deployments/<your.domain>/vault/rhis_builder_vault.yml
 ## Conventions
 
 - All vault variable names end with the `_vault` suffix to make their origin immediately identifiable in playbooks and templates.
-- Many variables are **aliases** — they reference a common base variable (e.g. `cdn_organization_vault: "{{ default_org_number_vault }}"`). This allows a single value to serve multiple roles while keeping variable names meaningful at the point of use. The alias itself carries no sensitive data; the underlying variable does.
+- Many variables are **aliases** — they reference a common base variable (e.g. `cdn_organization_vault: "{{ default_org_number_vault }}"`). This allows a single value to serve multiple roles while keeping variable names meaningful at the point of use. At runtime the alias resolves to the sensitive value of the underlying variable, so it must be treated with the same care. `no_log: true` is used throughout rhis-builder to ensure that secrets are not logged or inadvertently displayed.
 - Variables marked `# notsecret` are present in the vault file for structural convenience but do not represent sensitive credentials. See [../README.md](../README.md) for a full explanation of the annotation.
 - For POC environments, many passwords are aliased to `default_environment_password_vault`. **In production deployments, every password should be set individually.**
