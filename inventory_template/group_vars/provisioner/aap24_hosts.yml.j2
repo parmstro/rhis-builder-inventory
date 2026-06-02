@@ -1,11 +1,21 @@
 ---
 
+# PATTERN: aap24_hosts is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts=<aap24_hosts>"
+# The deploy script (deploy_aap24_hosts.sh) assigns it to the generic platform_hosts
+# variable that the create_hosts.yml playbook operates on.
+# NOTE: Version-based AAP host list naming (aap24_hosts, aap26_hosts) is being
+# phased out in favour of a version-neutral name. This file will be renamed
+# as part of that transition.
+# Static analysis tools will not detect aap24_hosts as "used" — expected. See
+# schema/audit_findings.md Scanner Limitation.
+
 # Ansible 2.4 growth deployment
 {% raw %}
 aap24_hosts:
 
   - name: "aapcontroller1"
-    fqdn: "aapcontroller1.{{ _global_domain_name }}"
+    fqdn: "aapcontroller1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -32,7 +42,7 @@ aap24_hosts:
         ip: "{{ _default_network }}.14"
 
   - name: "aaphub1"
-    fqdn: "aaphub1.{{ _global_domain_name }}"
+    fqdn: "aaphub1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"

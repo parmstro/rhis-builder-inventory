@@ -1,12 +1,19 @@
 ---
 
+# PATTERN: capsule_hosts is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts=<capsule_hosts>"
+# The deploy script (deploy_sat_capsule_hosts.sh) assigns it to the generic
+# platform_hosts variable that the create_hosts.yml playbook operates on.
+# Static analysis tools will not detect capsule_hosts as "used" — expected. See
+# schema/audit_findings.md Scanner Limitation.
+
 # The list of capsule servers
 
 {% raw %}
 capsule_hosts:
 
   - name: "capsule1"
-    fqdn: "capsule1.{{ _global_domain_name }}"
+    fqdn: "capsule1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"

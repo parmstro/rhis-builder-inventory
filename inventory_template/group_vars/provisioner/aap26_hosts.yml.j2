@@ -1,11 +1,21 @@
 ---
 
+# PATTERN: aap26_hosts is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts=<aap26_hosts>"
+# No version-specific deploy script exists yet for aap26_hosts; it will be
+# assigned to platform_hosts by the deploy script when one is created.
+# NOTE: Version-based AAP host list naming (aap24_hosts, aap26_hosts) is being
+# phased out in favour of a version-neutral name. This file will be renamed
+# as part of that transition.
+# Static analysis tools will not detect aap26_hosts as "used" — expected. See
+# schema/audit_findings.md Scanner Limitation.
+
 # AAP 2.6 Growth Deployment
 {% raw %}
 aap26_hosts:
 
   - name: "aapcontroller1"
-    fqdn: "aapcontroller1.{{ _global_domain_name }}"
+    fqdn: "aapcontroller1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -31,7 +41,7 @@ aap26_hosts:
         mac: "54:b2:03:f1:0b:d2"
         ip: "{{ _default_network }}.14"
 
-  - fqdn: "aaphub1.{{ _global_domain_name }}"
+  - fqdn: "aaphub1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -57,7 +67,7 @@ aap26_hosts:
         mac: "54:b2:03:f1:0b:9f"
         ip: "{{ _default_network }}.15"
 
-#   - fqdn: "aapdb.{{ _global_domain_name }}"
+#   - fqdn: "aapdb.{{ _runtime_global_domain_name }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
 #     location: "{{ satellite_location }}"
@@ -76,7 +86,7 @@ aap26_hosts:
 #         mac: ""
 #         ip: "{{ _default_network }}.16"
 
-#   - fqdn: "aapgateway1.{{ _global_domain_name }}"
+#   - fqdn: "aapgateway1.{{ _runtime_global_domain_name }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
 #     location: "{{ satellite_location }}"
@@ -95,7 +105,7 @@ aap26_hosts:
 #         mac: ""
 #         ip: "{{ _default_network }}.17"
 
-#   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
+#   - fqdn: "aapedacontroller.{{ _runtime_global_domain_name }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
 #     location: "{{ satellite_location }}"

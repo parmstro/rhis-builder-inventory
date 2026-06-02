@@ -7,7 +7,7 @@
 # resources in the landing zone repositories in future
 
 # GLOBAL VARIABLES THAT APPLY TO ALL HOSTS
-global_domain_name: "savage.test"
+basevars_global_domain_name: "savage.test"
 
 default_network: "192.168.140.0"
 default_network_prefix: "22"
@@ -28,7 +28,9 @@ rhis_time_servers:
   - "2.rhel.pool.ntp.org"
   - "3.rhel.pool.ntp.org"
 
-rhis_aap_release_version: "2.4"
+rhis_aap_release_version: "2.6"
+rhis_satellite_release_version: "6.18"
+rhis_satellite_os_major_version: "9"
 
 rhis_system_count:
   satellite: 1

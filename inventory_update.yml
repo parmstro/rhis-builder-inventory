@@ -43,9 +43,9 @@
 
     - name: "Setup the deployments directory"
       ansible.builtin.set_fact:
-        deployment_dir: "deployments/{{ global_domain_name }}"
+        deployment_dir: "deployments/{{ basevars_global_domain_name }}"
 
-    - name: "Create rhis-builder-inventory configuration directory for {{ global_domain_name }}"
+    - name: "Create rhis-builder-inventory configuration directory for {{ basevars_global_domain_name }}"
       ansible.builtin.file:
         path: "{{ deployment_dir }}"
         state: directory
@@ -57,7 +57,7 @@
 
     - name: Split domain name
       ansible.builtin.set_fact:
-        split_global_domain_name: "{{ global_domain_name | split('.') }}"
+        split_basevars_global_domain_name: "{{ basevars_global_domain_name | split('.') }}"
 
     - name: Split timezone name
       ansible.builtin.set_fact:
@@ -136,7 +136,7 @@
         state: directory
         mode: "0755"
 
-    - name: Configure individual host_vars directories with hostname.global_domain_name format
+    - name: Configure individual host_vars directories with hostname.basevars_global_domain_name format
       ansible.builtin.include_tasks: "inventory_update_subtasks/process_host_vars_directories.yml"
       loop: "{{ rhis_system_count | dict2items }}"
       loop_control:
@@ -174,10 +174,10 @@
         file_type: file
       register: group_vars_platform_installer_paths
 
-    - name: "Create platform_installer files from FQD interim files - {{ global_domain_name }}"
+    - name: "Create platform_installer files from FQD interim files - {{ basevars_global_domain_name }}"
       ansible.builtin.file:
         src: "{{ item }}"
-        dest: "{{ item | ansible.builtin.regex_replace('FQD', global_domain_name) }}"
+        dest: "{{ item | ansible.builtin.regex_replace('FQD', basevars_global_domain_name) }}"
         state: hard
         mode: "0755"
       loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
@@ -195,12 +195,12 @@
         patterns: "*.j2"
       register: jinja_bash_template_paths
 
-    - name: "Populate rhis container runtime scripts from jinja templates - {{ global_domain_name }}"
+    - name: "Populate rhis container runtime scripts from jinja templates - {{ basevars_global_domain_name }}"
       ansible.builtin.template:
         src: "{{ item }}"
         dest: "./{{ item |
           ansible.builtin.regex_replace('inventory_template/scripts', '') |
-          ansible.builtin.regex_replace('template', global_domain_name) |
+          ansible.builtin.regex_replace('template', basevars_global_domain_name) |
           ansible.builtin.regex_replace('.j2', '') }}"
         mode: "0755"
       loop: "{{ jinja_bash_template_paths.files | map(attribute='path') | list }}"

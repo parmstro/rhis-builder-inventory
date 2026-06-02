@@ -1,10 +1,17 @@
 ---
+# PATTERN: quadlet_hosts is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts=<quadlet_hosts>"
+# The deploy script (deploy_quadlet_hosts.sh) assigns it to the generic
+# platform_hosts variable that the create_hosts.yml playbook operates on.
+# Static analysis tools will not detect quadlet_hosts as "used" — expected. See
+# schema/audit_findings.md Scanner Limitation.
+
 # The list of quadlet_hosts
 {% raw %}
 quadlet_hosts:
 
   - name: "quadlet1"
-    fqdn: "quadlet1.{{ _global_domain_name }}"
+    fqdn: "quadlet1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -34,7 +41,7 @@ quadlet_hosts:
         ip: "{{ _default_network }}.71"
 
   - name: "quadlet2"
-    fqdn: "quadlet2.{{ _global_domain_name }}"
+    fqdn: "quadlet2.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"

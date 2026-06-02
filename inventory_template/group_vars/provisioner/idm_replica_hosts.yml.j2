@@ -1,10 +1,17 @@
 ---
+# PATTERN: idm_replica_hosts is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts=<idm_replica_hosts>"
+# The deploy script (deploy_idm_replica_hosts.sh) assigns it to the generic
+# platform_hosts variable that the create_hosts.yml playbook operates on.
+# Static analysis tools will not detect idm_replica_hosts as "used" — expected. See
+# schema/audit_findings.md Scanner Limitation.
+
 {% raw %}
-# The list of capsule servers to build for {{ _global_domain_name }}
+# The list of idm replica servers to build for {{ _runtime_global_domain_name }}
 # reference idm_replica_hosts to concatenate lists as necessary
 idm_replica_hosts:
   - name: "idm2"
-    fqdn: "idm2.{{ _global_domain_name }}"
+    fqdn: "idm2.{{ _runtime_global_domain_name }}"
     crt_force_regen: false
     delete_host: false
     organization: "{{ satellite_organization }}"
