@@ -1,4 +1,10 @@
 ---
+# PATTERN: kvm_hypervisor_hosts is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts={{ kvm_hypervisor_hosts }}"
+# The deploy script (deploy_kvm_hypervisors.sh) assigns it to the generic
+# platform_hosts variable that the create_hosts.yml playbook operates on.
+# Static analysis tools will not detect kvm_hypervisor_hosts as "used" — expected.
+# See schema/audit_findings.md Scanner Limitation.
 
 kvm_hypervisor_hosts:
   - fqdn: "kvm1.{{ _default_domain }}"

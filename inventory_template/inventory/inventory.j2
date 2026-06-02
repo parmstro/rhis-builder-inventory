@@ -4,28 +4,28 @@ provisioner:
 
 idm_primary:
   hosts:
-    idm1.{{ global_domain_name }}
+    idm1.{{ basevars_global_domain_name }}
 
 {% if rhis_system_count.idm is defined and rhis_system_count.idm > 1 %}
 idm_replicas:
   hosts:
 {% for num in range(2, rhis_system_count.idm +1) %}
-    idm{{ num }}.{{ global_domain_name }}
+    idm{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% endif %}
 sat_primary:
   hosts:  
 {% for num in range(1, rhis_system_count.satellite + 1) %}
-    satellite{{ num }}.{{ global_domain_name }}
-    # discosatellite{{ num }}.{{ global_domain_name }}
+    satellite{{ num }}.{{ basevars_global_domain_name }}
+    # discosatellite{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% if rhis_system_count.capsule is defined and rhis_system_count.capsule > 0 %}
 sat_capsules:
   hosts:
 {% for num in range(1, rhis_system_count.capsule + 1) %}
-    capsule{{ num }}.{{ global_domain_name }}
+    capsule{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% endif %}
@@ -37,24 +37,24 @@ sat_trusted_hosts:
 platform_installer:
   hosts:
 {% for num in range(1, rhis_system_count.aapcontroller + 1) %}
-    aapcontroller{{ num }}.{{ global_domain_name }}
+    aapcontroller{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 aap_controllers:
   hosts:
 {% for num in range(1, rhis_system_count.aapcontroller + 1) %}
-    aapcontroller{{ num }}.{{ global_domain_name }}
+    aapcontroller{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 # aap_databases:
 #   hosts:
-#     aapdb.{{ global_domain_name }}
+#     aapdb.{{ basevars_global_domain_name }}
 
 {% if rhis_system_count.aaphub is defined and rhis_system_count.aaphub > 0 %}
 aap_hubs:
   hosts:
 {% for num in range(1, rhis_system_count.aaphub + 1) %}
-    aaphub{{ num }}.{{ global_domain_name }}
+    aaphub{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% endif %}
@@ -71,7 +71,7 @@ aap_hosts:
 container_servers:
   hosts:
 {% for num in range(1, rhis_system_count.quadlet + 1) %}
-    quadlet{{ num }}.{{ global_domain_name }}
+    quadlet{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% endif %}
@@ -79,7 +79,7 @@ container_servers:
 quay_servers:
   hosts:
 {% for num in range(1, rhis_system_count.quay + 1) %}
-    quay{{ num }}.{{ global_domain_name }}
+    quay{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% endif %}
@@ -92,16 +92,16 @@ quay_servers:
 # openstack_nodes:
 vmware_vcenter_hosts:
   hosts:
-    vcenter.{{ global_domain_name }}
+    vcenter.{{ basevars_global_domain_name }}
 
 vmware_esx_hosts:
   hosts:
-    esx1.{{ global_domain_name }}
-    esx2.{{ global_domain_name }}
-    esx3.{{ global_domain_name }}
-    esx4.{{ global_domain_name }}
-    esx5.{{ global_domain_name }}
-    esx6.{{ global_domain_name }}
-    esx7.{{ global_domain_name }}
-    esx8.{{ global_domain_name }}
-    esx9.{{ global_domain_name }}
+    esx1.{{ basevars_global_domain_name }}
+    esx2.{{ basevars_global_domain_name }}
+    esx3.{{ basevars_global_domain_name }}
+    esx4.{{ basevars_global_domain_name }}
+    esx5.{{ basevars_global_domain_name }}
+    esx6.{{ basevars_global_domain_name }}
+    esx7.{{ basevars_global_domain_name }}
+    esx8.{{ basevars_global_domain_name }}
+    esx9.{{ basevars_global_domain_name }}

@@ -1,7 +1,13 @@
 ---
+# PATTERN: hostgroup_test_hosts_rhel9 is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts={{ hostgroup_test_hosts_rhel9 }}"
+# The deploy script (deploy_rhel9_test_hosts.sh) assigns it to the generic
+# platform_hosts variable that the create_hosts.yml playbook operates on.
+# Static analysis tools will not detect hostgroup_test_hosts_rhel9 as "used" — expected.
+# See schema/audit_findings.md Scanner Limitation.
 
-hg_test_hosts_rhel9:
-  - fqdn: "hg-x86-64-rhel9-metal1.{{ _global_domain_name }}"
+hostgroup_test_hosts_rhel9:
+  - fqdn: "hg-x86-64-rhel9-metal1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -30,7 +36,7 @@ hg_test_hosts_rhel9:
         mac: "94:c6:91:a3:1b:79"                          # c1s1n4
         ip: "{{ _default_network }}.202"
 
-  - fqdn: "hg-x86-64-rhel9-vm1.{{ _global_domain_name }}"
+  - fqdn: "hg-x86-64-rhel9-vm1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -46,7 +52,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-cis2-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-dev-cis2-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -59,7 +65,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-jboss-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-dev-jboss-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -72,7 +78,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-lamp-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-dev-lamp-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -85,7 +91,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-dev-wordpress-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-dev-wordpress-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -98,7 +104,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-qa-jboss-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-qa-jboss-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -111,7 +117,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-qa-lamp-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-qa-lamp-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -124,7 +130,7 @@ hg_test_hosts_rhel9:
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
 
-  - fqdn: "soe9-qa-wordpress-1.{{ _global_domain_name }}"
+  - fqdn: "soe9-qa-wordpress-1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"

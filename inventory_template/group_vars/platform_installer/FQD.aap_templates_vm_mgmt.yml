@@ -13,21 +13,21 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "{{ _global_domain_name }}/vm"
+      datacenter_folder: "{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       post_quiesce_delay_seconds: 30
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
           snap_name: testjboss2.testsnap
           snap_description: "test base jboss build - delete me"
           quiesce: true
-        - name: testlamp2.{{ _global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
           snap_name: testlamp2.testsnap
           snap_description: "test base LAMP build - delete me"
           quiesce: true
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
           snap_name: testwordpress2.testsnap
           snap_description: "test base WordPress build - delete me"
           quiesce: true
@@ -44,15 +44,15 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
   - name: "VMwarePowerOnVM"
     description: "Power-on test machines"
@@ -66,15 +66,15 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: true
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
   - name: "VMwareRebootGuestOS"
     description: "Reboot test machines"
@@ -88,15 +88,15 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
   - name: "VMwareRemoveAllSnaps"
     description: "Remove all snapshots from test machines"
@@ -110,22 +110,22 @@ aap_job_templates_vm_day_2:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       snapshot_target_remove_all: true
       snapshot_target_remove_children: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
           snap_name: testjboss2.original
           snap_description: "test base jboss build - delete me"
           quiesce: true
-        - name: testlamp2.{{ _global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
           snap_name: testlamp2.original
           snap_description: "test base LAMP build - delete me"
           quiesce: true
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
           snap_name: testwordpress2.original
           snap_description: "test base WordPress build - delete me"
           quiesce: true
@@ -142,15 +142,15 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
   - name: "VMwareRevertSnaps"
     description: "Revert the VM to a previous snapshot"
@@ -164,20 +164,20 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
           snap_name: testjboss2.original
           snap_description: "test base jboss build - delete me"
           quiesce: true
-        - name: testlamp2.{{ _global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
           snap_name: testlamp2.original
           snap_description: "test base LAMP build - delete me"
           quiesce: true
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
           snap_name: testwordpress.original
           snap_description: "test base WordPress build - delete me"
           quiesce: true
@@ -194,15 +194,15 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: true
       power_action_force: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
   - name: "VMwareSuspendVM"
     description: "Suspend test machine vm - use with caution"
@@ -216,14 +216,14 @@ aap_job_templates_vm_day_2:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
-      datacenter_folder: "/{{ _global_domain_name }}/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: true
       power_action_force: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
 ...

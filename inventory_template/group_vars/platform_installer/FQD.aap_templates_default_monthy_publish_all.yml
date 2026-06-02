@@ -13,7 +13,7 @@ aap_job_templates_default_monthly_publish:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       force_publish_all: true
       skip_publish_all: false

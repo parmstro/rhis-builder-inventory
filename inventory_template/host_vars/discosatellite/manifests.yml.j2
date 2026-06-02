@@ -28,7 +28,7 @@
 
 redhat_manifests:
     - name: "{{ ansible_fqdn }}"
-      {% endraw %}source: "discosatellite1.{{ global_domain_name }}_manifest.zip"
+      {% endraw %}source: "discosatellite1.{{ basevars_global_domain_name }}_manifest.zip"
       {% raw %}path: "/root/bootstrap_manifest.zip"
       generate: false
       organization: "{{ satellite_organization }}"
@@ -53,7 +53,7 @@ redhat_manifests:
 # we want to eventually support searching by contract number + SKU
 
 # example of subs dict
-# {% endraw %}{{ global_domain_name }}_subs_vault:
+# {% endraw %}{{ basevars_global_domain_name }}_subs_vault:
 #   - name: "Base"
 #     pool_id: "2c946de78e8076d6018e85b1e0b375e8"                                                  # notsecret
 #     pool_state: present

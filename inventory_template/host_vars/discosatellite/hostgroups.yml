@@ -14,7 +14,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 10.1"
@@ -46,7 +46,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 10.1"
@@ -79,7 +79,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 10.1"
@@ -129,7 +129,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 10.1"
@@ -160,7 +160,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 10.1"
@@ -191,7 +191,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -222,7 +222,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -257,7 +257,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -288,7 +288,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -317,7 +317,7 @@ satellite_hostgroups:
     activation_keys: "satellite_capsule"
     openscap_capsule: "{{ satellite_fqdn }}"
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -349,7 +349,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -573,7 +573,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 8.10"
@@ -605,7 +605,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 8.10"
@@ -784,7 +784,7 @@ satellite_hostgroups:
     content_view: "CentOS79"
     activation_keys: "convert_CentOS2RHEL7"
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "CentOS79"
@@ -814,7 +814,7 @@ satellite_hostgroups:
     content_view: "OEL79"
     activation_keys: "convert_OEL2RHEL7"
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     media: "OEL79"

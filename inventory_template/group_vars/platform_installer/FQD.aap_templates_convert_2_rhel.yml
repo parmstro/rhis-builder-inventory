@@ -13,7 +13,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       host_build_comment: "Created by rhis-builder-aap for convert2RHEL demo"
       deploy: true
@@ -24,7 +24,7 @@ aap_job_templates_convert_2_rhel:
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       platform_hosts:
-        - fqdn: "centosdemo1.{{ _global_domain_name }}"
+        - fqdn: "centosdemo1.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -34,7 +34,7 @@ aap_job_templates_convert_2_rhel:
           content_view: "CentOS79"
           content_source: "{{ groups['sat_primary'][0] }}"
           domain: "{{ satellite_domain }}"
-          subnet: "{{ _global_domain_name }}"
+          subnet: "{{ _runtime_global_domain_name }}"
           realm: "{{ satellite_domain | upper }}"
           architecture: "x86_64"
           operatingsystem: "CentOS79"
@@ -45,7 +45,7 @@ aap_job_templates_convert_2_rhel:
           compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
-        - fqdn: "centosdemo2.{{ _global_domain_name }}"
+        - fqdn: "centosdemo2.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -55,7 +55,7 @@ aap_job_templates_convert_2_rhel:
           content_view: "CentOS79"
           content_source: "{{ groups['sat_primary'][0] }}"
           domain: "{{ satellite_domain }}"
-          subnet: "{{ _global_domain_name }}"
+          subnet: "{{ _runtime_global_domain_name }}"
           realm: "{{ satellite_domain | upper }}"
           architecture: "x86_64"
           operatingsystem: "CentOS79"
@@ -66,7 +66,7 @@ aap_job_templates_convert_2_rhel:
           compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
-        - fqdn: "oeldemo1.{{ _global_domain_name }}"
+        - fqdn: "oeldemo1.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -76,7 +76,7 @@ aap_job_templates_convert_2_rhel:
           content_view: "CentOS79"
           content_source: "{{ groups['sat_primary'][0] }}"
           domain: "{{ satellite_domain }}"
-          subnet: "{{ _global_domain_name }}"
+          subnet: "{{ _runtime_global_domain_name }}"
           realm: "{{ satellite_domain | upper }}"
           architecture: "x86_64"
           operatingsystem: "OracleLinux 7.9"
@@ -87,7 +87,7 @@ aap_job_templates_convert_2_rhel:
           compute_profile: "SOE_Medium"
           mac: "00:50:56:ff:ff:ff"
           comment: "c2r_demo_host deleteme"
-        - fqdn: "oeldemo2.{{ _global_domain_name }}"
+        - fqdn: "oeldemo2.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -97,7 +97,7 @@ aap_job_templates_convert_2_rhel:
           content_view: "CentOS79"
           content_source: "{{ groups['sat_primary'][0] }}"
           domain: "{{ satellite_domain }}"
-          subnet: "{{ _global_domain_name }}"
+          subnet: "{{ _runtime_global_domain_name }}"
           realm: "{{ satellite_domain | upper }}"
           architecture: "x86_64"
           operatingsystem: "OracleLinux 7.9"
@@ -121,8 +121,8 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
-      - "rhis_{{ _global_domain_name }}_rhsm"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_rhsm"
     variables:
       role_name: "c2r_analyze"
       analysis_convert2rhel_preconv_opts: "--els"
@@ -144,7 +144,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_report_export"
       report_directory: "/tmp/c2r_reports/"
@@ -161,8 +161,8 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
-      - "rhis_{{ _global_domain_name }}_rhsm"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_rhsm"
     variables:
       role_name: "c2r_convert"
       common_convert2rhel_repo_satellite: "true"
@@ -184,7 +184,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_preconvert_remediate"
 
@@ -200,7 +200,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_post_remediate"
 
@@ -216,7 +216,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_post_validate"
       validate_convert2rhel_target_release: "7.9"
@@ -233,7 +233,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_prereq_cdn"
 
@@ -249,7 +249,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_prereq_sat"
       centos_host_pre_convert_sat_activationkey: "convertCentOS2RHEL7"
@@ -269,7 +269,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       role_name: "c2r_snapshot_cleanup"
 
@@ -300,7 +300,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       role_name: "c2r_snapshot_prepare"
 
@@ -316,7 +316,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       role_name: "c2r_snapshot_remove"
 
@@ -332,7 +332,7 @@ aap_job_templates_convert_2_rhel:
     credentials:
       - "default_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       role_name: "c2r_snapshot_revert"
 

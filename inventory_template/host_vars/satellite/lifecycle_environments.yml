@@ -14,11 +14,17 @@ lifecycle_environments:
     organization: "{{ satellite_organization }}"
     prior: "Development"
 
+  - name: "Staging"
+    label: "Staging"
+    description: "Content Qualification of SOEs"
+    organization: "{{ satellite_organization }}"
+    prior: "Qualification"
+
   - name: "Production"
     label: "Production"
     description: "Production Server Approved Content"
     organization: "{{ satellite_organization }}"
-    prior: "Qualification"
+    prior: "Staging"
 
   - name: "Retired"
     label: "Retired"

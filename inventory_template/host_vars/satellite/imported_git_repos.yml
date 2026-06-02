@@ -102,43 +102,43 @@ git_repos:
     clone: true
     force: true
 # RHEL7
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cui.git"
-    dest: "/etc/ansible/roles/ansible-role-rhel7-cui"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-pci-dss.git"
-    dest: "/etc/ansible/roles/ansible-role-rhel7-pci-dss"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-ospp.git"
-    dest: "/etc/ansible/roles/ansible-role-rhel7-ospp"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cjis.git"
-    dest: "/etc/ansible/roles/ansible-role-rhel7-cjis"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cis.git"
-    dest: "/etc/ansible/roles/ansible-role-rhel7-cis"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-stig.git"
-    dest: "/etc/ansible/roles/ansible-role-rhel7-stig"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_minimal.git"
-    dest: "/etc/ansible/roles/ansible-role-anssi_nt28_minimal"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_intermediary.git"
-    dest: "/etc/ansible/roles/ansible-role-anssi_nt28_intermediary"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_high.git"
-    dest: "/etc/ansible/roles/ansible-role-anssi_nt28_high"
-    clone: true
-    force: true
-  - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_enhanced.git"
-    dest: "/etc/ansible/roles/ansible-role-anssi_nt28_enhanced"
-    clone: true
-    force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cui.git"
+  #   dest: "/etc/ansible/roles/ansible-role-rhel7-cui"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-pci-dss.git"
+  #   dest: "/etc/ansible/roles/ansible-role-rhel7-pci-dss"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-ospp.git"
+  #   dest: "/etc/ansible/roles/ansible-role-rhel7-ospp"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cjis.git"
+  #   dest: "/etc/ansible/roles/ansible-role-rhel7-cjis"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cis.git"
+  #   dest: "/etc/ansible/roles/ansible-role-rhel7-cis"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-stig.git"
+  #   dest: "/etc/ansible/roles/ansible-role-rhel7-stig"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_minimal.git"
+  #   dest: "/etc/ansible/roles/ansible-role-anssi_nt28_minimal"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_intermediary.git"
+  #   dest: "/etc/ansible/roles/ansible-role-anssi_nt28_intermediary"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_high.git"
+  #   dest: "/etc/ansible/roles/ansible-role-anssi_nt28_high"
+  #   clone: true
+  #   force: true
+  # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-anssi_nt28_enhanced.git"
+  #   dest: "/etc/ansible/roles/ansible-role-anssi_nt28_enhanced"
+  #   clone: true
+  #   force: true

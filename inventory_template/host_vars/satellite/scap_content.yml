@@ -10,12 +10,12 @@ scap_contents:
       - "{{ satellite_location }}"
     organizations:
       - "{{ satellite_organization }}"
-  - title: "RHEL 7 SCAP content"
-    scap_file: "ssg-rhel7-ds.xml"
-    locations:
-      - "{{ satellite_location }}"
-    organizations:
-      - "{{ satellite_organization }}"
+  # - title: "RHEL 7 SCAP content"
+  #   scap_file: "ssg-rhel7-ds.xml"
+  #   locations:
+  #     - "{{ satellite_location }}"
+  #   organizations:
+  #     - "{{ satellite_organization }}"
   - title: "RHEL 9 SCAP content"
     scap_file: "ssg-rhel9-ds.xml"
     locations:
@@ -30,12 +30,12 @@ scap_tailoring_files:
       - "{{ satellite_location }}"
     organizations:
       - "{{ satellite_organization }}"
-  - name: "RHEL 7 DS 2022 Tailoring v3.0"
-    scap_file: "ssg-rhel7-ds-tailoring.xml"
-    locations:
-      - "{{ satellite_location }}"
-    organizations:
-      - "{{ satellite_organization }}"
+  # - name: "RHEL 7 DS 2022 Tailoring v3.0"
+  #   scap_file: "ssg-rhel7-ds-tailoring.xml"
+  #   locations:
+  #     - "{{ satellite_location }}"
+  #   organizations:
+  #     - "{{ satellite_organization }}"
   - name: "RHEL 9 DS 2022 Tailoring v3.0"
     scap_file: "ssg-rhel9-ds-tailoring.xml"
     locations:

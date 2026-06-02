@@ -16,7 +16,7 @@ there is no representation or claim that the C2S profile will
 ensure a system is in compliance or consistency with the CIS
 baseline.
 
-This policy has been modified to meet standards approved by {{ global_domain_name }} domain security authority. Please make inquiries to security@{{ global_domain_name }}
+This policy has been modified to meet standards approved by {{ basevars_global_domain_name }} domain security authority. Please make inquiries to security@{{ basevars_global_domain_name }}
 </xccdf:description>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_account_disable_post_pw_expiration" selected="true"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_accounts_maximum_age_login_defs" selected="true"/>
@@ -408,7 +408,7 @@ This policy has been modified to meet standards approved by {{ global_domain_nam
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_chronyd_run_as_chrony_user" selected="true"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_chronyd_specify_remote_server" selected="true"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_chronyd_server_directive" selected="true"/>
-    <xccdf:set-value idref="xccdf_org.ssgproject.content_value_var_multiple_time_servers">time.{{ global_domain_name }},time2.{{ global_domain_name }},time.nrc.ca,time.chu.nrc.ca</xccdf:set-value>
+    <xccdf:set-value idref="xccdf_org.ssgproject.content_value_var_multiple_time_servers">time.{{ basevars_global_domain_name }},time2.{{ basevars_global_domain_name }},time.nrc.ca,time.chu.nrc.ca</xccdf:set-value>
     <xccdf:set-value idref="xccdf_org.ssgproject.content_value_login_banner_text">^[\s\n]+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*(?:[\n]+|(?:\\n)+)[\s\n]+The[\s\n]+credentials[\s\n]+you[\s\n]+used[\s\n]+to[\s\n]+access[\s\n]+this[\s\n]+information[\s\n]+system[\s\n]+\(IS\)[\s\n]+have(?:[\n]+|(?:\\n)+)[\s\n]+been[\s\n]+authenticated\.[\s\n]+By[\s\n]+remaining[\s\n]+connected,[\s\n]+you[\s\n]+declare[\s\n]+that[\s\n]+you[\s\n]+are(?:[\n]+|(?:\\n)+)[\s\n]+the[\s\n]+authorized[\s\n]+user[\s\n]+of[\s\n]+these[\s\n]+credentials[\s\n]+and[\s\n]+agree[\s\n]+to[\s\n]+the[\s\n]+terms[\s\n]+of(?:[\n]+|(?:\\n)+)[\s\n]+use[\s\n]+of[\s\n]+this[\s\n]+IS\.(?:[\n]+|(?:\\n)+)(?:[\n]+|(?:\\n)+)[\s\n]+All[\s\n]+activities[\s\n]+performed[\s\n]+on[\s\n]+this[\s\n]+device[\s\n]+are[\s\n]+logged[\s\n]+and[\s\n]+monitored\.(?:[\n]+|(?:\\n)+)(?:[\n]+|(?:\\n)+)[\s\n]+Unauthorized[\s\n]+attempts[\s\n]+to[\s\n]+elevate[\s\n]+privilege[\s\n]+or[\s\n]+attempts[\s\n]+to[\s\n]+circumvent(?:[\n]+|(?:\\n)+)[\s\n]+system[\s\n]+security[\s\n]+will[\s\n]+result[\s\n]+in[\s\n]+civil[\s\n]+and/or[\s\n]+criminal[\s\n]+penalties\.(?:[\n]+|(?:\\n)+)[\s\n]+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*(?:[\n]+|(?:\\n)+)$</xccdf:set-value>
     <xccdf:refine-value idref="xccdf_org.ssgproject.content_value_var_selinux_state" selector="enforcing"/>
     <xccdf:refine-value idref="xccdf_org.ssgproject.content_value_var_selinux_policy_name" selector="targeted"/>
@@ -434,7 +434,7 @@ Linux 7 Benchmark™, v3.1.1, released 05-21-2021.
 
 This profile includes Center for Internet Security®
 Red Hat Enterprise Linux 7 CIS Benchmarks™ content.
-This policy has been modified to meet standards approved by {{ global_domain_name }} domain security authority. Please make inquiries to security@{{ global_domain_name }} </xccdf:description>
+This policy has been modified to meet standards approved by {{ basevars_global_domain_name }} domain security authority. Please make inquiries to security@{{ basevars_global_domain_name }} </xccdf:description>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_account_disable_post_pw_expiration" selected="true"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_account_unique_id" selected="true"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_account_unique_name" selected="true"/>
@@ -874,7 +874,7 @@ This policy has been modified to meet standards approved by {{ global_domain_nam
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_file_permissions_ungroupowned" selected="false"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_no_files_unowned_by_user" selected="false"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_selinux_confinement_of_daemons" selected="false"/>
-    <xccdf:set-value idref="xccdf_org.ssgproject.content_value_var_multiple_time_servers">time.{{ global_domain_name }},time2.{{ global_domain_name }},time.nrc.ca,time.chu.nrc.ca</xccdf:set-value>
+    <xccdf:set-value idref="xccdf_org.ssgproject.content_value_var_multiple_time_servers">time.{{ basevars_global_domain_name }},time2.{{ basevars_global_domain_name }},time.nrc.ca,time.chu.nrc.ca</xccdf:set-value>
     <xccdf:set-value idref="xccdf_org.ssgproject.content_value_login_banner_text">^[\s\n]+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*(?:[\n]+|(?:\\n)+)[\s\n]+The[\s\n]+credentials[\s\n]+you[\s\n]+used[\s\n]+to[\s\n]+access[\s\n]+this[\s\n]+information[\s\n]+system[\s\n]+\(IS\)[\s\n]+have(?:[\n]+|(?:\\n)+)[\s\n]+been[\s\n]+authenticated\.[\s\n]+By[\s\n]+remaining[\s\n]+connected,[\s\n]+you[\s\n]+declare[\s\n]+that[\s\n]+you[\s\n]+are(?:[\n]+|(?:\\n)+)[\s\n]+the[\s\n]+authorized[\s\n]+user[\s\n]+of[\s\n]+these[\s\n]+credentials[\s\n]+and[\s\n]+agree[\s\n]+to[\s\n]+the[\s\n]+terms[\s\n]+of(?:[\n]+|(?:\\n)+)[\s\n]+use[\s\n]+of[\s\n]+this[\s\n]+IS\.(?:[\n]+|(?:\\n)+)(?:[\n]+|(?:\\n)+)[\s\n]+All[\s\n]+activities[\s\n]+performed[\s\n]+on[\s\n]+this[\s\n]+device[\s\n]+are[\s\n]+logged[\s\n]+and[\s\n]+monitored\.(?:[\n]+|(?:\\n)+)(?:[\n]+|(?:\\n)+)[\s\n]+Unauthorized[\s\n]+attempts[\s\n]+to[\s\n]+elevate[\s\n]+privilege[\s\n]+or[\s\n]+attempts[\s\n]+to[\s\n]+circumvent(?:[\n]+|(?:\\n)+)[\s\n]+system[\s\n]+security[\s\n]+will[\s\n]+result[\s\n]+in[\s\n]+civil[\s\n]+and/or[\s\n]+criminal[\s\n]+penalties\.(?:[\n]+|(?:\\n)+)[\s\n]+\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*(?:[\n]+|(?:\\n)+)$</xccdf:set-value>
     <xccdf:refine-value idref="xccdf_org.ssgproject.content_value_var_accounts_user_umask" selector="027"/>
     <xccdf:refine-value idref="xccdf_org.ssgproject.content_value_var_accounts_tmout" selector="15_min"/>
@@ -935,7 +935,7 @@ Linux 7 Benchmark™, v3.1.1, released 05-21-2021.
 This profile includes Center for Internet Security®
 Red Hat Enterprise Linux 7 CIS Benchmarks™ content.
 
-This policy has been modified to meet standards approved by {{ global_domain_name }} domain security authority. Please make inquiries to security@{{ global_domain_name }}
+This policy has been modified to meet standards approved by {{ basevars_global_domain_name }} domain security authority. Please make inquiries to security@{{ basevars_global_domain_name }}
 </xccdf:description>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_account_disable_post_pw_expiration" selected="true"/>
     <xccdf:select idref="xccdf_org.ssgproject.content_rule_account_unique_id" selected="true"/>

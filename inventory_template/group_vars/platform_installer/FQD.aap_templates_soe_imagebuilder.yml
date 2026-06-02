@@ -13,13 +13,13 @@ aap_job_templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       satellite_organization: "{{ satellite_organization }}"
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       host:
-        fqdn: "imagebuilder9.{{ _global_domain_name }}"
+        fqdn: "imagebuilder9.{{ _runtime_global_domain_name }}"
         organization: "Default_Organization"
 
 
@@ -35,7 +35,7 @@ aap_job_templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       host_build_comment: "Created by rhis-builder"
       deploy: true
@@ -46,7 +46,7 @@ aap_job_templates_soe_imagebuilder:
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       platform_hosts:
-        - fqdn: "imagebuilder9.{{ _global_domain_name }}"
+        - fqdn: "imagebuilder9.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -68,9 +68,9 @@ aap_job_templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
-      fqdn: "imagebuilder9.{{ _global_domain_name }}"
+      fqdn: "imagebuilder9.{{ _runtime_global_domain_name }}"
 
   - name: "config_imagebuilder_build"
     description: "Determine if imagebuilder system exists"
@@ -84,9 +84,9 @@ aap_job_templates_soe_imagebuilder:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
-      fqdn: "imagebuilder9.{{ _global_domain_name }}"
+      fqdn: "imagebuilder9.{{ _runtime_global_domain_name }}"
       osbuild_config_dir: "/etc/osbuild-composer/repositories"
       osbuild_toml_dir: "/etc/osbuild-composer/toml"
       repo_file: "/etc/yum.repos.d/redhat.repo"

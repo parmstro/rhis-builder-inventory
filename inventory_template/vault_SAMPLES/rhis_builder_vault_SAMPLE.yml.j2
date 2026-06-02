@@ -18,7 +18,7 @@
 # we have some very long strings
 # yamllint disable rule:line-length
 
-{% endraw %}# Default user names for the {{ global_domain_name }} environment.
+{% endraw %}# Default user names for the {{ basevars_global_domain_name }} environment.
 {% raw %}# The rhis_builder_default_user variable is used primarily from the provisioner
 # to execute on the platform systems while we are bringing the RHIS environment up
 # Is a fake random password that we use to represent the real password "eyJhbGciOiJIUz"
@@ -69,7 +69,7 @@ cdn_activation_key_vault: "{{ default_activation_key_vault }}"                  
 # We are currently trying to reduce the number of ssh keys pairs within the projects
 # These tend to be a security risk if left around.
 # A cleanup operation will be defined and implemented
-{% endraw %}default_ssh_pub_key_vault: "ssh-rsa AAAA....a.long.string.....YgY7w== ansiblerunner@provisioner.{{ global_domain_name }}"  # noqa yaml[line-length]      # notsecret
+{% endraw %}default_ssh_pub_key_vault: "ssh-rsa AAAA....a.long.string.....YgY7w== ansiblerunner@provisioner.{{ basevars_global_domain_name }}"  # noqa yaml[line-length]      # notsecret
 {% raw %}ssh_pub_key_vault: "{{ default_ssh_pub_key_vault }}"                                               # notsecret
 
 
@@ -127,7 +127,7 @@ azure1_idp_app_id_vault: "idp_auth_app_id_guid_goes_here" # same as client id
 # Please see this KB article for the premissions need for a service account user https://access.redhat.com/solutions/1339483
 vmware1_vcenter_username_vault: "your_vcenter_users_username"                                     # notsecret
 vmware1_vcenter_password_vault: "your_vcenter_users_password"                                     # notsecret
-vmware1_datacenter_name_vault: "{{ _global_domain_name }}"  # This is our standard. Put in your datacenter name for brownfield.
+vmware1_datacenter_name_vault: "{{ _runtime_global_domain_name }}"  # This is our standard. Put in your datacenter name for brownfield.
 vmware1_vcenter_hostname_vault: "{{ groups['vmware_vcenter_hosts'][0] }}"  # We put this in the inventory
 
 ####################################################################
@@ -174,7 +174,7 @@ ipa_keytab_dn_vault: "cn=Directory Manager"                                     
 
 # I am updating FAM/redhat.satellite to support searching by contract and SKU
 
-{% endraw %}cdn_username_vault: "user@{{ global_domain_name }}"                                    # notsecret
+{% endraw %}cdn_username_vault: "user@{{ basevars_global_domain_name }}"                                    # notsecret
 {% raw %}cdn_password_vault: "eyJhbGciOiJIUz"                                                               # notsecret
 cdn_account_number_vault: "5258694"                                                                # notsecret
 cdn_organization_id_vault: "an_organization_number_from_the_CDN"                                   # notsecret
@@ -220,7 +220,7 @@ satellite_virtwho_password_vault: "{{ default_environment_password_vault }}"    
 
 # satellite email secrets
 # We are using a basic gmail app password method here
-{% endraw %}satellite_smtp_user_name_vault: "satellite@{{ global_domain_name }}"                                             # notsecret
+{% endraw %}satellite_smtp_user_name_vault: "satellite@{{ basevars_global_domain_name }}"                                             # notsecret
 {% raw %}satellite_smtp_password_vault: "eyJhbGciOiJSUzUxMiJ9"                                              # notsecret
 satellite_smtp_authentication: "login"                                                             # notsecret
 
@@ -232,7 +232,7 @@ default_provisioning_root_password_vault: "{{ default_environment_password_vault
 # Phase 4 - AAP Secrets
 ############################################
 
-{% endraw %}ansible_github_username_vault: "ansiblerunner@{{ global_domain_name }}"                            # notsecret
+{% endraw %}ansible_github_username_vault: "ansiblerunner@{{ basevars_global_domain_name }}"                            # notsecret
 {% raw %}ansible_github_gpat_vault: "github_pat_awer.......a.long.string........42aTtUaE"                   # notsecret
 
 # Note we have separate variables avaialble here
@@ -280,7 +280,7 @@ satellite_ansible_callback_config_key_vault: "203520146d360cdeb39436e7c76aa22e" 
 
 # RHISPost Secrets
 # Used to pull and push to github as necessary for demo projects
-{% endraw %}github_demo_username_vault: "user@{{ global_domain_name }}"                               # notsecret
+{% endraw %}github_demo_username_vault: "user@{{ basevars_global_domain_name }}"                               # notsecret
 {% raw %}github_demo_gpat_vault: "ghp_withalongrandomstringof$tU!!"                             # notsecret
 
 aap_idm_machine_username_vault: "{{ default_admin_username_vault }}"                               # notsecret

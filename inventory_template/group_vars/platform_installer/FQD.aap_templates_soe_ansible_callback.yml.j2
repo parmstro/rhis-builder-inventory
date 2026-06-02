@@ -14,7 +14,7 @@ aap_job_templates_soe_ansible_callback:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_idm"
+      - "rhis_{{ _runtime_global_domain_name }}_idm"
     variables:
       sysmessage_type: "base"
       time_timedaemon: "chrony"
@@ -39,7 +39,7 @@ aap_job_templates_soe_ansible_callback:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_idm"
+      - "rhis_{{ _runtime_global_domain_name }}_idm"
     variables:
       sysmessage_type: "base"
       time_timedaemon: "chrony"

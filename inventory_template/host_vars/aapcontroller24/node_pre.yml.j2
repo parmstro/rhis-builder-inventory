@@ -3,11 +3,10 @@
 #   - "RPM" deployment
 
 # time services are managed at deployment time in rhis
-# Provide time servers
-# time_servers:
-#   - time1.{{ global_domain_name }}
-#   - time2.{{ global_domain_name }}
-#   - time3.{{ global_domain_name }}
+# Provide time servers in inventory_basevars.yml using the rhis_time_servers list:
+# rhis_time_servers:
+#   - time1.{{ basevars_global_domain_name }}
+#   - time2.{{ basevars_global_domain_name }}
 {% raw %}
 satellite_username: "{{ satellite_username_vault }}"
 satellite_password: "{{ satellite_password_vault }}"

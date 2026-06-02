@@ -13,7 +13,7 @@ content_exports:
   #   format: "importable"
   #   # ca_path: # we will use the ipa ca for rhis idm integrated satellites
   #   chunk_size_gb: "2"  # format *must* be 'importable', 'syncable' format exports cannot be chunked (they are rpms)
-  #   destination_server: "satellite_disconnected.{{ _global_domain_name }}"
+  #   destination_server: "satellite_disconnected.{{ _runtime_global_domain_name }}"
   #   fail_on_missing_content: true
   #   incremental: false
 
@@ -27,7 +27,7 @@ content_exports:
     repository: "EPEL8"   # required
     # ca_path: # we will use the ipa ca for rhis idm integrated satellites
     chunk_size_gb: "2"  # format *must* be 'importable', 'syncable' format exports cannot be chunked (they are rpms)
-    {% endraw %}destination_server: "discosatellite1.{{ global_domain_name }}"
+    {% endraw %}destination_server: "discosatellite1.{{ basevars_global_domain_name }}"
     {% raw %}fail_on_missing_content: true
     incremental: false
   # - name: "Content_View_Version"
@@ -38,6 +38,6 @@ content_exports:
   #   content_view_version: "20.0"
   #   # ca_path: # we will use the ipa ca for rhis idm integrated satellites
   #   chunk_size_gb: "2"  # format *must* be 'importable', 'syncable' format exports cannot be chunked (they are rpms)
-  #   {% endraw %}destination_server: "satellite_disconnected.{{ global_domain_name }}"
+  #   {% endraw %}destination_server: "satellite_disconnected.{{ basevars_global_domain_name }}"
   #   fail_on_missing_content: true
   #   incremental: false

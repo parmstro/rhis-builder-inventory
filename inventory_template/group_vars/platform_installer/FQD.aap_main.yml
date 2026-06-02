@@ -16,7 +16,7 @@ aap_platform_username: "{{ aap_admin_username_vault }}"
 aap_platform_password: "{{ aap_admin_password_vault }}"
 
 # AAP Authentication
-aap_ldap_domain_map: "{{ _global_domain_name.split('.') | map('regex_replace', '^(.*)$', 'dc=\\1') | join(',') }}"
+aap_ldap_domain_map: "{{ _runtime_global_domain_name.split('.') | map('regex_replace', '^(.*)$', 'dc=\\1') | join(',') }}"
 aap_admin_username: "{{ aap_admin_username_vault }}"
 aap_admin_password: "{{ aap_admin_password_vault }}"
 

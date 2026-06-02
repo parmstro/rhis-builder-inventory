@@ -1,7 +1,7 @@
 ---
 satellite_subnets:
-  - name: "{{ _global_domain_name }}"
-    description: "{{ _global_domain_name }} network"
+  - name: "{{ _runtime_global_domain_name }}"
+    description: "{{ _runtime_global_domain_name }} network"
     network_type: "IPv4"
     network: "{{ _default_network }}.0"
     prefix: "{{ _default_network_prefix }}"
@@ -31,7 +31,7 @@ satellite_subnets:
       - "{{ satellite_organization }}"
 
   - name: "bond_subnet"
-    description: "{{ _global_domain_name }} bond network"
+    description: "{{ _runtime_global_domain_name }} bond network"
     network_type: "IPv4"
     network: "{{ _default_bond_network }}.0"
     prefix: "{{ _default_bond_network_prefix }}"
@@ -49,8 +49,8 @@ satellite_subnets:
     organizations:
       - "{{ satellite_organization }}"
 
-  # - name: "azure.{{ _global_domain_name }}"
-  #   description: "azure.{{ _global_domain_name }} network"
+  # - name: "azure.{{ _runtime_global_domain_name }}"
+  #   description: "azure.{{ _runtime_global_domain_name }} network"
   #   network_type: "IPv4"
   #   network: "10.10.0.0"
   #   prefix: "22"

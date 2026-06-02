@@ -13,7 +13,7 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       force_publish_all: false
       skip_publish_all: false
@@ -59,7 +59,7 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       force_promote_all: true
       enable_debug_logging: false
@@ -87,7 +87,7 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
       enable_debug_logging: false
@@ -100,7 +100,7 @@ aap_job_templates_soe_dev:
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       platform_hosts:
-        - fqdn: "testjboss2.{{ _global_domain_name }}"
+        - fqdn: "testjboss2.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -114,7 +114,7 @@ aap_job_templates_soe_dev:
           pxe_loader: "Grub2 UEFI"
           mac: "00:50:56:ff:ff:ff"
           comment: "rhis_test_host deleteme"
-        - fqdn: "testlamp2.{{ _global_domain_name }}"
+        - fqdn: "testlamp2.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -128,7 +128,7 @@ aap_job_templates_soe_dev:
           pxe_loader: "Grub2 UEFI"
           mac: "00:50:56:ff:ff:ff"
           comment: "rhis_test_host deleteme"
-        - fqdn: "testwordpress2.{{ _global_domain_name }}"
+        - fqdn: "testwordpress2.{{ _runtime_global_domain_name }}"
           delete_host: false
           organization: "{{ satellite_organization }}"
           location: "{{ satellite_location }}"
@@ -155,20 +155,20 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
           snap_name: testjboss2.original
           snap_description: "test base jboss build - delete me"
           quiesce: true
-        - name: testlamp2.{{ _global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
           snap_name: testlamp2.original
           snap_description: "test base LAMP build - delete me"
           quiesce: true
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
           snap_name: testwordpress2.original
           snap_description: "test base WordPress build - delete me"
           quiesce: true
@@ -321,7 +321,7 @@ aap_job_templates_soe_dev:
     credentials:
       - idm_machine
       - default_vault
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       force_promote_all: true
       enable_debug_logging: false
@@ -349,20 +349,20 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
           snap_name: testjboss2.original
           snap_description: "test base jboss build - delete me"
           quiesce: true
-        - name: testlamp2.{{ _global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
           snap_name: testlamp2.original
           snap_description: "test base LAMP build - delete me"
           quiesce: true
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
           snap_name: testwordpress2.original
           snap_description: "test base WordPress build - delete me"
           quiesce: true
@@ -379,15 +379,15 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_vmware1"
+      - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       enable_debug_logging: false
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
   - name: "Dev8SDeleteTestServers"
     description: "After approval, delete JBoss, LAMP and Wordpress test machines in Dev"
@@ -401,15 +401,15 @@ aap_job_templates_soe_dev:
     credentials:
       - "idm_machine"
       - "default_vault"
-      - "rhis_{{ _global_domain_name }}_satellite"
+      - "rhis_{{ _runtime_global_domain_name }}_satellite"
     variables:
       enable_debug_logging: false
       satellite_organization: "{{ satellite_organization }}"
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       host_list:
-        - name: testjboss2.{{ _global_domain_name }}
-        - name: testlamp2.{{ _global_domain_name }}
-        - name: testwordpress2.{{ _global_domain_name }}
+        - name: testjboss2.{{ _runtime_global_domain_name }}
+        - name: testlamp2.{{ _runtime_global_domain_name }}
+        - name: testwordpress2.{{ _runtime_global_domain_name }}
 
 ...

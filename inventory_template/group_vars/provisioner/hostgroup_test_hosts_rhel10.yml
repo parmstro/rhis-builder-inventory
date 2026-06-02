@@ -1,8 +1,15 @@
 ---
 # Tested 2025-11-16 - Success
 
-hg_test_hosts_rhel10:
-  - fqdn: "hg-x86-64-rhel10-metal1.{{ _global_domain_name }}"
+# PATTERN: hostgroup_test_hosts_rhel10 is a payload variable consumed via extra-vars dispatch:
+#   --extra-vars "platform_hosts={{ hostgroup_test_hosts_rhel10 }}"
+# The deploy script (deploy_rhel10_test_hosts.sh) assigns it to the generic
+# platform_hosts variable that the create_hosts.yml playbook operates on.
+# Static analysis tools will not detect hostgroup_test_hosts_rhel10 as "used" — expected.
+# See schema/audit_findings.md Scanner Limitation.
+
+hostgroup_test_hosts_rhel10:
+  - fqdn: "hg-x86-64-rhel10-metal1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
@@ -31,7 +38,7 @@ hg_test_hosts_rhel10:
         mac: "94:c6:91:a3:1d:fb"                          # c1s1n5
         ip: "{{ _default_network }}.203"
 
-  - fqdn: "hg-x86-64-rhel10-vm1.{{ _global_domain_name }}"
+  - fqdn: "hg-x86-64-rhel10-vm1.{{ _runtime_global_domain_name }}"
     delete_host: false
     organization: "{{ satellite_organization }}"
     location: "{{ satellite_location }}"
