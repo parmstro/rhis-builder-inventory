@@ -11,7 +11,7 @@ virtwho_configs:
   - foreman_virt_who_configure_config:
       name: "VMware"
       hypervisor_type: "esx"
-      hypervisor_server: "vcenter.{{ _global_domain_name }}"
+      hypervisor_server: "{{ groups['vmware_vcenter_hosts'][0] }}"
       hypervisor_username: "{{ vcenter_virtwho_username }}"
       hypervisor_password: "{{ vcenter_virtwho_password }}"
       hypervisor_id: "hostname"

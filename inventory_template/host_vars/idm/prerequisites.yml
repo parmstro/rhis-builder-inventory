@@ -10,12 +10,10 @@ idm_repository_ids:
   - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-supplementary-rpms"
   - "satellite-client-6-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
 
-# TODO: Change this to handle a list instead
-# NOTE: existing configurations will need to move to list when this changes.
-
-timeserver1: "0.rhel.pool.ntp.org"
-timeserver2: "1.rhel.pool.ntp.org"
-timeserver3: "2.rhel.pool.ntp.org"
+rhis_time_servers:
+  - "0.rhel.pool.ntp.org"
+  - "1.rhel.pool.ntp.org"
+  - "2.rhel.pool.ntp.org"
 
 idm_pre_dns_resolvers:  # e.g. replace with your own resolvers
   - 8.8.8.8
@@ -32,14 +30,14 @@ ipa_firewalld_services:
   - freeipa-trust
 
 ipa_required_umask: "0022"
-ipa_crypto_policy: "DeFaULt"
-# ipa_crypto_policy: "FuturE"
+ipa_crypto_policy: "DEFAULT"
+# ipa_crypto_policy: "FIPS"
 
 # add any other hosts that you need to resolve
 # before IdM DNS comes up in your network here
 # These are simply test values
 etc_hosts_list:
   - ip: "{{ _default_network }}.13"
-    fqdn: "provisioner.{{ _global_domain_name }}"
+    fqdn: "provisioner.{{ _runtime_global_domain_name }}"
   - ip: "{{ _default_network }}.12"
-    fqdn: "satellite.{{ _global_domain_name }}"
+    fqdn: "{{ groups['sat_primary'][0] }}"

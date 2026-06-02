@@ -32,6 +32,6 @@ ipa_crypto_policy: "Default"
 # These are simply test values
 etc_hosts_list:
   - ip: "{{ _default_network }}.13"
-    fqdn: "provisioner.{{ _global_domain_name }}"
+    fqdn: "provisioner.{{ _runtime_global_domain_name }}"
   - ip: "{{ _default_network }}.12"
-    fqdn: "satellite1.{{ _global_domain_name }}"
+    fqdn: "{{ groups['sat_primary'][0] }}"

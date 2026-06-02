@@ -8,7 +8,7 @@ ipaserver_hostname: "{{ ansible_fqdn }}"
 ipaserver_forwarders:
   - "8.8.8.8"
 
-ipaserver_forward_policy: "first"
+ipaserver_forward_policy: "only"
 default_password: "{{ ipa_default_user_password }}"
 
 # infrequently changed variables

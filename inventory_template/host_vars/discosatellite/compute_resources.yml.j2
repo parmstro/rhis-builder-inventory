@@ -17,7 +17,7 @@
 vcenter_service_username: "{{ vcenter_service_username_vault }}"
 vcenter_service_password: "{{ vcenter_service_password_vault }}"
 vmware_cluster1_name: "chassis1"
-vmware_cluster1_path: "/Datacenters/{{ _global_domain_name }}/vm"
+vmware_cluster1_path: "/Datacenters/{{ _runtime_global_domain_name }}/vm"
 vmware_cluster1_datastore: "NAS1_VMS"
 vmware_cluster1_network: "VM Network"
 
@@ -29,9 +29,9 @@ azure1_client_secret_id: "{{ azure1_client_secret_id_vault }}"
 azure1_client_secret: "{{ azure1_client_secret_vault }}"
 azure1_cloud: "azure"
 {% endraw %}azure1_region: "{{ rhis_azure_region }}"
-azure1_resourcegroup1: "rg1_{{ split_global_domain_name[0] }}_{{ split_global_domain_name[1] }}"
-azure1_rg1_vnet1: "vn1_{{ split_global_domain_name[0] }}_{{ split_global_domain_name[1] }}"
-azure1_rg1_vn1_subnet1: "sn1_{{ split_global_domain_name[0] }}_{{ split_global_domain_name[1] }}"
+azure1_resourcegroup1: "rg1_{{ split_basevars_global_domain_name[0] }}_{{ split_basevars_global_domain_name[1] }}"
+azure1_rg1_vnet1: "vn1_{{ split_basevars_global_domain_name[0] }}_{{ split_basevars_global_domain_name[1] }}"
+azure1_rg1_vn1_subnet1: "sn1_{{ split_basevars_global_domain_name[0] }}_{{ split_basevars_global_domain_name[1] }}"
 {% raw %}
 azure1_user_ssh_key: "{{ azure1_user_ssh_key_vault }}"
 
@@ -48,8 +48,8 @@ compute_resources:
     organizations: "{{ satellite_organization }}"
     provider_params:
       caching_enabled: false  # setting this to true currently causes some server faults.
-      datacenter: "{{ _global_domain_name }}"
-      url: "vcenter.{{ _global_domain_name }}"
+      datacenter: "{{ _runtime_global_domain_name }}"
+      url: "{{ groups['vmware_vcenter_hosts'][0] }}"
       user: "{{ vcenter_service_username }}"
       password: "{{ vcenter_service_password }}"
 
@@ -59,7 +59,7 @@ compute_resources:
     locations: "{{ satellite_location }}"
     organizations: "{{ satellite_organization }}"
     provider_params:
-      url: "qemu+tls://kvm1.{{ _global_domain_name }}/system"
+      url: "qemu+tls://kvm1.{{ _runtime_global_domain_name }}/system"
 
   - name: "KVM2_Lab"
     provider: "libvirt"
@@ -67,11 +67,11 @@ compute_resources:
     locations: "{{ satellite_location }}"
     organizations: "{{ satellite_organization }}"
     provider_params:
-      url: "qemu+tls://kvm2.{{ _global_domain_name }}/system"
+      url: "qemu+tls://kvm2.{{ _runtime_global_domain_name }}/system"
 
   - name: "Azure_Lab"
     provider: "AzureRm"
-    description: "{{ _global_domain_name }} Resource Group"
+    description: "{{ _runtime_global_domain_name }} Resource Group"
     locations: "{{ satellite_location }}"
     organizations: "{{ satellite_organization }}"
     images:

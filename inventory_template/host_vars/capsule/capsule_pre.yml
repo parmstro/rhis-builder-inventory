@@ -13,7 +13,7 @@ volume:
   minimum_size: "110G"
   state: present
 
-capsule_pre_time_servers: "{{ timeservers }}"
+capsule_pre_time_servers: "{{ rhis_time_servers }}"
 
 capsule_pre_selinux_state: "enforcing"
 capsule_pre_selinux_policy: "targeted"
@@ -24,7 +24,7 @@ capsule_pre_firewalld_config:
     zone: "public"
 
 capsule_pre_repositories:
-  - "rhel-9-for-x86_64-baseos-rpms"
-  - "rhel-9-for-x86_64-appstream-rpms"
-  - "satellite-capsule-6.18-for-rhel-9-x86_64-rpms"
-  - "satellite-maintenance-6.18-for-rhel-9-x86_64-rpms"
+  - "rhel-{{ rhis_satellite_os_major_version }}-for-x86_64-baseos-rpms"
+  - "rhel-{{ rhis_satellite_os_major_version }}-for-x86_64-appstream-rpms"
+  - "satellite-capsule-{{ rhis_satellite_release_version }}-for-rhel-{{ rhis_satellite_os_major_version }}-x86_64-rpms"
+  - "satellite-maintenance-{{ rhis_satellite_release_version }}-for-rhel-{{ rhis_satellite_os_major_version }}-x86_64-rpms"

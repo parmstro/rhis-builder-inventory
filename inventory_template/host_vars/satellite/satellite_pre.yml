@@ -1,7 +1,7 @@
 ---
 
-async_timeout: 14400
-async_delay: 30
+satellite_async_timeout: 14400
+satellite_async_delay: 30
 
 # disable transparent huge pages
 # install tuned, create a tuned profile
@@ -13,10 +13,10 @@ cdn_organization_id: "{{ cdn_organization_id_vault }}"
 cdn_sat_activation_key: "{{ cdn_activation_key_vault }}"
 
 sat_repository_ids:
-  - rhel-9-for-x86_64-baseos-rpms
-  - rhel-9-for-x86_64-appstream-rpms
-  - satellite-6.18-for-rhel-9-x86_64-rpms
-  - satellite-maintenance-6.18-for-rhel-9-x86_64-rpms
+  - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-baseos-rpms"
+  - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-appstream-rpms"
+  - "satellite-{{ rhis_satellite_release_version }}-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
+  - "satellite-maintenance-{{ rhis_satellite_release_version }}-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
 
 sat_firewalld_zone: "public"
 sat_firewalld_interface: "{{ ansible_default_ipv4.interface }}"
@@ -49,16 +49,14 @@ ipa_generate_certs: true
 # IdM client vars
 ipa_admin_password: "{{ ipa_admin_password_vault }}"
 ipa_admin_principal: "{{ ipa_admin_principal_vault }}"
-ipa_server_fqdn: "idm1.{{ _global_domain_name }}"
-ipa_server_domain: "{{ _global_domain_name }}"
+ipa_server_domain: "{{ _runtime_global_domain_name }}"
 ipa_server_realm: "{{ ipa_server_domain | upper }}"
 ipa_client_domain: "{{ ipa_server_domain }}"
 ipa_client_configure_dns_resolver: true
 ipa_client_mkhomedir: true
 ipasssd_enable_dns_updates: true
-ipa_client_dns_servers: "{{ _default_network }}.5"
 ipa_dns_reverse_zone: "168.192.in-addr.arpa"
-ipa_dns_zone: "{{ _global_domain_name }}"
+ipa_dns_zone: "{{ _runtime_global_domain_name }}"
 ipa_default_bind_policy: "grant {{ ipa_server_realm }} krb5-self * A; grant {{ ipa_server_realm }} krb5-self * AAAA; grant {{ ipa_server_realm }} krb5-self * SSHFP;" # noqa yaml[line-length]
 ipa_default_bind_policy_reverse: "grant {{ ipa_server_realm }} krb5-subdomain {{ ipa_dns_reverse_zone }} PTR;"
 

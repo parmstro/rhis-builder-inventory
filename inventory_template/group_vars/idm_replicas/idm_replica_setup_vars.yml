@@ -9,7 +9,7 @@ register_to_satellite: true
 ipareplica_forwarders:
   - "8.8.8.8"
   - "8.8.4.4"
-ipareplica_forward_policy: "first"
+ipareplica_forward_policy: "only"
 
 # infrequently changed variables
 ipareplica_install_packages: true
@@ -30,7 +30,7 @@ ipareplica_setup_dns: true
 # will cause replica deployment to fail with "NTP configuration cannot be updated during promotion"
 
 ipareplica_auto_reverse: true
-ipaclient_realm: "{{ _global_domain_name | upper }}"
+ipaclient_realm: "{{ _runtime_global_domain_name | upper }}"
 
 makehomedir: true
 sshtrustdns: true
