@@ -12,7 +12,7 @@ Upstream collection: `infra.quay_configuration` — refer to the upstream collec
 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
-| `quay_server_hostname` | string | `"quay1.{{ global_domain_name }}"` | Fully-qualified hostname that clients use to reach the Quay registry. Constructed from `global_domain_name` at template render time. | `quay.yml.j2` |
+| `quay_server_hostname` | string | `"quay1.{{ basevars_global_domain_name }}"` | Fully-qualified hostname that clients use to reach the Quay registry. Constructed from `basevars_global_domain_name` at template render time. | `quay.yml.j2` |
 
 ---
 

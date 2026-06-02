@@ -38,7 +38,7 @@ schema/variables/
 ## Conventions
 
 - Variable files ending in `.j2` are Jinja2 templates rendered by `inventory_update.yml` into your `deployments/<domain>/` directory. Do not edit the rendered output — edit the template source in `inventory_template/`.
-- Variables prefixed with `_` (e.g. `_global_domain_name`) are internal computed values derived at runtime and should not be set manually.
+- Variables prefixed with `_` (e.g. `_runtime_global_domain_name`) are internal computed values derived at runtime and should not be set manually.
 - Variables referencing vault secrets follow the pattern `some_var: "{{ some_var_vault }}"`. The `_vault` suffix always indicates the value lives in the encrypted vault file. See [../vault/](../vault/) for documentation of vault variables.
 - Where variables are consumed by upstream Ansible collections, the authoritative reference for allowed values and behaviour is the upstream collection documentation. Links are provided in each section.
 

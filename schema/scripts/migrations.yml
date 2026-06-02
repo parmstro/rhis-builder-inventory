@@ -1,0 +1,95 @@
+---
+# Machine-readable variable migration registry for rhis-builder-inventory.
+# Consumed by schema/scripts/migrate_inventory_variables.yml.
+# Human-readable documentation lives in schema/variable_migration.md.
+#
+# Target types:
+#   basevars_file    — applies to the user-supplied basevars file only
+#   specific_files   — applies to named files relative to inventory_dir
+#   inventory_dir    — applies to all .yml / .yml.j2 files under inventory_dir
+#
+# Fields:
+#   id          — unique identifier for this migration
+#   date        — date the rename was applied to inventory_template
+#   deprecated  — old variable name (for display only)
+#   replacement — new variable name (for display only)
+#   optional    — if true, migration is advisory; existing deployments still work
+#   regexp      — Python regex passed to the Ansible replace module
+#   replace     — replacement string
+
+migrations:
+
+  - id: global_domain_name_to_basevars
+    date: "2026-05-28"
+    deprecated: "global_domain_name"
+    replacement: "basevars_global_domain_name"
+    optional: false
+    description: >
+      global_domain_name renamed to basevars_global_domain_name to make the
+      variable lifecycle explicit — it is a user-supplied render-time value,
+      not an Ansible runtime variable.
+    targets:
+      - type: basevars_file
+        regexp: '^global_domain_name:'
+        replace: 'basevars_global_domain_name:'
+
+  - id: async_timeout_to_satellite_async_timeout
+    date: "2026-05-26"
+    deprecated: "async_timeout"
+    replacement: "satellite_async_timeout"
+    optional: false
+    description: >
+      async_timeout renamed to satellite_async_timeout in satellite and
+      discosatellite host_vars to comply with role-prefix naming convention.
+    targets:
+      - type: specific_files
+        files:
+          - host_vars/satellite/satellite_pre.yml
+          - host_vars/discosatellite/satellite_pre.yml
+        regexp: '^async_timeout:'
+        replace: 'satellite_async_timeout:'
+
+  - id: async_delay_to_satellite_async_delay
+    date: "2026-05-26"
+    deprecated: "async_delay"
+    replacement: "satellite_async_delay"
+    optional: false
+    description: >
+      async_delay renamed to satellite_async_delay in satellite and
+      discosatellite host_vars to comply with role-prefix naming convention.
+    targets:
+      - type: specific_files
+        files:
+          - host_vars/satellite/satellite_pre.yml
+          - host_vars/discosatellite/satellite_pre.yml
+        regexp: '^async_delay:'
+        replace: 'satellite_async_delay:'
+
+  - id: split_global_domain_name_to_split_basevars
+    date: "2026-05-28"
+    deprecated: "split_global_domain_name"
+    replacement: "split_basevars_global_domain_name"
+    optional: false
+    description: >
+      split_global_domain_name renamed to split_basevars_global_domain_name
+      to match the rename of its source variable global_domain_name.
+    targets:
+      - type: inventory_dir
+        regexp: 'split_global_domain_name'
+        replace: 'split_basevars_global_domain_name'
+
+  - id: _global_domain_name_to_runtime
+    date: "2026-05-28"
+    deprecated: "_global_domain_name"
+    replacement: "_runtime_global_domain_name"
+    optional: true
+    description: >
+      _global_domain_name renamed to _runtime_global_domain_name to clarify
+      that this variable is available at Ansible runtime (post-render), not
+      at template render time. A backwards-compatibility alias is retained in
+      group_vars/all/main.yml so existing deployments continue to work without
+      this migration. Apply after re-rendering from inventory_template.
+    targets:
+      - type: inventory_dir
+        regexp: '(?<!\w)_global_domain_name'
+        replace: '_runtime_global_domain_name'

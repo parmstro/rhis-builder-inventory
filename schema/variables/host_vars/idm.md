@@ -473,7 +473,7 @@ This is a Jinja2 template rendered per deployment. It configures IdM-managed DNS
 
 | Key | Type | Required | Description |
 |---|---|---|---|
-| `name` | string | yes | DNS zone name to forward (e.g. `"{{ _global_domain_name }}"`). |
+| `name` | string | yes | DNS zone name to forward (e.g. `"{{ _runtime_global_domain_name }}"`). |
 | `forwarders` | list\<dict\> | yes | List of forwarder objects with an `ip_address` key. |
 | `forward_policy` | string | no | `"first"` (try local, then forwarder) or `"only"` (always forward). |
 | `skip_overlap_check` | bool | no | Skip validation that this zone does not overlap an existing zone. |
@@ -490,7 +490,7 @@ This is a Jinja2 template rendered per deployment. It configures IdM-managed DNS
 
 | Key | Type | Required | Description |
 |---|---|---|---|
-| `name` | string | yes | DNS zone name (e.g. `"{{ _global_domain_name }}"` or the reverse zone name). |
+| `name` | string | yes | DNS zone name (e.g. `"{{ _runtime_global_domain_name }}"` or the reverse zone name). |
 | `foreman_proxy_BIND_update_policy` | string | yes | BIND `update-policy` grant statement. Controls which Kerberos principals may dynamically update DNS records. Rendered by the template with actual domain and realm names. The policy is intentionally broad to grant the foreman-proxy user the permissions required to create and update DNS entries. In the RHIS default configuration with IdM, the foreman-proxy user is a realm user with a specific RBAC role configured in IdM. The user authenticates via a keytab used for both IdM management and Ansible remote execution. The keytab is properly protected and access is restricted to the foreman-proxy process. If desired, a stricter update policy may be substituted; however, thorough testing is strongly recommended as the default policy is tested and documented. |
 | `allow_sync_ptr` | bool | yes | Allow IdM to automatically create and remove PTR (reverse) records when A/AAAA records change. |
 | `dynamic_update` | bool | yes | Enable DNS dynamic updates for this zone. |
@@ -577,7 +577,7 @@ This is a Jinja2 template rendered per deployment. It configures IdM automount l
 
 ## Users and Groups (`users_and_groups.yml.j2`)
 
-This is a Jinja2 template rendered per deployment. It defines the initial set of IdM users and user groups created as part of RHIS bootstrapping. Some fields reference deployment-specific values (`_global_domain_name`, `rhis_primary_city`, etc.) resolved at render time.
+This is a Jinja2 template rendered per deployment. It defines the initial set of IdM users and user groups created as part of RHIS bootstrapping. Some fields reference deployment-specific values (`_runtime_global_domain_name`, `rhis_primary_city`, etc.) resolved at render time.
 
 > **Note:** The sample configuration provided is intentionally broad. The underlying code supports the full range of configuration allowed by the corresponding `redhat.rhel_idm` module. Users can extend the configuration to meet their specific requirements. To ensure consistent and reproducible builds, update the relevant file directly in `inventory_template` — treat your inventory as code (GitOps).
 
@@ -597,7 +597,7 @@ This is a Jinja2 template rendered per deployment. It defines the initial set of
 | `first` | string | yes | Given (first) name. |
 | `last` | string | yes | Family (last) name. |
 | `password` | string | yes | Initial password. Should reference `default_environment_password` which is backed by a vault variable. |
-| `email` | string | no | User's e-mail address. Typically `login@{{ _global_domain_name }}`. |
+| `email` | string | no | User's e-mail address. Typically `login@{{ _runtime_global_domain_name }}`. |
 | `title` | string | no | Job title. |
 | `employeetype` | string | no | Employment type (e.g. `"full-time"`). |
 | `employnumber` | string | no | Employee ID number. |

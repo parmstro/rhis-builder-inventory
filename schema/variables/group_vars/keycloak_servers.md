@@ -90,7 +90,7 @@ Upstream collection: `middleware_automation.keycloak` — refer to the [collecti
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
 | `register_idm` | boolean | `true` | When `true`, enrolls the host as an IdM/IPA client. | IdM client role |
-| `ipaclient_domain` | string | `"{{ _global_domain_name }}"` | DNS domain name of the IdM realm. Derived from the global `_global_domain_name` computed variable. | IdM client role |
+| `ipaclient_domain` | string | `"{{ _runtime_global_domain_name }}"` | DNS domain name of the IdM realm. Derived from the global `_runtime_global_domain_name` computed variable. | IdM client role |
 | `ipaclient_mkhomedir` | boolean | `true` | When `true`, automatically creates home directories for IdM users on first login via PAM. | IdM client role |
 | `ipaclient_ntp_servers` | list of strings | Rendered from `rhis_time_servers` at template time | NTP server addresses configured on the IdM client. Populated by iterating `rhis_time_servers` during Jinja2 rendering. | IdM client role |
 
@@ -105,7 +105,7 @@ Upstream collection: `middleware_automation.keycloak` — refer to the [collecti
 | `force_regen` | boolean | `true` | When `true`, forces certificate regeneration even if a valid certificate already exists on the host. | Certificate management role |
 | `ssl_private_key_cipher` | string | `"aes256"` | Cipher algorithm used to encrypt the generated private key. | Certificate management role |
 | `ssl_private_key_size` | integer | `2048` | RSA key size in bits for the generated private key. | Certificate management role |
-| `csr_email_address` | string | `"bobsurunkle@{{ _global_domain_name }}"` | Email address embedded in the Certificate Signing Request (CSR). Should be updated to a real address for production deployments. | Certificate management role |
+| `csr_email_address` | string | `"bobsurunkle@{{ _runtime_global_domain_name }}"` | Email address embedded in the Certificate Signing Request (CSR). Should be updated to a real address for production deployments. | Certificate management role |
 | `csr_organization_name` | string | `"Bob Surunkle"` | Organization name embedded in the CSR. Should be updated for production deployments. | Certificate management role |
 | `csr_organization_unit_name` | string | `"Surunkle Lab"` | Organizational unit name embedded in the CSR. Should be updated for production deployments. | Certificate management role |
 | `csr_country_name` | string | `"CA"` | Two-letter ISO 3166-1 country code embedded in the CSR. | Certificate management role |

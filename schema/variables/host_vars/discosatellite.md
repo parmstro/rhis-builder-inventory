@@ -67,7 +67,7 @@ Variables controlling OS prerequisites, firewall, IdM client enrollment, SSL cer
 | `ipa_admin_password` | string | — | IdM admin password (references vault) | satellite_pre |
 | `ipa_admin_principal` | string | — | IdM admin principal (references vault) | satellite_pre |
 | `ipa_server_fqdn` | string | `{{ groups['idm_primary'][0] }}` | FQDN of the primary IdM server (group-based lookup, not hardcoded) | satellite_pre |
-| `ipa_server_domain` | string | `{{ _global_domain_name }}` | DNS domain of the IdM server | satellite_pre |
+| `ipa_server_domain` | string | `{{ _runtime_global_domain_name }}` | DNS domain of the IdM server | satellite_pre |
 | `ipa_server_realm` | string | derived (uppercased domain) | Kerberos realm name | satellite_pre |
 | `ipa_client_domain` | string | `{{ ipa_server_domain }}` | DNS domain for the IdM client | satellite_pre |
 | `ipa_client_configure_dns_resolver` | bool | `true` | Configure the DNS resolver for the IdM client | satellite_pre |
@@ -75,7 +75,7 @@ Variables controlling OS prerequisites, firewall, IdM client enrollment, SSL cer
 | `ipasssd_enable_dns_updates` | bool | `true` | Enable SSSD dynamic DNS updates | satellite_pre |
 | `ipa_client_dns_servers` | string | `{{ _default_network }}.5` | DNS server IP for the IdM client | satellite_pre |
 | `ipa_dns_reverse_zone` | string | `"168.192.in-addr.arpa"` | Reverse DNS zone for the lab network | satellite_pre |
-| `ipa_dns_zone` | string | `{{ _global_domain_name }}` | Forward DNS zone | satellite_pre |
+| `ipa_dns_zone` | string | `{{ _runtime_global_domain_name }}` | Forward DNS zone | satellite_pre |
 | `ipa_default_bind_policy` | string | — | BIND dynamic update policy for forward DNS records | satellite_pre |
 | `ipa_default_bind_policy_reverse` | string | — | BIND dynamic update policy for reverse DNS records | satellite_pre |
 | `ipaadmin_password` | string | — | Alias for `ipa_admin_password`; required by the `ipaclient` role (references vault) | ipaclient role |
@@ -688,7 +688,7 @@ Additional Satellite organizations beyond the default. The example Finance organ
 
 Compute resource definitions for VMware, KVM/libvirt, Azure, and AWS. This file is Jinja2 (`.j2`).
 
-**Difference from primary satellite:** Identical structure and provider list. The Azure and AWS credential variables reference vault variables directly (without intermediate local variables in some cases). The Azure region and resource group variables use Jinja2 interpolation outside `{% raw %}`/`{% endraw %}` blocks to allow the outer template layer to expand `global_domain_name`.
+**Difference from primary satellite:** Identical structure and provider list. The Azure and AWS credential variables reference vault variables directly (without intermediate local variables in some cases). The Azure region and resource group variables use Jinja2 interpolation outside `{% raw %}`/`{% endraw %}` blocks to allow the outer template layer to expand `basevars_global_domain_name`.
 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|

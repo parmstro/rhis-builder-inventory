@@ -69,7 +69,7 @@ These keys appear in every host definition map across all host list variables.
 
 | Field | Type | Description |
 |---|---|---|
-| `fqdn` | string | Fully qualified domain name of the host, typically using `{{ _global_domain_name }}` or `{{ _default_domain }}` |
+| `fqdn` | string | Fully qualified domain name of the host, typically using `{{ _runtime_global_domain_name }}` or `{{ _default_domain }}` |
 | `delete_host` | boolean | When `true`, the host will be removed from Satellite rather than created. Usually `false` during provisioning. |
 | `organization` | string | Satellite organization the host belongs to. References `{{ satellite_organization }}`. |
 | `location` | string | Satellite location the host belongs to. References `{{ satellite_location }}`. |
@@ -237,7 +237,7 @@ These variables identify the specific user being provisioned in a given run. The
 |---|---|---|---|---|
 | `piv_current_username` | string | (required) | The IdM username of the person receiving the smartcard certificate. Example: `"testyubiuser"`. Drives all file paths that include the username. | rhis-builder-yubi all PIV plays |
 | `piv_current_user_csr_subject` | string | (required) | The X.509 subject string for the CSR. Format: `/CN=<username>/DC=<dc1>/DC=<dc2>/emailAddress=<username>@<domain>`. | rhis-builder-yubi cert request plays |
-| `piv_current_realm` | string | (required) | The Kerberos realm, typically the domain name uppercased. Example: `"{{ global_domain_name \| upper }}"`. | rhis-builder-yubi cert request plays |
+| `piv_current_realm` | string | (required) | The Kerberos realm, typically the domain name uppercased. Example: `"{{ basevars_global_domain_name \| upper }}"`. | rhis-builder-yubi cert request plays |
 
 ### YubiKey Factory Defaults
 

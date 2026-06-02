@@ -10,8 +10,17 @@ The schema version corresponds to the value in `version.txt` at the repository r
 
 ```
 schema/
-  README.md               this file — index and conventions
-  TODO.md                 outstanding documentation work
+  README.md                         this file — index and conventions
+  TODO.md                           outstanding documentation work, backlog items
+  audit_findings.md                 variable audit findings across all rhis-builder projects
+  inventory_ordering_conventions.md ordering and formatting rules for satellite config files
+  shared_variable_contract.md       cross-project shared variable interface (IdM, Satellite, KVM)
+  soe_build_requirements.md         SOE build dependency model, checklist, and lessons learned
+  soe_bundle_model.md               SOE bundle and snippet ordering design
+  variable_migration.md             variable rename registry with migration scripts
+  scripts/
+    migrate_inventory_variables.yml  Ansible playbook to apply variable renames to deployments
+    migrations.yml                   machine-readable migration registry
   vault/
     README.md             vault overview: creation, encryption, mounting, annotation conventions
     common.md             global credentials, SSH keys, Red Hat tokens, CDN registration

@@ -22,13 +22,13 @@ User-supplied version pins for the major platform components. Changing a value h
 
 ---
 
-## Global Domain Identity (`main.yml.j2` — computed from `global_domain_name`)
+## Global Domain Identity (`main.yml.j2` — computed from `basevars_global_domain_name`)
 
-Internal computed aliases for the deployment's primary DNS domain. These are set by the Jinja2 template from the user-supplied `global_domain_name` value in `inventory_basevars.yml`.
+Internal computed aliases for the deployment's primary DNS domain. These are set by the Jinja2 template from the user-supplied `basevars_global_domain_name` value in `inventory_basevars.yml`.
 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
-| `_global_domain_name` | string | `"{{ global_domain_name }}"` | Internal alias for the deployment's DNS domain name (e.g. `example.ca`). Used as the authoritative domain reference throughout all role variable bindings. | All phases |
+| `_runtime_global_domain_name` | string | `"{{ basevars_global_domain_name }}"` | Internal alias for the deployment's DNS domain name (e.g. `example.ca`). Used as the authoritative domain reference throughout all role variable bindings. | All phases |
 
 ---
 
@@ -63,7 +63,7 @@ Variables used by all phases that communicate with or configure the Satellite se
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
 | `satellite_fqdn` | string | `"{{ groups['sat_primary'][0] }}"` | Fully qualified domain name of the primary Satellite server, resolved from the inventory group. | All phases |
-| `satellite_domain` | string | `"{{ _global_domain_name }}"` | DNS domain associated with the Satellite server. | rhis-builder-satellite |
+| `satellite_domain` | string | `"{{ _runtime_global_domain_name }}"` | DNS domain associated with the Satellite server. | rhis-builder-satellite |
 | `satellite_initial_location` | string | `"Default Location"` | Satellite location created during initial setup. | rhis-builder-satellite |
 | `satellite_initial_organization` | string | `"Default Organization"` | Satellite organization created during initial setup. | rhis-builder-satellite |
 | `satellite_organization` | string | `"{{ satellite_initial_organization }}"` | Active Satellite organization used for all subsequent operations. | All phases |
@@ -81,7 +81,7 @@ Variables controlling virtual machine provisioning and bare-metal host discovery
 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
-| `vm_compute_resource` | string | `"vcenter.{{ _global_domain_name }}"` | Name of the Satellite compute resource entry for vCenter, used when provisioning virtual machines. | rhis-builder-satellite, VM provisioning phases |
+| `vm_compute_resource` | string | `"vcenter.{{ _runtime_global_domain_name }}"` | Name of the Satellite compute resource entry for vCenter, used when provisioning virtual machines. | rhis-builder-satellite, VM provisioning phases |
 | `search_dh_mac` | string | `"ff:ff:ff:ff:ff:ff"` | Placeholder MAC address used in Satellite DHCP record searches. Broadcast MAC indicates a wildcard/no-filter search. | rhis-builder-satellite |
 | `default_vm_mac` | string | `"00:50:56:ff:ff:ff"` | OUI prefix used to identify VMware-provisioned virtual machines in Satellite host searches. | rhis-builder-satellite, VM provisioning phases |
 | `post_deploy_timeout` | int | `600` | Seconds to wait for a host to become reachable after Satellite triggers a deployment. | rhis-builder-satellite, provisioning phases |
@@ -100,8 +100,8 @@ Default interface names and subnet identifiers used when defining Satellite subn
 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
-| `_default_domain` | string | `"{{ _global_domain_name }}"` | Internal alias for the DNS domain, used in Satellite domain and subnet definitions. | rhis-builder-satellite |
-| `_default_subnetname` | string | `"{{ _global_domain_name }}"` | Name of the primary Satellite subnet record, defaulting to the domain name. | rhis-builder-satellite |
+| `_default_domain` | string | `"{{ _runtime_global_domain_name }}"` | Internal alias for the DNS domain, used in Satellite domain and subnet definitions. | rhis-builder-satellite |
+| `_default_subnetname` | string | `"{{ _runtime_global_domain_name }}"` | Name of the primary Satellite subnet record, defaulting to the domain name. | rhis-builder-satellite |
 | `_default_provision_iface` | string | `"eno1"` | Default provisioning network interface name for physical (bare-metal) hosts. | rhis-builder-satellite, baremetal provisioning |
 | `_default_vm_provision_iface` | string | `"ens192"` | Default provisioning network interface name for VMware virtual machines. | rhis-builder-satellite, VM provisioning |
 | `_default_bond_subnetname` | string | `"bond_subnet"` | Name of the Satellite subnet record for the bonded network. | rhis-builder-satellite |
@@ -119,12 +119,12 @@ Aliased domain/realm variables required by the `redhat.rhel_idm` collection role
 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
-| `ipa_server_domain` | string | `"{{ _global_domain_name }}"` | IdM domain name; used by `ipaserver` role and custom tasks. | rhis-builder-idm |
-| `ipaserver_domain` | string | `"{{ _global_domain_name }}"` | IdM domain name; canonical variable name for the `redhat.rhel_idm.ipaserver` role. | rhis-builder-idm |
-| `ipa_domain` | string | `"{{ _global_domain_name }}"` | IdM domain name; generic alias used across multiple roles and playbooks. | All phases |
-| `ipa_server_realm` | string | `"{{ _global_domain_name \| upper }}"` | Kerberos realm name (uppercased domain); used by `ipaserver` role and custom tasks. | rhis-builder-idm |
-| `ipaserver_realm` | string | `"{{ _global_domain_name \| upper }}"` | Kerberos realm name; canonical variable for the `redhat.rhel_idm.ipaserver` role. | rhis-builder-idm |
-| `ipa_realm` | string | `"{{ _global_domain_name \| upper }}"` | Kerberos realm name; generic alias. | All phases |
+| `ipa_server_domain` | string | `"{{ _runtime_global_domain_name }}"` | IdM domain name; used by `ipaserver` role and custom tasks. | rhis-builder-idm |
+| `ipaserver_domain` | string | `"{{ _runtime_global_domain_name }}"` | IdM domain name; canonical variable name for the `redhat.rhel_idm.ipaserver` role. | rhis-builder-idm |
+| `ipa_domain` | string | `"{{ _runtime_global_domain_name }}"` | IdM domain name; generic alias used across multiple roles and playbooks. | All phases |
+| `ipa_server_realm` | string | `"{{ _runtime_global_domain_name \| upper }}"` | Kerberos realm name (uppercased domain); used by `ipaserver` role and custom tasks. | rhis-builder-idm |
+| `ipaserver_realm` | string | `"{{ _runtime_global_domain_name \| upper }}"` | Kerberos realm name; canonical variable for the `redhat.rhel_idm.ipaserver` role. | rhis-builder-idm |
+| `ipa_realm` | string | `"{{ _runtime_global_domain_name \| upper }}"` | Kerberos realm name; generic alias. | All phases |
 | `ipa_server_fqdn` | string | `"{{ groups['idm_primary'][0] }}"` | FQDN of the primary IdM server, resolved from the inventory group. | All phases |
 | `ipaserver_fqdn` | string | `"{{ groups['idm_primary'][0] }}"` | FQDN of the primary IdM server; canonical variable for the `redhat.rhel_idm.ipaserver` role. | rhis-builder-idm |
 
@@ -135,7 +135,7 @@ Aliased domain/realm variables required by the `redhat.rhel_idm` collection role
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
 | `ipareplicas` | list | `"{{ groups['ipa_replicas'] }}"` | List of IdM replica FQDNs, resolved from the inventory group. Passed to topology management roles. | rhis-builder-idm |
-| `ipareplica_domain` | string | `"{{ _global_domain_name }}"` | Domain name passed to the `redhat.rhel_idm.ipareplica` role. | rhis-builder-idm |
+| `ipareplica_domain` | string | `"{{ _runtime_global_domain_name }}"` | Domain name passed to the `redhat.rhel_idm.ipareplica` role. | rhis-builder-idm |
 
 ---
 
@@ -147,7 +147,7 @@ Variables consumed by the `redhat.rhel_idm.ipaclient` role when enrolling any ho
 |---|---|---|---|---|
 | `ipa_client_dns_servers` | string | `"{{ target_net_cidr \| ansible.utils.next_nth_usable(10) }}"` | IP address of the IdM DNS server, computed as the 10th usable host in the target network CIDR (rendered outside `{% raw %}` block so the filter is evaluated at template time). | All phases (client enrollment) |
 | `ipaclient_dns_servers` | string | `"{{ ipa_client_dns_servers }}"` | Alias for `ipa_client_dns_servers`; canonical variable for the `ipaclient` role. | rhis-builder-idm, All phases (client enrollment) |
-| `ipa_client_domain` | string | `"{{ _global_domain_name }}"` | DNS domain passed to the `ipaclient` role during enrollment. | All phases (client enrollment) |
+| `ipa_client_domain` | string | `"{{ _runtime_global_domain_name }}"` | DNS domain passed to the `ipaclient` role during enrollment. | All phases (client enrollment) |
 | `ipaclient_domain` | string | `"{{ ipa_server_domain }}"` | Canonical `ipaclient` role variable for the client's domain. | rhis-builder-idm, All phases (client enrollment) |
 | `ipaclient_realm` | string | `"{{ ipa_server_domain \| upper }}"` | Kerberos realm for the enrolling client; canonical `ipaclient` role variable. | rhis-builder-idm, All phases (client enrollment) |
 | `ipa_client_configure_dns_resolver` | bool | `true` | Whether to configure the host's DNS resolver to point at the IdM DNS server after enrollment. | All phases (client enrollment) |
@@ -194,7 +194,7 @@ Variables that control TLS certificate and key generation for hosts integrated i
 | `ssl_public_key_path` | string | `"{{ crt_dir }}/{{ ansible_fqdn }}.pub"` | Path to the host's public key file. | All phases (cert management) |
 | `ssl_public_key_format` | string | `"PEM"` | Encoding format for the public key file. | All phases (cert management) |
 | `csr_path` | string | `"{{ crt_dir }}/{{ ansible_fqdn }}.csr"` | Path where the Certificate Signing Request (CSR) is written. | All phases (cert management) |
-| `csr_email_address` | string | `"parmstro@{{ _global_domain_name }}"` | Email address embedded in the CSR subject. Should be updated to reflect the actual admin contact. | All phases (cert management) |
+| `csr_email_address` | string | `"parmstro@{{ _runtime_global_domain_name }}"` | Email address embedded in the CSR subject. Should be updated to reflect the actual admin contact. | All phases (cert management) |
 | `csr_organization_name` | string | `"Paul Armstrong"` | Organization name embedded in the CSR subject. | All phases (cert management) |
 | `csr_organization_unit_name` | string | `"Red Lab"` | Organizational unit embedded in the CSR subject. | All phases (cert management) |
 | `csr_country_name` | string | `"CA"` | Two-letter ISO country code embedded in the CSR subject. | All phases (cert management) |

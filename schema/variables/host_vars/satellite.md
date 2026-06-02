@@ -64,8 +64,8 @@ Variables controlling OS prerequisites, firewall, IdM client enrollment, SSL cer
 | `ipa_generate_certs` | bool | `true` | Generate IPA-signed SSL certificates for Satellite | satellite_pre |
 | `ipa_admin_password` | string | — | IdM admin password (references vault) | satellite_pre |
 | `ipa_admin_principal` | string | — | IdM admin principal (references vault) | satellite_pre |
-| `ipa_server_fqdn` | string | `idm1.{{ _global_domain_name }}` | FQDN of the primary IdM server | satellite_pre |
-| `ipa_server_domain` | string | `{{ _global_domain_name }}` | DNS domain of the IdM server | satellite_pre |
+| `ipa_server_fqdn` | string | `idm1.{{ _runtime_global_domain_name }}` | FQDN of the primary IdM server | satellite_pre |
+| `ipa_server_domain` | string | `{{ _runtime_global_domain_name }}` | DNS domain of the IdM server | satellite_pre |
 | `ipa_server_realm` | string | derived (uppercased domain) | Kerberos realm name | satellite_pre |
 | `ipa_client_domain` | string | `{{ ipa_server_domain }}` | DNS domain for the IdM client | satellite_pre |
 | `ipa_client_configure_dns_resolver` | bool | `true` | Configure the DNS resolver for the IdM client | satellite_pre |
@@ -73,7 +73,7 @@ Variables controlling OS prerequisites, firewall, IdM client enrollment, SSL cer
 | `ipasssd_enable_dns_updates` | bool | `true` | Enable SSSD dynamic DNS updates | satellite_pre |
 | `ipa_client_dns_servers` | string | `{{ _default_network }}.5` | DNS server IP for the IdM client | satellite_pre |
 | `ipa_dns_reverse_zone` | string | `"168.192.in-addr.arpa"` | Reverse DNS zone for the lab network | satellite_pre |
-| `ipa_dns_zone` | string | `{{ _global_domain_name }}` | Forward DNS zone | satellite_pre |
+| `ipa_dns_zone` | string | `{{ _runtime_global_domain_name }}` | Forward DNS zone | satellite_pre |
 | `ipa_default_bind_policy` | string | — | BIND dynamic update policy for forward DNS records | satellite_pre |
 | `ipa_default_bind_policy_reverse` | string | — | BIND dynamic update policy for reverse DNS records | satellite_pre |
 | `ipaadmin_password` | string | — | Alias for `ipa_admin_password`; required by the `ipaclient` role (references vault) | ipaclient role |
@@ -128,6 +128,8 @@ Variables controlling OS prerequisites, firewall, IdM client enrollment, SSL cer
 | `libvirt_server_csr_path` | string | derived | Path to the libvirt server CSR | satellite_pre |
 | `libvirt_server_crt_path` | string | derived | Path to the libvirt server certificate | satellite_pre |
 | `libvirt_server_crt_service_type` | string | `"libvirt"` | Kerberos service type for the libvirt server certificate | satellite_pre |
+
+**Note:** These libvirt TLS variables are part of a shared cross-role contract. Satellite carries both client and server certificates because the `qemu+tls://` connection to KVM hypervisors is **mutually authenticated** — either end can initiate a connection. The KVM hypervisor carries the same variable set. See `schema/variables/host_vars/kvm.md` for the full mutual TLS documentation.
 
 ---
 
@@ -1142,7 +1144,7 @@ Key settings actively configured (others commented out):
 
 | Setting `id` | Type | Value | Description |
 |---|---|---|---|
-| `administrator` | string | `root@{{ _global_domain_name }}` | Default administrator email address |
+| `administrator` | string | `root@{{ _runtime_global_domain_name }}` | Default administrator email address |
 | `login_text` | string | Custom string with version | Login page footer text |
 
 Each setting entry schema: `id`/`name`, `full_name`, `description`, `settings_type`, `value`, `category`, `category_name`, `readonly`, `encrypted`, `updated_at`, `config_file`, `select_values`.
@@ -1187,7 +1189,7 @@ Key settings actively configured:
 | Setting `name` | Type | Value | Description |
 |---|---|---|---|
 | `root_pass` | string | (vault) | Default root password (encrypted) |
-| `unattended_url` | string | `http://satellite.{{ _global_domain_name }}` | URL hosts contact for templates during build |
+| `unattended_url` | string | `http://satellite.{{ _runtime_global_domain_name }}` | URL hosts contact for templates during build |
 | `safemode_render` | bool | `false` | Disable safe-mode template rendering (allows full Ruby) |
 | `update_ip_from_built_request` | bool | `false` | Do not update host IP from the build request source |
 | `name_generator_type` | string | `"MAC-based"` | Hostname generation strategy |
@@ -1219,8 +1221,8 @@ Key settings actively configured:
 
 | Setting `name` | Type | Value | Description |
 |---|---|---|---|
-| `email_reply_address` | string | `satellite-noreply@{{ _global_domain_name }}` | Reply-to address for outgoing email |
-| `email_subject_prefix` | string | `[satellite.{{ _global_domain_name }}]` | Subject line prefix |
+| `email_reply_address` | string | `satellite-noreply@{{ _runtime_global_domain_name }}` | Reply-to address for outgoing email |
+| `email_subject_prefix` | string | `[satellite.{{ _runtime_global_domain_name }}]` | Subject line prefix |
 | `delivery_method` | string | `"SMTP"` | Email delivery backend |
 | `smtp_address` | string | `"smtp.gmail.com"` | SMTP server address |
 | `smtp_port` | int | `587` | SMTP port |

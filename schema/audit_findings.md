@@ -216,8 +216,8 @@ FQDNs in `aap26_hosts.yml.j2`, `aap24_hosts.yml.j2`, `capsule_hosts.yml.j2`, `qu
 
 1. **Remove** dead capsule_pre defaults: `capsule_pre_min_var_storage_gb`, `capsule_pre_sat_fqdn`, `capsule_pre_assert_not_users`, `capsule_pre_assert_selinux` from `rhis-builder-satellite` — already commented out pending test confirmation
 2. ~~Remove `idm_bootstrap_init_hosts` and `satellite_bootstrap_init_hosts`~~ — **RETRACTED**: these are extra-vars dispatch payload variables, not dead. See Scanner Limitation Note.
-3. **Fix** `tasls/` typo in `rhis-builder-kvm/roles/kvm_networks/`
-4. **Fix** `global_domain_name` → `_global_domain_name` in `quay.yml.j2` and `content_exports.yml.j2`
+3. ~~**Fix** `tasls/` typo in `rhis-builder-kvm/roles/kvm_networks/`~~ — **RESOLVED 2026-05-28**: empty `tasls/` stub removed; `tasks/` created with `.gitkeep`. Note: `kvm_networks/` was entirely untracked in git.
+4. ~~**Fix** `global_domain_name` → `_global_domain_name` in `quay.yml.j2` and `content_exports.yml.j2`~~ — **FALSE POSITIVE 2026-05-28**: both references are outside `{% raw %}`/`{% endraw %}` blocks and are intentional render-time Jinja2 substitutions. `inventory_update.yml` replaces them with the domain from `<domain>_inventory_basevars.yml`. No fix needed.
 
 ### FQDN fixes (requires inventory_update.yml rerender)
 
@@ -231,8 +231,8 @@ FQDNs in `aap26_hosts.yml.j2`, `aap24_hosts.yml.j2`, `capsule_hosts.yml.j2`, `qu
 9. **Add** libvirt cert variables to `kvm_host/defaults/main.yml` (see Section 2)
 10. **Resolve** `active_controller` vs `aap_platform_host` inconsistency in rhis-builder-aap
 11. **Remediate** hardcoded credentials in rhis-builder-aap `test_node.yml`
-12. **Rename** `oem_dir` → `baremetal_init_oem_dir` in baremetal_init role (breaking change, coordinate with users)
-13. **Document** shared infrastructure variables in schema (cross-role contract for `crt_service_type`, `csr_*`, etc.)
+12. ~~**Rename** `oem_dir` → `baremetal_init_oem_dir` in baremetal_init role~~ — **WONT_FIX 2026-05-29**: the `baremetal_init` role is deprecated.
+13. ~~**Document** shared infrastructure variables in schema~~ — **RESOLVED 2026-05-29**: `schema/shared_variable_contract.md` created, documenting the architectural rationale, full variable list, and rules for managing the contract across rhis-builder projects.
 
 ---
 

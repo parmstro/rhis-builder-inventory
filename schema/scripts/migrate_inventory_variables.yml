@@ -1,0 +1,255 @@
+---
+# migrate_inventory_variables.yml
+#
+# Applies rhis-builder variable renames to an existing deployed inventory.
+#
+# USAGE:
+#   # Preview changes (default) — writes <file>.new for review, nothing is modified
+#   ansible-playbook schema/scripts/migrate_inventory_variables.yml \
+#       -e "basevars_file=example.ca_inventory_basevars.yml"
+#
+#   # Preview changes to a deployed inventory directory
+#   ansible-playbook schema/scripts/migrate_inventory_variables.yml \
+#       -e "inventory_dir=deployments/example.ca/"
+#
+#   # Preview both
+#   ansible-playbook schema/scripts/migrate_inventory_variables.yml \
+#       -e "basevars_file=example.ca_inventory_basevars.yml" \
+#       -e "inventory_dir=deployments/example.ca/"
+#
+#   # Apply changes in place (no .new files)
+#   ansible-playbook schema/scripts/migrate_inventory_variables.yml \
+#       -e "basevars_file=example.ca_inventory_basevars.yml" \
+#       -e "preview=false"
+#
+# VARIABLES:
+#   basevars_file   Path to a <domain>_inventory_basevars.yml file (optional)
+#   inventory_dir   Path to a deployed inventory directory (optional)
+#   preview         true (default) = write .new files; false = apply in place
+
+- name: Migrate rhis-builder inventory variables
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  # This playbook runs entirely on the control node — no managed hosts required.
+
+  vars:
+    preview: true
+    basevars_file: ""
+    inventory_dir: ""
+    migrations_file: "{{ playbook_dir }}/migrations.yml"
+
+  tasks:
+
+    - name: Validate that at least one target was provided
+      ansible.builtin.assert:
+        that:
+          - basevars_file | length > 0 or inventory_dir | length > 0
+        fail_msg: "Specify at least one of: -e basevars_file=<path> or -e inventory_dir=<path>"
+
+    # extra vars cannot be overridden by set_fact, so we resolve to internal vars
+    - name: Resolve paths to absolute
+      ansible.builtin.set_fact:
+        _basevars_file: "{{ basevars_file if basevars_file.startswith('/') else lookup('env', 'PWD') ~ '/' ~ basevars_file }}"
+        _inventory_dir: "{{ inventory_dir if inventory_dir.startswith('/') else lookup('env', 'PWD') ~ '/' ~ inventory_dir }}"
+
+    - name: Load migration registry
+      ansible.builtin.include_vars:
+        file: "{{ migrations_file }}"
+
+    - name: Show run mode
+      ansible.builtin.debug:
+        msg: "Mode: {{ 'PREVIEW (writing .new files)' if (preview | bool) else 'APPLY (modifying in place)' }}"
+
+    # ── basevars_file migrations ────────────────────────────────────────────────
+
+    - name: Process basevars_file migrations
+      when: basevars_file | length > 0
+      block:
+
+        - name: Verify basevars file exists
+          ansible.builtin.stat:
+            path: "{{ _basevars_file }}"
+          register: bvf_stat
+
+        - name: Assert basevars file found
+          ansible.builtin.assert:
+            that: bvf_stat.stat.exists
+            fail_msg: "basevars_file not found: {{ _basevars_file }}"
+
+        - name: Build list of basevars migrations
+          ansible.builtin.set_fact:
+            basevars_migrations: >-
+              {{
+                migrations | selectattr('targets', 'defined')
+                | map(attribute='targets') | flatten
+                | selectattr('type', 'equalto', 'basevars_file')
+                | list
+              }}
+
+        - name: Copy basevars file to .new for preview
+          ansible.builtin.copy:
+            src: "{{ _basevars_file }}"
+            dest: "{{ _basevars_file }}.new"
+            mode: preserve
+          when: preview | bool
+
+        - name: Apply basevars migrations (preview)
+          ansible.builtin.replace:
+            path: "{{ _basevars_file }}.new"
+            regexp: "{{ item.regexp }}"
+            replace: "{{ item.replace }}"
+          loop: "{{ basevars_migrations }}"
+          loop_control:
+            label: "{{ item.regexp }} → {{ item.replace }}"
+          when: preview | bool
+
+        - name: Apply basevars migrations (in place)
+          ansible.builtin.replace:
+            path: "{{ _basevars_file }}"
+            regexp: "{{ item.regexp }}"
+            replace: "{{ item.replace }}"
+          loop: "{{ basevars_migrations }}"
+          loop_control:
+            label: "{{ item.regexp }} → {{ item.replace }}"
+          when: not (preview | bool)
+
+        - name: Show basevars diff
+          ansible.builtin.command:
+            cmd: diff "{{ _basevars_file }}" "{{ _basevars_file }}.new"
+          register: basevars_diff
+          changed_when: false
+          failed_when: basevars_diff.rc > 1
+          when: preview | bool
+
+        - name: Report basevars changes
+          ansible.builtin.debug:
+            msg: "{{ basevars_diff.stdout_lines }}"
+          when: (preview | bool) and basevars_diff.stdout | length > 0
+
+        - name: Report basevars no changes
+          ansible.builtin.debug:
+            msg: "{{ _basevars_file }} — no changes required"
+          when: (preview | bool) and basevars_diff.stdout | length == 0
+
+    # ── inventory_dir migrations ────────────────────────────────────────────────
+
+    - name: Process inventory_dir migrations
+      when: inventory_dir | length > 0
+      block:
+
+        - name: Verify inventory directory exists
+          ansible.builtin.stat:
+            path: "{{ _inventory_dir }}"
+          register: inv_stat
+
+        - name: Assert inventory directory found
+          ansible.builtin.assert:
+            that: inv_stat.stat.isdir
+            fail_msg: "inventory_dir not found or not a directory: {{ _inventory_dir }}"
+
+        - name: Find all YAML files in inventory directory
+          ansible.builtin.find:
+            paths: "{{ _inventory_dir }}"
+            patterns:
+              - "*.yml"
+              - "*.yml.j2"
+            recurse: true
+          register: inventory_files
+
+        - name: Process specific_files migrations
+          vars:
+            specific_migrations: >-
+              {{
+                migrations | selectattr('targets', 'defined') | list
+                | map(attribute='targets') | flatten
+                | selectattr('type', 'equalto', 'specific_files')
+                | list
+              }}
+          block:
+
+            - name: Copy specific target files to .new for preview
+              ansible.builtin.copy:
+                src: "{{ _inventory_dir }}/{{ item.1 }}"
+                dest: "{{ _inventory_dir }}/{{ item.1 }}.new"
+                mode: preserve
+              loop: "{{ specific_migrations | subelements('files') }}"
+              loop_control:
+                label: "{{ item.1 }}"
+              when: (preview | bool) and (_inventory_dir ~ '/' ~ item.1) is file
+
+            - name: Apply specific_files migrations (preview)
+              ansible.builtin.replace:
+                path: "{{ _inventory_dir }}/{{ item.1 }}.new"
+                regexp: "{{ item.0.regexp }}"
+                replace: "{{ item.0.replace }}"
+              loop: "{{ specific_migrations | subelements('files') }}"
+              loop_control:
+                label: "{{ item.1 }}: {{ item.0.regexp }} → {{ item.0.replace }}"
+              when: (preview | bool) and (_inventory_dir ~ '/' ~ item.1) is file
+
+            - name: Apply specific_files migrations (in place)
+              ansible.builtin.replace:
+                path: "{{ _inventory_dir }}/{{ item.1 }}"
+                regexp: "{{ item.0.regexp }}"
+                replace: "{{ item.0.replace }}"
+              loop: "{{ specific_migrations | subelements('files') }}"
+              loop_control:
+                label: "{{ item.1 }}: {{ item.0.regexp }} → {{ item.0.replace }}"
+              when: not (preview | bool) and (_inventory_dir ~ '/' ~ item.1) is file
+
+        - name: Process inventory_dir-wide migrations
+          vars:
+            dir_migrations: >-
+              {{
+                migrations | selectattr('targets', 'defined') | list
+                | map(attribute='targets') | flatten
+                | selectattr('type', 'equalto', 'inventory_dir')
+                | list
+              }}
+          block:
+
+            - name: Copy all inventory files to .new for preview
+              ansible.builtin.copy:
+                src: "{{ item.path }}"
+                dest: "{{ item.path }}.new"
+                mode: preserve
+              loop: "{{ inventory_files.files }}"
+              loop_control:
+                label: "{{ item.path | basename }}"
+              when: preview | bool
+
+            - name: Apply inventory_dir migrations (preview)
+              ansible.builtin.replace:
+                path: "{{ item.0.path }}.new"
+                regexp: "{{ item.1.regexp }}"
+                replace: "{{ item.1.replace }}"
+              loop: "{{ inventory_files.files | product(dir_migrations) | list }}"
+              loop_control:
+                label: "{{ item.0.path | basename }}: {{ item.1.regexp }}"
+              when: preview | bool
+
+            - name: Apply inventory_dir migrations (in place)
+              ansible.builtin.replace:
+                path: "{{ item.0.path }}"
+                regexp: "{{ item.1.regexp }}"
+                replace: "{{ item.1.replace }}"
+              loop: "{{ inventory_files.files | product(dir_migrations) | list }}"
+              loop_control:
+                label: "{{ item.0.path | basename }}: {{ item.1.regexp }}"
+              when: not (preview | bool)
+
+    # ── summary ────────────────────────────────────────────────────────────────
+
+    - name: Preview summary
+      ansible.builtin.debug:
+        msg:
+          - "Migration preview complete."
+          - "Review .new files then re-run with -e preview=false to apply."
+          - "To discard previews: find . -name '*.new' -delete"
+      when: preview | bool
+
+    - name: Apply summary
+      ansible.builtin.debug:
+        msg: "Migration applied in place."
+      when: not (preview | bool)

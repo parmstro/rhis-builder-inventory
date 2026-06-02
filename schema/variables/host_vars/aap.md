@@ -215,7 +215,7 @@ Applies after the AAP installer completes. All four AAP host directories use an 
 | Variable | Type | Default | Description | Used by |
 |---|---|---|---|---|
 | `aap_admin_username` | string | — | Admin username used by the post-configuration role to authenticate to the AAP API | `platform_post.yml.j2` |
-| `aap_ldap_domain_map` | string | `"dc={{ split_global_domain_name[0] }},dc={{ split_global_domain_name[1] }}"` | LDAP base DN constructed from the split global domain name; used in all LDAP configuration settings | `platform_post.yml.j2` |
+| `aap_ldap_domain_map` | string | `"dc={{ split_runtime_global_domain_name[0] }},dc={{ split_runtime_global_domain_name[1] }}"` | LDAP base DN constructed from the split global domain name; used in all LDAP configuration settings | `platform_post.yml.j2` |
 
 ### LDAP Authentication Settings (`aap_settings`)
 

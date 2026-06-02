@@ -35,7 +35,7 @@ Top-level connection and authentication variables for AAP and supporting service
 | `aap_platform_host` | string | `"{{ groups['aap_controllers'][0] }}"` | Hostname of the primary AAP controller, resolved from the `aap_controllers` inventory group | Controller API connections |
 | `aap_platform_username` | string | _(from vault)_ | AAP admin username for API authentication | Controller API connections |
 | `aap_platform_password` | string | _(from vault)_ | AAP admin password for API authentication | Controller API connections |
-| `aap_ldap_domain_map` | string | _(computed)_ | LDAP DC string computed from `_global_domain_name` (e.g. `dc=example,dc=com`). Prefixed with `_` convention would mark this computed, but it is a plain variable used in LDAP settings | LDAP settings, credential inputs |
+| `aap_ldap_domain_map` | string | _(computed)_ | LDAP DC string computed from `_runtime_global_domain_name` (e.g. `dc=example,dc=com`). Prefixed with `_` convention would mark this computed, but it is a plain variable used in LDAP settings | LDAP settings, credential inputs |
 | `aap_admin_username` | string | _(from vault)_ | AAP admin username (duplicates `aap_platform_username` for role compatibility) | Controller configuration roles |
 | `aap_admin_password` | string | _(from vault)_ | AAP admin password (duplicates `aap_platform_password` for role compatibility) | Controller configuration roles |
 | `active_controller` | string | `"{{ groups['aap_controllers'][0] }}"` | Convenience alias for the active controller FQDN | Role targeting |
@@ -194,10 +194,10 @@ Defines AAP credentials via the `aap_credentials` list. Covers Hub API tokens, s
 | `default_vault` | Vault | Ansible Vault passphrase for demo projects |
 | `prod_satellite` | Red Hat Satellite 6 | API credential for the production Satellite server |
 | `aaphub24_containers` | Container Registry | Pull access to EEs stored in the Private Hub registry |
-| `rhis_{{ _global_domain_name }}_rhsm` | `rhis_rhsm_operator` | CDN subscription credentials for this domain |
-| `rhis_{{ _global_domain_name }}_satellite` | `rhis_satellite_operator` | Satellite operator credentials for this domain |
-| `rhis_{{ _global_domain_name }}_idm` | `rhis_idm_operator` | IdM admin credentials for this domain |
-| `rhis_{{ _global_domain_name }}_vmware1` | `rhis_vmware_operator` | vCenter credentials for VMware environment 1 |
+| `rhis_{{ _runtime_global_domain_name }}_rhsm` | `rhis_rhsm_operator` | CDN subscription credentials for this domain |
+| `rhis_{{ _runtime_global_domain_name }}_satellite` | `rhis_satellite_operator` | Satellite operator credentials for this domain |
+| `rhis_{{ _runtime_global_domain_name }}_idm` | `rhis_idm_operator` | IdM admin credentials for this domain |
+| `rhis_{{ _runtime_global_domain_name }}_vmware1` | `rhis_vmware_operator` | vCenter credentials for VMware environment 1 |
 
 ---
 
@@ -564,7 +564,7 @@ All job template lists share the same entry schema:
 | `VMwareShutdownGuestOS` | `vmware/vmw_shutdown_guest_os.yml` | Graceful guest OS shutdown |
 | `VMwareSuspendVM` | `vmware/vmw_suspend_vm.yml` | Suspend VM (use with caution) |
 
-All templates target `TheProvisioner` inventory, use `satellite_ee_9`, and require `idm_machine`, `default_vault`, and `rhis_{{ _global_domain_name }}_vmware1` credentials.
+All templates target `TheProvisioner` inventory, use `satellite_ee_9`, and require `idm_machine`, `default_vault`, and `rhis_{{ _runtime_global_domain_name }}_vmware1` credentials.
 
 ---
 
@@ -682,7 +682,7 @@ This file is a Jinja2 template (`.j2` suffix) that injects the time server list 
 | `SOE_Base_Ansible_Callback` | `post_provisioning_base.yml` | Called by Satellite via host config key after PXE provisioning; applies base SOE configuration |
 | `SOE_Base_Ansible_Callback_Survey` | `post_provisioning_base.yml` | Same as above but with `ask_limit_on_launch: true` for manual re-runs against a specific host |
 
-Both templates use the Satellite dynamic inventory, `rhis-builder-day-2-ops` project, and require `idm_machine`, `default_vault`, and `rhis_{{ _global_domain_name }}_idm` credentials. The `host_config_key` is set from `satellite_ansible_callback_config_key`. Time server and timezone variables are rendered from `rhis_time_servers` and `rhis_timezone` at template generation time.
+Both templates use the Satellite dynamic inventory, `rhis-builder-day-2-ops` project, and require `idm_machine`, `default_vault`, and `rhis_{{ _runtime_global_domain_name }}_idm` credentials. The `host_config_key` is set from `satellite_ansible_callback_config_key`. Time server and timezone variables are rendered from `rhis_time_servers` and `rhis_timezone` at template generation time.
 
 ---
 

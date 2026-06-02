@@ -53,7 +53,7 @@ Variables passed to the `redhat.rhel_idm.ipareplica` role during replica promoti
 | `ipareplica_setup_kra` | bool | `true` | Whether to install the Key Recovery Authority (KRA) on the replica. Distributes secret-archival capability for HA. | rhis-builder-idm (replica deployment) |
 | `ipareplica_setup_dns` | bool | `true` | Whether to configure BIND/DNS on the replica. Must be `true` for replicas to participate in IdM DNS HA. | rhis-builder-idm (replica deployment) |
 | `ipareplica_auto_reverse` | bool | `true` | When `true`, the installer automatically creates reverse DNS zones for all configured IP subnets. | rhis-builder-idm (replica deployment) |
-| `ipaclient_realm` | string | `"{{ _global_domain_name \| upper }}"` | Kerberos realm used during the client-enrollment phase of replica promotion. Overrides the global default here to ensure the replica-specific context is explicit. | rhis-builder-idm (replica deployment) |
+| `ipaclient_realm` | string | `"{{ _runtime_global_domain_name \| upper }}"` | Kerberos realm used during the client-enrollment phase of replica promotion. Overrides the global default here to ensure the replica-specific context is explicit. | rhis-builder-idm (replica deployment) |
 | `makehomedir` | bool | `true` | Whether to configure PAM `oddjobd`/`mkhomedir` on the replica so IdM user home directories are created automatically on first login. | rhis-builder-idm (replica deployment) |
 | `sshtrustdns` | bool | `true` | When `true`, configures SSHD to trust host key fingerprints published in IdM DNS (SSHFP records), enabling verified SSH connections without manual `known_hosts` entries. | rhis-builder-idm (replica deployment) |
 
