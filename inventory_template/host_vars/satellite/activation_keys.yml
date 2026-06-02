@@ -6,6 +6,70 @@
 # service_level = [ "Premium" | "Standard" | "Self-Support" ]"
 
 activation_keys:
+
+############## Infrastructure ##################
+
+  - name: "satellite_capsule"
+    state: "present"
+    description: "Activate a Satellite Capsule Server"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "satellite-capsule-6.18-for-rhel-9-x86_64-rpms"
+        override: "enabled"
+      - label: "satellite-maintenance-6.18-for-rhel-9-x86_64-rpms"
+        override: "enabled"
+    content_view: "Default Organization View"
+    lifecycle_environment: "Library"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Production"
+    service_level: "Premium"
+
+
+############## LEAPP / Migration (newest first) ##################
+
+  - name: "LEAPP_8_2_9"
+    state: "present"
+    description: "Migrate a RHEL 8 system to RHEL 9"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "rhel-8-for-x86_64-supplementary-rpms"
+        override: "disabled"
+      - label: "satellite-client-6-for-rhel-8-x86_64-rpms"
+        override: "enabled"
+      - label: "satellite-client-6-for-rhel-9-x86_64-rpms"
+        override: "enabled"
+    content_view: "LEAPP_8_2_9"
+    lifecycle_environment: "Development"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Development/Test"
+    service_level: "Self-Support"
+
+  # - name: "LEAPP_7_2_8"
+  #   state: "present"
+  #   description: "Migrate a RHEL 7 system to RHEL 8"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "rhel-7-server-extras-rpms"
+  #       override: "enabled"
+  #     - label: "satellite-client-6-for-rhel-8-x86_64-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-satellite-client-6-rpms"
+  #       override: "enabled"
+  #   content_view: "LEAPP_7_2_8"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
+
+
+############## SOE10 ##################
+
   - name: "SOE10_dev"
     state: "present"
     description: "Activate a RHEL 10 system in development"
@@ -29,7 +93,7 @@ activation_keys:
 
   - name: "SOE10_qa"
     state: "present"
-    description: "Activate a RHEL 10 system in development"
+    description: "Activate a RHEL 10 system in qualification"
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
@@ -50,7 +114,7 @@ activation_keys:
 
   - name: "SOE10_prod"
     state: "present"
-    description: "Activate a RHEL 10 system in development"
+    description: "Activate a RHEL 10 system in production"
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
@@ -68,6 +132,47 @@ activation_keys:
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Production"
     service_level: "Premium"
+
+  - name: "SOE10_dev_aap_26"
+    state: "present"
+    description: "Activate a RHEL 10 AAP 2.6 system in development"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "ansible-automation-platform-2.6-for-rhel-10-x86_64-rpms"
+        override: "disabled"
+      - label: "rhel-10-for-x86_64-supplementary-rpms"
+        override: "enabled"
+    content_view: "SOE10_AAP26"
+    lifecycle_environment: "Development"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Development/Test"
+    service_level: "Self-Support"
+
+  # - name: "SOE10_dev_edge_manager"
+  #   state: "present"
+  #   description: "Activate a RHEL 10 Edge Manager system in development"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
+  #       override: "enabled"
+  #     - label: "edge-manager-1.1-for-rhel-10-x86_64-rpms"
+  #       override: "disabled"
+  #     - label: "rhel-10-for-x86_64-supplementary-rpms"
+  #       override: "enabled"
+  #   content_view: "SOE10_EdgeManager"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
+
+
+############## SOE9 ##################
 
   - name: "SOE9_dev"
     state: "present"
@@ -114,23 +219,6 @@ activation_keys:
     purpose_usage: "Production"
     service_level: "Premium"
 
-  - name: "satellite_capsule"
-    state: "present"
-    description: "Activate a Satellite Capsule Server"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "satellite-capsule-6.18-for-rhel-9-x86_64-rpms"
-        override: "enabled"
-      - label: "satellite-maintenance-6.18-for-rhel-9-x86_64-rpms"
-        override: "enabled"
-    content_view: "Default Organization View"
-    lifecycle_environment: "Library"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Production"
-    service_level: "Premium"
-
   - name: "SOE9_dev_aap_24"
     state: "present"
     description: "Activate a RHEL 9 AAP 2.4 system in development"
@@ -168,44 +256,6 @@ activation_keys:
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
     service_level: "Self-Support"
-
-  - name: "SOE10_dev_aap_26"
-    state: "present"
-    description: "Activate a RHEL 10 AAP 2.5 system in development"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
-        override: "enabled"
-      - label: "ansible-automation-platform-2.6-for-rhel-10-x86_64-rpms"
-        override: "disabled"
-      - label: "rhel-10-for-x86_64-supplementary-rpms"
-        override: "enabled"
-    content_view: "SOE10_AAP26"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
-
-  # - name: "SOE10_dev_edge_manager"
-  #   state: "present"
-  #   description: "Activate a RHEL 10 Edge Manager system in development"
-  #   organization: "{{ satellite_organization }}"
-  #   auto_attach: false
-  #   content_overrides:
-  #     - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
-  #       override: "enabled"
-  #     - label: "edge-manager-1.0-for-rhel-10-x86_64-rpms"
-  #       override: "disabled"
-  #     - label: "rhel-10-for-x86_64-supplementary-rpms"
-  #       override: "enabled"
-  #   content_view: "SOE10_EdgeManager"
-  #   lifecycle_environment: "Development"
-  #   unlimited_hosts: true
-  #   purpose_role: "Red Hat Enterprise Linux Server"
-  #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
 
   - name: "SOE9_dev_EPEL"
     state: "present"
@@ -264,11 +314,11 @@ activation_keys:
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
-      - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
+      - label: "satellite-client-6-for-rhel-9-x86_64-rpms"
         override: "enabled"
-      - label: "edge-manager-1.0-for-rhel-9-x86_64-rpms"
+      - label: "edge-manager-1.1-for-rhel-9-x86_64-rpms"
         override: "disabled"
-      - label: "rhel-10-for-x86_64-supplementary-rpms"
+      - label: "rhel-9-for-x86_64-supplementary-rpms"
         override: "enabled"
     content_view: "SOE9_EdgeManager"
     lifecycle_environment: "Development"
@@ -328,9 +378,12 @@ activation_keys:
     purpose_usage: "Production"
     service_level: "Premium"
 
+
+############## SOE8 ##################
+
   - name: "SOE8_dev"
     state: "present"
-    description: "Activate a RHEL 8 system"
+    description: "Activate a RHEL 8 system in development"
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
@@ -345,7 +398,7 @@ activation_keys:
 
   - name: "SOE8_qa"
     state: "present"
-    description: "Activate a RHEL 8 system"
+    description: "Activate a RHEL 8 system in qualification"
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
@@ -360,7 +413,7 @@ activation_keys:
 
   - name: "SOE8_prod"
     state: "present"
-    description: "Activate a RHEL 8 system"
+    description: "Activate a RHEL 8 system in production"
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
@@ -375,7 +428,7 @@ activation_keys:
 
   - name: "SOE8_dev_EPEL"
     state: "present"
-    description: "Activate a RHEL 8 with EPEL system in development"
+    description: "Activate a RHEL 8 system with EPEL in development"
     organization: "{{ satellite_organization }}"
     auto_attach: false
     content_overrides:
@@ -481,154 +534,119 @@ activation_keys:
     purpose_usage: "Production"
     service_level: "Premium"
 
-  - name: "SOE7ELS"
-    state: "present"
-    description: "Activate a RHEL 7 ELS system in development"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "rhel-7-server-els-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-els-optional-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-satellite-client-6-rpms"
-        override: "enabled"
-    content_view: "SOE7ELS"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
 
-  - name: "SOE7"
-    state: "present"
-    description: "Activate a RHEL 7 system in development"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "rhel-7-server-satellite-client-6-rpms"
-        override: "enabled"
-    content_view: "SOE7"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+############## Deprecated (commented) ##################
 
-  - name: "CentOS79"
-    state: "present"
-    description: "Activate a RHEL 7 system in development"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "Default_Organization_centos_79_CentOS79"
-        override: "enabled"
-      - label: "Default_Organization_centos_79_updates"
-        override: "enabled"
-    content_view: "CentOS79"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+  # - name: "SOE7ELS"
+  #   state: "present"
+  #   description: "Activate a RHEL 7 ELS system in development"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "rhel-7-server-els-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-els-optional-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-satellite-client-6-rpms"
+  #       override: "enabled"
+  #   content_view: "SOE7ELS"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
 
-  - name: "OEL79"
-    state: "present"
-    description: "Activate a RHEL 7 system in development"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "Default_Organization_oel_79_OEL79"
-        override: "enabled"
-    content_view: "OEL79"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+  # - name: "SOE7"
+  #   state: "present"
+  #   description: "Activate a RHEL 7 system in development"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "rhel-7-server-satellite-client-6-rpms"
+  #       override: "enabled"
+  #   content_view: "SOE7"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
 
-  - name: "convert_CentOS2RHEL7"
-    state: "present"
-    description: "Activate a CentOS79 system in a convert2rhel content view"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "Default_Organization_centos_79_CentOS79"
-        override: "enabled"
-      - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
-        override: "enabled"
-      - label: "Default_Organization_centos_79_updates"
-        override: "enabled"
-      - label: "rhel-7-server-els-satellite-client-6-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-els-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-extras-rpms"
-        override: "enabled"
-    content_view: "convert_CentOS2RHEL7"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+  # - name: "CentOS79"
+  #   state: "present"
+  #   description: "Activate a CentOS79 system in development"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "Default_Organization_centos_79_CentOS79"
+  #       override: "enabled"
+  #     - label: "Default_Organization_centos_79_updates"
+  #       override: "enabled"
+  #   content_view: "CentOS79"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
 
-  - name: "convert_OEL2RHEL7"
-    state: "present"
-    description: "Activate an OEL79 system in a convert2rhel content view"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "Default_Organization_oel_79_OEL79"
-        override: "enabled"
-      - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
-        override: "enabled"
-      - label: "rhel-7-server-els-satellite-client-6-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-els-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-extras-rpms"
-        override: "enabled"
-    content_view: "OEL79"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+  # - name: "OEL79"
+  #   state: "present"
+  #   description: "Activate an OEL79 system in development"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "Default_Organization_oel_79_OEL79"
+  #       override: "enabled"
+  #   content_view: "OEL79"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
 
-  - name: "LEAPP_7_2_8"
-    state: "present"
-    description: "Migrate a RHEL 7 system to RHEL 8"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "rhel-7-server-extras-rpms"
-        override: "enabled"
-      - label: "satellite-client-6-for-rhel-8-x86_64-rpms"
-        override: "enabled"
-      - label: "rhel-7-server-satellite-client-6-rpms"
-        override: "enabled"
-    content_view: "LEAPP_7_2_8"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+  # - name: "convert_CentOS2RHEL7"
+  #   state: "present"
+  #   description: "Activate a CentOS79 system in a convert2rhel content view"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "Default_Organization_centos_79_CentOS79"
+  #       override: "enabled"
+  #     - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
+  #       override: "enabled"
+  #     - label: "Default_Organization_centos_79_updates"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-els-satellite-client-6-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-els-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-extras-rpms"
+  #       override: "enabled"
+  #   content_view: "convert_CentOS2RHEL7"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"
 
-  - name: "LEAPP_8_2_9"
-    state: "present"
-    description: "Migrate a RHEL 8 system to RHEL 9"
-    organization: "{{ satellite_organization }}"
-    auto_attach: false
-    content_overrides:
-      - label: "rhel-8-for-x86_64-supplementary-rpms"
-        override: "disabled"
-      - label: "satellite-client-6-for-rhel-8-x86_64-rpms"
-        override: "enabled"
-      - label: "satellite-client-6-for-rhel-9-x86_64-rpms"
-        override: "enabled"
-    content_view: "LEAPP_8_2_9"
-    lifecycle_environment: "Development"
-    unlimited_hosts: true
-    purpose_role: "Red Hat Enterprise Linux Server"
-    purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+  # - name: "convert_OEL2RHEL7"
+  #   state: "present"
+  #   description: "Activate an OEL79 system in a convert2rhel content view"
+  #   organization: "{{ satellite_organization }}"
+  #   auto_attach: false
+  #   content_overrides:
+  #     - label: "Default_Organization_oel_79_OEL79"
+  #       override: "enabled"
+  #     - label: "Default_Organization_client-tools-for-rhel_Red_Hat_Client_Tools_for_RHEL_7"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-els-satellite-client-6-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-els-rpms"
+  #       override: "enabled"
+  #     - label: "rhel-7-server-extras-rpms"
+  #       override: "enabled"
+  #   content_view: "OEL79"
+  #   lifecycle_environment: "Development"
+  #   unlimited_hosts: true
+  #   purpose_role: "Red Hat Enterprise Linux Server"
+  #   purpose_usage: "Development/Test"
+  #   service_level: "Self-Support"

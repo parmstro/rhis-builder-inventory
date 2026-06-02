@@ -1,7 +1,9 @@
 ---
 
 satellite_hostgroups:
-# RHEL10
+############## RHEL 10 ##################
+
+# RHEL 10 x86_64 Baremetal
   - name: "hg_x86_64_rhel10_metal"
     description: "RHEL 10 SOE baremetal hostgroup"
     organization: "{{ satellite_organization }}"
@@ -14,11 +16,11 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
-    operatingsystem: "RHEL 10.1"
-    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    operatingsystem: "RHEL 10.2"
+    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
     ptable: "RHEL_Server_Compliance"
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
@@ -32,6 +34,38 @@ satellite_hostgroups:
         parameter_type: "string"
         value: "/dev/sda"
 
+  - name: "aap10_26"
+    parent: "hg_x86_64_rhel10_metal"
+    description: "Baremetal hostgroup for RHEL 10 AAP 2.6 deployments"
+    organization: "{{ satellite_organization }}"
+    locations: "{{ satellite_location }}"
+    content_source: "{{ groups['sat_primary'][0] }}"
+    lifecycle_environment: "Development"
+    content_view: "SOE10_AAP26"
+    activation_keys: "SOE10_dev_aap_26"
+    openscap_capsule: "{{ satellite_fqdn }}"
+    ansible_roles:
+      - theforeman.foreman_scap_client
+    domain: "{{ satellite_domain }}"
+    subnet: "{{ _runtime_global_domain_name }}"
+    realm: "{{ satellite_domain | upper }}"
+    architecture: "x86_64"
+    operatingsystem: "RHEL 10.2"
+    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
+    ptable: "RHEL_Server_Compliance"
+    pxe_loader: "Grub2 UEFI"
+    root_pass: "{{ satellite_password }}"
+    parameters:
+      - name: "boot_disk"
+        hidden_value: false
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+      - name: "root_disk"
+        hidden_value: false
+        parameter_type: "string"
+        value: "/dev/nvme0n1"
+
+# RHEL 10 x86_64 Virtual Machine
   - name: "hg_x86_64_rhel10_vm"
     description: "RHEL 10 SOE vm hostgroup"
     organization: "{{ satellite_organization }}"
@@ -46,11 +80,11 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
-    operatingsystem: "RHEL 10.1"
-    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    operatingsystem: "RHEL 10.2"
+    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
     ptable: "RHEL_Server_Compliance"
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
@@ -79,11 +113,11 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
-    operatingsystem: "RHEL 10.1"
-    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    operatingsystem: "RHEL 10.2"
+    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
     ptable: "RHEL_Server_Compliance"
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
@@ -129,11 +163,11 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
-    operatingsystem: "RHEL 10.1"
-    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
+    operatingsystem: "RHEL 10.2"
+    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
     ptable: "RHEL_Server_Compliance"
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
@@ -147,38 +181,9 @@ satellite_hostgroups:
         parameter_type: "string"
         value: "/dev/sda"
 
-  - name: "aap10_26"
-    parent: "hg_x86_64_rhel10_metal"
-    description: "Baremetal hostgroup for RHEL 10 AAP 2.6 deployments"
-    organization: "{{ satellite_organization }}"
-    locations: "{{ satellite_location }}"
-    content_source: "{{ groups['sat_primary'][0] }}"
-    lifecycle_environment: "Development"
-    content_view: "SOE10_AAP26"
-    activation_keys: "SOE10_dev_aap_26"
-    openscap_capsule: "{{ satellite_fqdn }}"
-    ansible_roles:
-      - theforeman.foreman_scap_client
-    domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
-    realm: "{{ satellite_domain | upper }}"
-    architecture: "x86_64"
-    operatingsystem: "RHEL 10.1"
-    kickstart_repository: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
-    ptable: "RHEL_Server_Compliance"
-    pxe_loader: "Grub2 UEFI"
-    root_pass: "{{ satellite_password }}"
-    parameters:
-      - name: "boot_disk"
-        hidden_value: false
-        parameter_type: "string"
-        value: "/dev/nvme0n1"
-      - name: "root_disk"
-        hidden_value: false
-        parameter_type: "string"
-        value: "/dev/nvme0n1"
+############## RHEL 9 ##################
 
-# RHEL9
+# RHEL 9 x86_64 Baremetal
   - name: "hg_x86_64_rhel9_metal"
     description: "RHEL 9 SOE baremetal hostgroup"
     organization: "{{ satellite_organization }}"
@@ -191,7 +196,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -222,7 +227,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -244,20 +249,20 @@ satellite_hostgroups:
         parameter_type: "boolean"
         value: true
 
-  - name: "aap9_24"
+  - name: "aap9_26"
     parent: "hg_x86_64_rhel9_metal"
-    description: "Baremetal hostgroup for RHEL9 AAP 2.4 deployments"
+    description: "Baremetal hostgroup for AAP 2.6 deployments"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     content_source: "{{ groups['sat_primary'][0] }}"
     lifecycle_environment: "Development"
-    content_view: "SOE9_AAP24"
-    activation_keys: "SOE9_dev_aap_24"
+    content_view: "SOE9_AAP26"
+    activation_keys: "SOE9_dev_aap_26"
     openscap_capsule: "{{ satellite_fqdn }}"
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -275,20 +280,20 @@ satellite_hostgroups:
         parameter_type: "string"
         value: "/dev/nvme0n1"
 
-  - name: "aap9_26"
+  - name: "aap9_24"
     parent: "hg_x86_64_rhel9_metal"
-    description: "Baremetal hostgroup for AAP 2.6 deployments"
+    description: "Baremetal hostgroup for RHEL9 AAP 2.4 deployments"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     content_source: "{{ groups['sat_primary'][0] }}"
     lifecycle_environment: "Development"
-    content_view: "SOE9_AAP26"
-    activation_keys: "SOE9_dev_aap_26"
+    content_view: "SOE9_AAP24"
+    activation_keys: "SOE9_dev_aap_24"
     openscap_capsule: "{{ satellite_fqdn }}"
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -317,7 +322,7 @@ satellite_hostgroups:
     activation_keys: "satellite_capsule"
     openscap_capsule: "{{ satellite_fqdn }}"
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -335,6 +340,7 @@ satellite_hostgroups:
         parameter_type: "string"
         value: "/dev/nvme0n1"
 
+# RHEL 9 x86_64 Virtual Machine
   - name: "hg_x86_64_rhel9_vm"
     description: "RHEL 9 SOE vm hostgroup"
     organization: "{{ satellite_organization }}"
@@ -349,7 +355,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 9.7"
@@ -385,23 +391,6 @@ satellite_hostgroups:
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
 
-  - name: "aap9_24_vm"
-    parent: "hg_x86_64_rhel9_vm/dev"
-    description: "RHEL 9 vm for AAP 2.4 host deployments"
-    organization: "{{ satellite_organization }}"
-    locations: "{{ satellite_location }}"
-    compute_resource: "VMware_Lab"
-    compute_profile: "SOE_Medium"
-    content_source: "{{ groups['sat_primary'][0] }}"
-    lifecycle_environment: "Development"
-    content_view: "SOE9_AAP24"
-    activation_keys: "SOE9_dev_aap_24"
-    ansible_roles:
-      - theforeman.foreman_scap_client
-    ptable: "RHEL_Server_Compliance"
-    pxe_loader: "Grub2 UEFI"
-    root_pass: "{{ satellite_password }}"
-
   - name: "aap9_26_vm"
     parent: "hg_x86_64_rhel9_vm/dev"
     description: "RHEL 9 vm for AAP 2.6 host deployments"
@@ -413,6 +402,23 @@ satellite_hostgroups:
     lifecycle_environment: "Development"
     content_view: "SOE9_AAP26"
     activation_keys: "SOE9_dev_aap_26"
+    ansible_roles:
+      - theforeman.foreman_scap_client
+    ptable: "RHEL_Server_Compliance"
+    pxe_loader: "Grub2 UEFI"
+    root_pass: "{{ satellite_password }}"
+
+  - name: "aap9_24_vm"
+    parent: "hg_x86_64_rhel9_vm/dev"
+    description: "RHEL 9 vm for AAP 2.4 host deployments"
+    organization: "{{ satellite_organization }}"
+    locations: "{{ satellite_location }}"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+    content_source: "{{ groups['sat_primary'][0] }}"
+    lifecycle_environment: "Development"
+    content_view: "SOE9_AAP24"
+    activation_keys: "SOE9_dev_aap_24"
     ansible_roles:
       - theforeman.foreman_scap_client
     ptable: "RHEL_Server_Compliance"
@@ -560,7 +566,9 @@ satellite_hostgroups:
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
 
-# RHEL8
+############## RHEL 8 ##################
+
+# RHEL 8 x86_64 Baremetal
   - name: "hg_x86_64_rhel8_metal"
     description: "RHEL 8 SOE base hostgroup"
     organization: "{{ satellite_organization }}"
@@ -573,7 +581,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 8.10"
@@ -591,6 +599,7 @@ satellite_hostgroups:
         parameter_type: "string"
         value: "/dev/nvme0n1"
 
+# RHEL 8 x86_64 Virtual Machine
   - name: "hg_x86_64_rhel8_vm"
     description: "RHEL 8 SOE vm hostgroup"
     organization: "{{ satellite_organization }}"
@@ -605,7 +614,7 @@ satellite_hostgroups:
     ansible_roles:
       - theforeman.foreman_scap_client
     domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
+    subnet: "{{ _runtime_global_domain_name }}"
     realm: "{{ satellite_domain | upper }}"
     architecture: "x86_64"
     operatingsystem: "RHEL 8.10"
@@ -772,62 +781,64 @@ satellite_hostgroups:
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
 
-# CentOS
-  - name: "hg_x86_64_centos79_vm"
-    description: "CentOS 7.9 convert2rhel demo vm hostgroup"
-    organization: "{{ satellite_organization }}"
-    locations: "{{ satellite_location }}"
-    compute_resource: "VMware_Lab"
-    compute_profile: "SOE_Medium"
-    content_source: "{{ groups['sat_primary'][0] }}"
-    lifecycle_environment: "Development"
-    content_view: "CentOS79"
-    activation_keys: "convert_CentOS2RHEL7"
-    domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
-    realm: "{{ satellite_domain | upper }}"
-    architecture: "x86_64"
-    operatingsystem: "CentOS79"
-    media: "CentOS 7 mirror"
-    ptable: "RHEL_Server_Compliance"
-    pxe_loader: "Grub2 UEFI"
-    root_pass: "{{ satellite_password }}"
-    parameters:
-      - name: "boot_disk"
-        hidden_value: false
-        parameter_type: "string"
-        value: "/dev/sda"
-      - name: "root_disk"
-        hidden_value: false
-        parameter_type: "string"
-        value: "/dev/sda"
+############## Deprecated ##################
 
-# OEL79
-  - name: "hg_x86_64_oel79_vm"
-    description: "Oracle Enterprise Linux 7.9 convert2rhel demo vm hostgroup"
-    organization: "{{ satellite_organization }}"
-    locations: "{{ satellite_location }}"
-    compute_resource: "VMware_Lab"
-    compute_profile: "SOE_Medium"
-    content_source: "{{ groups['sat_primary'][0] }}"
-    lifecycle_environment: "Development"
-    content_view: "OEL79"
-    activation_keys: "convert_OEL2RHEL7"
-    domain: "{{ satellite_domain }}"
-    subnet: "{{ _global_domain_name }}"
-    realm: "{{ satellite_domain | upper }}"
-    architecture: "x86_64"
-    media: "OEL79"
-    operatingsystem: "OracleLinux 7.9"
-    ptable: "RHEL_Server_Compliance"
-    pxe_loader: "Grub2 UEFI"
-    root_pass: "{{ satellite_password }}"
-    parameters:
-      - name: "boot_disk"
-        hidden_value: false
-        parameter_type: "string"
-        value: "/dev/sda"
-      - name: "root_disk"
-        hidden_value: false
-        parameter_type: "string"
-        value: "/dev/sda"
+# CentOS 7.9
+  # - name: "hg_x86_64_centos79_vm"
+  #   description: "CentOS 7.9 convert2rhel demo vm hostgroup"
+  #   organization: "{{ satellite_organization }}"
+  #   locations: "{{ satellite_location }}"
+  #   compute_resource: "VMware_Lab"
+  #   compute_profile: "SOE_Medium"
+  #   content_source: "{{ groups['sat_primary'][0] }}"
+  #   lifecycle_environment: "Development"
+  #   content_view: "CentOS79"
+  #   activation_keys: "convert_CentOS2RHEL7"
+  #   domain: "{{ satellite_domain }}"
+  #   subnet: "{{ _runtime_global_domain_name }}"
+  #   realm: "{{ satellite_domain | upper }}"
+  #   architecture: "x86_64"
+  #   operatingsystem: "CentOS79"
+  #   media: "CentOS 7 mirror"
+  #   ptable: "RHEL_Server_Compliance"
+  #   pxe_loader: "Grub2 UEFI"
+  #   root_pass: "{{ satellite_password }}"
+  #   parameters:
+  #     - name: "boot_disk"
+  #       hidden_value: false
+  #       parameter_type: "string"
+  #       value: "/dev/sda"
+  #     - name: "root_disk"
+  #       hidden_value: false
+  #       parameter_type: "string"
+  #       value: "/dev/sda"
+
+# Oracle Enterprise Linux 7.9
+  # - name: "hg_x86_64_oel79_vm"
+  #   description: "Oracle Enterprise Linux 7.9 convert2rhel demo vm hostgroup"
+  #   organization: "{{ satellite_organization }}"
+  #   locations: "{{ satellite_location }}"
+  #   compute_resource: "VMware_Lab"
+  #   compute_profile: "SOE_Medium"
+  #   content_source: "{{ groups['sat_primary'][0] }}"
+  #   lifecycle_environment: "Development"
+  #   content_view: "OEL79"
+  #   activation_keys: "convert_OEL2RHEL7"
+  #   domain: "{{ satellite_domain }}"
+  #   subnet: "{{ _runtime_global_domain_name }}"
+  #   realm: "{{ satellite_domain | upper }}"
+  #   architecture: "x86_64"
+  #   media: "OEL79"
+  #   operatingsystem: "OracleLinux 7.9"
+  #   ptable: "RHEL_Server_Compliance"
+  #   pxe_loader: "Grub2 UEFI"
+  #   root_pass: "{{ satellite_password }}"
+  #   parameters:
+  #     - name: "boot_disk"
+  #       hidden_value: false
+  #       parameter_type: "string"
+  #       value: "/dev/sda"
+  #     - name: "root_disk"
+  #       hidden_value: false
+  #       parameter_type: "string"
+  #       value: "/dev/sda"

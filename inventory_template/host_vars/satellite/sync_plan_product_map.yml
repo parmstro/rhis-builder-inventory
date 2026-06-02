@@ -5,7 +5,33 @@
 
 product_plans:
 
-# RHEL8, RHEL9, RHEL10 x86_64
+# Red Hat Products (A→Z)
+
+  - name: "JBoss Enterprise Application Platform"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+  - name: "Red Hat Ansible Automation Platform"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+  # - name: "Red Hat Ansible Engine"
+  #   plan: "nightly_infra"
+  #   organization: "{{ satellite_organization }}"
+  # Deprecated — replaced by AAP
+
+  - name: "Red Hat Client Tools for RHEL"
+    plan: "nightly_third_party"
+    organization: "{{ satellite_organization }}"
+
+  - name: "Red Hat Enterprise Linux Bootc Containers"
+    plan: "nightly_infra"
+    organization: "{{ satellite_organization }}"
+
+  - name: "Red Hat Enterprise Linux for ARM 64"
+    plan: "nightly_os"
+    organization: "{{ satellite_organization }}"
+
   - name: "Red Hat Enterprise Linux for x86_64"
     plan: "nightly_os"
     organization: "{{ satellite_organization }}"
@@ -14,63 +40,22 @@ product_plans:
     plan: "nightly_os"
     organization: "{{ satellite_organization }}"
 
-# RHEL9, RHEL10 ARM 64
-  - name: "Red Hat Enterprise Linux for ARM 64"
-    plan: "nightly_os"
-    organization: "{{ satellite_organization }}"
+  # - name: "Red Hat Enterprise Linux Server"
+  #   plan: "nightly_os"
+  #   organization: "{{ satellite_organization }}"
+  # Deprecated — RHEL 7 EOL
 
-# RHEL 7.9 and ELS
-  - name: "Red Hat Enterprise Linux Server"
-    plan: "nightly_os"
-    organization: "{{ satellite_organization }}"
+  # - name: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
+  #   plan: "nightly_os"
+  #   organization: "{{ satellite_organization }}"
+  # Deprecated — RHEL 7 ELS EOL
 
-  - name: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
-    plan: "nightly_os"
-    organization: "{{ satellite_organization }}"
-
-# Satellite for RHEL9
   - name: "Red Hat Satellite Capsule"
     plan: "nightly_infra"
     organization: "{{ satellite_organization }}"
 
-# AAP 2.4 and 2.6
-  - name: "Red Hat Ansible Automation Platform"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
 
-# Ansible Engine for RHEL 7.9
-  - name: "Red Hat Ansible Engine"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
-
-# JBoss EAP7 EAP8
-  - name: "JBoss Enterprise Application Platform"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
-
-# RHEL9 imagemode containers
-  - name: "rhel9_containers"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
-
-# convert2RHEL utilities
-  - name: "Red Hat Client Tools for RHEL"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
-
-# Extra Packages for Enterprise Linux
-  - name: "EPEL8"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
-
-  - name: "EPEL9"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
-
-# CentOS
-  - name: "CentOS79"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
+# Third Party Products (A→Z, newest release first)
 
   - name: "CentOS Stream 9"
     plan: "nightly_third_party"
@@ -80,16 +65,28 @@ product_plans:
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
-# Oracle Enterprise Linux
-  - name: "OEL79"
+  # - name: "CentOS79"
+  #   plan: "nightly_third_party"
+  #   organization: "{{ satellite_organization }}"
+  # Deprecated — CentOS 7 EOL
+
+  - name: "EPEL9"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
-# Microsoft SQL Server
-  - name: "Microsoft SQL Server for Linux 2022 for RHEL 8"
+  - name: "EPEL8"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
   - name: "Microsoft SQL Server for Linux 2022 for RHEL 9"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
+
+  - name: "Microsoft SQL Server for Linux 2022 for RHEL 8"
+    plan: "nightly_third_party"
+    organization: "{{ satellite_organization }}"
+
+  # - name: "OEL79"
+  #   plan: "nightly_third_party"
+  #   organization: "{{ satellite_organization }}"
+  # Deprecated — OEL 7 EOL

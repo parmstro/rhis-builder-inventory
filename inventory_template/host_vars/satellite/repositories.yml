@@ -13,349 +13,9 @@
 
 satellite_repositories:
 
-# RHEL 10 x86_64
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.1"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.1"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
+############## JBoss Enterprise Application Platform ##################
 
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream RPMs 10"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS RPMs 10"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - Supplementary RPMs 10"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - Extensions RPMs 10"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - High Availability RPMs 10"
-    product: "Red Hat Enterprise Linux High Availability for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 10 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite 6 Client 2 for RHEL 10 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  # - name: "Red Hat Edge Manager 1.0 for RHEL 10 x86_64 RPMs"
-  #   product: "Red Hat Edge Manager"
-  #   content_type: "yum"
-  #   download_policy: "immediate"
-
-# RHEL 10 ARM 64
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.1"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.1"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream RPMs 10"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS RPMs 10"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - Supplementary RPMs 10"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 10 for ARM 64 - Extensions RPMs 10"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 10 aarch64 RPMs"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite 6 Client 2 for RHEL 10 aarch64 RPMs"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# RHEL 9 x86_64
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.6"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.7"  # for LEAPP
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.7"  # for LEAPP
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.7"  # for LEAPP
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - High Availability RPMs 9"
-    product: "Red Hat Enterprise Linux High Availability for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Edge Manager 1.0 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Edge Manager"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite 6 Client 2 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# RHEL 9 ARM 64
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to kickstart RPi edge devices
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.2"   # known to kickstart RPi edge devices
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream RPMs 9"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS RPMs 9"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 9 for ARM 64 - Supplementary RPMs 9"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 9 aarch64 RPMs"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite 6 Client 2 for RHEL 9 aarch64 RPMs"
-    product: "Red Hat Enterprise Linux for ARM 64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# RHEL 8 x86_64
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.10"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8.10" # for LEAPP
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8.10" # for LEAPP
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8.10" # for LEAPP
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - High Availability RPMs 8"
-    product: "Red Hat Enterprise Linux High Availability for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite 6 Client 2 for RHEL 8 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# RHEL 7.9 x86_64
-  - name: "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 7 Server - Optional RPMs x86_64 7Server"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 7 Server - RH Common RPMs x86_64 7Server"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 7 Server - Supplementary RPMs x86_64 7Server"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 7 Server RPMs x86_64"
-    product: "Red Hat Enterprise Linux Server"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
-    product: "Red Hat Ansible Engine"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# RHEL 7.9 ELS Add-on
-  - name: "Red Hat Enterprise Linux 7 Server - Extended Life Cycle Support RPMs x86_64"
-    product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Enterprise Linux 7 Server - Extended Life Cycle Support - Optional RPMs x86_64"
-    product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "Red Hat Satellite Client 6 for RHEL 7 Server - ELS RPMs x86_64"
-    product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite 6 Client 2 for RHEL 7 Server - ELS RPMs x86_64"
-    product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  # Red Hat Satellite Capsule
-  - name: "Red Hat Satellite Maintenance 6.18 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Enterprise Linux for x86_64"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Satellite Capsule 6.18 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Satellite Capsule"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# Red Hat Ansible Automation Platform
-  - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
-    product: "Red Hat Ansible Automation Platform"
-    content_type: "file"
-    download_policy: "immediate"
-  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
-    product: "Red Hat Ansible Automation Platform"
-    content_type: "file"
-    download_policy: "immediate"
-  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 Files"
-    product: "Red Hat Ansible Automation Platform"
-    content_type: "file"
-    download_policy: "immediate"
-
-  - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Ansible Automation Platform"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 RPMs"
-    product: "Red Hat Ansible Automation Platform"
-    content_type: "yum"
-    download_policy: "immediate"
-  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 RPMs"
-    product: "Red Hat Ansible Automation Platform"
-    content_type: "yum"
-    download_policy: "immediate"
-
-# Red Hat JBoss Enterprise Application Platform
-  - name: "JBoss Enterprise Application Platform 7.4 RHEL 8 RPMs"
-    product: "JBoss Enterprise Application Platform"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "JBoss Enterprise Application Platform 7.4 RHEL 9 RPMs"
-    product: "JBoss Enterprise Application Platform"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "JBoss Enterprise Application Platform 8.0 RHEL 8 x86_64 RPMs"
-    product: "JBoss Enterprise Application Platform"
-    content_type: "yum"
-    download_policy: "immediate"
-
-  - name: "JBoss Enterprise Application Platform 8.0 RHEL 9 x86_64 RPMs"
+  - name: "JBoss Enterprise Application Platform 8.1 RHEL 9 x86_64 RPMs"
     product: "JBoss Enterprise Application Platform"
     content_type: "yum"
     download_policy: "immediate"
@@ -365,18 +25,68 @@ satellite_repositories:
     content_type: "yum"
     download_policy: "immediate"
 
-  - name: "JBoss Enterprise Application Platform 8.1 RHEL 9 x86_64 RPMs"
+  - name: "JBoss Enterprise Application Platform 8.0 RHEL 9 x86_64 RPMs"
     product: "JBoss Enterprise Application Platform"
     content_type: "yum"
     download_policy: "immediate"
 
-# Red Hat Convert2RHEL utilities
-  - name: "Red Hat Client Tools for RHEL 7"
+  - name: "JBoss Enterprise Application Platform 8.0 RHEL 8 x86_64 RPMs"
+    product: "JBoss Enterprise Application Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "JBoss Enterprise Application Platform 7.4 RHEL 9 RPMs"
+    product: "JBoss Enterprise Application Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "JBoss Enterprise Application Platform 7.4 RHEL 8 RPMs"
+    product: "JBoss Enterprise Application Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+
+
+############## Red Hat Ansible Automation Platform ##################
+
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 Files"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "file"
+    download_policy: "immediate"
+
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 RPMs"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "file"
+    download_policy: "immediate"
+
+  - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 Files"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "file"
+    download_policy: "immediate"
+
+  - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Ansible Automation Platform"
+    content_type: "yum"
+    download_policy: "immediate"
+
+
+############## Red Hat Client Tools for RHEL ##################
+
+  - name: "Red Hat Client Tools for RHEL 9"
     product: "Red Hat Client Tools for RHEL"
     content_type: "yum"
     gpg_key: "RedHatGPG"
     ssl_ca_cert: "RedHatSSL"
-    download_policy: "on_demand"
+    download_policy: "immediate"
     unprotected: false
 
   - name: "Red Hat Client Tools for RHEL 8"
@@ -387,30 +97,358 @@ satellite_repositories:
     download_policy: "immediate"
     unprotected: false
 
-  - name: "Red Hat Client Tools for RHEL 9"
-    product: "Red Hat Client Tools for RHEL"
-    content_type: "yum"
-    gpg_key: "RedHatGPG"
-    ssl_ca_cert: "RedHatSSL"
-    download_policy: "immediate"
-    unprotected: false
+  # - name: "Red Hat Client Tools for RHEL 7"
+  #   product: "Red Hat Client Tools for RHEL"
+  #   content_type: "yum"
+  #   gpg_key: "RedHatGPG"
+  #   ssl_ca_cert: "RedHatSSL"
+  #   download_policy: "on_demand"
+  #   unprotected: false
+  # Deprecated — RHEL 7 EOL
 
-# CentOS 79 for convert2rhel demos
-  - name: "CentOS79"
-    product: "CentOS79"
-    content_type: "yum"
-    gpg_key: "CentOS79GPG"
-    download_policy: "immediate"
-    unprotected: false
 
-  - name: "updates"
-    product: "CentOS79"
-    content_type: "yum"
-    gpg_key: "CentOS79GPG"
-    download_policy: "immediate"
-    unprotected: false
+############## Red Hat Edge Manager ##################
 
-# CentOS9 for convert2rhel demos
+  # - name: "Red Hat Edge Manager 1.1 for RHEL 10 x86_64 RPMs"
+  #   product: "Red Hat Edge Manager"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  - name: "Red Hat Edge Manager 1.1 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Edge Manager"
+    content_type: "yum"
+    download_policy: "immediate"
+
+############## Red Hat Enterprise Linux for ARM 64 ##################
+
+# RHEL 10 aarch64
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream Kickstart 10.2"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.2"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream RPMs 10"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS RPMs 10"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - Supplementary RPMs 10"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for ARM 64 - Extensions RPMs 10"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Satellite Client 6 for RHEL 10 aarch64 RPMs"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+# RHEL 9 aarch64
+  # - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.8"
+  #   product: "Red Hat Enterprise Linux for ARM 64"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.8"
+  #   product: "Red Hat Enterprise Linux for ARM 64"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to kickstart RPi edge devices
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.2"    # known to kickstart RPi edge devices
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream RPMs 9"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS RPMs 9"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for ARM 64 - Supplementary RPMs 9"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Satellite Client 6 for RHEL 9 aarch64 RPMs"
+    product: "Red Hat Enterprise Linux for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+
+############## Red Hat Enterprise Linux for x86_64 ##################
+
+# RHEL 10 x86_64
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream Kickstart 10.2"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream RPMs 10"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS RPMs 10"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - Supplementary RPMs 10"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - Extensions RPMs 10"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Satellite Client 6 for RHEL 10 x86_64 RPMs"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+# RHEL 9 x86_64
+  # - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.8"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.8"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9.8"  # Used for LEAPP
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9.8"  # Used for LEAPP
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.8"  # Used for LEAPP
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+# RHEL 8 x86_64
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.10"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.10"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8.10"  # Used for LEAPP
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8.10"  # Used for LEAPP
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary RPMs 8.10"  # Used for LEAPP
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 RPMs"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+# RHEL 7 x86_64 — deprecated, kept for reference
+  # - name: "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 7 Server - Optional RPMs x86_64 7Server"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 7 Server - RH Common RPMs x86_64 7Server"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 7 Server - Supplementary RPMs x86_64 7Server"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Satellite Client 6 for RHEL 7 Server RPMs x86_64"
+  #   product: "Red Hat Enterprise Linux Server"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64"
+  #   product: "Red Hat Ansible Engine"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+
+############## Red Hat Enterprise Linux High Availability for x86_64 ##################
+
+  - name: "Red Hat Enterprise Linux 10 for x86_64 - High Availability RPMs 10"
+    product: "Red Hat Enterprise Linux High Availability for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - High Availability RPMs 9"
+    product: "Red Hat Enterprise Linux High Availability for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Enterprise Linux 8 for x86_64 - High Availability RPMs 8"
+    product: "Red Hat Enterprise Linux High Availability for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+
+############## Red Hat Enterprise Linux Server - Extended Life Cycle Support ##################
+# Deprecated — RHEL 7 ELS EOL
+
+  # - name: "Red Hat Enterprise Linux 7 Server - Extended Life Cycle Support RPMs x86_64"
+  #   product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Enterprise Linux 7 Server - Extended Life Cycle Support - Optional RPMs x86_64"
+  #   product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Satellite Client 6 for RHEL 7 Server - ELS RPMs x86_64"
+  #   product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+  # - name: "Red Hat Satellite 6 Client 2 for RHEL 7 Server - ELS RPMs x86_64"
+  #   product: "Red Hat Enterprise Linux Server - Extended Life Cycle Support"
+  #   content_type: "yum"
+  #   download_policy: "immediate"
+
+
+############## Red Hat Satellite Capsule ##################
+
+  - name: "Red Hat Satellite Capsule 6.18 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Satellite Capsule"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat Satellite Maintenance 6.18 for RHEL 9 x86_64 RPMs"
+    product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+
+############## Third Party Products (A→Z, newest release first) ##################
+
+# CentOS Stream 9
   - name: "centos-9-appstream"
     product: "CentOS Stream 9"
     content_type: "yum"
@@ -425,15 +463,29 @@ satellite_repositories:
     download_policy: "immediate"
     unprotected: false
 
-# Oracle Enterprise Linux for convert2RHEL demos
-  - name: "OEL79"
-    product: "OEL79"
+# CentOS79 — deprecated
+  # - name: "CentOS79"
+  #   product: "CentOS79"
+  #   content_type: "yum"
+  #   gpg_key: "CentOS79GPG"
+  #   download_policy: "immediate"
+  #   unprotected: false
+
+  # - name: "updates"
+  #   product: "CentOS79"
+  #   content_type: "yum"
+  #   gpg_key: "CentOS79GPG"
+  #   download_policy: "immediate"
+  #   unprotected: false
+
+# EPEL9
+  - name: "EPEL9"
+    product: "EPEL9"
     content_type: "yum"
-    gpg_key: "OracleLinux7GPG"
     download_policy: "immediate"
     unprotected: false
 
-# Extra Packages for Linux repositories for Sample Applications
+# EPEL8
   - name: "EPEL8"
     product: "EPEL8"
     content_type: "yum"
@@ -446,15 +498,9 @@ satellite_repositories:
     download_policy: "immediate"
     unprotected: false
 
-  - name: "EPEL9"
-    product: "EPEL9"
-    content_type: "yum"
-    download_policy: "immediate"
-    unprotected: false
-
-# Microsoft SQL Server for Linux for Sample Applications
-  - name: "msqltools2022_rhel8"
-    product: "Microsoft SQL Server for Linux 2022 for RHEL 8"
+# Microsoft SQL Server for Linux 2022 — newest RHEL first
+  - name: "mssqlserver2022_rhel9"
+    product: "Microsoft SQL Server for Linux 2022 for RHEL 9"
     content_type: "yum"
     download_policy: "immediate"
     unprotected: false
@@ -471,8 +517,16 @@ satellite_repositories:
     download_policy: "immediate"
     unprotected: false
 
-  - name: "mssqlserver2022_rhel9"
-    product: "Microsoft SQL Server for Linux 2022 for RHEL 9"
+  - name: "msqltools2022_rhel8"
+    product: "Microsoft SQL Server for Linux 2022 for RHEL 8"
     content_type: "yum"
     download_policy: "immediate"
     unprotected: false
+
+# Oracle Enterprise Linux — deprecated
+  # - name: "OEL79"
+  #   product: "OEL79"
+  #   content_type: "yum"
+  #   gpg_key: "OracleLinux7GPG"
+  #   download_policy: "immediate"
+  #   unprotected: false
