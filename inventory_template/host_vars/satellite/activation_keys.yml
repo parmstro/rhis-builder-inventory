@@ -82,8 +82,7 @@ activation_keys:
         override: "enabled"
       - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
         override: "enabled"
-      - label: "satellite-6-client-2-for-rhel-10-x86_64-rpms"
-        override: "enabled"
+      # satellite-6-client-2-for-rhel-10-x86_64-rpms not yet available in org — enable when repo is synced
     content_view: "SOE10"
     lifecycle_environment: "Development"
     unlimited_hosts: true
@@ -103,8 +102,7 @@ activation_keys:
         override: "enabled"
       - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
         override: "enabled"
-      - label: "satellite-6-client-2-for-rhel-10-x86_64-rpms"
-        override: "enabled"
+      # satellite-6-client-2-for-rhel-10-x86_64-rpms not yet available in org — enable when repo is synced
     content_view: "SOE10"
     lifecycle_environment: "Qualification"
     unlimited_hosts: true
@@ -124,8 +122,7 @@ activation_keys:
         override: "enabled"
       - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
         override: "enabled"
-      - label: "satellite-6-client-2-for-rhel-10-x86_64-rpms"
-        override: "enabled"
+      # satellite-6-client-2-for-rhel-10-x86_64-rpms not yet available in org — enable when repo is synced
     content_view: "SOE10"
     lifecycle_environment: "Production"
     unlimited_hosts: true

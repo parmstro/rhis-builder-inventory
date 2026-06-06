@@ -1,6 +1,6 @@
 ---
 
-satellite_async_timeout: 14400
+satellite_async_timeout: 43200
 satellite_async_delay: 30
 
 # disable transparent huge pages
