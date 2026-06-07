@@ -112,6 +112,8 @@
           - "--exclude=host_vars"
           - "--exclude=logs"
           - "--exclude=vault"
+          - "--exclude=files/ssg-*.xml"     # SCAP DS files — large binaries, referenced from template path
+          - "--exclude=files/ssg-*.xml.gz"  # do not copy per-deployment, copy once during satellite build
 
     - name: Copy jinja templates as-is without templating
       ansible.builtin.copy:

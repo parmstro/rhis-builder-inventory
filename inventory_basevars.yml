@@ -10,6 +10,14 @@
 basevars_global_domain_name: "savage.test"
 basevars_delete_logs: false       # Set to true to wipe the logs directory on inventory_update
 
+# Deployment relationship
+# Set basevars_disconnected_domain: true for air-gapped/highside deployments
+# Set basevars_upstream_connected_deployment to the domain that produced this deployment's content
+# Set basevars_downstream_disconnected_deployment to the domain this deployment feeds content to
+basevars_disconnected_domain: false
+# basevars_upstream_connected_deployment: ""
+# basevars_downstream_disconnected_deployment: ""
+
 default_network: "192.168.140.0"
 default_network_prefix: "22"
 default_network_mask: "255.255.252.0"
