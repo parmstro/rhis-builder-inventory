@@ -6,6 +6,7 @@ filesdir=""
 groupvarsdir=""
 hostvarsdir=""
 inventorydir=""
+logsdir=""
 secretsdir=""
 templatesdir=""
 varsdir=""
@@ -37,6 +38,10 @@ while [[ "$#" -gt 0 ]]; do
             ;;
         -i|--inventory-dir)
             inventorydir="$2"
+            shift # Shift past the value
+            ;;
+        -l|--logs-dir)
+            logsdir="$2"
             shift # Shift past the value
             ;;
         -r|--container-registry)
@@ -78,6 +83,7 @@ echo "files-dir: $filesdir"
 echo "group-vars-dir: $groupvarsdir"
 echo "host-vars-dir: $hostvarsdir"
 echo "inventory-dir: $inventorydir"
+echo "logs-dir: $logsdir"
 echo "secrets-dir: $secretsdir"
 echo "ssh-dir: $sshdir"
 echo "templates-dir: $templatesdir"
@@ -113,6 +119,7 @@ else
                  -v $filesdir:/rhis/vars/files:Z \
                  -v $groupvarsdir:/rhis/vars/group_vars:Z \
                  -v $hostvarsdir:/rhis/vars/host_vars:Z \
+                 -v $logsdir:/rhis/vars/logs:Z \
                  -v $templatesdir:/rhis/vars/templates:Z \
                  -v $varsdir:/rhis/vars/vars:Z \
                  -v $secretsdir:/rhis/vars/vault:Z \
@@ -128,6 +135,7 @@ else
     restorecon -FRq $groupvarsdir
     restorecon -FRq $hostvarsdir
     restorecon -FRq $inventorydir
+    restorecon -FRq $logsdir
     restorecon -FRq $secretsdir
     restorecon -FRq $sshdir
     restorecon -FRq $templatesdir

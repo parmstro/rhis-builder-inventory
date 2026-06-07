@@ -330,6 +330,7 @@ connected (lowside) satellite and imported on the disconnected (highside) satell
 | Operator export checklist generation | `implemented` | Includes transfer drive readiness checks |
 | ISO pre-stage and mount (rsync-based) | `implemented` | `satellite_disconnected_iso_prestaged/mounted` variables |
 | Compliance role bundle (rsync to transfer media) | `implemented` | `satellite_roles_source_path` |
+| rhis-builder-baremetal-init bundle | `implemented` | Synced to `baremetal_init/` in export bundle. Provides highside operator with kickstart ISO generation tools — used to prepare bare metal or VMware VMs (upload ISO to vCenter) before IdM and Satellite are operational. |
 | Content import on highside | `implemented` | `content_imports` role |
 | `content_imports.yml` auto-generation for highside | `designed` | Pre-populated import config; not yet implemented |
 | Content credential export | `designed` | GPG keys and SSL certs for custom products; not yet automated |

@@ -1,5 +1,44 @@
 ### Schema TODO list
 
+#### Disconnected Import Workflow — Known Bugs to Fix
+
+The customer has used the import workflow for manually assembled content. Review
+`export_disconnected.yml` / `content_imports` role for the following issues:
+
+**1. Role import on highside — skip clone, use bundle source**
+The `imported_git_repos` role currently skips role cloning if `satellite_disconnected`
+is true and `satellite_roles_source_path` is defined. This is the correct behaviour —
+on the highside, roles come from the bundle's `ansible_roles/` directory via
+`ansible.posix.synchronize`, not from GitHub. Verify this path is correctly
+wired in the highside satellite build.
+
+**2. Discovery images not installed on highside**
+The bundle includes discovery images in `discovery_images/` (copied in Step 4).
+On the highside Satellite, the discovery plugin tries to pull images from the internet
+during satellite-installer and fails in disconnected environments.
+Fix: The discovery images must be pre-staged from the bundle (or from the Satellite
+DVD ISO) BEFORE satellite-installer runs the discovery configuration.
+The `satellite_disconnected_pre` role or a new pre-task should copy the discovery
+images to `/var/lib/tftpboot/boot/` on the highside before the installer runs.
+
+**3. Discovery image source URL — serve from provisioner via nginx**
+Rather than pre-staging discovery images on the satellite, configure
+`satellite-installer` to pull from a local nginx server running on the provisioner
+during the install. The bundle already carries the discovery images in
+`discovery_images/`. The provisioner starts nginx serving that directory, passes
+`--foreman-proxy-plugin-discovery-source-url http://provisioner.<domain>:8080/`
+to satellite-installer, and stops nginx when the install completes.
+
+This eliminates the internet dependency cleanly and doesn't require manual file
+staging. The provisioner container could include nginx, or it runs on the host.
+The satellite-installer parameter name needs to be confirmed — check
+`satellite-installer --help | grep discovery` on the highside.
+
+All three items need to be addressed in `rhis-builder-satellite` before the
+disconnected import workflow is considered complete.
+
+---
+
 #### SOE Configuration Consistency Validation — Prevent Cross-File Drift
 
 Small inconsistencies between SOE-related files kill long builds late in the run.
@@ -271,10 +310,12 @@ ls -dZ /var/lib/pulp/exports
 sudo -u pulp touch /var/lib/pulp/exports/.write_test && sudo rm /var/lib/pulp/exports/.write_test
 ```
 
-**Why `fscontext=` not `context=`:** ext4 supports extended attributes so individual files can
-carry their own SELinux labels. `fscontext=` sets the filesystem-level context while allowing
-per-file labels — required for Pulp to manage its own subdirectory contexts. `context=` forces
-a single context on everything and prevents Pulp from setting file labels correctly.
+**Why `context=` not `fscontext=`:** On a fresh ext4 transfer drive, the root directory has
+`unlabeled_t` stored in its xattr. `fscontext=` only sets the default for files without an
+existing xattr label — it does not override `unlabeled_t`. The result is the drive root shows
+`unlabeled_t` and Pulp cannot write to it. `context=` forces the context on ALL files regardless
+of xattr, which is correct for a drive used exclusively for export content. Per-file SELinux
+labels are not needed on the transfer drive.
 
 **Space check logic:** Before exporting, verify available space on the transfer drive is at
 least as large as the current used space under `/var/lib/pulp/`. A full Library export

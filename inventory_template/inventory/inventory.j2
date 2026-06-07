@@ -2,6 +2,10 @@ provisioner:
   hosts:
     localhost
 
+provisioner_host:
+  hosts:
+    provisioner.{{ basevars_global_domain_name }}
+
 idm_primary:
   hosts:
     idm1.{{ basevars_global_domain_name }}

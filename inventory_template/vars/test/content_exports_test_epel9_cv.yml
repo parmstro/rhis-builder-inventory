@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/vars.json
+# Test override for content_exports — EPEL8_Stream content view version export
+#
+# Purpose: Validate the disconnected export tooling end-to-end using a small,
+#          single-repo content view. Faster to export and fail than a full
+#          Library export. Run this before committing to a Library export.
+#
+# Usage (from provisioner container):
+#   ansible-playbook ... export_disconnected.yml \
+#     --extra-vars "@/rhis/vars/vars/test/content_exports_test_epel9_cv.yml"
+#
+# This overrides the content_exports variable defined in
+# host_vars/satellite/content_exports.yml for the duration of the run.
+# The production Library config is not modified.
+#
+# After a successful test run, proceed with the full Library export using
+# the standard export_disconnected.yml without this override.
+
+# Literal values required — @file vars are loaded before inventory variables are resolved,
+# so Jinja2 templates referencing inventory vars (satellite_organization, groups, etc.)
+# will fail. Use literal strings in test override files.
+content_exports:
+  - name: "EPEL8_test"
+    type: "cv_version"
+    organization: "Default Organization"
+    format: "importable"
+    content_view: "EPEL8"
+    content_view_version: "1.0"
+    chunk_size_gb: 1        # 1 GB chunks — integer required by the module
+    destination_server: "discosatellite1.example.ca"
+    fail_on_missing_content: true
+    incremental: false
