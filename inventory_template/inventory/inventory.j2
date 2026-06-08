@@ -19,10 +19,9 @@ idm_replicas:
 
 {% endif %}
 sat_primary:
-  hosts:  
+  hosts:
 {% for num in range(1, rhis_system_count.satellite + 1) %}
     satellite{{ num }}.{{ basevars_global_domain_name }}
-    # discosatellite{{ num }}.{{ basevars_global_domain_name }}
 {% endfor %}
 
 {% if rhis_system_count.capsule is defined and rhis_system_count.capsule > 0 %}
