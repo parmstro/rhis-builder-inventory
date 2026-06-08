@@ -13,9 +13,9 @@
 #
 # Prerequisites:
 #   - ansible-playbook available on the provisioner host
-#   - rhis-builder-baremetal-init cloned alongside rhis-builder-inventory
+#   - rhis-builder-bootstrap-init cloned alongside rhis-builder-inventory
 #   - Bootstrap vars at deployments/<domain>/vars/highside_bootstrap_hosts.yml
-#   - Vault files at deployments/<domain>/vault/ (must include baremetal-init vault vars)
+#   - Vault files at deployments/<domain>/vault/ (must include bootstrap-init vault vars)
 #   - SSH access to the satellite host
 
 GREEN='\033[0;32m'
@@ -27,7 +27,7 @@ bv_file=""
 bundle_dir=""
 sshuser="ansiblerunner"
 RHIS_ROOT="$(cd "$(dirname "$0")" && pwd)"
-BAREMETAL_INIT="${RHIS_ROOT}/../rhis-builder-baremetal-init"
+BOOTSTRAP_INIT="${RHIS_ROOT}/../rhis-builder-bootstrap-init"
 ISO_DIR="/tmp/highside_isos"
 
 usage() {
@@ -78,7 +78,7 @@ UPSTREAM_DOMAIN=$(grep "basevars_upstream_connected_deployment:" "$RHIS_ROOT/$bv
 UPSTREAM_DIR="${RHIS_ROOT}/deployments/${UPSTREAM_DOMAIN}"
 SATELLITE=$(grep -A3 "^sat_primary:" "${UPSTREAM_DIR}/inventory/inventory" 2>/dev/null | grep -v "sat_primary:\|hosts:" | awk 'NF{gsub(/:$/, "", $1); print $1; exit}')
 
-for check in "$DEPLOYMENT_DIR" "$BOOTSTRAP_VARS" "$BAREMETAL_INIT"; do
+for check in "$DEPLOYMENT_DIR" "$BOOTSTRAP_VARS" "$BOOTSTRAP_INIT"; do
     if [[ ! -e "$check" ]]; then
         echo -e "${RED}ERROR: Not found: ${check}${NC}"
         exit 1
@@ -110,7 +110,7 @@ cat > /tmp/rhis_provisioner_inventory.ini << 'INVENTORY'
 localhost ansible_connection=local
 INVENTORY
 
-cd "$BAREMETAL_INIT" && \
+cd "$BOOTSTRAP_INIT" && \
 ansible-playbook \
   --inventory /tmp/rhis_provisioner_inventory.ini \
   --vault-password-file "${HOME}/.ssh/vault.txt" \
