@@ -28,6 +28,6 @@ content_exports:
     content_view: "EPEL8"
     content_view_version: "1.0"
     chunk_size_gb: 1        # 1 GB chunks — integer required by the module
-    destination_server: "discosatellite1.example.ca"
+    destination_server: "satellite1.highside.example.ca"
     fail_on_missing_content: true
     incremental: false
