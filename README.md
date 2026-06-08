@@ -1,7 +1,7 @@
 # rhis-builder-inventory
 
-### Getting started fast
----
+## Getting started fast
+
 You need a system with git and podman tools.
 VSCode is very helpful.
 Having ansible language, ansible linter and wolfmah's ansible-vault inline is also super useful.
@@ -34,17 +34,19 @@ Review and edit `your.domain_inventory_basevars.yml`, then run the inventory_upd
 ./inventory_update.sh -b your.domain_inventory_basevars.yml
 ```
 
-`inventory_update.sh` will build a new directory at `deployments/your.domain/` containing the customized RHIS build configuration based on the parameters you have provided. Running it again with a different domain basevars file creates an independent deployment alongside the first.
+`inventory_update.sh` will build a new directory at `deployments/your.domain/` containing the customized RHIS build configuration based on the parameters you have provided. Running it again with a different domain basevars file creates an independent deployment alongside the first. (Hint: This is how you create disconnected/air-gapped environments. More later...)
 
 The inventory_update script will also create a custom launch script at the repo root (`your.domain.24.sh` or `your.domain.25.sh`) to pull and launch the rhis-provisioner container mounted against your deployment.
 
-See below for information on customizing your build further.
+The rhis-provisioner container has all the scripts, playbooks, roles, etc.. that are used to build the RHIS deployment. You can run from within the container or call the helper scripts through the entrypoint.
+
+See below for information on customizing your build further and run the Ansible plays.
 
 ---
 
 ## inventory_basevars.yml reference
 
-`inventory_basevars.yml` is the committed template that you copy to `<your.domain>_inventory_basevars.yml` before customizing. Domain-specific basevars files are gitignored so each user's environment details stay out of the shared repository. The file controls how your deployment directory is generated — the host names, network parameters, location metadata, and system counts. It does **not** configure the hosts themselves; that is done through the generated `host_vars/` and `group_vars/` files inside your deployment directory.
+`inventory_basevars.yml` is the committed template that you copy to `<your.domain>_inventory_basevars.yml` before customizing. Domain-specific basevars files are gitignored so each user's environment details stay out of any shared repository you create. The file controls how your deployment directory is generated — the host names, network parameters, location metadata, and system counts. It does **not** configure the hosts themselves; that is done through the generated `host_vars/` and `group_vars/` files inside your deployment directory.
 
 > **Note:** Networks, datastores, and other underlying hypervisor or hyperscaler resources referenced in your configurations **must already exist** before running the RHIS provisioner. Satellite will attempt to validate compute resources and profiles at runtime and will fail if they are absent.
 
@@ -59,7 +61,6 @@ The fully-qualified domain name for your RHIS deployment. This value drives:
 - The name of the generated deployment directory: `deployments/<global_domain_name>/`
 - The FQDN of every generated host: `<role><N>.<global_domain_name>` (e.g. `satellite1.example.ca`, `idm2.example.ca`)
 - The name of the generated container launch scripts at the repo root: `<global_domain_name>.24.sh` / `<global_domain_name>.25.sh`
-- The prefix of all `group_vars/platform_installer/` files
 
 Set this to the actual DNS domain you will use for your environment.
 
@@ -129,13 +130,14 @@ The list of NTP time servers to configure on your hosts via chrony. Use your org
 ### rhis_aap_release_version
 
 ```yaml
-rhis_aap_release_version: "2.4"
+rhis_aap_release_version: "2.6"
 ```
 
 The AAP release version to deploy. Accepted values are `"2.4"` and `"2.6"`. This controls:
 
 - Which AAP `host_vars` templates are used (`aapcontroller24`/`aaphub24` vs `aapcontroller26`/`aaphub26`)
 - The container image selected when launching the rhis-provisioner
+- AAP 2.4 is deprecated and will be removed in a future release
 
 This does **not** install AAP itself; it selects the correct configuration templates that the provisioner will use when it runs the AAP installation role.
 
@@ -144,7 +146,6 @@ This does **not** install AAP itself; it selects the correct configuration templ
 ```yaml
 rhis_system_count:
   satellite: 1
-  discosatellite: 0
   capsule: 1
   idm: 2
   aapcontroller: 1
@@ -157,7 +158,6 @@ Controls how many instances of each host role are included in your deployment. F
 | Key | Role | Notes |
 |---|---|---|
 | `satellite` | Red Hat Satellite | Primary Satellite server |
-| `discosatellite` | Disconnected Satellite | Satellite in a secure enclave that receives exported content from the primary Satellite for air-gapped environments; set to `0` if not needed |
 | `capsule` | Satellite Capsule | Remote Capsule servers |
 | `idm` | Red Hat IdM | Identity Management; typically 1 primary + 1 replica (count of 2) |
 | `aapcontroller` | AAP Controller | Automation controller nodes |
@@ -202,13 +202,14 @@ That practice fits naturally into a **GitOps** pipeline:
 Once your deployment directory is generated, run the domain launch script from the repo root:
 
 ```
-./your.domain.24.sh    # for AAP 2.4
+./your.domain.24.sh    # for AAP 2.4 (deprecated)
 ./your.domain.25.sh    # for AAP 2.5 / 2.6
 ```
+NOTE: With the deprecation of AAP 2.4 the need for multiple containers and any version decoration is removed. In a future release there will be only one file generated ./your.domain.sh
 
 The script starts the `rhis-provisioner` container interactively. Your deployment configuration is mounted read-write into the container at startup. The container hostname is set to `provisioner` and it is named `rhis-builder`.
 
-> **Note:** Any files you add to the mounted directories after the container starts will not be visible inside the container. You must stop and restart the container to pick up new files.
+> **Note:** Any files you add to the mounted directories after the container starts will be visible inside the container, but will not be accessible due to security configuraiton. You must stop and restart the container to pick up new files.
 
 ### What is mounted inside the container
 
@@ -237,7 +238,7 @@ Configure Satellite including content, lifecycle environments, activation keys, 
 **Phase 4 — Ansible Automation Platform (AAP)**
 Configure the AAP Controller, Private Automation Hub, and any additional nodes. AAP is configured last as it depends on both IdM (for authentication) and Satellite (for content and inventory sources).
 
-> **Phase 1 — Baremetal bootstrap** (runs outside the container, before the above phases): Use `rhis-builder-baremetal-init` to generate OEMDRV kickstart images and bootstrap your physical or virtual hosts to a base RHEL 9 install before running the container.
+> **Phase 1 — Bootstrap** (runs outside the container, before the above phases): Use `rhis-builder-baremetal-init` to generate OEMDRV kickstart images and bootstrap your physical or virtual hosts to a base RHEL 9 install before running the container. The ISO files are generated for use with hypervisors, ks.cfg files are created for using thumb drives with bare metal systems.
 
 ### Stopping and restarting the container
 
@@ -248,6 +249,101 @@ If the container is already running and you need to access it from another termi
 ```
 podman exec -it rhis-builder /bin/bash
 ```
+
+---
+
+## Disconnected (air-gapped) deployments
+
+A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There are a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names. 
+
+NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments my diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction.
+
+
+### Deployment relationship model
+
+Two basevars files, one for each side of the air gap:
+
+```yaml
+# example.ca_inventory_basevars.yml (lowside — connected)
+basevars_global_domain_name: "example.ca"
+basevars_disconnected_domain: false
+basevars_downstream_disconnected_deployment: "highside.example.ca"
+
+# highside.example.ca_inventory_basevars.yml (highside — air-gapped)
+basevars_global_domain_name: "highside.example.ca"
+basevars_disconnected_domain: true
+basevars_upstream_connected_deployment: "example.ca"
+satellite_import_content: true    # triggers content import during satellite build
+```
+
+Generate each deployment independently:
+```bash
+./inventory_update.sh -b example.ca_inventory_basevars.yml
+./inventory_update.sh -b highside.example.ca_inventory_basevars.yml
+```
+
+### Disconnected workflow scripts
+
+These scripts live at the repo root and run **on the provisioner host directly** — not inside the container. The container is used for Ansible operations against remote hosts; these scripts handle local and inter-host operations.
+
+#### Stage 1 — Export content from the lowside Satellite
+
+```bash
+./build_sat_disconnected_export.sh \
+    -x deployments/example.ca/vars/test/content_exports_test_epel9_cv.yml  # optional test override
+```
+
+Runs the full disconnected export playbook. For a Library export (default), expect several hours. Prints the exact Stage 2 command when complete, including the bundle directory path and estimated transfer media size.
+
+> The Pulp export content is written directly to the transfer drive (mounted at `/var/lib/pulp/exports/`). Bundle artifacts (roles, inventory, ISOs, manifests) are staged in `rhis_export_root` on the satellite.
+
+#### Stage 2 — Copy bundle artifacts to the transfer drive
+
+```bash
+./update_transfer_bundle.sh \
+    -b example.ca_inventory_basevars.yml \
+    -d /home/ansiblerunner/rhis_export/Library_2026-06-07_1416
+```
+
+Syncs the bundle artifacts to the transfer drive using rsync — only changed or new files are transferred. Fast. **Run this whenever bundle artifacts change without needing to repeat the export.** Common scenarios:
+- ISOs were generated or updated after the export
+- Inventory archive was regenerated
+- Compliance roles were updated
+
+The Pulp export content at the drive root is never touched.
+
+#### Generate highside kickstart ISOs
+
+```bash
+./build_highside_isos.sh \
+    -b highside.example.ca_inventory_basevars.yml \
+    -d /home/ansiblerunner/rhis_export/Library_2026-06-07_1416
+```
+
+Generates OEMDRV kickstart ISOs for all highside hosts (provisioner, IdM, Satellite) from the highside deployment configuration. ISOs are generated on the provisioner host and pushed to the satellite's bundle `isos/` directory. The next run of `update_transfer_bundle.sh` includes them on the drive automatically.
+
+Upload the ISOs to vCenter (or attach as virtual media) to boot VMs with an OEMDRV kickstart. Boot the VM from the RHEL DVD ISO with the OEMDRV ISO as a second virtual CD.
+
+#### Validate the bundle before import
+
+Run on the highside after mounting the transfer drive:
+
+```bash
+validate_import_bundle.sh -d /mnt/transfer
+```
+
+Checks that the bundle is complete, verifies SHA256 checksums against the manifest, and reports readiness. Prints `READY FOR IMPORT` or `NOT READY` with specific issues.
+
+### Highside bootstrap sequence
+
+1. Install RHEL 9 on three nodes from ISO: `provisioner`, `idm1`, `satellite1`
+2. Connect the transfer drive to the provisioner; mount it at `/mnt/transfer`
+3. Validate the bundle: `validate_import_bundle.sh -d /mnt/transfer`
+4. Extract the inventory: `tar xzf /mnt/transfer/rhis_transfer_*/inventory/*.tar.gz -C /home/ansiblerunner/rhis/`
+5. Load the provisioner container: `podman load < /mnt/transfer/rhis_transfer_*/container/rhis-provisioner.tar`
+6. Build IdM (optional): `build_idm_primary.sh`
+7. Build Satellite (triggers content import): `build_sat_primary.sh`
+8. Satellite provisions remaining infrastructure via kickstart
 
 ---
 

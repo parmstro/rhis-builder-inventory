@@ -1,0 +1,115 @@
+---
+# highside_bootstrap_hosts.yml
+# Bootstrap kickstart ISO configuration for highside.example.ca nodes.
+# Generates OEMDRV ISOs for upload to VMware vCenter (or any virtual media).
+#
+# Usage (from provisioner container):
+#   ansible-playbook main.yml \
+#     --extra-vars "vault_dir=/rhis/vars/vault vars_dir=/rhis/vars/host_vars" \
+#     --extra-vars "@/rhis/vars/vars/highside_bootstrap_hosts.yml"
+#
+# ISOs are written to bootstrap_init_iso_dir on the provisioner host.
+# After generation, copy ISOs to the bundle directory for transfer:
+#   isos/
+#     provisioner.highside.example.ca.oemdrv.iso
+#     idm1.highside.example.ca.oemdrv.iso
+#     satellite1.highside.example.ca.oemdrv.iso
+
+bootstrap_init_iso_dir: "/tmp/highside_isos"
+bootstrap_init_ks_path: "ks.cfg"
+bootstrap_init_oem_dir: "/mnt/OEMDRV"
+
+bootstrap_init_hosts:
+
+  - rhis_role: "provisioner"
+    hostname: "provisioner"
+    domain: "highside.example.ca"
+    mac: "ff:ff:ff:ff:ff:ff"           # VMware assigns MAC at deploy time
+    ipv4_address: "192.168.140.213"
+    ipv4_netmask: "255.255.252.0"
+    ipv4_prefix: 22
+    ipv4_gateway: "192.168.140.1"
+    name_server1: "192.168.140.10"     # lowside IdM during bootstrap
+    name_server2: "192.168.140.1"      # OPNsense fallback
+    root_enc_pass: "{{ encrypted_root_pass_vault }}"
+    grub_enc_pass: "{{ encrypted_grub_pass_vault }}"
+    boot_disk: "/dev/sda"
+    root_disk: "/dev/sda"
+    boot_mb: 1024
+    boot_efi_mb: 2048
+    lv_root_mb: 65536
+    lv_home_mb: 20480
+    lv_tmp_mb: 6144
+    lv_var_tmp_mb: 6144
+    lv_var_log_mb: 6144
+    lv_var_log_audit_mb: 6144
+    lv_var_mb: 1
+    username: "ansiblerunner"
+    user_enc_pass: "{{ encrypted_user_pass_vault }}"
+    user_sudoer_policy: "{{ user_sudoer_policy_vault }}"
+    ssh_pub_key: "{{ ssh_pub_key_vault }}"
+    org: "{{ cdn_organization_vault }}"
+    activation_key: "{{ cdn_activation_key_vault }}"
+    generate_oemdrv_iso: true
+
+  - rhis_role: "idm"
+    hostname: "idm1"
+    domain: "highside.example.ca"
+    mac: "ff:ff:ff:ff:ff:ff"
+    ipv4_address: "192.168.140.210"
+    ipv4_netmask: "255.255.252.0"
+    ipv4_prefix: 22
+    ipv4_gateway: "192.168.140.1"
+    name_server1: "192.168.140.10"
+    name_server2: "192.168.140.1"
+    root_enc_pass: "{{ encrypted_root_pass_vault }}"
+    grub_enc_pass: "{{ encrypted_grub_pass_vault }}"
+    boot_disk: "/dev/sda"
+    root_disk: "/dev/sda"
+    boot_mb: 1024
+    boot_efi_mb: 2048
+    lv_root_mb: 65536
+    lv_home_mb: 20480
+    lv_tmp_mb: 6144
+    lv_var_tmp_mb: 6144
+    lv_var_log_mb: 6144
+    lv_var_log_audit_mb: 6144
+    lv_var_mb: 1
+    username: "ansiblerunner"
+    user_enc_pass: "{{ encrypted_user_pass_vault }}"
+    user_sudoer_policy: "{{ user_sudoer_policy_vault }}"
+    ssh_pub_key: "{{ ssh_pub_key_vault }}"
+    org: "{{ cdn_organization_vault }}"
+    activation_key: "{{ cdn_activation_key_vault }}"
+    generate_oemdrv_iso: true
+
+  - rhis_role: "satellite"
+    hostname: "satellite1"
+    domain: "highside.example.ca"
+    mac: "ff:ff:ff:ff:ff:ff"           # set actual MAC for PXE if needed
+    ipv4_address: "192.168.140.212"
+    ipv4_netmask: "255.255.252.0"
+    ipv4_prefix: 22
+    ipv4_gateway: "192.168.140.1"
+    name_server1: "192.168.140.10"
+    name_server2: "192.168.140.1"
+    root_enc_pass: "{{ encrypted_root_pass_vault }}"
+    grub_enc_pass: "{{ encrypted_grub_pass_vault }}"
+    boot_disk: "/dev/nvme0n1"          # bare metal 4TB NVMe
+    root_disk: "/dev/nvme0n1"
+    boot_mb: 1024
+    boot_efi_mb: 2048
+    lv_root_mb: 65536
+    lv_home_mb: 20480
+    lv_tmp_mb: 6144
+    lv_var_tmp_mb: 6144
+    lv_var_log_mb: 6144
+    lv_var_log_audit_mb: 6144
+    lv_var_mb: 1                       # remainder of 4TB NVMe (~3.7 TB) goes to /var
+    username: "ansiblerunner"
+    user_enc_pass: "{{ encrypted_user_pass_vault }}"
+    user_sudoer_policy: "{{ user_sudoer_policy_vault }}"
+    ssh_pub_key: "{{ ssh_pub_key_vault }}"
+    org: "{{ cdn_organization_vault }}"
+    activation_key: "{{ cdn_activation_key_vault }}"
+    generate_oemdrv_iso: true

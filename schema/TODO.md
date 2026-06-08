@@ -1,5 +1,57 @@
 ### Schema TODO list
 
+#### rhis-builder-kvm — Network and Storage Roles (WIP)
+
+`kvm_host` (base KVM node configuration, IdM and Satellite integration) is sound.
+`kvm_images` is sound.
+
+The following roles are work in progress — network and storage provisioning:
+- `kvm_networks` — WIP
+- `kvm_pools` — WIP
+- `kvm_volumes` — WIP
+
+Do not use kvm_networks, kvm_pools, or kvm_volumes in production until complete.
+
+---
+
+#### Satellite Performance Tuning — Apply After Export Completes
+
+Baseline metrics collected during 2026-06-07 full library export (1.27 TB).
+Apply these changes after the export finishes and validate against next export.
+
+**Current state:** 62 GB RAM, 19 GB in use (30%). PostgreSQL shared_buffers=16 GB (good).
+Pulp task workers=4 (undersized). SYNC_MAX_IN_FLIGHT_MB=5000 (default, conservative).
+
+**Changes to apply via satellite-installer:**
+```bash
+sudo satellite-installer \
+  --foreman-proxy-content-pulpcore-worker-count=8
+```
+
+**Changes via /etc/foreman-installer/custom-hiera.yaml (PostgreSQL):**
+```yaml
+postgresql::server::config_entries:
+  maintenance_work_mem:
+    value: '2000MB'
+  effective_cache_size:
+    value: '48GB'
+  max_wal_size:
+    value: '4GB'
+```
+
+**Changes via /etc/pulp/settings.py (requires satellite-installer to persist):**
+```
+SYNC_MAX_IN_FLIGHT_MB = 20000
+```
+
+**Important:** Red Hat caps Pulp workers at 8 regardless of CPU count (I/O bottleneck risk).
+Test at 6 first if unsure, then 8. Monitor `iostat` during export to confirm I/O
+is not saturated (util <90%, await <50ms).
+
+**Baseline metrics log:** `deployments/example.ca/logs/export_perf_baseline.log`
+
+---
+
 #### Disconnected Import Workflow — Known Bugs to Fix
 
 The customer has used the import workflow for manually assembled content. Review

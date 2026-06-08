@@ -1,22 +1,22 @@
 provisioner:
   hosts:
-    localhost
+    localhost:
 
 idm_primary:
   hosts:
-    idm1.{{ basevars_global_domain_name }}
+    idm1.{{ basevars_global_domain_name }}:
 
 idm_replicas:
   hosts:
-    idm2.{{ basevars_global_domain_name }}
+    idm2.{{ basevars_global_domain_name }}:
 
 sat_primary:
   hosts:
-    satellite1.{{ basevars_global_domain_name }}
+    satellite1.{{ basevars_global_domain_name }}:
 
 sat_capsules:
   hosts:
-    capsule1.{{ basevars_global_domain_name }}
+    capsule1.{{ basevars_global_domain_name }}:
 
 sat_trusted_hosts:
   children:
@@ -25,17 +25,17 @@ sat_trusted_hosts:
 
 platform_installer:
   hosts:
-    aaphub1.{{ basevars_global_domain_name }}
+    aaphub1.{{ basevars_global_domain_name }}:
 
 aap_controllers:
   hosts:
-    aapcontroller1.{{ basevars_global_domain_name }}
+    aapcontroller1.{{ basevars_global_domain_name }}:
 
 # aap_database:
 
 aap_hubs:
   hosts:
-    aaphub1.{{ basevars_global_domain_name }}
+    aaphub1.{{ basevars_global_domain_name }}:
 
 # aap_edacontrollers:
 # aap_execution_nodes:
@@ -49,12 +49,12 @@ aap_hosts:
 
 container_servers:
   hosts:
-    quadlet1.{{ basevars_global_domain_name }}
-    quadlet2.{{ basevars_global_domain_name }}
+    quadlet1.{{ basevars_global_domain_name }}:
+    quadlet2.{{ basevars_global_domain_name }}:
 
 quay_servers:
   hosts:
-    quay1.{{ basevars_global_domain_name }}
+    quay1.{{ basevars_global_domain_name }}:
 
 # aws_nodes:
 # azure_nodes:
@@ -65,16 +65,16 @@ quay_servers:
 # openstack_nodes:
 vmware_vcenter_hosts:
   hosts:
-    vcenter.{{ basevars_global_domain_name }}
+    vcenter.{{ basevars_global_domain_name }}:
 
 vmware_esx_hosts:
   hosts:
-    esx1.{{ basevars_global_domain_name }}
-    esx2.{{ basevars_global_domain_name }}
-    esx3.{{ basevars_global_domain_name }}
-    esx4.{{ basevars_global_domain_name }}
-    esx5.{{ basevars_global_domain_name }}
-    esx6.{{ basevars_global_domain_name }}
-    esx7.{{ basevars_global_domain_name }}
-    esx8.{{ basevars_global_domain_name }}
-    esx9.{{ basevars_global_domain_name }}
+    esx1.{{ basevars_global_domain_name }}:
+    esx2.{{ basevars_global_domain_name }}:
+    esx3.{{ basevars_global_domain_name }}:
+    esx4.{{ basevars_global_domain_name }}:
+    esx5.{{ basevars_global_domain_name }}:
+    esx6.{{ basevars_global_domain_name }}:
+    esx7.{{ basevars_global_domain_name }}:
+    esx8.{{ basevars_global_domain_name }}:
+    esx9.{{ basevars_global_domain_name }}:

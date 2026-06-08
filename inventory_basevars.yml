@@ -43,7 +43,6 @@ rhis_satellite_os_major_version: "9"
 
 rhis_system_count:
   satellite: 1
-  discosatellite: 1
   capsule: 1
   idm: 2
   aapcontroller: 1
