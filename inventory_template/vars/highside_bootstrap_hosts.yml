@@ -24,6 +24,7 @@ bootstrap_init_hosts:
   - rhis_role: "provisioner"
     hostname: "provisioner"
     domain: "highside.example.ca"
+    disconnected: true                 # DVD install — no CDN registration
     mac: "ff:ff:ff:ff:ff:ff"           # VMware assigns MAC at deploy time
     ipv4_address: "192.168.140.213"
     ipv4_netmask: "255.255.252.0"
@@ -48,13 +49,12 @@ bootstrap_init_hosts:
     user_enc_pass: "{{ encrypted_user_pass_vault }}"
     user_sudoer_policy: "{{ user_sudoer_policy_vault }}"
     ssh_pub_key: "{{ ssh_pub_key_vault }}"
-    org: "{{ cdn_organization_vault }}"
-    activation_key: "{{ cdn_activation_key_vault }}"
     generate_oemdrv_iso: true
 
   - rhis_role: "idm"
     hostname: "idm1"
     domain: "highside.example.ca"
+    disconnected: true                 # DVD install — no CDN registration
     mac: "ff:ff:ff:ff:ff:ff"
     ipv4_address: "192.168.140.210"
     ipv4_netmask: "255.255.252.0"
@@ -79,13 +79,12 @@ bootstrap_init_hosts:
     user_enc_pass: "{{ encrypted_user_pass_vault }}"
     user_sudoer_policy: "{{ user_sudoer_policy_vault }}"
     ssh_pub_key: "{{ ssh_pub_key_vault }}"
-    org: "{{ cdn_organization_vault }}"
-    activation_key: "{{ cdn_activation_key_vault }}"
     generate_oemdrv_iso: true
 
   - rhis_role: "satellite"
     hostname: "satellite1"
     domain: "highside.example.ca"
+    disconnected: true                 # DVD install — no CDN registration
     mac: "ff:ff:ff:ff:ff:ff"           # set actual MAC for PXE if needed
     ipv4_address: "192.168.140.212"
     ipv4_netmask: "255.255.252.0"
@@ -110,6 +109,4 @@ bootstrap_init_hosts:
     user_enc_pass: "{{ encrypted_user_pass_vault }}"
     user_sudoer_policy: "{{ user_sudoer_policy_vault }}"
     ssh_pub_key: "{{ ssh_pub_key_vault }}"
-    org: "{{ cdn_organization_vault }}"
-    activation_key: "{{ cdn_activation_key_vault }}"
     generate_oemdrv_iso: true
