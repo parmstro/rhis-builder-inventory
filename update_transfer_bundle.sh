@@ -129,14 +129,38 @@ duration=$SECONDS
 printf "\n${GREEN}End Time: %(%T)T${NC}\n" -1
 TZ=UTC0 printf "${GREEN}Elapsed Time: %(%T)T${NC}\n" $duration
 
-if [[ $EXIT_CODE -eq 0 ]]; then
-    echo ""
-    echo -e "${GREEN}════════════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN}  Transfer bundle updated${NC}"
-    echo -e "  Log: ${DEPLOYMENT_DIR}/logs/update_transfer_bundle.log"
-    echo -e "${GREEN}════════════════════════════════════════════════════════════════${NC}"
-else
+if [[ $EXIT_CODE -ne 0 ]]; then
     echo -e "${RED}ERROR: Bundle update failed with exit code ${EXIT_CODE}${NC}"
     echo "  Check: ${DEPLOYMENT_DIR}/logs/update_transfer_bundle.log"
     exit $EXIT_CODE
 fi
+
+SAT_HOST="satellite1.${DOMAIN}"
+
+echo ""
+echo -e "${GREEN}Validating transfer drive at ${media_path} on ${SAT_HOST}...${NC}"
+
+podman run --rm \
+  -v "${HOME}/.ssh:/root/.ssh:Z" \
+  --hostname provisioner \
+  quay.io/parmstro/rhis-provisioner-9-2.5:latest \
+  -c "ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_ed25519 \
+      ansiblerunner@${SAT_HOST} \
+      'sudo bash -s -- -d ${media_path}' \
+      < /rhis-provisioner/validate_import_bundle.sh" \
+  2>&1 | tee "${DEPLOYMENT_DIR}/logs/update_transfer_bundle_validate.log"
+
+VALIDATE_EXIT=${PIPESTATUS[0]}
+
+if [[ $VALIDATE_EXIT -ne 0 ]]; then
+    echo -e "${RED}Drive validation failed — resolve failures before transporting.${NC}"
+    echo "  Check: ${DEPLOYMENT_DIR}/logs/update_transfer_bundle_validate.log"
+    exit $VALIDATE_EXIT
+fi
+
+echo ""
+echo -e "${GREEN}════════════════════════════════════════════════════════════════${NC}"
+echo -e "${GREEN}  Transfer bundle updated and drive validated${NC}"
+echo -e "  Bundle log:     ${DEPLOYMENT_DIR}/logs/update_transfer_bundle.log"
+echo -e "  Validation log: ${DEPLOYMENT_DIR}/logs/update_transfer_bundle_validate.log"
+echo -e "${GREEN}════════════════════════════════════════════════════════════════${NC}"
