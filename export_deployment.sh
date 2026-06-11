@@ -315,6 +315,36 @@ if [[ $STAGE2_EXIT -ne 0 ]]; then
     exit $STAGE2_EXIT
 fi
 
+# ── Stage 3: Validate transfer drive ──────────────────────────────────────────
+# Pipes validate_import_bundle.sh from inside the container to the satellite
+# via SSH so the drive is validated in place — no file copying needed.
+
+echo ""
+echo -e "${GREEN}Stage 3 — Validating transfer drive at ${media_path} on ${SAT_HOST}...${NC}"
+
+podman run --rm \
+  -v "${HOME}/.ssh:/root/.ssh:Z" \
+  --hostname provisioner \
+  "${CONTAINER_IMAGE}" \
+  -c "ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_ed25519 \
+      ansiblerunner@${SAT_HOST} \
+      'sudo bash -s -- -d ${media_path}' \
+      < /rhis-provisioner/validate_import_bundle.sh \
+      2>&1 | tee /dev/stderr" \
+  2>&1 | tee "${LOWSIDE_DIR}/logs/export_deployment_stage3.log"
+
+STAGE3_EXIT=${PIPESTATUS[0]}
+
+if [[ $STAGE3_EXIT -ne 0 ]]; then
+    echo -e "${RED}Stage 3 — Drive validation failed (exit ${STAGE3_EXIT}).${NC}"
+    echo "  Log: ${LOWSIDE_DIR}/logs/export_deployment_stage3.log"
+    echo -e "${RED}  Resolve failures before transporting the drive.${NC}"
+    rm -f "${IMAGE_TAR}"
+    exit $STAGE3_EXIT
+fi
+
+echo -e "${GREEN}Stage 3 complete — drive validated.${NC}"
+
 # ── Cleanup and summary ────────────────────────────────────────────────────────
 
 rm -f "${IMAGE_TAR}"
@@ -334,6 +364,7 @@ echo -e "  Transfer media:      ${YELLOW}${media_path}${NC}  (on ${SAT_HOST})"
 echo ""
 echo -e "  Stage 1 log: ${LOWSIDE_DIR}/logs/export_deployment_stage1.log"
 echo -e "  Stage 2 log: ${LOWSIDE_DIR}/logs/export_deployment_stage2.log"
+echo -e "  Stage 3 log: ${LOWSIDE_DIR}/logs/export_deployment_stage3.log"
 echo ""
 echo -e "${YELLOW}  IMPORTANT: Vault password must travel via a separate trusted channel.${NC}"
 echo -e "${YELLOW}  Do NOT include the vault password in or alongside the transfer bundle.${NC}"
