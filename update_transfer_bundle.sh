@@ -141,6 +141,7 @@ echo ""
 echo -e "${GREEN}Validating transfer drive at ${media_path} on ${SAT_HOST}...${NC}"
 
 podman run --rm \
+  --entrypoint /bin/bash \
   -v "${HOME}/.ssh:/root/.ssh:Z" \
   --hostname provisioner \
   quay.io/parmstro/rhis-provisioner-9-2.5:latest \

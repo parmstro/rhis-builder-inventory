@@ -323,6 +323,7 @@ echo ""
 echo -e "${GREEN}Stage 3 — Validating transfer drive at ${media_path} on ${SAT_HOST}...${NC}"
 
 podman run --rm \
+  --entrypoint /bin/bash \
   -v "${HOME}/.ssh:/root/.ssh:Z" \
   --hostname provisioner \
   "${CONTAINER_IMAGE}" \
