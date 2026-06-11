@@ -322,16 +322,13 @@ fi
 echo ""
 echo -e "${GREEN}Stage 3 — Validating transfer drive at ${media_path} on ${SAT_HOST}...${NC}"
 
-podman run --rm \
-  --entrypoint /bin/bash \
-  -v "${HOME}/.ssh:/root/.ssh:Z" \
-  --hostname provisioner \
-  "${CONTAINER_IMAGE}" \
-  -c "ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_ed25519 \
-      ansiblerunner@${SAT_HOST} \
-      'sudo bash -s -- -d ${media_path}' \
-      < /rhis-provisioner/validate_import_bundle.sh \
-      2>&1 | tee /dev/stderr" \
+VALIDATE_SCRIPT="${RHIS_ROOT}/../rhis-provisioner-container/rhis-provisioner/validate_import_bundle.sh"
+
+ssh -o StrictHostKeyChecking=no \
+    -i "${HOME}/.ssh/id_ed25519" \
+    "ansiblerunner@${SAT_HOST}" \
+    "sudo bash -s -- -d ${media_path}" \
+    < "${VALIDATE_SCRIPT}" \
   2>&1 | tee "${LOWSIDE_DIR}/logs/export_deployment_stage3.log"
 
 STAGE3_EXIT=${PIPESTATUS[0]}

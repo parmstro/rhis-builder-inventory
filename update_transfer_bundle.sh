@@ -140,15 +140,13 @@ SAT_HOST="satellite1.${DOMAIN}"
 echo ""
 echo -e "${GREEN}Validating transfer drive at ${media_path} on ${SAT_HOST}...${NC}"
 
-podman run --rm \
-  --entrypoint /bin/bash \
-  -v "${HOME}/.ssh:/root/.ssh:Z" \
-  --hostname provisioner \
-  quay.io/parmstro/rhis-provisioner-9-2.5:latest \
-  -c "ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_ed25519 \
-      ansiblerunner@${SAT_HOST} \
-      'sudo bash -s -- -d ${media_path}' \
-      < /rhis-provisioner/validate_import_bundle.sh" \
+VALIDATE_SCRIPT="${RHIS_ROOT}/../rhis-provisioner-container/rhis-provisioner/validate_import_bundle.sh"
+
+ssh -o StrictHostKeyChecking=no \
+    -i "${HOME}/.ssh/id_ed25519" \
+    "ansiblerunner@${SAT_HOST}" \
+    "sudo bash -s -- -d ${media_path}" \
+    < "${VALIDATE_SCRIPT}" \
   2>&1 | tee "${DEPLOYMENT_DIR}/logs/update_transfer_bundle_validate.log"
 
 VALIDATE_EXIT=${PIPESTATUS[0]}

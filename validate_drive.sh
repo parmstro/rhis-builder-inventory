@@ -11,7 +11,6 @@
 #                                 REQUIRED
 #   -m | --media-path <path>      Transfer drive mount point on the satellite
 #                                 (default: /mnt/rhis_transfer)
-#       --ansible-ver <version>   Provisioner container version (default: 2.5)
 #   -h | --help                   Show this help
 
 GREEN='\033[0;32m'
@@ -22,7 +21,6 @@ NC='\033[0m'
 RHIS_ROOT="$(cd "$(dirname "$0")" && pwd)"
 bv_file=""
 media_path="/mnt/rhis_transfer"
-ansible_ver="2.5"
 
 usage() {
     sed -n '/^# USAGE:/,/^[^#]/p' "$0" | grep '^#' | sed 's/^# \{0,1\}//'
@@ -35,7 +33,6 @@ while [[ "$#" -gt 0 ]]; do
     case "$1" in
         -b|--basevars-file) bv_file="$2";    shift ;;
         -m|--media-path)    media_path="$2"; shift ;;
-        --ansible-ver)      ansible_ver="$2"; shift ;;
         -h|--help)          usage ;;
         *)
             echo -e "${RED}ERROR: Unknown option: $1${NC}" >&2
@@ -53,11 +50,11 @@ DOMAIN=$(grep "^basevars_global_domain_name:" "${RHIS_ROOT}/${bv_file}" \
 [[ -z "$DOMAIN" ]] && die "Could not parse basevars_global_domain_name from ${bv_file}"
 
 SAT_HOST="satellite1.${DOMAIN}"
-CONTAINER_IMAGE="quay.io/parmstro/rhis-provisioner-9-${ansible_ver}:latest"
 
-if ! podman image exists "${CONTAINER_IMAGE}"; then
-    die "Container image not found locally: ${CONTAINER_IMAGE}
-Pull it first: podman pull ${CONTAINER_IMAGE}"
+VALIDATE_SCRIPT="${RHIS_ROOT}/../rhis-provisioner-container/rhis-provisioner/validate_import_bundle.sh"
+if [[ ! -f "${VALIDATE_SCRIPT}" ]]; then
+    die "validate_import_bundle.sh not found: ${VALIDATE_SCRIPT}
+Ensure rhis-provisioner-container is checked out alongside rhis-builder-inventory."
 fi
 
 echo -e "${GREEN}Validating transfer drive${NC}"
@@ -65,15 +62,11 @@ echo "  Satellite:   ${SAT_HOST}"
 echo "  Drive mount: ${media_path}"
 echo ""
 
-podman run --rm \
-  --entrypoint /bin/bash \
-  -v "${HOME}/.ssh:/root/.ssh:Z" \
-  --hostname provisioner \
-  "${CONTAINER_IMAGE}" \
-  -c "ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_ed25519 \
-      ansiblerunner@${SAT_HOST} \
-      'sudo bash -s -- -d ${media_path}' \
-      < /rhis-provisioner/validate_import_bundle.sh"
+ssh -o StrictHostKeyChecking=no \
+    -i "${HOME}/.ssh/id_ed25519" \
+    "ansiblerunner@${SAT_HOST}" \
+    "sudo bash -s -- -d ${media_path}" \
+    < "${VALIDATE_SCRIPT}"
 
 EXIT_CODE=$?
 
