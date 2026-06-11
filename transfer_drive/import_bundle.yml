@@ -1,0 +1,216 @@
+---
+# import_bundle.yml
+# Survey-driven RHIS highside bundle delivery playbook.
+# Runs on the operator's RHEL workstation from the root of the TRANSFER_DRV.
+# Handles three delivery methods: usb, rsync, virtual_disk.
+#
+# Usage:
+#   ./import_bundle.sh
+#   ansible-playbook import_bundle.yml
+
+- name: "RHIS Highside Bundle — Data Delivery"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_prompt:
+
+    - name: delivery_method
+      prompt: |2
+
+        ══════════════════════════════════════════════════════════════════
+         RHIS Highside Bundle Import
+        ══════════════════════════════════════════════════════════════════
+
+         Select delivery method:
+
+           usb          — Drive physically connected to the satellite
+           rsync        — Push from this workstation over the network
+           virtual_disk — Push all content to provisioner first
+
+        Delivery method [usb/rsync/virtual_disk]
+      private: false
+
+    - name: provisioner_host
+      prompt: "Provisioner hostname or IP"
+      private: false
+
+    - name: satellite_host
+      prompt: "Satellite hostname or IP"
+      private: false
+
+    - name: deployment
+      prompt: "Deployment name (e.g. highside.example.ca)"
+      private: false
+
+    - name: ssh_user
+      prompt: "SSH user"
+      default: "ansiblerunner"
+      private: false
+
+    - name: ssh_key
+      prompt: "SSH private key path"
+      default: "~/.ssh/id_ed25519"
+      private: false
+
+  tasks:
+
+    - name: "Validate delivery method"
+      ansible.builtin.assert:
+        that: delivery_method in ['usb', 'rsync', 'virtual_disk']
+        fail_msg: >
+          Invalid delivery method '{{ delivery_method }}'.
+          Must be one of: usb, rsync, virtual_disk.
+          See README_FIRST.md for a description of each method.
+
+    - name: "Set drive root"
+      ansible.builtin.set_fact:
+        _drive_root: "{{ playbook_dir }}"
+
+    - name: "Find rhis_transfer_* bundle directory on drive"
+      ansible.builtin.find:
+        paths: "{{ _drive_root }}"
+        file_type: directory
+        patterns: "rhis_transfer_*"
+      register: _bundle_dirs
+
+    - name: "Assert bundle directory present on drive"
+      ansible.builtin.assert:
+        that: _bundle_dirs.files | length > 0
+        fail_msg: >
+          No rhis_transfer_* directory found at {{ _drive_root }}.
+          Ensure the drive was prepared with export_deployment.sh on the lowside.
+
+    - name: "Set bundle directory facts"
+      ansible.builtin.set_fact:
+        _bundle_dir: "{{ (_bundle_dirs.files | sort(attribute='mtime') | last).path }}"
+        _bundle_dir_name: "{{ (_bundle_dirs.files | sort(attribute='mtime') | last).path | basename }}"
+
+    - name: "Show delivery plan"
+      ansible.builtin.debug:
+        msg:
+          - "══════════════════════════════════════════════════════════════════"
+          - " Delivery plan"
+          - "══════════════════════════════════════════════════════════════════"
+          - "  Method:      {{ delivery_method }}"
+          - "  Provisioner: {{ provisioner_host }}"
+          - "  Satellite:   {{ satellite_host }}"
+          - "  Deployment:  {{ deployment }}"
+          - "  Bundle:      {{ _bundle_dir_name }}"
+          - "══════════════════════════════════════════════════════════════════"
+
+    # ── USB ──────────────────────────────────────────────────────────────────────
+    # No network transfer from workstation. Drive is physically connected to satellite.
+    # The build script on the provisioner discovers and mounts the drive by label.
+
+    - name: "USB — wait for physical drive connection"
+      when: delivery_method == 'usb'
+      ansible.builtin.pause:
+        prompt: |
+
+          USB delivery selected. No network transfer is required from this workstation.
+
+          1. Physically connect this drive to the satellite ({{ satellite_host }})
+          2. The drive label must be: TRANSFER_DRV
+          3. Do NOT mount it manually — the build script will discover and mount it
+
+          Press Enter when the drive is connected to the satellite
+
+    # ── rsync ────────────────────────────────────────────────────────────────────
+    # Pulp chunks go directly from workstation → satellite (large, single hop).
+    # Bundle artifacts go from workstation → provisioner (smaller, single hop).
+
+    - name: "rsync — create Pulp staging path on satellite"
+      when: delivery_method == 'rsync'
+      ansible.builtin.command:
+        cmd: >
+          ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
+          {{ ssh_user }}@{{ satellite_host }}
+          "sudo mkdir -p /var/satellite_stage/pulp_stage &&
+           sudo chown {{ ssh_user }}:{{ ssh_user }} /var/satellite_stage/pulp_stage"
+      changed_when: true
+
+    - name: "rsync — transfer Pulp content to satellite (large — please wait)..."
+      when: delivery_method == 'rsync'
+      ansible.builtin.command:
+        cmd: >
+          rsync -a --progress
+          --exclude=rhis_transfer_*
+          --exclude=import_bundle.sh
+          --exclude=import_bundle.yml
+          --exclude=README_FIRST.md
+          -e "ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}"
+          {{ _drive_root }}/
+          {{ ssh_user }}@{{ satellite_host }}:/var/satellite_stage/pulp_stage/
+      changed_when: true
+
+    - name: "rsync — create artifact staging path on provisioner"
+      when: delivery_method == 'rsync'
+      ansible.builtin.command:
+        cmd: >
+          ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
+          {{ ssh_user }}@{{ provisioner_host }}
+          "mkdir -p /mnt/rhis_transfer"
+      changed_when: true
+
+    - name: "rsync — transfer bundle artifacts to provisioner..."
+      when: delivery_method == 'rsync'
+      ansible.builtin.command:
+        cmd: >
+          rsync -a --progress
+          -e "ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}"
+          {{ _bundle_dir }}/
+          {{ ssh_user }}@{{ provisioner_host }}:/mnt/rhis_transfer/{{ _bundle_dir_name }}/
+      changed_when: true
+
+    # ── virtual_disk ─────────────────────────────────────────────────────────────
+    # All drive content pushed to provisioner. The provisioner delivers
+    # everything to the satellite during the build.
+
+    - name: "virtual_disk — create staging path on provisioner"
+      when: delivery_method == 'virtual_disk'
+      ansible.builtin.command:
+        cmd: >
+          ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
+          {{ ssh_user }}@{{ provisioner_host }}
+          "mkdir -p /mnt/rhis_transfer"
+      changed_when: true
+
+    - name: "virtual_disk — transfer all bundle content to provisioner (large — please wait)..."
+      when: delivery_method == 'virtual_disk'
+      ansible.builtin.command:
+        cmd: >
+          rsync -a --progress
+          --exclude=import_bundle.sh
+          --exclude=import_bundle.yml
+          --exclude=README_FIRST.md
+          -e "ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}"
+          {{ _drive_root }}/
+          {{ ssh_user }}@{{ provisioner_host }}:/mnt/rhis_transfer/
+      changed_when: true
+
+    # ── Next steps ───────────────────────────────────────────────────────────────
+
+    - name: "Data delivery complete — next steps"
+      ansible.builtin.debug:
+        msg:
+          - "══════════════════════════════════════════════════════════════════"
+          - " Data delivery complete"
+          - "══════════════════════════════════════════════════════════════════"
+          - ""
+          - " SSH to the provisioner and run the satellite build:"
+          - ""
+          - "   ssh {{ ssh_user }}@{{ provisioner_host }}"
+          - ""
+          - "   build_sat_disconnected_import.sh \\"
+          - "     --delivery-method {{ delivery_method }} \\"
+          - "     --deployment {{ deployment }}"
+          - ""
+          - " The build script will:"
+          - "   1. Run bundle_delivery.yml  — validate and stage content on satellite"
+          - "   2. Prepare content_imports.yml and disconnected build vars"
+          - "   3. Run main.yml             — install and configure satellite (60–90 min)"
+          - ""
+          - " IMPORTANT: Ensure the vault password has been delivered via"
+          - " a separate trusted channel before starting the build."
+          - "══════════════════════════════════════════════════════════════════"

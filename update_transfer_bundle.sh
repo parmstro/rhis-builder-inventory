@@ -107,6 +107,7 @@ podman run --rm \
   -v "${DEPLOYMENT_DIR}/logs:/rhis/vars/logs:Z" \
   -v "${DEPLOYMENT_DIR}/vars:/rhis/vars/vars:Z" \
   -v "${DEPLOYMENT_DIR}/vault:/rhis/vars/vault:Z" \
+  -v "${RHIS_ROOT}:/rhis/rhis-builder-inventory:Z" \
   -v "${RHIS_ROOT}/../rhis-builder-satellite:/rhis/rhis-builder-satellite:Z" \
   -v "${HOME}/.ssh:/root/.ssh:Z" \
   --hostname provisioner \
