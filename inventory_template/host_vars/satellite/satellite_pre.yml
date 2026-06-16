@@ -1,6 +1,10 @@
 ---
 
-satellite_async_timeout: 14400
+satellite_async_timeout: 43200
+
+# Derived from deployment-level flag — do not set manually
+# Set basevars_disconnected_domain: true in your basevars file to enable disconnected mode
+satellite_disconnected: "{{ basevars_disconnected_domain | default(false) }}"
 satellite_async_delay: 30
 
 # disable transparent huge pages

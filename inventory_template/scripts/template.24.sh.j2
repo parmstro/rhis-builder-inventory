@@ -5,6 +5,7 @@
                    --group-vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/group_vars' \
                    --host-vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/host_vars' \
                    --inventory-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/inventory' \
+                   --logs-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/logs' \
                    --templates-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/templates' \
                    --vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/vars' \
                    --ssh-dir '/home/{{ ansible_user_id }}/.ssh' \

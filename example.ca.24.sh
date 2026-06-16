@@ -5,6 +5,7 @@
                    --group-vars-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/group_vars' \
                    --host-vars-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/host_vars' \
                    --inventory-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/inventory' \
+                   --logs-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/logs' \
                    --templates-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/templates' \
                    --vars-dir '/home/ansiblerunner/rhis/rhis-builder-inventory/deployments/example.ca/vars' \
                    --ssh-dir '/home/ansiblerunner/.ssh' \

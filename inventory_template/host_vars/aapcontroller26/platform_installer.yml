@@ -25,7 +25,8 @@ platform_installer_config:
   aap_product: "Red Hat Ansible Automation Platform"
   aap_file_repo_name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
   aap_bundle_file: "ansible-automation-platform-containerized-setup-bundle-2.6-7-x86_64.tar.gz"
-  aap_destination_dir: "/root/ansible_installer"
+  aap_destination_dir: "/home/{{ ansible_user }}/ansible_installer"
+  aap_bundle_dir: "{{ aap_destination_dir }}/{{ aap_bundle_file | regex_replace('.tar.gz$', '') }}/bundle"
   # Installer Template
   # All
   aap_admin_username: "admin"
@@ -40,7 +41,7 @@ platform_installer_config:
   aap_pg_host: "" # empty string == localhost
   aap_pg_port: 5432
   aap_pg_database: "awx"
-  aap_pg_username: "awx"
+  aap_pg_username: "postgres"
   aap_pg_password: "{{ aap_pg_password_vault }}"
   aap_pg_sslmode: "prefer"
   aap_pg_use_ssl: true

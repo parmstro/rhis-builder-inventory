@@ -687,6 +687,9 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
+      # 9.8 kickstart excluded — aadsshlogin CDN duplicate content bug confirmed still present 2026-06-04.
+      # Every version of aadsshlogin appears twice with identical location_href in the 9.8 kickstart repos,
+      # causing Pulp to reject CV publish. Re-enable only after Red Hat resolves the CDN metadata issue.
       # - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.8"
       #   product: "Red Hat Enterprise Linux for x86_64"
       # - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.8"
@@ -756,7 +759,7 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      # 9.8 kickstart removed — aadsshlogin package duplicate content bug (see schema/TODO.md)
+      # 9.8 kickstart excluded — aadsshlogin CDN duplicate content bug confirmed still present 2026-06-04.
       # - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.8"
       #   product: "Red Hat Enterprise Linux for ARM 64"
       # - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.8"

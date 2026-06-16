@@ -110,7 +110,10 @@
         rsync_opts:
           - "--exclude=*.j2"
           - "--exclude=host_vars"
+          - "--exclude=logs"
           - "--exclude=vault"
+          - "--exclude=files/ssg-*.xml"     # SCAP DS files — large binaries, referenced from template path
+          - "--exclude=files/ssg-*.xml.gz"  # do not copy per-deployment, copy once during satellite build
 
     - name: Copy jinja templates as-is without templating
       ansible.builtin.copy:
@@ -168,25 +171,17 @@
         loop_var: system_info
         label: "{{ system_info.key }}"
 
-    - name: Find and register paths to group_vars platform_installer FQD files
-      ansible.builtin.find:
-        paths: "{{ deployment_dir }}/group_vars/platform_installer"
-        file_type: file
-      register: group_vars_platform_installer_paths
-
-    - name: "Create platform_installer files from FQD interim files - {{ basevars_global_domain_name }}"
+    - name: Delete logs directory if basevars_delete_logs is true
+      when: basevars_delete_logs | default(false) | bool
       ansible.builtin.file:
-        src: "{{ item }}"
-        dest: "{{ item | ansible.builtin.regex_replace('FQD', basevars_global_domain_name) }}"
-        state: hard
-        mode: "0755"
-      loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
-
-    - name: Remove interim FQD platform_installer files
-      ansible.builtin.file:
-        path: "{{ item }}"
+        path: "{{ deployment_dir }}/logs"
         state: absent
-      loop: "{{ group_vars_platform_installer_paths.files | map(attribute='path') | list }}"
+
+    - name: Ensure logs directory exists in deployment
+      ansible.builtin.file:
+        path: "{{ deployment_dir }}/logs"
+        state: directory
+        mode: "0755"
 
     - name: Find and register paths to jinja bash templates
       ansible.builtin.find:
