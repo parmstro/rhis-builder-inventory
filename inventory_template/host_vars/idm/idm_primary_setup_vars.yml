@@ -5,9 +5,8 @@ register_to_satellite: false
 # commonly changed variables
 ipaserver_ip_addresses: "{{ _default_network }}.5"
 ipaserver_hostname: "{{ ansible_fqdn }}"
-ipaserver_forwarders:
-  - "8.8.8.8"
-
+ipaserver_no_forwarders: "{{ idm_disconnected | default(false) }}"
+ipaserver_forwarders: "{{ [] if (idm_disconnected | default(false)) else ['8.8.8.8'] }}"
 ipaserver_forward_policy: "only"
 default_password: "{{ ipa_default_user_password }}"
 

@@ -6,100 +6,107 @@
 # This really allows you to import any git repos that may contain content
 # that you otherwise want to reference in your build
 
+# DISCONNECTED DEPLOYMENTS: clone: false tells ansible.builtin.git to verify
+# existing local repos without reaching GitHub. Roles must be pre-staged from
+# the export bundle to satellite_roles_source_path before running the build.
+{% if basevars_disconnected_domain | default(false) %}
+satellite_roles_source_path: "/home/ansiblerunner/rhis_export/ansible_roles"
+
+{% endif %}
 git_repos:
 # RHEL9
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-e8.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-e8"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-ism.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-ism"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-cui.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-cui"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-pci-dss.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-pci-dss"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-ospp.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-ospp"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-hipaa.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-hipaa"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-cis.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-cis"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-anssi_bp28_minimal.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-anssi_bp28_minimal"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-anssi_bp28_intermediary.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-anssi_bp28_intermediary"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-anssi_bp28_high.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-anssi_bp28_high"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-stig.git"
     dest: "/etc/ansible/roles/ansible-role-rhel9-stig"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
 # RHEL8
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-cui.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-cui"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-rht-ccp.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-rht-ccp"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-pci-dss.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-pci-dss"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-ospp.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-ospp"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-hipaa.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-hipaa"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-cjis.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-cjis"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-cis.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-cis"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-anssi_bp28_minimal.git"
     dest: "/etc/ansible/roles/ansible-role-anssi_bp28_minimal"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-anssi_bp28_intermediary.git"
     dest: "/etc/ansible/roles/ansible-role-anssi_bp28_intermediary"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-anssi_bp28_high.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-anssi_bp28_high"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-anssi_bp28_enhanced.git"
     dest: "/etc/ansible/roles/ansible-role-anssi_bp28_enhanced"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel8-stig.git"
     dest: "/etc/ansible/roles/ansible-role-rhel8-stig"
-    clone: true
+    clone: {{ 'false' if basevars_disconnected_domain | default(false) else 'true' }}
     force: true
 # RHEL7
   # - repository: "https://github.com/RedHatOfficial/ansible-role-rhel7-cui.git"

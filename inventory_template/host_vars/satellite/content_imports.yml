@@ -1,6 +1,13 @@
 ---
 
 # content_imports definition
+# at minimum requires:
+#  name
+#  import_path
+#  metadata_file
 
 content_imports:
   - name: "Library"
+    type: "library"
+    import_path: "/var/lib/pulp/imports/Default_Organization/Library"
+    metadata_file: "/var/lib/pulp/imports/Default_Organization/Library/metadata.json"

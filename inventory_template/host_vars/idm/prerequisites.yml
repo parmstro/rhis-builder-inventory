@@ -15,9 +15,7 @@ rhis_time_servers:
   - "1.rhel.pool.ntp.org"
   - "2.rhel.pool.ntp.org"
 
-idm_pre_dns_resolvers:  # e.g. replace with your own resolvers
-  - 8.8.8.8
-  - 8.8.4.4
+idm_pre_dns_resolvers: "{{ [_default_network + '.1'] if (idm_disconnected | default(false)) else ['8.8.8.8', '8.8.4.4'] }}"
 
 ipa_firewalld_zone: "public"
 # interface supporting the default ipv4 address

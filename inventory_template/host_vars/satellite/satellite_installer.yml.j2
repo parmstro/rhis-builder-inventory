@@ -1,5 +1,5 @@
 ---
-
+{% raw %}
 # variables for a satellite installation
 
 foreman_proxy_realm_principal: "{{ foreman_proxy_realm_principal }}"
@@ -69,6 +69,15 @@ sat_installer_options:
   - '--foreman-proxy-templates true'
   - '--foreman-proxy-tftp true'
   - '--foreman-proxy-plugin-discovery-install-images true'
+{% endraw %}
+{% if basevars_disconnected_domain | default(false) %}
+# DISCONNECTED: discovery images served by HTTP server on provisioner.
+# Set satellite_disconnected_discovery_source_url before running the highside build.
+# Example: http://provisioner.highside.example.ca:8080/discovery_images
+  - '--foreman-proxy-plugin-discovery-source-url {% raw %}{{ satellite_disconnected_discovery_source_url }}{% endraw %}'
+  - '--foreman-proxy-plugin-discovery-image-name fdi-image-latest.tar'
+{% endif %}
+{% raw %}
 # END PXE boot integration
 # BEGIN DHCP Integration
   # - '--foreman-proxy-dhcp true'
@@ -80,3 +89,4 @@ sat_installer_options:
   # - '--foreman-proxy-dhcp-pxeserver "{{ _default_network }}.12"'
   # - '--foreman-proxy-dhcp-network "{{ _default_network }}.0"'
   # - '--foreman-proxy-dhcp-netmask "{{ _default_network_mask }}"'
+{% endraw %}

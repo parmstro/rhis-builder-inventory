@@ -6,9 +6,8 @@
 register_to_satellite: true
 
 # commonly changed variables
-ipareplica_forwarders:
-  - "8.8.8.8"
-  - "8.8.4.4"
+ipareplica_no_forwarders: "{{ idm_disconnected | default(false) }}"
+ipareplica_forwarders: "{{ [] if (idm_disconnected | default(false)) else ['8.8.8.8', '8.8.4.4'] }}"
 ipareplica_forward_policy: "only"
 
 # infrequently changed variables

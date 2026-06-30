@@ -2,15 +2,29 @@
 
 satellite_async_timeout: 43200
 
-# Derived from deployment-level flag — do not set manually
-# Set basevars_disconnected_domain: true in your basevars file to enable disconnected mode
-satellite_disconnected: "{{ basevars_disconnected_domain | default(false) }}"
+# Rendered from basevars at inventory_update time
+satellite_disconnected: {{ basevars_disconnected_domain | default(false) | lower }}
+{% if basevars_disconnected_domain | default(false) %}
+# DISCONNECTED: Repos are served via HTTP from the provisioner's DVD server (prepare_highside.sh).
+# The satellite_disconnected_pre role is skipped; dnf update + dnf install satellite runs instead.
+satellite_disconnected_http_repos: true
+# FDI discovery image is served by the provisioner's DVD HTTP server.
+# Copy fdi-image-latest.tar from the transfer bundle into /mnt/rhis_dvd/ before the build.
+# See rhis_discovery_source_url in your basevars file to change the URL.
+satellite_disconnected_discovery_source_url: "{{ rhis_discovery_source_url }}"
+{% endif %}
+
+# DISCONNECTED: path to discovery_images/ from the transfer bundle on the highside host.
+# The satellite_post role copies images to /var/lib/tftpboot/boot/ after satellite-installer runs.
+# Set this if using the satellite_post staging approach instead of the HTTP server approach above.
+satellite_disconnected_discovery_images_src: ""
+
 satellite_async_delay: 30
 
 # disable transparent huge pages
 # install tuned, create a tuned profile
-
 apply_standard_tuning: true
+{% raw %}
 
 # prerequisites
 cdn_organization_id: "{{ cdn_organization_id_vault }}"
@@ -130,3 +144,4 @@ libvirt_server_key_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.ser
 libvirt_server_csr_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.csr" # noqa: var-naming[no-role-prefix]
 libvirt_server_crt_path: "{{ host_ssl_certs_dir }}{{ ansible_fqdn }}.libvirt.server.crt" # noqa: var-naming[no-role-prefix]
 libvirt_server_crt_service_type: "libvirt" # noqa: var-naming[no-role-prefix]
+{% endraw %}

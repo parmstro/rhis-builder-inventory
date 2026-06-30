@@ -1,6 +1,6 @@
 ---
 {% raw %}
-idm_send_new_user_notifications: true
+idm_send_new_user_notifications: "{{ not (idm_disconnected | default(false)) }}"
 idm_reply_address: "idm-noreply@{{ _runtime_global_domain_name }}"
 idm_email_subject_prefix: "[ {{ groups['idm_primary'][0] }} ] - Welcome to the {{ _runtime_global_domain_name | upper }} IdM Realm"
 idm_notification_delivery_method: "SMTP"
