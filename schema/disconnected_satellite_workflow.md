@@ -291,10 +291,23 @@ Before the standard `satellite_pre` role runs, the `satellite_disconnected_pre` 
 
 Unlike the lowside, the highside cannot generate a manifest via the CDN API. The `manifests.yml.j2` for the highside sets `generate: false` and expects a pre-existing zip file at the configured source path.
 
-The manifest zip must be:
-1. Created manually in the Red Hat Customer Portal for the highside Satellite
-2. Downloaded and included in the transfer bundle
-3. Placed at the path configured in `manifests.yml.j2` before running `redhat_manifests`
+> **Licensing requirement: the highside manifest must be a separate allocation.**
+> Red Hat subscription terms require each registered Satellite to have its own manifest
+> allocation created independently in the [Red Hat Customer Portal](https://access.redhat.com/management/subscription-allocations).
+> The lowside manifest cannot be copied, re-used, or re-exported for the highside — even
+> though the highside satellite operates in Simple Content Access (SCA) mode and cannot
+> phone home to validate subscription counts. The contractual obligation exists regardless
+> of what Satellite technically enforces. Create a distinct manifest allocation for the
+> highside Satellite in the portal before beginning the highside build.
+
+The manifest zip must be obtained and staged on the lowside **before running the export**:
+
+1. Create a separate allocation in the Red Hat Customer Portal for the highside Satellite
+2. Download the manifest ZIP from the portal
+3. Copy it to `deployments/<name>/files/manifests/` in your rhis-builder-inventory — this directory is included in the export bundle automatically
+4. Update `host_vars/<discosatellite>/manifests.yml` — set `source:` to the manifest filename so `redhat_manifests` can find it when the highside build runs
+
+The export bundle assembly step picks up everything in `files/manifests/` and transfers it with the bundle. If the manifest is not staged and the configuration is not updated before export, the highside build will fail when `redhat_manifests` runs.
 
 ### 6.3 Content import
 
