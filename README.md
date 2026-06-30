@@ -267,12 +267,14 @@ Two basevars files, one for each side of the air gap:
 # example.ca_inventory_basevars.yml (lowside — connected)
 basevars_global_domain_name: "example.ca"
 basevars_disconnected_domain: false
-basevars_downstream_disconnected_deployment: "highside.example.ca"
+basevars_downstream_disconnected_deployment:
+  - "highside.example.ca"    # list — one entry per air-gapped environment fed by this satellite
 
 # highside.example.ca_inventory_basevars.yml (highside — air-gapped)
 basevars_global_domain_name: "highside.example.ca"
 basevars_disconnected_domain: true
-basevars_upstream_connected_deployment: "example.ca"
+basevars_upstream_connected_deployment:
+  - "example.ca"             # list — the connected satellite(s) that supply content to this deployment
 satellite_import_content: true    # triggers content import during satellite build
 ```
 

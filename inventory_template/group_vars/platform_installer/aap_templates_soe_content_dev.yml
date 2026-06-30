@@ -18,7 +18,7 @@ aap_job_templates_soe_dev:
       force_publish_all: false
       skip_publish_all: false
       enable_debug_logging: false
-      description: "Published by rhis-builder-pipelines"
+      description: !unsafe "Errata updated on or before - {{ filter_enddate | default(ansible_date_time.date) }} - published by rhis-builder-pipelines"
       satellite_organization: "{{ satellite_organization }}"
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
@@ -63,7 +63,7 @@ aap_job_templates_soe_dev:
     variables:
       force_promote_all: true
       enable_debug_logging: false
-      description: "Promoted by rhis-builder-pipelines"
+      description: !unsafe "Promoted by rhis-builder-pipelines on - {{ ansible_date_time.date }}"
       satellite_organization: "{{ satellite_organization }}"
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
@@ -325,7 +325,7 @@ aap_job_templates_soe_dev:
     variables:
       force_promote_all: true
       enable_debug_logging: false
-      description: "Published by rhis-builder-pipelines"
+      description: !unsafe "Published by rhis-builder-pipelines on {{ ansible_date_time.date }}"
       satellite_organization: "{{ satellite_organization }}"
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true

@@ -1,7 +1,48 @@
 # WARNING: This is destructive and cannot be undone
-for disk in $(lsblk --output=NAME --nodeps --noheadings);
-do
-    dd if=/dev/zero of=/dev/$disk bs=1M count=8192 status=progress;
-    dd if=/dev/zero of=/dev/$disk bs=1M count=8192 status=progress;
-done
-shutdown -r 1
+<% if input('Acknowledgement') == 'Yes' then -%>
+- name: "Zero Drives"
+  hosts: all
+  become: true
+  tasks:
+  
+    - name: "Gather disks"
+      ansible.builtin.command: "lsblk --output=NAME --nodeps --noheadings"
+      register: lsblk_result
+      
+    - name: "Create disk list"
+      ansible.builtin.set_fact:
+        disk_list: "{{ lsblk_result.stdout_lines | list }}"
+        
+    - name: "Wipe disks - pass 1"
+      ansible.builtin.command: "dd if=/dev/zero of=/dev/{{ disk_item }} bs=1M count=8192 status=progress"
+      loop: "{{ disk_list }}"
+      loop_control:
+        loop_var: disk_item
+        
+    - name: "Wipe disks - pass 2"
+      ansible.builtin.command: "dd if=/dev/zero of=/dev/{{ disk_item }} bs=1M count=8192 status=progress"
+      loop: "{{ disk_list }}"
+      loop_control:
+        loop_var: disk_item
+
+    - name: "Wipe disks - pass 3"
+      ansible.builtin.command: "dd if=/dev/zero of=/dev/{{ disk_item }} bs=1M count=8192 status=progress"
+      loop: "{{ disk_list }}"
+      loop_control:
+        loop_var: disk_item
+        
+    - name: "Reboot will occur in 3 minutes - delete the host from Satellite to ensure rediscovery"
+      ansible.builtin.command: "sleep 2 && /sbin/shutdown -r 3"
+      async: 1
+      poll: 0
+      ignore_errors: true
+    
+<% else %>
+- name: "Zero Drives"
+  hosts: all
+  become: true
+  tasks:
+    - name: "Acknowlegement Not Accepted"
+      ansible.builtin.fail:
+      
+<% end %>
