@@ -9,14 +9,19 @@ Standard (RHIS) environment. Follow these steps in order.
 
 | Item | Description |
 |---|---|
-| `import_bundle.sh` | Start here — launches the delivery survey |
-| `import_bundle.yml` | Ansible playbook called by the script |
+| `import_bundle.sh` | **Start here** — delivers drive contents to the highside hosts |
+| `import_bundle.yml` | Ansible playbook called by `import_bundle.sh` |
+| `prepare_highside.sh` | **Run second** — loads containers, mounts DVDs, distributes repo files |
+| `rhis_export_manifest.yml` | Checksums and metadata for the bundle — used for integrity verification |
+| `validate_import_bundle.sh` | Run before importing to verify bundle completeness |
 | `<Org_Folder>/` | Red Hat Pulp content export — RPMs, kickstart repos (large, do not modify) |
-| `rhis_transfer_<timestamp>/` | RHIS configuration bundle |
-| `rhis_transfer_<timestamp>/isos/` | OEMDRV kickstart ISOs for provisioner, IdM, and satellite |
-| `rhis_transfer_<timestamp>/bootstrap_init/` | rhis-builder-bootstrap-init repo — regenerate ISOs if needed |
-| `rhis_transfer_<timestamp>/ansible_roles/` | Compliance Ansible roles for the satellite |
-| `rhis_transfer_<timestamp>/discovery_images/` | Foreman discovery PXE images |
+| `bootstrap/bootstrap_isos/` | OEMDRV kickstart ISOs for provisioner, IdM, and satellite |
+| `bootstrap/infra_isos/` | RHEL DVD ISO and Satellite DVD ISO |
+| `bootstrap/rhis-builder-bootstrap-init/` | Kickstart ISO tooling repo — regenerate ISOs if needed |
+| `provisioner/inventory/` | rhis-builder-inventory archive for the highside deployment |
+| `provisioner/containers/` | Provisioner and Tang container images |
+| `satellite/ansible_roles/` | Compliance Ansible roles for the satellite |
+| `satellite/discovery_images/` | Foreman discovery PXE images (includes `fdi-image-latest.tar`) |
 
 ---
 
@@ -30,17 +35,18 @@ with a base RHEL OS install. If they are already built and reachable, skip to Pr
 The bundle includes OEMDRV kickstart ISOs for each highside host:
 
 ```
-rhis_transfer_<timestamp>/isos/
+bootstrap/bootstrap_isos/
   provisioner.<domain>.iso
   idm1.<domain>.iso
   satellite1.<domain>.iso
 ```
 
 Each ISO is an unattended kickstart image.
-Attach it as a second virtual CD-ROM alongsidethe RHEL installation DVD when booting the host on a hypervisor or on baremetal.
+Attach it as a second virtual CD-ROM alongside the RHEL installation DVD when booting the host on a hypervisor or on baremetal.
 Anaconda automatically picks up the OEMDRV volume and uses the embedded ks.cfg to install the systems without prompts.
+You can also connect these iso file to the BMC for your baremetal servers or copy them to USB drives. If you are running a disconnected environment in a cloud hyperscalar, you can use one of the rhis-builder project's cloud landing zone repos to build your cloud landing zone. The process is similar.
 
-The `rhis_transfer_<timestamp>/bootstrap_init/` directory contains the
+The `bootstrap/rhis-builder-bootstrap-init/` directory contains the
 `rhis-builder-bootstrap-init` repo used to regenerate ISOs if needed. If you need to make changes to the base system builds, follow the README.md in that project and modify the templates accordingly.
 
 ### Build order
@@ -109,12 +115,19 @@ Before running the import script, ensure:
 
 1. **RHEL workstation** — ansible-core is installed (`ansible-playbook --version`)
 2. **SSH access** to the highside provisioner and satellite using the ansiblerunner key
+<!-- MANDATORY: vault password callout — do not remove or consolidate (C14) -->
 3. **Vault password** — delivered via a separate trusted channel (it is NOT on this drive)
 4. **Drive mounted** — this drive is mounted and readable (you're reading this, so it is)
 
 ---
 
 ## How to run
+
+There are three steps. Run them in order.
+
+### Step 1 — Deliver data to the highside hosts
+
+Run from the operator workstation (this machine):
 
 ```bash
 cd /run/media/<user>/TRANSFER_DRV     # or wherever this drive is mounted
@@ -128,6 +141,50 @@ The script prompts for:
 - **Deployment name** — e.g. `highside.example.ca`
 - **SSH user** — default: `ansiblerunner`
 - **SSH key path** — default: `~/.ssh/id_ed25519`
+
+### Step 2 — Prepare the provisioner
+
+SSH to the provisioner and run `prepare_highside.sh` from the location it was
+delivered to in Step 1:
+
+```bash
+ssh ansiblerunner@<provisioner_ip>
+~/rhis_transfer/prepare_highside.sh \
+  --deployment highside.example.ca \
+  --idm-host   idm1.highside.example.ca \
+  --sat-host   satellite1.highside.example.ca
+```
+
+This script:
+- Loads the provisioner and Tang container images into podman
+- Places the inventory at `~/rhis/rhis-builder-inventory/`
+- Loop-mounts the RHEL and Satellite DVD ISOs from the path given by `--iso-path`
+- Starts a persistent local HTTP server (default port 7778) serving both ISOs as package repos
+- Distributes repo files to `idm1` and `satellite1` (`/etc/yum.repos.d/rhis-highside.repo`)
+
+> **The HTTP server must remain running for the duration of Steps 3a and 3b.**
+> It is the only package source for IdM and Satellite during their builds.
+> See the script's summary output for the stop command.
+
+### Step 3 — Build IdM, then Satellite
+
+Run both build scripts from **inside the provisioner container**, in this order:
+
+**3a — Build IdM first:**
+```bash
+build_idm_primary.sh \
+  --deployment highside.example.ca
+```
+
+**3b — Build Satellite (after IdM is up):**
+```bash
+build_sat_disconnected_import.sh \
+  --delivery-method rsync \
+  --deployment highside.example.ca
+```
+
+IdM must be fully operational before Satellite is built — Satellite uses IdM
+as its certificate authority and realm provider.
 
 ---
 
@@ -143,53 +200,43 @@ The drive is physically connected to (or USB-attached to) the satellite server.
 
 Best for: baremetal satellite with a USB port or hot-plug storage.
 
+In some hypervisor environments you may also be able to perform a pass through to connect the drive via the virtual USB interface.
+
 ### `rsync` — Network push from this workstation (recommended for VMs)
+**Recommended method.**
+
 The script pushes data directly from this workstation to its destination over the network:
 
 - Pulp content (`<Org_Folder>/`) → satellite `/var/satellite_stage/pulp_stage/`
-- Bundle artifacts (`rhis_transfer_<ts>/`) → provisioner `/mnt/rhis_transfer/`
+- Bundle artifacts (`provisioner/`, `satellite/`, `bootstrap/`) → provisioner `~/rhis_transfer/`
 
 No double-hop through the provisioner for the large Pulp content.
 
 Best for: operator workstation has network access to both provisioner and satellite.
+This methodology is used most frequently. 
 
 ### `virtual_disk` — Push everything to provisioner
-The script pushes all drive content to the provisioner. The provisioner then delivers
-everything to the satellite during the build.
+The script pushes all drive content to the provisioner. The provisioner then delivers everything to the satellite during the build.
 
-- All content → provisioner `/mnt/rhis_transfer/`
+- All content → provisioner `~/rhis_transfer/`
 
-Best for: only the provisioner is reachable from the operator workstation.
+This relies on converting the content for the satellite into a virtual disk for the  target hypervisor and attaching it to the satellite. 
+This tends to be a more complicated automation scenario. 
+
+Only use this when the provisioner is the only system reachable from the operator workstation.
 
 ---
 
 ## After data delivery
 
-When `import_bundle.sh` finishes, it prints the exact command to run.
-
-In summary:
-
-1. SSH to the provisioner:
-   ```bash
-   ssh ansiblerunner@<provisioner_ip>
-   ```
-
-2. Run the satellite import build script inside the provisioner container:
-   ```bash
-   build_sat_disconnected_import.sh \
-     --delivery-method <method> \
-     --deployment <deployment_name>
-   ```
-
-   This script:
-   - Runs `bundle_delivery.yml` — validates and stages content on the satellite
-   - Prepares `content_imports.yml` and disconnected extra-vars
-   - Runs `main.yml` — installs and fully configures the satellite (60–90 minutes)
+When `import_bundle.sh` finishes, it prints the next steps to follow.
+Continue with Step 2 and Step 3 from the **How to run** section above.
 
 ---
 
 ## Security notes
 
+<!-- MANDATORY: vault password callout — do not remove or consolidate (C14) -->
 - **The vault password is NOT on this drive.** It must arrive via a separate trusted
   channel (encrypted email, out-of-band verbal, physical paper, etc.).
 - Do not leave this drive connected to systems when not in active use.
@@ -204,9 +251,10 @@ In summary:
 |---|---|---|
 | `ansible-playbook: command not found` | ansible-core not installed | `dnf install ansible-core` |
 | `Permission denied (publickey)` | SSH key not loaded or wrong path | Check `~/.ssh/id_ed25519` exists and matches `ansiblerunner` authorized_keys |
-| `No rhis_transfer_* directory found` | Drive not fully written | Re-run `export_deployment.sh` on the lowside |
+| `validate_import_bundle.sh` reports FAIL | Drive not fully written or transfer interrupted | Re-run `transfer_to_drive.sh` on the lowside workstation |
 | `rsync: mkdir failed: Permission denied` | Target path needs sudo | Ensure ansiblerunner has NOPASSWD sudo on the target |
-| `bundle_delivery.yml` fails on satellite | Drive label not TRANSFER_DRV | Check `blkid` output on satellite; re-label with `e2label /dev/sdX TRANSFER_DRV` |
+| `bootstrap/`, `provisioner/`, `satellite/` missing | Staging not complete on lowside | Re-run `export_deployment.sh` on the lowside provisioner |
+| IdM build fails: `DNS server 8.8.8.8: query '. SOA': The resolution lifetime expired` | `ipaserver_no_forwarders` not set — the IPA installer validates every configured forwarder and 8.8.8.8 is unreachable in a disconnected environment | Verify `idm_disconnected: true` is in the inventory at `~/rhis/rhis-builder-inventory/deployments/<deployment>/group_vars/all/main.yml`. If missing, add `ipaserver_no_forwarders: true` directly to `host_vars/idm1.<domain>/idm_primary_setup_vars.yml` and re-run `build_idm_primary.sh` |
 
 ---
 

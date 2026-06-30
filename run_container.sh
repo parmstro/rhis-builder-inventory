@@ -11,8 +11,10 @@ secretsdir=""
 templatesdir=""
 varsdir=""
 sshdir="/home/ansiblerunner/.ssh/"
+transferdir=""
 registry="quay.io"
 repo="parmstro"
+tag="latest"
 
 while [[ "$#" -gt 0 ]]; do
     case "$1" in
@@ -52,12 +54,20 @@ while [[ "$#" -gt 0 ]]; do
             repo="$2"
             shift
             ;;
+        --tag)
+            tag="$2"
+            shift
+            ;;
         -s|--secrets-dir)
             secretsdir="$2"
             shift # Shift past the value
             ;;
         -S|--ssh-dir)
             sshdir="$2"
+            shift # Shift past the value
+            ;;
+        -T|--transfer-dir)
+            transferdir="$2"
             shift # Shift past the value
             ;;
         -t|--templates-dir)
@@ -86,11 +96,13 @@ echo "inventory-dir: $inventorydir"
 echo "logs-dir: $logsdir"
 echo "secrets-dir: $secretsdir"
 echo "ssh-dir: $sshdir"
+echo "transfer-dir: $transferdir"
 echo "templates-dir: $templatesdir"
 echo "vars-dir: $varsdir"
 echo "ansible-ver: $ansiblever"
 echo "registry: $registry"
 echo "repo: $repo"
+echo "tag: $tag"
 echo "NOTE: files added to any of the diretories will not be accessible."
 echo "      You must restart the container to access new files."
 
@@ -113,6 +125,9 @@ if [[ $groupvarsdir == "" || $hostvarsdir == "" || $inventorydir == "" ]]; then
 else
   echo "Mounting custom configuration"
 
+  transfer_mount=""
+  [[ -n "$transferdir" ]] && transfer_mount="-v $transferdir:/home/ansiblerunner/rhis_transfer:Z"
+
   podman run -it --rm \
                  -v $inventorydir:/rhis/vars/external_inventory:Z \
                  -v $externaltasksdir:/rhis/vars/external_tasks:Z \
@@ -124,9 +139,10 @@ else
                  -v $varsdir:/rhis/vars/vars:Z \
                  -v $secretsdir:/rhis/vars/vault:Z \
                  -v $sshdir:/root/.ssh:Z \
+                 $transfer_mount \
                  --hostname provisioner \
                  --name rhis-builder \
-                 $path/rhis-provisioner-9-$ansiblever:latest
+                 $path/rhis-provisioner-9-$ansiblever:$tag
   
   if [ "$(uname)" == "Linux" ]; then
     # Quietly restore the SELinux context 

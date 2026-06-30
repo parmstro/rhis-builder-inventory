@@ -67,24 +67,42 @@
       ansible.builtin.set_fact:
         _drive_root: "{{ playbook_dir }}"
 
-    - name: "Find rhis_transfer_* bundle directory on drive"
-      ansible.builtin.find:
-        paths: "{{ _drive_root }}"
-        file_type: directory
-        patterns: "rhis_transfer_*"
-      register: _bundle_dirs
+    # ── Read bundle manifest ──────────────────────────────────────────────────
+    # rhis_export_manifest.yml at the drive root carries the Pulp export path,
+    # from which we derive the org-level directory name (e.g. Default_Organization).
+    # Required for rsync/virtual_disk methods to know which directory is Pulp content.
 
-    - name: "Assert bundle directory present on drive"
-      ansible.builtin.assert:
-        that: _bundle_dirs.files | length > 0
-        fail_msg: >
-          No rhis_transfer_* directory found at {{ _drive_root }}.
-          Ensure the drive was prepared with export_deployment.sh on the lowside.
+    - name: "Read bundle manifest from drive"
+      ansible.builtin.slurp:
+        src: "{{ _drive_root }}/rhis_export_manifest.yml"
+      register: _manifest_slurp
+      ignore_errors: true
 
-    - name: "Set bundle directory facts"
+    - name: "Parse bundle manifest"
+      when: _manifest_slurp is not failed
       ansible.builtin.set_fact:
-        _bundle_dir: "{{ (_bundle_dirs.files | sort(attribute='mtime') | last).path }}"
-        _bundle_dir_name: "{{ (_bundle_dirs.files | sort(attribute='mtime') | last).path | basename }}"
+        _pulp_export_path: "{{ (_manifest_slurp.content | b64decode | from_yaml).pulp_export_path | default('') }}"
+        _pulp_org_dir: "{{ ((_manifest_slurp.content | b64decode | from_yaml).pulp_export_path | default(''))
+                           | regex_replace('^/var/lib/pulp/exports/([^/]+)/.*$', '\\1') }}"
+
+    - name: "Warn if manifest not found"
+      when: _manifest_slurp is failed
+      ansible.builtin.debug:
+        msg: >-
+          WARNING: rhis_export_manifest.yml not found at {{ _drive_root }}.
+          Pulp org directory cannot be determined — rsync/virtual_disk Pulp transfer will fail.
+          Ensure the drive was prepared with transfer_to_drive.sh on the lowside.
+
+    - name: "Assert Pulp org dir is known for network delivery"
+      when: delivery_method in ['rsync', 'virtual_disk']
+      ansible.builtin.assert:
+        that:
+          - _pulp_org_dir is defined
+          - _pulp_org_dir | length > 0
+          - _pulp_org_dir != _pulp_export_path
+        fail_msg: >
+          Pulp org directory could not be determined from rhis_export_manifest.yml.
+          Ensure the drive was prepared with transfer_to_drive.sh and the manifest is present.
 
     - name: "Show delivery plan"
       ansible.builtin.debug:
@@ -96,14 +114,47 @@
           - "  Provisioner: {{ provisioner_host }}"
           - "  Satellite:   {{ satellite_host }}"
           - "  Deployment:  {{ deployment }}"
-          - "  Bundle:      {{ _bundle_dir_name }}"
+          - "  Pulp org:    {{ _pulp_org_dir | default('(not required for usb)') }}"
           - "══════════════════════════════════════════════════════════════════"
+
+    # ── Preflight: provisioner disk space ────────────────────────────────────────
+    # For rsync and virtual_disk, everything on the drive except the Pulp export
+    # goes to ~/rhis_transfer on the provisioner.  Measure the transfer footprint
+    # locally and assert the provisioner /home has room before starting the copy.
+
+    - name: "Preflight — measure non-Pulp transfer size"
+      when: delivery_method in ['rsync', 'virtual_disk']
+      ansible.builtin.command:
+        cmd: "du -sb --exclude='{{ _pulp_org_dir }}' {{ _drive_root }}/"
+      register: _transfer_size_raw
+      changed_when: false
+
+    - name: "Preflight — check available space on provisioner /home"
+      when: delivery_method in ['rsync', 'virtual_disk']
+      ansible.builtin.command:
+        cmd: >
+          ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
+          {{ ssh_user }}@{{ provisioner_host }}
+          "df -B1 /home | awk 'NR==2{print $4}'"
+      register: _prov_space_raw
+      changed_when: false
+
+    - name: "Preflight — assert provisioner has sufficient space"
+      when: delivery_method in ['rsync', 'virtual_disk']
+      ansible.builtin.assert:
+        that:
+          - _prov_space_raw.stdout | trim | int >= _transfer_size_raw.stdout.split()[0] | int
+        fail_msg: >-
+          Insufficient space on {{ provisioner_host }}:/home.
+          Transfer requires ~{{ (_transfer_size_raw.stdout.split()[0] | int / 1073741824) | round(1) }} GB.
+          Available: {{ (_prov_space_raw.stdout | trim | int / 1073741824) | round(1) }} GB.
+          Expand /home on the provisioner before retrying.
 
     # ── USB ──────────────────────────────────────────────────────────────────────
     # No network transfer from workstation. Drive is physically connected to satellite.
     # The build script on the provisioner discovers and mounts the drive by label.
 
-    - name: "USB — wait for physical drive connection"
+    - name: "Using USB — wait for physical drive connection"
       when: delivery_method == 'usb'
       ansible.builtin.pause:
         prompt: |
@@ -117,76 +168,78 @@
           Press Enter when the drive is connected to the satellite
 
     # ── rsync ────────────────────────────────────────────────────────────────────
-    # Pulp chunks go directly from workstation → satellite (large, single hop).
-    # Bundle artifacts go from workstation → provisioner (smaller, single hop).
+    # Pulp chunks go directly from workstation → satellite staging (large, single hop).
+    # Non-Pulp C3 artifacts go from workstation → provisioner ~/rhis_transfer/.
 
-    - name: "rsync — create Pulp staging path on satellite"
+    - name: "Running rsync — create Pulp staging path on satellite"
       when: delivery_method == 'rsync'
       ansible.builtin.command:
         cmd: >
           ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
           {{ ssh_user }}@{{ satellite_host }}
-          "sudo mkdir -p /var/satellite_stage/pulp_stage &&
-           sudo chown {{ ssh_user }}:{{ ssh_user }} /var/satellite_stage/pulp_stage"
+          "sudo mkdir -p /var/satellite_stage/pulp_stage/{{ _pulp_org_dir }} &&
+           sudo chown {{ ssh_user }}:{{ ssh_user }} /var/satellite_stage/pulp_stage/{{ _pulp_org_dir }}"
       changed_when: true
 
-    - name: "rsync — transfer Pulp content to satellite (large — please wait)..."
+    - name: "Running rsync — transfer Pulp content to satellite staging (large — please wait)..."
       when: delivery_method == 'rsync'
       ansible.builtin.command:
         cmd: >
           rsync -a --progress
-          --exclude=rhis_transfer_*
-          --exclude=import_bundle.sh
-          --exclude=import_bundle.yml
-          --exclude=README_FIRST.md
           -e "ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}"
-          {{ _drive_root }}/
-          {{ ssh_user }}@{{ satellite_host }}:/var/satellite_stage/pulp_stage/
+          {{ _drive_root }}/{{ _pulp_org_dir }}/
+          {{ ssh_user }}@{{ satellite_host }}:/var/satellite_stage/pulp_stage/{{ _pulp_org_dir }}/
       changed_when: true
 
-    - name: "rsync — create artifact staging path on provisioner"
+    - name: "Running rsync — create artifact staging path on provisioner"
       when: delivery_method == 'rsync'
       ansible.builtin.command:
         cmd: >
           ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
           {{ ssh_user }}@{{ provisioner_host }}
-          "mkdir -p /mnt/rhis_transfer"
+          "mkdir -p /home/{{ ssh_user }}/rhis_transfer"
       changed_when: true
 
-    - name: "rsync — transfer bundle artifacts to provisioner..."
+    - name: "Running rsync — transfer artifacts to provisioner staging..."
       when: delivery_method == 'rsync'
       ansible.builtin.command:
         cmd: >
           rsync -a --progress
+          --exclude="{{ _pulp_org_dir }}/"
+          --exclude="import_bundle.sh"
+          --exclude="import_bundle.yml"
+          --exclude="README_FIRST.md"
+          --exclude="transfer_to_drive.sh"
           -e "ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}"
-          {{ _bundle_dir }}/
-          {{ ssh_user }}@{{ provisioner_host }}:/mnt/rhis_transfer/{{ _bundle_dir_name }}/
+          {{ _drive_root }}/
+          {{ ssh_user }}@{{ provisioner_host }}:/home/{{ ssh_user }}/rhis_transfer/
       changed_when: true
 
     # ── virtual_disk ─────────────────────────────────────────────────────────────
     # All drive content pushed to provisioner. The provisioner delivers
-    # everything to the satellite during the build.
+    # everything (including Pulp) to the satellite during the build.
 
-    - name: "virtual_disk — create staging path on provisioner"
+    - name: "Using virtual_disk — create staging path on provisioner"
       when: delivery_method == 'virtual_disk'
       ansible.builtin.command:
         cmd: >
           ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}
           {{ ssh_user }}@{{ provisioner_host }}
-          "mkdir -p /mnt/rhis_transfer"
+          "mkdir -p /home/{{ ssh_user }}/rhis_transfer"
       changed_when: true
 
-    - name: "virtual_disk — transfer all bundle content to provisioner (large — please wait)..."
+    - name: "Using virtual_disk — transfer all bundle content to provisioner (large — please wait)..."
       when: delivery_method == 'virtual_disk'
       ansible.builtin.command:
         cmd: >
           rsync -a --progress
-          --exclude=import_bundle.sh
-          --exclude=import_bundle.yml
-          --exclude=README_FIRST.md
+          --exclude="import_bundle.sh"
+          --exclude="import_bundle.yml"
+          --exclude="README_FIRST.md"
+          --exclude="transfer_to_drive.sh"
           -e "ssh -o StrictHostKeyChecking=no -i {{ ssh_key }}"
           {{ _drive_root }}/
-          {{ ssh_user }}@{{ provisioner_host }}:/mnt/rhis_transfer/
+          {{ ssh_user }}@{{ provisioner_host }}:/home/{{ ssh_user }}/rhis_transfer/
       changed_when: true
 
     # ── Next steps ───────────────────────────────────────────────────────────────
@@ -198,19 +251,33 @@
           - " Data delivery complete"
           - "══════════════════════════════════════════════════════════════════"
           - ""
-          - " SSH to the provisioner and run the satellite build:"
+          - " Step 1 — Prepare the provisioner (run from this workstation):"
           - ""
           - "   ssh {{ ssh_user }}@{{ provisioner_host }}"
+          - ""
+          - "   ~/rhis_transfer/prepare_highside.sh \\"
+          - "     --deployment {{ deployment }} \\"
+          - "     --idm-host idm1.{{ deployment }} \\"
+          - "     --sat-host satellite1.{{ deployment }}"
+          - ""
+          - " This will load containers, place inventory, mount the RHEL and"
+          - " Satellite DVD ISOs, start the local package HTTP server, and"
+          - " distribute repo files to the IdM and Satellite hosts."
+          - ""
+          - " Step 2 — Build IdM (from inside the provisioner container):"
+          - ""
+          - "   build_idm_primary.sh \\"
+          - "     --deployment {{ deployment }}"
+          - ""
+          - " Step 3 — Build Satellite (from inside the provisioner container):"
           - ""
           - "   build_sat_disconnected_import.sh \\"
           - "     --delivery-method {{ delivery_method }} \\"
           - "     --deployment {{ deployment }}"
           - ""
-          - " The build script will:"
-          - "   1. Run bundle_delivery.yml  — validate and stage content on satellite"
-          - "   2. Prepare content_imports.yml and disconnected build vars"
-          - "   3. Run main.yml             — install and configure satellite (60–90 min)"
+          - " The DVD HTTP server started by prepare_highside.sh must remain"
+          - " running for the duration of Steps 2 and 3."
           - ""
           - " IMPORTANT: Ensure the vault password has been delivered via"
-          - " a separate trusted channel before starting the build."
+          - " a separate trusted channel before starting the builds."
           - "══════════════════════════════════════════════════════════════════"
