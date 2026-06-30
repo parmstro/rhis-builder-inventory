@@ -1,0 +1,7 @@
+skip_list:
+  - command-instead-of-module
+
+kinds:
+  - tasks: "inventory_update_subtasks/*.yml"
+  - vars: "inventory_template/group_vars/**/*.yml"
+  - vars: "inventory_template/host_vars/**/*.yml"
