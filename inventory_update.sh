@@ -25,5 +25,5 @@ podman run --rm --userns=keep-id --env working_directory_external_to_container="
            --volume $PWD:/rhis/external_inventory:Z,U \
            --workdir /rhis/external_inventory \
            --hostname inventory_update \
-           quay.io/s4v0/centosstream10-ansible:latest ansible-playbook -e "basevars_file=$bv_file" inventory_update.yml \
+           ghcr.io/ansible/community-ansible-dev-tools:latest ansible-playbook -e "basevars_file=$bv_file" inventory_update.yml \
            --extra-vars "working_directory_external_to_container=${working_directory_external_to_container}"
