@@ -1,0 +1,64 @@
+---
+catalog_schema_version: "1.0"
+id: rhel9_jboss
+name: "RHEL 9 JBoss EAP SOE"
+description: >
+  Extends the RHEL 9 Base SOE with JBoss Enterprise Application Platform
+  content for both EAP 7.4 (long-term support) and EAP 8.x (current).
+  Provides a complete application server SOE for Java EE / Jakarta EE
+  workloads on RHEL 9. Both EAP versions are included so the composite
+  content view can serve hosts on either release without separate SOE
+  definitions.
+type: layered
+architectures: [x86_64, aarch64]
+status: active
+disk_estimate_gb:
+  x86_64: 2
+  aarch64: 2
+
+requires:
+  - rhel9_base
+
+content:
+  repository_sets:
+    - product: "JBoss Enterprise Application Platform"
+      name: "JBoss Enterprise Application Platform 8.1 (RHEL 9 x86_64) (RPMs)"
+      arch: x86_64
+
+    - product: "JBoss Enterprise Application Platform"
+      name: "JBoss Enterprise Application Platform 8.0 (RHEL 9 x86_64) (RPMs)"
+      arch: x86_64
+
+    - product: "JBoss Enterprise Application Platform"
+      name: "JBoss Enterprise Application Platform 7.4 (RHEL 9) (RPMs)"
+      arch: x86_64
+
+  content_views:
+    - name: "JBoss9EAP8"
+      desc: "JBoss EAP 8.x content for RHEL 9"
+      environments:
+        - Library
+
+    - name: "JBoss9EAP74"
+      desc: "JBoss EAP 7.4 LTS content for RHEL 9"
+      environments:
+        - Library
+
+  composite_content_views:
+    - name: "SOE9_JBoss"
+      desc: "RHEL 9 JBoss EAP Standard Operating Environment"
+      components:
+        - "SOE9"
+        - "JBoss9EAP74"
+        - "JBoss9EAP8"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+lifecycle:
+  levels: [dev, qa, prod]
+  # Pattern: SOE9_{level}_JBoss  →  SOE9_dev_JBoss, SOE9_qa_JBoss, SOE9_prod_JBoss
+  activation_key_pattern: "SOE9_{level}_JBoss"

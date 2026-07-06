@@ -1,0 +1,60 @@
+---
+catalog_schema_version: "1.0"
+id: rhel9_mssql
+name: "RHEL 9 MS SQL Server SOE"
+description: >
+  Extends the RHEL 9 Base SOE with Microsoft SQL Server 2022 content for
+  Linux. Provides both the SQL Server installation packages and the Microsoft
+  tools and drivers repository for RHEL 9. Suitable for database server
+  workloads requiring Microsoft SQL Server under a Red Hat-managed lifecycle.
+type: layered
+architectures: [x86_64]
+status: active
+disk_estimate_gb:
+  x86_64: 2
+
+requires:
+  - rhel9_base
+
+content:
+  custom_products:
+    - name: "Microsoft SQL Server for Linux 2022 for RHEL 9"
+      desc: "Microsoft SQL Server for Linux 2022 installation and tools"
+      label: "mssqlserver-2022-rhel-9"
+      repositories:
+        - name: "mssqlserver2022_rhel9"
+          description: "MSSQL Server 2022 server installation packages"
+          content_type: yum
+          url: "https://packages.microsoft.com/rhel/9/mssql-server-2022/"
+          download_policy: immediate
+
+        - name: "msqltools2022_rhel9"
+          description: "MSSQL Server 2022 tools and drivers packages"
+          content_type: yum
+          url: "https://packages.microsoft.com/rhel/9/prod/"
+          download_policy: immediate
+
+  content_views:
+    - name: "mssqlserver2022_rhel9"
+      desc: "Microsoft SQL Server 2022 content for RHEL 9"
+      environments:
+        - Library
+
+  composite_content_views:
+    - name: "SOE9_MSSQL"
+      desc: "RHEL 9 MS SQL Server 2022 Standard Operating Environment"
+      components:
+        - "SOE9"
+        - "mssqlserver2022_rhel9"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        # Staging and Production to be enabled once SQL Server SOE is validated
+        # through the full content lifecycle pipeline.
+
+lifecycle:
+  levels: [dev, qa]
+  # Pattern: SOE9_{level}_MSSQL  →  SOE9_dev_MSSQL, SOE9_qa_MSSQL
+  # Lifecycle extends to prod once Staging/Production CV promotion is validated.
+  activation_key_pattern: "SOE9_{level}_MSSQL"

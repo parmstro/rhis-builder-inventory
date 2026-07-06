@@ -1,0 +1,216 @@
+---
+# SOE Catalog Schema — Field Vocabulary and Global Defaults
+#
+# This file serves three purposes:
+#   1. Field vocabulary — controlled values for all enum fields used in catalog entries
+#   2. Global defaults — provisioning templates and ptables shared by all base SOEs
+#      (entries override only when they differ from these defaults)
+#   3. Aggregation guidance — describes how the inventory_update.yml aggregation step
+#      resolves catalog entries into flat Satellite variable files
+
+schema_version: "1.0"
+
+# ── Entry type definitions ────────────────────────────────────────────────────
+#
+# base    — An OS major release SOE. Owns repository sets, content views,
+#           OS definitions, activation keys, and hostgroups for a given OS
+#           major version × architecture combination.
+#
+# layered — An application layer that extends one or more base SOEs. Adds
+#           repository sets or custom products, an independent content view
+#           (carrying only the layer content), and a composite content view
+#           that combines the base CV + layer CV. Activation keys and
+#           hostgroups reference the composite CV name.
+#
+# custom  — An operator-saved composition of one base + one or more layered
+#           entries, given a deployment-specific name. Created by the UI;
+#           stored back into the catalog for reuse.
+
+entry_types:
+  - base
+  - layered
+  - custom
+
+
+# ── Status vocabulary ─────────────────────────────────────────────────────────
+
+status_values:
+  active:       "Entry is deployed and verified in at least one production deployment"
+  partial:      "Core content works; activation keys, hostgroups, or testing incomplete"
+  aspirational: "Entry is defined but not yet deployed — waiting on content availability"
+                # or operator decision. Shown in UI but marked clearly as unverified.
+  deprecated:   "Entry is being retired; no new deployments should select it"
+
+
+# ── Lifecycle symbolic levels ─────────────────────────────────────────────────
+#
+# Catalog entries reference lifecycle levels symbolically. The deployment maps
+# each symbolic level to a named Satellite lifecycle environment.
+# inventory_update.yml resolves these at aggregation time.
+#
+# The standard set is dev → qa → stage → prod.
+# Entries that are not yet promoted to all levels list only the levels they
+# currently support (e.g. a new layered entry might support only [dev, qa]).
+
+lifecycle_levels:
+  dev:   "Development — content proposed for SOEs"
+  qa:    "Qualification — content under testing"
+  stage: "Staging — content approved for pre-production validation"
+  prod:  "Production — approved for operational use"
+
+# Default lifecycle level set applied to base SOE entries.
+# Override per-entry in the lifecycle.levels field when an entry supports fewer levels.
+lifecycle_defaults:
+  levels: [dev, qa, prod]
+
+
+# ── Template substitution variables ──────────────────────────────────────────
+#
+# Catalog entries use {{ variable }} syntax for values resolved at aggregation.
+# The aggregation step provides these from the operator's deployment selections.
+# Do not resolve these in the catalog itself.
+
+template_variables:
+  kickstart_version:
+    description: "The selected kickstart releasever for x86_64 (e.g. '9.7', '10.2')"
+    source: "Operator selection in UI — SOE Templates view, per-arch kickstart pin"
+  kickstart_version_aarch64:
+    description: "The selected kickstart releasever for aarch64"
+    source: "Operator selection in UI — SOE Templates view, per-arch kickstart pin"
+  eus_minor:
+    description: "The EUS minor version selected (e.g. '9.4') — only when eus_enabled: true"
+    source: "Operator selection in UI — only available when os.eus.available is true"
+  satellite_organization:
+    description: "Satellite organization name from deployment config"
+    source: "inventory_basevars.yml"
+  satellite_location:
+    description: "Satellite location name from deployment config"
+    source: "inventory_basevars.yml"
+
+
+# ── Global provisioning defaults ──────────────────────────────────────────────
+#
+# These template and ptable lists are identical across all active base SOEs.
+# Catalog entries that match these defaults omit the provisioning.templates
+# and provisioning.ptables fields entirely — the aggregation step applies
+# these defaults automatically.
+#
+# Override the provisioning section in an entry only when it genuinely differs.
+
+provisioning_defaults:
+  pxe_loader: "Grub2 UEFI"
+  templates:
+    - name: "SOE Kickstart Default"
+      template_kind: "provision"
+    - name: "SOE Kickstart Default Finish"
+      template_kind: "finish"
+    - name: "SOE Kickstart Default PXELinux"
+      template_kind: "PXELinux"
+    - name: "Linux host_init_config default"
+      template_kind: "host_init_config"
+    - name: "Kickstart default iPXE"
+      template_kind: "iPXE"
+    - name: "Discovery Red Hat kexec"
+      template_kind: "kexec"
+    - name: "Kickstart default PXEGrub2"
+      template_kind: "PXEGrub2"
+    - name: "Kickstart default user data"
+      template_kind: "user_data"
+  ptables:
+    - "Kickstart default"
+    - "Kickstart default thin"
+    - "RHEL_Server_CIS1"
+    - "RHEL_Server_Compliance"
+    - "RHEL_Server_Compliance_Encrypted"
+  platforms:
+    - type: vm
+      hostgroup_suffix: "vm"
+      compute_profile_default: "SOE_Medium"
+    - type: metal
+      hostgroup_suffix: "metal"
+
+
+# ── Content view naming conventions ──────────────────────────────────────────
+#
+# Base SOE content views:
+#   SOE{major}              x86_64 base CV     (e.g. SOE9, SOE10)
+#   SOE{major}_aarch64      aarch64 base CV    (e.g. SOE9_aarch64, SOE10_aarch64)
+#
+# Layer-only content views (non-composite, carries only the layer content):
+#   {LayerName}{major}      (e.g. EPEL9, JBoss9EAP8, mssqlserver2022_rhel9)
+#
+# Composite content views (base + layer):
+#   SOE{major}_{LayerLabel} (e.g. SOE9_EPEL, SOE9_JBoss, SOE10_AAP26)
+#
+# Activation key naming:
+#   {cv_name}_{level}       (e.g. SOE9_dev, SOE9_prod, SOE9_EPEL_dev)
+#
+# Hostgroup naming:
+#   hg_{arch}_{os_slug}_{platform}  (e.g. hg_x86_64_rhel9_vm, hg_aarch64_rhel10_metal)
+#   Child hostgroups for layered SOEs use the composite CV name as a prefix.
+
+
+# ── Catalog entry field reference ────────────────────────────────────────────
+#
+# Top-level fields present in every catalog entry:
+#
+#   catalog_schema_version  string  required  Schema version this entry targets
+#   id                      string  required  Unique identifier, snake_case (e.g. rhel9_base)
+#   name                    string  required  Human-readable display name
+#   description             string  required  One paragraph — shown in UI catalog browser
+#   type                    enum    required  base | layered | custom
+#   status                  enum    required  active | partial | aspirational | deprecated
+#
+# Section: os (base entries only)
+#   os.family               string  required  Satellite OS family (e.g. Redhat)
+#   os.major                int     required  OS major version (e.g. 9)
+#   os.eus.available        bool    required  Whether EUS repos exist for this major version
+#   os.eus.supported_minors list    optional  EUS minor versions available (even minors for RHEL)
+#   os.architectures        list    required  Per-arch kickstart version lists and defaults
+#     .id                   enum    required  x86_64 | aarch64
+#     .kickstart_versions   list    required  Supported kickstart releasevers, newest first
+#     .kickstart_default    string  required  Default kickstart releasever for this arch
+#
+# Section: requires (layered entries only)
+#   requires                list    required  IDs of base entries this layer depends on
+#
+# Section: content
+#   content.repository_sets         list  Red Hat subscription repository sets to enable
+#     .product                      string  Satellite product name
+#     .name                         string  Repository set name (exact Satellite name)
+#     .releasever                   string  Version pin or streaming major (e.g. "9", "9.7")
+#     .arch                         enum    x86_64 | aarch64 — omit if product is arch-neutral
+#   content.custom_products         list  Non-Red-Hat product and repository definitions
+#     .name                         string  Product name in Satellite
+#     .description                  string
+#     .label                        string  Satellite product label (no spaces)
+#     .repositories                 list  Repository definitions within this product
+#       .name                       string
+#       .content_type               enum  yum | docker | file
+#       .url                        string
+#       .gpg_key                    string  optional
+#       .download_policy            enum  immediate | on_demand | background
+#   content.content_views           list  Non-composite CVs (layer-only or base)
+#     .name                         string
+#     .desc                         string
+#     .arch                         enum    optional — omit for arch-neutral layer CVs
+#   content.composite_content_views list  Composite CVs (layered entries only)
+#     .name                         string
+#     .desc                         string
+#     .components                   list of CV names included in this composite
+#     .environments                 list of Satellite lifecycle environment names to promote to
+#
+# Section: lifecycle
+#   lifecycle.levels                list    Symbolic levels this entry supports: subset of
+#                                           [dev, qa, stage, prod]
+#   lifecycle.activation_key_pattern string Template for activation key names.
+#                                           Use {level} as the only substitution variable.
+#                                           Everything else is literal.
+#                                           e.g. "SOE9_{level}" → SOE9_dev, SOE9_qa, SOE9_prod
+#                                           e.g. "SOE9_{level}_JBoss" → SOE9_dev_JBoss
+#
+# Section: provisioning (base entries only — omit to use provisioning_defaults above)
+#   provisioning.templates          list    Override the default template list
+#   provisioning.ptables            list    Override the default ptable list
+#   provisioning.pxe_loader         string  Override the default PXE loader
+#   provisioning.platforms          list    Override the default platform types (vm, metal)

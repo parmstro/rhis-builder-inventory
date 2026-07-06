@@ -1,0 +1,58 @@
+---
+catalog_schema_version: "1.0"
+id: rhel9_aap
+name: "RHEL 9 AAP 2.6 SOE"
+description: >
+  Extends the RHEL 9 Base SOE with Ansible Automation Platform 2.6 content
+  for RHEL 9 hosts. Provides both the installation files (offline installer
+  bundle) and RPM packages for AAP controllers, hubs, and execution nodes
+  running on RHEL 9. Used when the automation infrastructure itself requires
+  a Satellite-managed lifecycle rather than direct CDN access.
+type: layered
+architectures: [x86_64, aarch64]
+status: active
+disk_estimate_gb:
+  x86_64: 10
+  aarch64: 8
+
+requires:
+  - rhel9_base
+
+content:
+  repository_sets:
+    - product: "Red Hat Ansible Automation Platform"
+      name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 (Files)"
+      arch: x86_64
+
+    - product: "Red Hat Ansible Automation Platform"
+      name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 (RPMs)"
+      arch: x86_64
+
+  content_views:
+    - name: "AAP26_RHEL9_Files"
+      desc: "AAP 2.6 offline installer files for RHEL 9"
+      environments:
+        - Library
+
+    - name: "AAP26_RHEL9_RPMs"
+      desc: "AAP 2.6 RPM packages for RHEL 9"
+      environments:
+        - Library
+
+  composite_content_views:
+    - name: "SOE9_AAP26"
+      desc: "RHEL 9 Ansible Automation Platform 2.6 Standard Operating Environment"
+      components:
+        - "SOE9"
+        - "AAP26_RHEL9_Files"
+        - "AAP26_RHEL9_RPMs"
+      environments:
+        - Library
+        - Development
+        - Qualification
+
+lifecycle:
+  levels: [dev, qa]
+  # AAP infrastructure hosts are managed at dev/qa only — AAP itself handles
+  # its own promotion pipeline. Extend to prod when operational requirements change.
+  activation_key_pattern: "SOE9_{level}_aap_26"

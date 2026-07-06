@@ -10,6 +10,9 @@
 
 1. [Architecture Overview](#1-architecture-overview)
 2. [Prerequisites](#2-prerequisites)
+   - [2.1 Lowside prerequisites](#21-lowside-prerequisites-must-be-complete-first)
+   - [2.2 Highside prerequisites](#22-highside-prerequisites)
+   - [2.3 Highside basevars pre-flight for export_disconnected](#23-highside-basevars-pre-flight-for-export_disconnected)
 3. [Build Sequence](#3-build-sequence)
 4. [Content Export Process](#4-content-export-process)
 5. [Transfer Process](#5-transfer-process)
@@ -82,6 +85,40 @@ The comment in `build_sat_primary_connected.sh` states explicitly: "You must bui
 | Highside host provisioned with supported RHEL OS | Base OS only; no internet access required or expected |
 | Transfer media accessible at highside | The bundle landing path (e.g. `/run/media/ansiblerunner/export`) must be mountable |
 | Vault password received via trusted channel | Required before the import playbook can run |
+
+### 2.3 Highside basevars pre-flight for export_disconnected
+
+Before running `export_disconnected.yml`, a basevars file for the disconnected deployment must exist and pass all of the following checks. The export playbook reads this file to determine what to include in the bundle and where the highside satellite will be.
+
+| Requirement | Basevars key | Valid value | Notes |
+|---|---|---|---|
+| Basevars file exists | — | File must be present on the provisioner | e.g. `highside.example.ca_inventory_basevars.yml` |
+| Deployment has been rendered | `basevars_global_domain_name` | Must match an existing directory under `deployments/` | Run `inventory_update` if the deployment directory is missing or stale |
+| Flagged as disconnected | `basevars_disconnected_domain` | `true` | Enables disconnected code paths; export will refuse to run against a connected deployment |
+| Upstream connected deployment identified | `basevars_upstream_connected_deployment` | Domain name of the connected lowside (e.g. `"example.ca"`) | Used by the export playbook to locate the lowside satellite and its content |
+| Content import enabled | `satellite_import_content` | `true` | Must be uncommented and set to `true`; controls whether the import role runs during the highside build |
+| Satellite count | `rhis_system_count.satellite` | `>= 1` | At least one satellite must be defined in the highside inventory |
+| Satellite version matches lowside | `rhis_satellite_release_version` | Must match the lowside version exactly | Pulp enforces strict version compatibility between export and import — a mismatch causes content import to fail |
+
+> **Note on `satellite_roles_source_path`:** This variable does **not** need to be set in basevars. It is injected automatically by `build_sat_disconnected_import.sh` using the bundle path written by `bundle_delivery/tasks/validate.yml` to `/tmp/rhis_bundle_path.txt`. The resolved default is `/var/satellite_stage/satellite/ansible_roles` (derived from `bundle_delivery_stage_path`). Only set it manually if overriding the default staging location.
+
+**Pre-flight checklist before running `export_disconnected.yml`:**
+
+```bash
+# 1. Confirm basevars file exists
+ls <domain>_inventory_basevars.yml
+
+# 2. Confirm deployment directory exists and is current
+ls deployments/<domain>/
+# If missing or stale: ./inventory_update.sh --basevars-file <domain>_inventory_basevars.yml
+
+# 3. Confirm required keys
+grep "basevars_disconnected_domain" <domain>_inventory_basevars.yml      # must be: true
+grep "basevars_upstream_connected_deployment" <domain>_inventory_basevars.yml  # must be set
+grep "satellite_import_content" <domain>_inventory_basevars.yml          # must be uncommented and: true
+grep "rhis_system_count" -A6 <domain>_inventory_basevars.yml             # satellite must be >= 1
+grep "rhis_satellite_release_version" <domain>_inventory_basevars.yml    # must match lowside version
+```
 
 ---
 

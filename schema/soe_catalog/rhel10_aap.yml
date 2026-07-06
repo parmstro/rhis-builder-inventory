@@ -1,0 +1,56 @@
+---
+catalog_schema_version: "1.0"
+id: rhel10_aap
+name: "RHEL 10 AAP 2.6 SOE"
+description: >
+  Extends the RHEL 10 Base SOE with Ansible Automation Platform 2.6 content
+  for RHEL 10 hosts. Provides both the installation files (offline installer
+  bundle) and RPM packages for AAP controllers, hubs, and execution nodes
+  running on RHEL 10. The RHEL 10 base is the target platform for new AAP
+  infrastructure deployments as RHEL 10 becomes the standard.
+type: layered
+architectures: [x86_64, aarch64]
+status: active
+disk_estimate_gb:
+  x86_64: 10
+  aarch64: 8
+
+requires:
+  - rhel10_base
+
+content:
+  repository_sets:
+    - product: "Red Hat Ansible Automation Platform"
+      name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 (Files)"
+      arch: x86_64
+
+    - product: "Red Hat Ansible Automation Platform"
+      name: "Red Hat Ansible Automation Platform 2.6 for RHEL 10 x86_64 (RPMs)"
+      arch: x86_64
+
+  content_views:
+    - name: "AAP26_RHEL10_Files"
+      desc: "AAP 2.6 offline installer files for RHEL 10"
+      environments:
+        - Library
+
+    - name: "AAP26_RHEL10_RPMs"
+      desc: "AAP 2.6 RPM packages for RHEL 10"
+      environments:
+        - Library
+
+  composite_content_views:
+    - name: "SOE10_AAP26"
+      desc: "RHEL 10 Ansible Automation Platform 2.6 Standard Operating Environment"
+      components:
+        - "SOE10"
+        - "AAP26_RHEL10_Files"
+        - "AAP26_RHEL10_RPMs"
+      environments:
+        - Library
+        - Development
+        - Qualification
+
+lifecycle:
+  levels: [dev, qa]
+  activation_key_pattern: "SOE10_{level}_aap_26"

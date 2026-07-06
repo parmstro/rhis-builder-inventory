@@ -1,0 +1,154 @@
+---
+catalog_schema_version: "1.0"
+id: rhel10_base
+name: "RHEL 10 Base SOE"
+description: >
+  Standard Operating Environment for Red Hat Enterprise Linux 10.
+  Provides the full OS content lifecycle — BaseOS, AppStream, Supplementary,
+  Extensions, and Satellite Client repos — for both x86_64 and aarch64.
+  RHEL 10 introduces the Extensions repository set (previously part of
+  AppStream). All layered RHEL 10 SOEs (AAP, Edge Manager) require this
+  entry as their base.
+type: base
+status: active
+disk_estimate_gb:
+  x86_64: 15
+  aarch64: 12
+
+os:
+  family: Redhat
+  major: 10
+  eus:
+    available: true
+    current_minor: "10.2"
+    supported_minors:
+      - "10.0"
+      - "10.2"
+    note: >
+      Derived using the n-4 sliding window at RHEL 10.2: lower bound = max(0, 10.(2−4)) = 10.0;
+      highest even non-last minor ≤ 10.2 = 10.2; result: 10.0, 10.2.
+      Update current_minor and this list each time a new RHEL 10 minor is released.
+      See the catalog README for the full derivation algorithm.
+      EUS repository sets carry distinct Satellite names from the streaming repos
+      and require an EUS add-on subscription. Populate eus_repository_sets once
+      EUS repo names are confirmed on a subscribed Satellite instance.
+  architectures:
+    - id: x86_64
+      kickstart_versions:
+        - "10.2"
+        - "10.1"
+        - "10.0"
+      kickstart_default: "10.2"
+    - id: aarch64
+      kickstart_versions:
+        - "10.2"
+        - "10.1"
+        - "10.0"
+      kickstart_default: "10.2"
+
+content:
+  repository_sets:
+
+    # ── RHEL 10 x86_64 streaming ──────────────────────────────────────────────
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)"
+      releasever: "10"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (RPMs)"
+      releasever: "10"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 10 for x86_64 - Supplementary (RPMs)"
+      releasever: "10"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 10 for x86_64 - Extensions (RPMs)"
+      releasever: "10"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (Kickstart)"
+      releasever: "{{ kickstart_version }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (Kickstart)"
+      releasever: "{{ kickstart_version }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Satellite Client 6 for RHEL 10 x86_64 (RPMs)"
+      arch: x86_64
+
+    # ── RHEL 10 aarch64 streaming ─────────────────────────────────────────────
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS (RPMs)"
+      releasever: "10"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream (RPMs)"
+      releasever: "10"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 10 for ARM 64 - Supplementary (RPMs)"
+      releasever: "10"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 10 for ARM 64 - Extensions (RPMs)"
+      releasever: "10"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS (Kickstart)"
+      releasever: "{{ kickstart_version_aarch64 }}"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream (Kickstart)"
+      releasever: "{{ kickstart_version_aarch64 }}"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Satellite Client 6 for RHEL 10 aarch64 (RPMs)"
+      arch: aarch64
+
+  # EUS repository sets — RHEL 10 EUS names not yet confirmed in CDN.
+  # Populate once EUS entitlements are available in a subscribed Satellite.
+  eus_repository_sets: []
+
+  content_views:
+    - name: "SOE10"
+      arch: x86_64
+      desc: "RHEL 10 x86_64 Standard Operating Environment"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+    - name: "SOE10_aarch64"
+      arch: aarch64
+      desc: "RHEL 10 ARM64 Standard Operating Environment"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+lifecycle:
+  levels: [dev, qa, prod]
+  # Pattern: SOE10_{level}  →  SOE10_dev, SOE10_qa, SOE10_prod
+  activation_key_pattern: "SOE10_{level}"
+
+# provisioning section omitted — uses soe_catalog_schema.yml provisioning_defaults
