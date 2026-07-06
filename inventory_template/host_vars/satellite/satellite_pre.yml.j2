@@ -11,7 +11,7 @@ satellite_disconnected_http_repos: true
 # FDI discovery image is served by the provisioner's DVD HTTP server.
 # Copy fdi-image-latest.tar from the transfer bundle into /mnt/rhis_dvd/ before the build.
 # See rhis_discovery_source_url in your basevars file to change the URL.
-satellite_disconnected_discovery_source_url: "{{ rhis_discovery_source_url }}"
+satellite_disconnected_discovery_source_url: "http://{{ groups['provisioner_host'][0] }}:7778/"
 {% endif %}
 
 # DISCONNECTED: path to discovery_images/ from the transfer bundle on the highside host.

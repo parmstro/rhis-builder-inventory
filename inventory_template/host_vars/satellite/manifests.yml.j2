@@ -13,10 +13,19 @@
 {% raw %}
 redhat_manifests:
   - name: "{{ ansible_fqdn }}"
-    source: "{{ ansible_fqdn }}_manifest.zip"
-    generate: false
+    account: "{{ cdn_account_number_vault }}"
+    cdn_username: "{{ cdn_username_vault }}"
+    cdn_password: "{{ cdn_password_vault }}"
+    content_access_mode: "org_environment"  # SCA mode
+    generate: true
     organization: "{{ satellite_organization }}"
-    state: present
+#   source: org_name_versionstring.zip  # when providing your own manifest
+    path: "/root/bootstrap_manifest.zip"
+    portal_url: "https://subscription.rhsm.redhat.com"
+#   repository_url:  # alternate content source
+    state: present   # present | absent | refreshed
+    subs: "{{ manifest_subs_vault }}"
+    validate_certs: true
 {% endraw %}
 
 {% else %}

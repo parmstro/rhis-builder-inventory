@@ -1,4 +1,8 @@
 #!/bin/bash
+# Mount ~/rhis_transfer into the container when present (highside: populated by import_bundle.sh).
+_transfer_arg=""
+[[ -d "${HOME}/rhis_transfer" ]] && _transfer_arg="--transfer-dir ${HOME}/rhis_transfer"
+
 ./run_container.sh --ansible-ver '2.5' \
                    --secrets-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/vault' \
                    --external-tasks-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/external_tasks' \
@@ -11,4 +15,5 @@
                    --vars-dir '{{ lookup('ansible.builtin.env', 'working_directory_external_to_container') }}/{{ deployment_dir }}/vars' \
                    --ssh-dir '/home/{{ ansible_user_id }}/.ssh' \
                    --container-registry 'quay.io' \
-                   --container-repo 'parmstro'
+                   --container-repo 'parmstro' \
+                   ${_transfer_arg}
