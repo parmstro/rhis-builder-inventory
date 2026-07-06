@@ -1,0 +1,958 @@
+---
+# export_deployment.yml
+#
+# Ansible orchestrator for the disconnected satellite export workflow.
+# Called by the thin bash wrapper export_deployment.sh.
+#
+# Stages:
+#   Stage 1: Save provisioner container image (and any additional containers)
+#   Stage 2: Pulp export and satellite artifact collection (runs export_disconnected.yml
+#            inside the provisioner container via podman run)
+#   Stage 3: Stage provisioner-side artifacts (inventory archive, bootstrap ISOs,
+#            subscription manifests, operator tools)
+#   Stage 4: Generate export manifest (rhis_export_manifest.yml) and transfer scripts
+#
+# REQUIRED EXTRA VARS (passed by export_deployment.sh):
+#   basevars_file   — path to the lowside basevars file (absolute or relative to playbook_dir)
+#   highside        — target highside FQDN (required when basevars lists > 1 downstream)
+#
+# OPTIONAL EXTRA VARS:
+#   ansible_ver     — provisioner container version tag (default: "2.5")
+#   export_root     — staging root directory (default: /var/rhis_export_staging)
+#   dry_run         — print plan and exit, do not export (default: false)
+
+- name: "RHIS Disconnected Satellite Export"
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars:
+    ansible_ver: "2.5"
+    dry_run: false
+    highside: ""
+    basevars_file: ""
+    export_root: "/var/rhis_export_staging"
+
+  tasks:
+
+    # ── Preflight: argument validation and variable setup ────────────────────────
+
+    - name: "Preflight — assert basevars_file is specified"
+      ansible.builtin.assert:
+        that: basevars_file | length > 0
+        fail_msg: >-
+          basevars_file is required.
+          Pass --extra-vars 'basevars_file=/path/to/example.ca_inventory_basevars.yml'
+
+    - name: "Preflight — resolve basevars file to absolute path"
+      ansible.builtin.set_fact:
+        _basevars_path: >-
+          {{ basevars_file if basevars_file.startswith('/')
+             else playbook_dir ~ '/' ~ basevars_file }}
+
+    - name: "Preflight — assert basevars file exists"
+      ansible.builtin.stat:
+        path: "{{ _basevars_path }}"
+      register: _bv_stat
+
+    - name: "Preflight — fail if basevars file not found"
+      ansible.builtin.fail:
+        msg: "basevars file not found: {{ _basevars_path }}"
+      when: not _bv_stat.stat.exists | default(false)
+
+    - name: "Preflight — load basevars"
+      ansible.builtin.include_vars:
+        file: "{{ _basevars_path }}"
+
+    # After include_vars, basevars_* variables are in play scope.
+
+    - name: "Preflight — validate downstream list is non-empty"
+      ansible.builtin.assert:
+        that: basevars_downstream_disconnected_deployment | default([]) | length > 0
+        fail_msg: >-
+          basevars_downstream_disconnected_deployment is empty in {{ basevars_file }}.
+          At least one highside domain must be listed.
+
+    - name: "Preflight — assert highside specified when multiple downstreams configured"
+      ansible.builtin.assert:
+        that: highside | length > 0
+        fail_msg: >-
+          Multiple highside deployments configured; specify which to export to:
+          --extra-vars 'highside=<domain>'
+          Configured: {{ basevars_downstream_disconnected_deployment | join(', ') }}
+      when: (basevars_downstream_disconnected_deployment | default([])) | length > 1
+
+    - name: "Preflight — resolve highside domain"
+      ansible.builtin.set_fact:
+        highside_domain: >-
+          {{ highside if highside | length > 0
+             else basevars_downstream_disconnected_deployment[0] }}
+
+    - name: "Preflight — validate highside domain is in configured list"
+      ansible.builtin.assert:
+        that: highside_domain in basevars_downstream_disconnected_deployment
+        fail_msg: >-
+          '{{ highside_domain }}' is not in basevars_downstream_disconnected_deployment.
+          Configured: {{ basevars_downstream_disconnected_deployment | join(', ') }}
+
+    - name: "Preflight — set derived variables"
+      ansible.builtin.set_fact:
+        lowside_domain: "{{ basevars_global_domain_name }}"
+        sat_host: "satellite1.{{ basevars_global_domain_name }}"
+        provisioner_host: "{{ ansible_fqdn }}"
+        container_image: "quay.io/parmstro/rhis-provisioner-9-{{ ansible_ver }}:latest"
+        ver_tag: "{{ ansible_ver | replace('.', '') }}"
+        log_timestamp: >-
+          {{ ansible_date_time.date | replace('-', '') }}_{{
+             ansible_date_time.hour ~ ansible_date_time.minute ~ ansible_date_time.second }}
+        lowside_dir: "{{ playbook_dir }}/deployments/{{ basevars_global_domain_name }}"
+        highside_dir: "{{ playbook_dir }}/deployments/{{ highside_domain }}"
+        marker_file: >-
+          {{ playbook_dir }}/deployments/{{ basevars_global_domain_name }}/logs/.pulp_export_complete
+
+    - name: "Preflight — set staging path"
+      ansible.builtin.set_fact:
+        export_staging: "{{ export_root }}/{{ highside_domain }}_{{ log_timestamp }}"
+
+    - name: "Preflight — check export_root is writable"
+      ansible.builtin.stat:
+        path: "{{ export_root }}"
+      register: _export_root_stat
+
+    - name: "Preflight — fail if export_root not writable"
+      ansible.builtin.fail:
+        msg: >-
+          export_root '{{ export_root }}' does not exist or is not writable by {{ ansible_user_id }}.
+          Run: sudo mkdir -p {{ export_root }} && sudo chown {{ ansible_user_id }} {{ export_root }}
+      when: >-
+        not _export_root_stat.stat.exists | default(false)
+        or not _export_root_stat.stat.writeable | default(false)
+
+    - name: "Preflight — check highside basevars file"
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/{{ highside_domain }}_inventory_basevars.yml"
+      register: _hs_bv_stat
+
+    - name: "Preflight — load highside basevars"
+      ansible.builtin.include_vars:
+        file: "{{ playbook_dir }}/{{ highside_domain }}_inventory_basevars.yml"
+        name: _hs_bv
+      when: _hs_bv_stat.stat.exists
+
+    - name: "Preflight — expose highside container list"
+      ansible.builtin.set_fact:
+        rhis_highside_containers: "{{ _hs_bv.rhis_highside_containers | default([]) }}"
+
+    # ── Preflight: resume marker ─────────────────────────────────────────────────
+
+    - name: "Preflight — check Pulp export resume marker"
+      ansible.builtin.stat:
+        path: "{{ marker_file }}"
+      register: _marker_stat
+
+    - name: "Preflight — load resume marker vars"
+      ansible.builtin.include_vars:
+        file: "{{ marker_file }}"
+        name: _marker_vars
+      when: _marker_stat.stat.exists
+
+    - name: "Preflight — set pulp_export_path from marker"
+      ansible.builtin.set_fact:
+        pulp_export_path: "{{ _marker_vars.pulp_export_path | default('') }}"
+      when: _marker_stat.stat.exists
+
+    - name: "Preflight — initialize pulp_export_path when no marker"
+      ansible.builtin.set_fact:
+        pulp_export_path: ""
+      when: not _marker_stat.stat.exists
+
+    # ── Preflight: deployment directories ───────────────────────────────────────
+
+    - name: "Preflight — check lowside deployment directory"
+      ansible.builtin.stat:
+        path: "{{ lowside_dir }}"
+      register: _lowside_dir_stat
+
+    - name: "Preflight — fail if lowside deployment not found"
+      ansible.builtin.fail:
+        msg: >-
+          Lowside deployment not found: {{ lowside_dir }}
+          Run: ./inventory_update.sh -b {{ basevars_file }}
+      when: not (_lowside_dir_stat.stat.isdir | default(false))
+
+    - name: "Preflight — check highside deployment directory"
+      ansible.builtin.stat:
+        path: "{{ highside_dir }}"
+      register: _highside_dir_stat
+
+    - name: "Preflight — fail if highside deployment not found"
+      ansible.builtin.fail:
+        msg: >-
+          Highside deployment not found: {{ highside_dir }}
+          Run: ./inventory_update.sh -b <highside_basevars_file>
+      when: not (_highside_dir_stat.stat.isdir | default(false))
+
+    # ── Preflight: container image ───────────────────────────────────────────────
+
+    - name: "Preflight — check provisioner container image exists locally"
+      ansible.builtin.command:
+        cmd: "podman image exists {{ container_image }}"
+      register: _container_check
+      changed_when: false
+      failed_when: false
+
+    - name: "Preflight — fail if container image not found"
+      ansible.builtin.fail:
+        msg: >-
+          Container image not found locally: {{ container_image }}
+          Pull it first: podman pull {{ container_image }}
+      when: _container_check.rc != 0
+
+    # ── Preflight: subscription manifest ZIP ────────────────────────────────────
+
+    - name: "Preflight — find subscription manifest ZIP"
+      ansible.builtin.find:
+        paths: "{{ highside_dir }}/files"
+        patterns: "*_manifest.zip"
+        file_type: file
+      register: _manifest_zip_find
+
+    - name: "Preflight — warn if no manifest ZIP found"
+      ansible.builtin.debug:
+        msg:
+          - "WARNING: No subscription manifest ZIP found in {{ highside_dir }}/files/"
+          - "The highside Satellite requires its own manifest from the Red Hat Customer Portal."
+          - "  1. Create a separate allocation at https://access.redhat.com/management"
+          - "  2. Download the manifest ZIP"
+          - "  3. Copy it to: {{ highside_dir }}/files/"
+      when: _manifest_zip_find.matched == 0
+
+    - name: "Preflight — check manifests.yml has generate: false"
+      ansible.builtin.find:
+        paths: "{{ highside_dir }}/host_vars"
+        patterns: "manifests.yml"
+        recurse: true
+        contains: "generate: false"
+      register: _manifests_yml_find
+
+    - name: "Preflight — warn if manifests.yml missing generate: false"
+      ansible.builtin.debug:
+        msg:
+          - "WARNING: No manifests.yml with 'generate: false' found in {{ highside_dir }}/host_vars/"
+          - "The highside Satellite cannot reach subscription.rhsm.redhat.com."
+          - "Set 'generate: false' for all redhat_manifest entries in the highside manifests.yml."
+      when: _manifests_yml_find.matched == 0
+
+    # ── Preflight: infra ISOs (check/download) ──────────────────────────────────
+
+    - name: "Preflight — check for rh_iso_download.sh"
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/rh_iso_download.sh"
+      register: _iso_script_stat
+
+    - name: "Preflight — stat RHEL DVD ISO"
+      ansible.builtin.stat:
+        path: "{{ basevars_rhel_dvd_iso_path | default('') }}"
+      register: _rhel_dvd_stat
+      when: basevars_rhel_dvd_iso_path | default('') | length > 0
+
+    - name: "Preflight — download RHEL DVD ISO if missing"
+      ansible.builtin.command:
+        cmd: >-
+          bash {{ playbook_dir }}/rh_iso_download.sh
+          --cset {{ basevars_rhel_dvd_cset }}
+          {{ ('--version ' ~ basevars_rhel_dvd_version) if basevars_rhel_dvd_version | default('') not in ['', 'latest'] else '' }}
+          --output {{ basevars_rhel_dvd_iso_path }}
+      changed_when: true
+      when:
+        - basevars_rhel_dvd_iso_path | default('') | length > 0
+        - not (_rhel_dvd_stat.stat.exists | default(false))
+        - _iso_script_stat.stat.exists
+      register: _rhel_dvd_download
+
+    - name: "Preflight — warn if RHEL DVD ISO missing and not downloadable"
+      ansible.builtin.debug:
+        msg: "WARNING: RHEL DVD ISO not found and could not be downloaded — infra_isos/ will not contain RHEL DVD"
+      when:
+        - basevars_rhel_dvd_iso_path | default('') | length > 0
+        - not (_rhel_dvd_stat.stat.exists | default(false))
+        - not _iso_script_stat.stat.exists
+
+    - name: "Preflight — stat Satellite DVD ISO"
+      ansible.builtin.stat:
+        path: "{{ basevars_satellite_dvd_iso_path | default('') }}"
+      register: _sat_dvd_stat
+      when: basevars_satellite_dvd_iso_path | default('') | length > 0
+
+    - name: "Preflight — download Satellite DVD ISO if missing"
+      ansible.builtin.command:
+        cmd: >-
+          bash {{ playbook_dir }}/rh_iso_download.sh
+          --cset {{ basevars_satellite_dvd_cset }}
+          {{ ('--version ' ~ basevars_satellite_dvd_version) if basevars_satellite_dvd_version | default('') not in ['', 'latest'] else '' }}
+          --output {{ basevars_satellite_dvd_iso_path }}
+      changed_when: true
+      when:
+        - basevars_satellite_dvd_iso_path | default('') | length > 0
+        - not (_sat_dvd_stat.stat.exists | default(false))
+        - _iso_script_stat.stat.exists
+      register: _sat_dvd_download
+
+    - name: "Preflight — warn if Satellite DVD ISO missing and not downloadable"
+      ansible.builtin.debug:
+        msg: "WARNING: Satellite DVD ISO not found and could not be downloaded — infra_isos/ will not contain Satellite DVD"
+      when:
+        - basevars_satellite_dvd_iso_path | default('') | length > 0
+        - not (_sat_dvd_stat.stat.exists | default(false))
+        - not _iso_script_stat.stat.exists
+
+    # ── Summary ──────────────────────────────────────────────────────────────────
+
+    - name: "Summary — precompute display values"
+      ansible.builtin.set_fact:
+        _display_manifest: >-
+          {{ (_manifest_zip_find.files | map(attribute='path') | map('basename') | list | first)
+             if _manifest_zip_find.matched > 0 else 'NOT FOUND — highside build will fail' }}
+        _display_resume: >-
+          {{ 'Pulp export marker found — Stage 2 will be skipped (delete ' ~ marker_file ~ ' to force full export)'
+             if _marker_stat.stat.exists else 'No marker — full export will run' }}
+        _display_rhel_iso: >-
+          {{ basevars_rhel_dvd_iso_path ~ ' (' ~ ('present' if _rhel_dvd_stat.stat.exists | default(false) else 'missing') ~ ')'
+             if basevars_rhel_dvd_iso_path | default('') | length > 0 else 'not configured' }}
+        _display_sat_iso: >-
+          {{ basevars_satellite_dvd_iso_path ~ ' (' ~ ('present' if _sat_dvd_stat.stat.exists | default(false) else 'missing') ~ ')'
+             if basevars_satellite_dvd_iso_path | default('') | length > 0 else 'not configured' }}
+
+    - name: "Summary — export plan"
+      ansible.builtin.debug:
+        msg:
+          - "════════════════════════════════════════════════════════════════"
+          - "  RHIS Disconnected Satellite Export"
+          - "════════════════════════════════════════════════════════════════"
+          - "  Lowside:    {{ lowside_domain }}  ({{ sat_host }})"
+          - "  Highside:   {{ highside_domain }}"
+          - "  Container:  {{ container_image }}"
+          - "  Manifest:   {{ _display_manifest }}"
+          - "  Resume:     {{ _display_resume }}"
+          - "  RHEL ISO:   {{ _display_rhel_iso }}"
+          - "  Sat ISO:    {{ _display_sat_iso }}"
+          - "  Containers: {{ rhis_highside_containers | join(', ') if rhis_highside_containers | length > 0 else 'none defined' }}"
+          - "════════════════════════════════════════════════════════════════"
+
+    - name: "Summary — dry-run exit"
+      ansible.builtin.meta: end_play
+      when: dry_run | bool
+
+    # ── Create staging directory tree ────────────────────────────────────────────
+
+    - name: "Setup — create staging directory tree"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "{{ export_staging }}/provisioner/containers"
+        - "{{ export_staging }}/provisioner/inventory"
+        - "{{ export_staging }}/bootstrap/bootstrap_isos"
+        - "{{ export_staging }}/bootstrap/infra_isos"
+        - "{{ export_staging }}/bootstrap/rhis-builder-bootstrap-init"
+        - "{{ export_staging }}/satellite/ansible_roles"
+        - "{{ export_staging }}/satellite/discovery_images"
+
+    # ── Stage 1: Save container images ──────────────────────────────────────────
+
+    - name: "Stage 1 — Save provisioner container image"
+      ansible.builtin.command:
+        cmd: >-
+          podman save {{ container_image }}
+          -o {{ export_staging }}/provisioner/containers/rhis-provisioner_{{ log_timestamp }}.tar
+      changed_when: true
+
+    - name: "Stage 1 — Check additional container images"
+      ansible.builtin.command:
+        cmd: "podman image exists {{ item }}"
+      loop: "{{ rhis_highside_containers }}"
+      register: _extra_container_checks
+      changed_when: false
+      failed_when: false
+
+    - name: "Stage 1 — Warn if additional container not found locally"
+      ansible.builtin.debug:
+        msg: "WARNING: Container image not found locally: {{ item.item }} — pull it first: podman pull {{ item.item }}"
+      loop: "{{ _extra_container_checks.results }}"
+      when: item.rc != 0
+      loop_control:
+        label: "{{ item.item }}"
+
+    - name: "Stage 1 — Save additional container images"
+      ansible.builtin.command:
+        cmd: >-
+          podman save {{ item.item }}
+          -o {{ export_staging }}/provisioner/containers/{{ item.item | regex_replace('^.+/', '') | regex_replace(':.*$', '') }}_{{ log_timestamp }}.tar
+      loop: "{{ _extra_container_checks.results }}"
+      when: item.rc == 0
+      changed_when: true
+      loop_control:
+        label: "{{ item.item }}"
+
+    # ── Stage 2: Pulp export and satellite artifact collection ───────────────────
+    # Runs export_disconnected.yml inside the provisioner container via podman run.
+    # Container mounts expose the lowside inventory, vault, logs, highside host_vars,
+    # and the export staging directory.
+
+    - name: "Stage 2 — Run export_disconnected.yml in provisioner container"
+      ansible.builtin.shell:  # noqa: command-instead-of-module risky-shell-pipe
+        cmd: |
+          podman run --rm \
+            --entrypoint /bin/bash \
+            -v {{ lowside_dir }}/inventory:/rhis/vars/external_inventory:Z \
+            -v {{ lowside_dir }}/group_vars:/rhis/vars/group_vars:Z \
+            -v {{ lowside_dir }}/host_vars:/rhis/vars/host_vars:Z \
+            -v {{ lowside_dir }}/logs:/rhis/vars/logs:Z \
+            -v {{ lowside_dir }}/vars:/rhis/vars/vars:Z \
+            -v {{ lowside_dir }}/vault:/rhis/vars/vault:Z \
+            -v {{ highside_dir }}/host_vars:/rhis/vars/highside_host_vars:Z \
+            -v {{ export_staging }}:/rhis/vars/export_staging:Z \
+            -v {{ playbook_dir }}/../rhis-builder-satellite:/rhis/rhis-builder-satellite:Z \
+            -v {{ ansible_env.HOME }}/.ssh:/root/.ssh:Z \
+            --hostname provisioner \
+            {{ container_image }} \
+            -c 'cd /rhis/rhis-builder-satellite && \
+                ansible-playbook \
+                  --inventory /rhis/vars/external_inventory/inventory \
+                  --user ansiblerunner \
+                  --private-key /root/.ssh/id_ed25519 \
+                  --vault-password-file /root/.ssh/vault.txt \
+                  --extra-vars "vault_dir=/rhis/vars/vault vars_dir=/rhis/vars/host_vars" \
+                  --extra-vars "active_downstream_deployment={{ highside_domain }}" \
+                  --limit=sat_primary \
+                  {{ "--skip-tags tags_content_exports" if _marker_stat.stat.exists else "" }} \
+                  export_disconnected.yml 2>&1 | tee /rhis/vars/logs/export_deployment_stage2_{{ log_timestamp }}.log'
+      changed_when: true
+      register: _stage2_result
+
+    - name: "Stage 2 — Re-check resume marker (written or updated by Stage 2)"
+      ansible.builtin.stat:
+        path: "{{ marker_file }}"
+      register: _marker_stat_post
+
+    - name: "Stage 2 — Reload resume marker to get pulp_export_path"
+      ansible.builtin.include_vars:
+        file: "{{ marker_file }}"
+        name: _marker_vars_post
+      when: _marker_stat_post.stat.exists
+
+    - name: "Stage 2 — Update pulp_export_path from post-Stage-2 marker"
+      ansible.builtin.set_fact:
+        pulp_export_path: "{{ _marker_vars_post.pulp_export_path | default(pulp_export_path) }}"
+      when: _marker_stat_post.stat.exists
+
+    - name: "Stage 2 — Warn if pulp_export_path is still unknown"
+      ansible.builtin.debug:
+        msg: >-
+          WARNING: Could not read pulp_export_path from {{ marker_file }}.
+          content_imports.yml injection and drive-size estimation may be incomplete.
+      when: pulp_export_path | length == 0
+
+    - name: "Stage 2 — Derive Pulp org directory and src root"
+      ansible.builtin.set_fact:
+        pulp_org_dir: "{{ pulp_export_path | regex_replace('^/var/lib/pulp/exports/', '') | regex_replace('/.*$', '') }}"
+        pulp_src_root: "/var/lib/pulp/exports/{{ pulp_export_path | regex_replace('^/var/lib/pulp/exports/', '') | regex_replace('/.*$', '') }}"
+      when: pulp_export_path | length > 0
+
+    - name: "Stage 2 — Set empty Pulp org vars when path unknown"
+      ansible.builtin.set_fact:
+        pulp_org_dir: ""
+        pulp_src_root: ""
+      when: pulp_export_path | length == 0
+
+    # ── Stage 3: Stage provisioner-side artifacts ────────────────────────────────
+
+    - name: "Stage 3 — Archive and extract inventory git tree"  # noqa: command-instead-of-module
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          git -C {{ playbook_dir }} archive HEAD | tar -x -C {{ export_staging }}/provisioner/inventory/
+        executable: /bin/bash
+      changed_when: true
+
+    - name: "Stage 3 — Ensure highside deployment directory exists in staging"
+      ansible.builtin.file:
+        path: "{{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain }}"
+        state: directory
+        mode: "0755"
+
+    - name: "Stage 3 — Rsync rendered highside deployment to staging"
+      ansible.posix.synchronize:
+        src: "{{ highside_dir }}/"
+        dest: "{{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain }}/"
+        rsync_opts:
+          - "--exclude=vault/"
+          - "--exclude=logs/"
+          - "--omit-dir-times"
+
+    - name: "Stage 3 — Check for highside launcher script"
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/{{ highside_domain }}.{{ ver_tag }}.sh"
+      register: _launcher_stat
+
+    - name: "Stage 3 — Copy highside launcher script to staging"
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/{{ highside_domain }}.{{ ver_tag }}.sh"
+        dest: "{{ export_staging }}/provisioner/inventory/{{ highside_domain }}.{{ ver_tag }}.sh"
+        mode: "0755"
+      when: _launcher_stat.stat.exists
+
+    - name: "Stage 3 — Warn if launcher script not found"
+      ansible.builtin.debug:
+        msg: >-
+          WARNING: Launcher script not found: {{ playbook_dir }}/{{ highside_domain }}.{{ ver_tag }}.sh
+          Generate it with run_container.sh before exporting.
+      when: not _launcher_stat.stat.exists
+
+    # ── Prune non-highside files from the extracted inventory archive ────────────
+    # Compartmentalization: the bundle must contain configuration ONLY for the
+    # target highside. See export_deployment.sh for the selection rule rationale.
+
+    - name: "Stage 3 — Find all deployment directories in staging"
+      ansible.builtin.find:
+        paths: "{{ export_staging }}/provisioner/inventory/deployments"
+        file_type: directory
+        depth: 1
+      register: _staged_deployment_dirs
+
+    - name: "Stage 3 — Remove non-target deployment directories"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ _staged_deployment_dirs.files }}"
+      when: item.path | basename != highside_domain
+      loop_control:
+        label: "{{ item.path | basename }}"
+
+    - name: "Stage 3 — Find deployment-specific basevars files in staging"
+      ansible.builtin.find:
+        paths: "{{ export_staging }}/provisioner/inventory"
+        patterns: "*_inventory_basevars.yml"
+        file_type: file
+        depth: 1
+      register: _staged_bv_files
+
+    - name: "Stage 3 — Remove non-target basevars files"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ _staged_bv_files.files }}"
+      when:
+        - item.path | basename != 'inventory_basevars.yml'
+        - item.path | basename != highside_domain ~ '_inventory_basevars.yml'
+      loop_control:
+        label: "{{ item.path | basename }}"
+
+    - name: "Stage 3 — Find launcher scripts in staging"
+      ansible.builtin.find:
+        paths: "{{ export_staging }}/provisioner/inventory"
+        patterns: "*.sh"
+        file_type: file
+        depth: 1
+      register: _staged_launchers
+
+    - name: "Stage 3 — Remove non-target deployment launcher scripts"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ _staged_launchers.files }}"
+      when:
+        - item.path | basename | regex_replace('\\.sh$', '') is search('\\.')
+        - item.path | basename != highside_domain ~ '.' ~ ver_tag ~ '.sh'
+      loop_control:
+        label: "{{ item.path | basename }}"
+
+    - name: "Stage 3 — Recreate empty logs directory for highside deployment"
+      ansible.builtin.file:
+        path: "{{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain }}/logs"
+        state: "{{ item }}"
+        mode: "0755"
+      loop:
+        - absent
+        - directory
+
+    # ── Inject content_imports.yml ───────────────────────────────────────────────
+    # Written to staging by generate_content_imports_file.yml during Stage 2.
+    # On a resume run (Stage 2 skipped), fall back to the copy in highside host_vars
+    # written by the previous successful run.
+
+    - name: "Stage 3 — Stat content_imports.yml in staging"
+      ansible.builtin.stat:
+        path: "{{ export_staging }}/satellite/content_imports.yml"
+      register: _ci_staging_stat
+
+    - name: "Stage 3 — Stat content_imports.yml in highside host_vars (resume fallback)"
+      ansible.builtin.stat:
+        path: "{{ highside_dir }}/host_vars/satellite1.{{ highside_domain }}/content_imports.yml"
+      register: _ci_hs_stat
+
+    - name: "Stage 3 — Resolve content_imports.yml source"
+      ansible.builtin.set_fact:
+        _ci_src: >-
+          {{ export_staging ~ '/satellite/content_imports.yml'
+             if _ci_staging_stat.stat.exists
+             else highside_dir ~ '/host_vars/satellite1.' ~ highside_domain ~ '/content_imports.yml'
+             if _ci_hs_stat.stat.exists
+             else '' }}
+        _ci_resume_fallback: "{{ not _ci_staging_stat.stat.exists and _ci_hs_stat.stat.exists }}"
+
+    - name: "Stage 3 — Log resume fallback for content_imports.yml"
+      ansible.builtin.debug:
+        msg: "Resume run: using existing content_imports.yml from highside host_vars."
+      when: _ci_resume_fallback | bool
+
+    - name: "Stage 3 — Create content_imports.yml staging target directories"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "{{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain }}/host_vars/satellite1.{{ highside_domain }}"
+        - "{{ highside_dir }}/host_vars/satellite1.{{ highside_domain }}"
+      when: _ci_src | length > 0
+
+    - name: "Stage 3 — Back up existing content_imports.yml in highside host_vars"
+      ansible.builtin.copy:
+        src: "{{ highside_dir }}/host_vars/satellite1.{{ highside_domain }}/content_imports.yml"
+        dest: "{{ highside_dir }}/host_vars/satellite1.{{ highside_domain }}/content_imports.yml.bak"
+        remote_src: true
+        mode: "0644"
+      when:
+        - _ci_src | length > 0
+        - _ci_hs_stat.stat.exists
+        - not (_ci_resume_fallback | bool)
+
+    - name: "Stage 3 — Inject content_imports.yml into highside host_vars"
+      ansible.builtin.copy:
+        src: "{{ _ci_src }}"
+        dest: "{{ highside_dir }}/host_vars/satellite1.{{ highside_domain }}/content_imports.yml"
+        remote_src: true
+        mode: "0644"
+      when: _ci_src | length > 0
+
+    - name: "Stage 3 — Inject content_imports.yml into inventory staging"
+      ansible.builtin.copy:
+        src: "{{ _ci_src }}"
+        dest: >-
+          {{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain
+          }}/host_vars/satellite1.{{ highside_domain }}/content_imports.yml
+        remote_src: true
+        mode: "0644"
+      when: _ci_src | length > 0
+
+    - name: "Stage 3 — Warn if content_imports.yml not found"
+      ansible.builtin.debug:
+        msg:
+          - "WARNING: content_imports.yml not found in staging or highside host_vars — not injected."
+          - "  Run a full export (delete {{ marker_file }}) to regenerate it."
+      when: _ci_src | length == 0
+
+    # ── Subscription manifests ───────────────────────────────────────────────────
+
+    - name: "Stage 3 — Create manifest destination in staging"
+      ansible.builtin.file:
+        path: "{{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain }}/files"
+        state: directory
+        mode: "0755"
+
+    - name: "Stage 3 — Find subscription manifest ZIPs"
+      ansible.builtin.find:
+        paths: "{{ highside_dir }}/files"
+        patterns: "*_manifest.zip"
+        file_type: file
+      register: _manifest_zips
+
+    - name: "Stage 3 — Copy subscription manifest ZIPs to staging"
+      ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: "{{ export_staging }}/provisioner/inventory/deployments/{{ highside_domain }}/files/"
+        remote_src: true
+        mode: "0644"
+      loop: "{{ _manifest_zips.files }}"
+      loop_control:
+        label: "{{ item.path | basename }}"
+
+    - name: "Stage 3 — Warn if no subscription manifests found"
+      ansible.builtin.debug:
+        msg: "WARNING: No subscription manifests found in {{ highside_dir }}/files/ — staged files/ will be empty"
+      when: _manifest_zips.matched == 0
+
+    # ── Normalize inventory permissions ──────────────────────────────────────────
+
+    - name: "Stage 3 — Normalize directory permissions to 755"
+      ansible.builtin.command:
+        cmd: "find {{ export_staging }}/provisioner/inventory -type d -exec chmod 755 {} +"
+      changed_when: true
+
+    - name: "Stage 3 — Normalize file permissions to 644"
+      ansible.builtin.command:
+        cmd: "find {{ export_staging }}/provisioner/inventory -type f -exec chmod 644 {} +"
+      changed_when: true
+
+    - name: "Stage 3 — Normalize shell script permissions to 755"
+      ansible.builtin.command:
+        cmd: "find {{ export_staging }}/provisioner/inventory -name '*.sh' -exec chmod 755 {} +"
+      changed_when: true
+
+    # ── Stage bootstrap-init repo ────────────────────────────────────────────────
+
+    - name: "Stage 3 — Check bootstrap-init source"
+      ansible.builtin.stat:
+        path: "/home/ansiblerunner/rhis/rhis-builder-bootstrap-init"
+      register: _bootstrap_init_stat
+
+    - name: "Stage 3 — Warn if bootstrap-init not found"
+      ansible.builtin.debug:
+        msg:
+          - "WARNING: rhis-builder-bootstrap-init not found at /home/ansiblerunner/rhis/rhis-builder-bootstrap-init"
+          - "  Clone it before transferring the bundle."
+      when: not _bootstrap_init_stat.stat.exists | default(false)
+
+    - name: "Stage 3 — Stage rhis-builder-bootstrap-init"
+      ansible.posix.synchronize:
+        src: "/home/ansiblerunner/rhis/rhis-builder-bootstrap-init/"
+        dest: "{{ export_staging }}/bootstrap/rhis-builder-bootstrap-init/"
+        rsync_opts:
+          - "--exclude=.git/"
+          - "--omit-dir-times"
+      when: _bootstrap_init_stat.stat.exists | default(false)
+
+    # ── Bootstrap ISOs (Stage 3, sub-step) ──────────────────────────────────────
+
+    - name: "Stage 3 — Check bootstrap vars file"
+      ansible.builtin.stat:
+        path: "{{ highside_dir }}/vars/highside_bootstrap_hosts.yml"
+      register: _bootstrap_vars_stat
+
+    - name: "Stage 3 — Create bootstrap inventory for ansible-playbook"
+      ansible.builtin.copy:
+        content: |
+          [provisioner]
+          localhost ansible_connection=local
+        dest: "/tmp/rhis_bootstrap_inv_{{ log_timestamp }}.ini"
+        mode: "0600"
+      when:
+        - _bootstrap_init_stat.stat.exists | default(false)
+        - _bootstrap_vars_stat.stat.exists
+
+    - name: "Stage 3 — Generate OEMDRV kickstart ISOs"
+      ansible.builtin.command:
+        cmd: >-
+          ansible-playbook
+          --inventory /tmp/rhis_bootstrap_inv_{{ log_timestamp }}.ini
+          --vault-password-file {{ ansible_env.HOME }}/.ssh/vault.txt
+          --extra-vars "vault_dir={{ lowside_dir }}/vault"
+          --extra-vars "@{{ highside_dir }}/vars/highside_bootstrap_hosts.yml"
+          --extra-vars "bootstrap_init_iso_dir={{ export_staging }}/bootstrap/bootstrap_isos"
+          main.yml
+        chdir: "/home/ansiblerunner/rhis/rhis-builder-bootstrap-init"
+      changed_when: true
+      register: _bootstrap_iso_result
+      when:
+        - _bootstrap_init_stat.stat.exists | default(false)
+        - _bootstrap_vars_stat.stat.exists
+
+    - name: "Stage 3 — Remove bootstrap inventory"
+      ansible.builtin.file:
+        path: "/tmp/rhis_bootstrap_inv_{{ log_timestamp }}.ini"
+        state: absent
+      when:
+        - _bootstrap_init_stat.stat.exists | default(false)
+        - _bootstrap_vars_stat.stat.exists
+
+    - name: "Stage 3 — Find generated bootstrap ISOs"
+      ansible.builtin.find:
+        paths: "{{ export_staging }}/bootstrap/bootstrap_isos"
+        patterns: "*.iso"
+        file_type: file
+      register: _generated_isos
+      when:
+        - _bootstrap_init_stat.stat.exists | default(false)
+        - _bootstrap_vars_stat.stat.exists
+
+    - name: "Stage 3 — Report bootstrap ISO generation results"
+      ansible.builtin.debug:
+        msg: "Generated {{ _generated_isos.matched }} OEMDRV ISO(s): {{ _generated_isos.files | map(attribute='path') | map('basename') | list | join(', ') }}"
+      when:
+        - _generated_isos is defined
+        - _generated_isos.matched | default(0) > 0
+
+    - name: "Stage 3 — Warn if no bootstrap ISOs generated"
+      ansible.builtin.debug:
+        msg: "WARNING: No ISOs found after generation — check generate_oemdrv_iso flags in {{ highside_dir }}/vars/highside_bootstrap_hosts.yml"
+      when:
+        - _generated_isos is defined
+        - _generated_isos.matched | default(0) == 0
+
+    - name: "Stage 3 — Warn if bootstrap vars not found"
+      ansible.builtin.debug:
+        msg: "WARNING: Bootstrap vars not found: {{ highside_dir }}/vars/highside_bootstrap_hosts.yml — bootstrap ISOs not generated"
+      when: not _bootstrap_vars_stat.stat.exists
+
+    # ── Infra ISO status ──────────────────────────────────────────────────────────
+
+    - name: "Stage 3 — Re-stat RHEL DVD ISO (may have been downloaded in preflight)"
+      ansible.builtin.stat:
+        path: "{{ basevars_rhel_dvd_iso_path | default('') }}"
+      register: _rhel_dvd_final_stat
+      when: basevars_rhel_dvd_iso_path | default('') | length > 0
+
+    - name: "Stage 3 — Re-stat Satellite DVD ISO"
+      ansible.builtin.stat:
+        path: "{{ basevars_satellite_dvd_iso_path | default('') }}"
+      register: _sat_dvd_final_stat
+      when: basevars_satellite_dvd_iso_path | default('') | length > 0
+
+    - name: "Stage 3 — Compute infra ISO display values"
+      ansible.builtin.set_fact:
+        _display_rhel_dvd: >-
+          {{ basevars_rhel_dvd_iso_path | default('not configured') }} ({{
+          'present' if _rhel_dvd_final_stat.stat.exists | default(false) else 'missing' }})
+        _display_sat_dvd: >-
+          {{ basevars_satellite_dvd_iso_path | default('not configured') }} ({{
+          'present' if _sat_dvd_final_stat.stat.exists | default(false) else 'missing' }})
+
+    - name: "Stage 3 — Report infra ISO status"
+      ansible.builtin.debug:
+        msg:
+          - "Infra ISOs: transferred directly from provisioner to drive (not staged here)"
+          - "  RHEL DVD:      {{ _display_rhel_dvd }}"
+          - "  Satellite DVD: {{ _display_sat_dvd }}"
+
+    # ── Stage operator tools ─────────────────────────────────────────────────────
+
+    - name: "Stage 3 — Check validate_import_bundle.sh"
+      ansible.builtin.stat:
+        path: "{{ playbook_dir }}/../rhis-provisioner-container/rhis-provisioner/validate_import_bundle.sh"
+      register: _validate_stat
+
+    - name: "Stage 3 — Copy validate_import_bundle.sh to staging root"
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../rhis-provisioner-container/rhis-provisioner/validate_import_bundle.sh"
+        dest: "{{ export_staging }}/validate_import_bundle.sh"
+        mode: "0755"
+        remote_src: true
+      when: _validate_stat.stat.exists
+
+    - name: "Stage 3 — Copy operator tools from transfer_drive/"
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/transfer_drive/{{ item }}"
+        dest: "{{ export_staging }}/{{ item }}"
+        mode: "0644"
+        remote_src: true
+      loop:
+        - "README_FIRST.md"
+        - "import_bundle.sh"
+        - "import_bundle.yml"
+        - "prepare_highside.sh"
+
+    - name: "Stage 3 — Make shell scripts in staging executable"
+      ansible.builtin.file:
+        path: "{{ export_staging }}/{{ item }}"
+        mode: "0755"
+      loop:
+        - "import_bundle.sh"
+        - "prepare_highside.sh"
+
+    # ── Stage 4: Generate export manifest and transfer scripts ───────────────────
+
+    - name: "Stage 4 — Generate rhis_export_manifest.yml"
+      ansible.builtin.command:
+        cmd: >-
+          python3 {{ playbook_dir }}/scripts/generate_manifest.py
+          --staging {{ export_staging }}
+          --sat-host {{ sat_host }}
+          --lowside {{ lowside_domain }}
+          --highside {{ highside_domain }}
+          --generated {{ log_timestamp }}
+          --pulp-path {{ pulp_export_path | default('') }}
+      changed_when: true
+      register: _manifest_result
+
+    - name: "Stage 4 — Show manifest generation result"
+      ansible.builtin.debug:
+        msg: "{{ _manifest_result.stdout_lines }}"
+
+    - name: "Stage 4 — Generate transfer_to_drive_vars.yml"
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/transfer_drive/transfer_to_drive_vars.yml.j2"
+        dest: "{{ export_staging }}/transfer_to_drive_vars.yml"
+        mode: "0644"
+
+    - name: "Stage 4 — Copy static transfer_to_drive.yml to staging"
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/transfer_drive/transfer_to_drive.yml"
+        dest: "{{ export_staging }}/transfer_to_drive.yml"
+        mode: "0644"
+        remote_src: true
+
+    - name: "Stage 4 — Copy static transfer_to_drive.sh to staging"
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/transfer_drive/transfer_to_drive.sh"
+        dest: "{{ export_staging }}/transfer_to_drive.sh"
+        mode: "0755"
+        remote_src: true
+
+    # ── Drive size estimation ────────────────────────────────────────────────────
+
+    - name: "Stage 4 — Get staging size"
+      ansible.builtin.command:
+        cmd: "du -sb {{ export_staging }}"
+      register: _staging_du
+      changed_when: false
+
+    - name: "Stage 4 — Get Pulp export size from satellite"
+      ansible.builtin.command:
+        cmd: >-
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=no -o ConnectTimeout=10
+          ansiblerunner@{{ sat_host }}
+          "sudo du -sb '{{ pulp_src_root }}' 2>/dev/null"
+      register: _pulp_du
+      changed_when: false
+      failed_when: false
+      when: pulp_src_root | length > 0
+
+    - name: "Stage 4 — Get ISO sizes"
+      ansible.builtin.stat:
+        path: "{{ item }}"
+      loop:
+        - "{{ basevars_rhel_dvd_iso_path | default('') }}"
+        - "{{ basevars_satellite_dvd_iso_path | default('') }}"
+      register: _iso_stats
+      when: item | length > 0
+
+    # ── Final summary ────────────────────────────────────────────────────────────
+
+    - name: "Summary — final export complete"
+      ansible.builtin.debug:
+        msg:
+          - "════════════════════════════════════════════════════════════════"
+          - "  RHIS Export Complete — Staging Ready"
+          - "════════════════════════════════════════════════════════════════"
+          - "  Lowside → Highside:  {{ lowside_domain }} → {{ highside_domain }}"
+          - "  Staging:             {{ export_staging }}"
+          - "  Staging size:        {{ (_staging_du.stdout.split()[0] | int) | human_readable }}"
+          - "  Pulp export path:    {{ pulp_export_path | default('unknown') }}"
+          - "  Pulp size:           {{ (_pulp_du.stdout.split()[0] | int) | human_readable
+               if (_pulp_du is defined and _pulp_du.rc | default(1) == 0)
+               else '(SSH to ' ~ sat_host ~ ' failed)' }}"
+          - "════════════════════════════════════════════════════════════════"
+          - "  Next steps — transfer to drive:"
+          - "  1. Copy transfer scripts to your RHEL operator workstation:"
+          - "       scp ansiblerunner@{{ provisioner_host }}:{{ export_staging }}/transfer_to_drive.* ."
+          - "       scp ansiblerunner@{{ provisioner_host }}:{{ export_staging }}/transfer_to_drive_vars.yml ."
+          - "  2. Plug in the transfer drive (label: TRANSFER_DRV)"
+          - "  3. Run the transfer script:"
+          - "       ./transfer_to_drive.sh -d <drive_mount>"
+          - "  4. Physically transport the drive to the highside environment"
+          - "  5. Mount the drive on an operator RHEL workstation"
+          - "  6. cd <drive_mount> && ./import_bundle.sh"
+          - "════════════════════════════════════════════════════════════════"
+          - "  !! IMPORTANT: The vault password is NOT on the transfer drive."
+          - "     It must travel via a separate trusted channel."
