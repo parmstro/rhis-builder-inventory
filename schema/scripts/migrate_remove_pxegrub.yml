@@ -1,0 +1,223 @@
+---
+# migrate_remove_pxegrub.yml
+#
+# Removes legacy PXEGrub v1 (grub legacy) references from a rendered deployment inventory.
+# PXEGrub v1 (template type "pxegrub") was removed in Satellite 6.19.
+# PXEGrub2 references are not touched.
+#
+# Affects four files in the satellite host_vars directory:
+#   operating_systems.yml      — removes "Kickstart default PXEGrub" from
+#                                provisioning_templates lists and default_templates blocks
+#   provisioning_templates.yml — removes "SOE PXEGrub Global Default" and
+#                                "soe_pxegrub_discovery" entries
+#   settings_provisioning.yml  — removes "global_PXEGrub" and "local_boot_PXEGrub"
+#                                setting entries
+#   discovery_config.yml       — removes dead rhis_discovery_pxegrub_* variable lines
+#
+# USAGE:
+#   # Preview changes (default) — writes .new files for review, nothing is modified
+#   ansible-playbook schema/scripts/migrate_remove_pxegrub.yml \
+#       -e "inventory_dir=deployments/example.ca"
+#
+#   # Apply changes in place
+#   ansible-playbook schema/scripts/migrate_remove_pxegrub.yml \
+#       -e "inventory_dir=deployments/example.ca" \
+#       -e "preview=false"
+#
+#   # Discard previews without applying
+#   find deployments/example.ca -name '*.new' -delete
+#
+# VARIABLES:
+#   inventory_dir   Path to a rendered deployment directory (required)
+#   preview         true (default) = write .new files; false = apply in place
+
+- name: "Remove legacy PXEGrub v1 references from deployment host_vars"
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    preview: true
+    inventory_dir: ""
+
+  tasks:
+
+    - name: "Validate inventory_dir was provided"
+      ansible.builtin.assert:
+        that: inventory_dir | length > 0
+        fail_msg: "Specify the target deployment: -e inventory_dir=deployments/example.ca"
+
+    - name: "Resolve inventory_dir to absolute path"
+      ansible.builtin.set_fact:
+        _inv: "{{ inventory_dir if inventory_dir.startswith('/') else lookup('env', 'PWD') ~ '/' ~ inventory_dir }}"
+
+    - name: "Assert inventory_dir exists"
+      ansible.builtin.stat:
+        path: "{{ _inv }}"
+      register: inv_stat
+
+    - name: "Assert directory found"
+      ansible.builtin.assert:
+        that: inv_stat.stat.isdir
+        fail_msg: "inventory_dir not found or not a directory: {{ _inv }}"
+
+    - name: "Show run mode"
+      ansible.builtin.debug:
+        msg: "Mode: {{ 'PREVIEW (writing .new files)' if (preview | bool) else 'APPLY (modifying in place)' }}"
+
+    # Locate the satellite host_vars directory — hostname is domain-specific
+    - name: "Find operating_systems.yml under host_vars to locate satellite host_vars dir"
+      ansible.builtin.find:
+        paths: "{{ _inv }}/host_vars"
+        patterns: "operating_systems.yml"
+        recurse: true
+      register: os_yml_files
+
+    - name: "Assert satellite host_vars found"
+      ansible.builtin.assert:
+        that: os_yml_files.files | length > 0
+        fail_msg: "No operating_systems.yml found under {{ _inv }}/host_vars — is this a rendered deployment directory?"
+
+    - name: "Resolve satellite host_vars directory"
+      ansible.builtin.set_fact:
+        _sat_hvars: "{{ os_yml_files.files[0].path | dirname }}"
+
+    - name: "Report satellite host_vars directory"
+      ansible.builtin.debug:
+        msg: "Target: {{ _sat_hvars }}"
+
+    - name: "Set target file paths"
+      ansible.builtin.set_fact:
+        _f_os: "{{ _sat_hvars }}/operating_systems.yml"
+        _f_pt: "{{ _sat_hvars }}/provisioning_templates.yml"
+        _f_sp: "{{ _sat_hvars }}/settings_provisioning.yml"
+        _f_dc: "{{ _sat_hvars }}/discovery_config.yml"
+
+    # ── Preview: copy files to .new ───────────────────────────────────────────
+
+    - name: "Copy target files to .new for preview"
+      ansible.builtin.copy:
+        src: "{{ _target }}"
+        dest: "{{ _target }}.new"
+        mode: preserve
+      loop:
+        - "{{ _f_os }}"
+        - "{{ _f_pt }}"
+        - "{{ _f_sp }}"
+        - "{{ _f_dc }}"
+      loop_control:
+        loop_var: _target
+        label: "{{ _target | basename }}"
+      when: preview | bool
+
+    # ── operating_systems.yml ─────────────────────────────────────────────────
+
+    - name: "operating_systems: remove 'Kickstart default PXEGrub' from provisioning_templates lists"
+      ansible.builtin.replace:
+        path: "{{ _f_os }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: '      - "Kickstart default PXEGrub"\n'
+        replace: ""
+
+    - name: "operating_systems: remove PXEGrub default_template blocks"
+      ansible.builtin.replace:
+        path: "{{ _f_os }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: '      - name: "Kickstart default PXEGrub"\n        template_kind: "PXEGrub"\n'
+        replace: ""
+
+    # ── provisioning_templates.yml ────────────────────────────────────────────
+
+    - name: "provisioning_templates: remove SOE PXEGrub Global Default entry"
+      ansible.builtin.replace:
+        path: "{{ _f_pt }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: '\n  - name: "SOE PXEGrub Global Default"\n    type: "pxegrub"\n    locked: false\n    description: "[^"]+"\n    audit_comment: "[^"]+"\n    path: "[^"]+"\n    organizations:\n      - "[^"]+"\n    locations:\n      - "[^"]+"'
+        replace: ""
+
+    - name: "provisioning_templates: remove soe_pxegrub_discovery snippet entry"
+      ansible.builtin.replace:
+        path: "{{ _f_pt }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: '\n  - name: "soe_pxegrub_discovery"\n    type: "snippet"\n    locked: false\n    description: "[^"]+"\n    audit_comment: "[^"]+"\n    path: "[^"]+"\n    organizations:\n      - "[^"]+"\n    locations:\n      - "[^"]+"'
+        replace: ""
+
+    # ── settings_provisioning.yml ─────────────────────────────────────────────
+
+    - name: "settings_provisioning: remove global_PXEGrub setting block"
+      ansible.builtin.replace:
+        path: "{{ _f_sp }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: '\n  - name: "global_PXEGrub"\n    full_name: "[^"]+"\n    description: "[^"]+"\n    settings_type: "[^"]+"\n[#][^\n]*\n[#][^\n]*\n[#][^\n]*\n    value: "PXEGrub global default"'
+        replace: ""
+
+    - name: "settings_provisioning: remove local_boot_PXEGrub setting block"
+      ansible.builtin.replace:
+        path: "{{ _f_sp }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: '\n  - name: "local_boot_PXEGrub"\n    full_name: "[^"]+"\n    description: "[^"]+"\n    settings_type: "[^"]+"\n[#][^\n]*\n    value: "PXEGrub default local boot"'
+        replace: ""
+
+    # ── discovery_config.yml ──────────────────────────────────────────────────
+
+    - name: "discovery_config: remove rhis_discovery_pxegrub_template variable"
+      ansible.builtin.replace:
+        path: "{{ _f_dc }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: 'rhis_discovery_pxegrub_template:[^\n]*\n'
+        replace: ""
+
+    - name: "discovery_config: remove rhis_discovery_pxegrub_global_default_template variable"
+      ansible.builtin.replace:
+        path: "{{ _f_dc }}{{ '.new' if (preview | bool) else '' }}"
+        regexp: 'rhis_discovery_pxegrub_global_default_template:[^\n]*\n'
+        replace: ""
+
+    # ── Diffs ─────────────────────────────────────────────────────────────────
+
+    - name: "Diff target files"
+      when: preview | bool
+      block:
+
+        - name: "Diff each file"
+          ansible.builtin.command:
+            cmd: "diff {{ _target }} {{ _target }}.new"
+          register: _file_diffs
+          changed_when: false
+          failed_when: _file_diff.rc > 1
+          loop:
+            - "{{ _f_os }}"
+            - "{{ _f_pt }}"
+            - "{{ _f_sp }}"
+            - "{{ _f_dc }}"
+          loop_control:
+            loop_var: _target
+            label: "{{ _target | basename }}"
+
+        - name: "Report changes found"
+          ansible.builtin.debug:
+            msg: "{{ _file_diff.stdout_lines }}"
+          loop: "{{ _file_diffs.results }}"
+          loop_control:
+            loop_var: _file_diff
+            label: "{{ _file_diff._target | basename }}"
+          when: _file_diff.stdout | length > 0
+
+        - name: "Report files with no changes needed"
+          ansible.builtin.debug:
+            msg: "{{ _file_diff._target | basename }} — no changes required"
+          loop: "{{ _file_diffs.results }}"
+          loop_control:
+            loop_var: _file_diff
+            label: "{{ _file_diff._target | basename }}"
+          when: _file_diff.stdout | length == 0
+
+    # ── Summary ───────────────────────────────────────────────────────────────
+
+    - name: "Preview summary"
+      ansible.builtin.debug:
+        msg:
+          - "Migration preview complete."
+          - "Review .new files then re-run with -e preview=false to apply."
+          - "To discard previews: find {{ _inv }} -name '*.new' -delete"
+      when: preview | bool
+
+    - name: "Apply summary"
+      ansible.builtin.debug:
+        msg:
+          - "Migration applied to {{ _sat_hvars }}."
+          - "Re-run inventory_update to re-render cleanly from inventory_template."
+      when: not (preview | bool)
