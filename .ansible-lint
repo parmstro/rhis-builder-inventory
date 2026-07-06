@@ -1,5 +1,6 @@
 skip_list:
   - command-instead-of-module
+  - complexity[play]
 
 kinds:
   - tasks: "inventory_update_subtasks/*.yml"

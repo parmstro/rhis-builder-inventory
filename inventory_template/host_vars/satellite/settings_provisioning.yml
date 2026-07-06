@@ -198,15 +198,6 @@ settings_provisioning:
 #    value: "SOE PXELinux Global Default"
     value: "PXELinux global default"
 
-  - name: "global_PXEGrub"
-    full_name: "Global default PXEGrub template"
-    description: "Global default PXEGrub template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades."
-    settings_type: "string"
-#    default: "PXEGrub global default"
-# use this value  to support custom discovery facts
-#    value: "SOE PXEGrub Global Default"
-    value: "PXEGrub global default"
-
   - name: "global_iPXE"
     full_name: "Global default iPXE template"
     description: "Global default iPXE template. This template gets deployed to all configured TFTP servers. It will not be affected by upgrades."
@@ -231,13 +222,6 @@ settings_provisioning:
     settings_type: "string"
 #    default: "PXELinux default local boot"
     value: "PXELinux default local boot"
-
-  - name: "local_boot_PXEGrub"
-    full_name: "Local boot PXEGrub template"
-    description: "Template that will be selected as PXEGrub default for local boot."
-    settings_type: "string"
-#    default: "PXEGrub default local boot"
-    value: "PXEGrub default local boot"
 
   - name: "local_boot_iPXE"
     full_name: "Local boot iPXE template"

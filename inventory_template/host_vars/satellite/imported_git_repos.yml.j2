@@ -8,11 +8,11 @@
 
 # DISCONNECTED DEPLOYMENTS: clone: false tells ansible.builtin.git to verify
 # existing local repos without reaching GitHub. Roles must be pre-staged from
-# the export bundle to satellite_roles_source_path before running the build.
-{% if basevars_disconnected_domain | default(false) %}
-satellite_roles_source_path: "/home/ansiblerunner/rhis_export/ansible_roles"
-
-{% endif %}
+# the export bundle before running the build.
+#
+# satellite_roles_source_path is NOT set here. It is injected automatically by
+# build_sat_disconnected_import.sh from the bundle path written by bundle_delivery
+# validate.yml. Default resolved path: /var/satellite_stage/satellite/ansible_roles
 git_repos:
 # RHEL9
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-e8.git"

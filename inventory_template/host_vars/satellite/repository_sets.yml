@@ -17,20 +17,20 @@ repository_sets:
   - name: "JBoss Enterprise Application Platform 8.1 (RHEL 9 x86_64) (RPMs)"
     product: "JBoss Enterprise Application Platform"
 
-  - name: "JBoss Enterprise Application Platform 8.1 (RHEL 8 x86_64) (RPMs)"
-    product: "JBoss Enterprise Application Platform"
+  # - name: "JBoss Enterprise Application Platform 8.1 (RHEL 8 x86_64) (RPMs)"
+  #   product: "JBoss Enterprise Application Platform"
 
   - name: "JBoss Enterprise Application Platform 8.0 (RHEL 9 x86_64) (RPMs)"
     product: "JBoss Enterprise Application Platform"
 
-  - name: "JBoss Enterprise Application Platform 8.0 (RHEL 8 x86_64) (RPMs)"
-    product: "JBoss Enterprise Application Platform"
+  # - name: "JBoss Enterprise Application Platform 8.0 (RHEL 8 x86_64) (RPMs)"
+  #   product: "JBoss Enterprise Application Platform"
 
   - name: "JBoss Enterprise Application Platform 7.4 (RHEL 9) (RPMs)"
     product: "JBoss Enterprise Application Platform"
 
-  - name: "JBoss Enterprise Application Platform 7.4 (RHEL 8) (RPMs)"
-    product: "JBoss Enterprise Application Platform"
+  # - name: "JBoss Enterprise Application Platform 7.4 (RHEL 8) (RPMs)"
+  #   product: "JBoss Enterprise Application Platform"
 
 
 ############## Red Hat Ansible Automation Platform ##################
@@ -46,13 +46,6 @@ repository_sets:
 
   - name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Ansible Automation Platform"
-
-  - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 (Files)"
-    product: "Red Hat Ansible Automation Platform"
-
-  - name: "Red Hat Ansible Automation Platform 2.4 for RHEL 9 x86_64 (RPMs)"
-    product: "Red Hat Ansible Automation Platform"
-
 
 ############## Red Hat Edge Manager ##################
 
@@ -200,43 +193,48 @@ repository_sets:
       - releasever: "9"
       - releasever: "9.8"  # Used for LEAPP
 
+  - name: "Red Hat Enterprise Linux 9 for x86_64 - Extensions (RPMs)"
+    product: "Red Hat Enterprise Linux for x86_64"
+    repository_list:
+      - releasever: "9"
+
   - name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
 
-  - name: "Red Hat Satellite Maintenance 6.18 for RHEL 9 x86_64 (RPMs)"
+  - name: "Red Hat Satellite Maintenance 6.19 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
 
 # RHEL 8 x86_64
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)"
-    product: "Red Hat Enterprise Linux for x86_64"
-    repository_list:
-      - releasever: "8.10"
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   repository_list:
+  #     - releasever: "8.10"
 
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)"
-    product: "Red Hat Enterprise Linux for x86_64"
-    repository_list:
-      - releasever: "8.10"
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   repository_list:
+  #     - releasever: "8.10"
 
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
-    product: "Red Hat Enterprise Linux for x86_64"
-    repository_list:
-      - releasever: "8"
-      - releasever: "8.10"  # Used for LEAPP
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   repository_list:
+  #     - releasever: "8"
+  #     - releasever: "8.10"  # Used for LEAPP
 
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)"
-    product: "Red Hat Enterprise Linux for x86_64"
-    repository_list:
-      - releasever: "8"
-      - releasever: "8.10"  # Used for LEAPP
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   repository_list:
+  #     - releasever: "8"
+  #     - releasever: "8.10"  # Used for LEAPP
 
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary (RPMs)"
-    product: "Red Hat Enterprise Linux for x86_64"
-    repository_list:
-      - releasever: "8"
-      - releasever: "8.10"  # Used for LEAPP
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary (RPMs)"
+  #   product: "Red Hat Enterprise Linux for x86_64"
+  #   repository_list:
+  #     - releasever: "8"
+  #     - releasever: "8.10"  # Used for LEAPP
 
-  - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 (RPMs)"
-    product: "Red Hat Enterprise Linux for x86_64"
+  # - name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 (RPMs)"
+  #   product: "Red Hat Enterprise Linux for x86_64"
 
 # RHEL 7 x86_64 — deprecated, kept for reference
   # - name: "Red Hat Enterprise Linux 7 Server (Kickstart)"
@@ -281,20 +279,20 @@ repository_sets:
 
 ############## Red Hat Enterprise Linux High Availability for x86_64 ##################
 
-  - name: "Red Hat Enterprise Linux 10 for x86_64 - High Availability (RPMs)"
-    product: "Red Hat Enterprise Linux High Availability for x86_64"
-    repository_list:
-      - releasever: "10"
+  # - name: "Red Hat Enterprise Linux 10 for x86_64 - High Availability (RPMs)"
+  #   product: "Red Hat Enterprise Linux High Availability for x86_64"
+  #   repository_list:
+  #     - releasever: "10"
 
-  - name: "Red Hat Enterprise Linux 9 for x86_64 - High Availability (RPMs)"
-    product: "Red Hat Enterprise Linux High Availability for x86_64"
-    repository_list:
-      - releasever: "9"
+  # - name: "Red Hat Enterprise Linux 9 for x86_64 - High Availability (RPMs)"
+  #   product: "Red Hat Enterprise Linux High Availability for x86_64"
+  #   repository_list:
+  #     - releasever: "9"
 
-  - name: "Red Hat Enterprise Linux 8 for x86_64 - High Availability (RPMs)"
-    product: "Red Hat Enterprise Linux High Availability for x86_64"
-    repository_list:
-      - releasever: "8"
+  # - name: "Red Hat Enterprise Linux 8 for x86_64 - High Availability (RPMs)"
+  #   product: "Red Hat Enterprise Linux High Availability for x86_64"
+  #   repository_list:
+  #     - releasever: "8"
 
 
 ############## Red Hat Enterprise Linux Server - Extended Life Cycle Support ##################
@@ -315,7 +313,7 @@ repository_sets:
 
 ############## Red Hat Satellite Capsule ##################
 
-  - name: "Red Hat Satellite Capsule 6.18 for RHEL 9 x86_64 (RPMs)"
+  - name: "Red Hat Satellite Capsule 6.19 for RHEL 9 x86_64 (RPMs)"
     product: "Red Hat Satellite Capsule"
 
 
