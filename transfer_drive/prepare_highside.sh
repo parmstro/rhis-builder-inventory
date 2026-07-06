@@ -188,7 +188,7 @@ else
         warn "Discovery image already staged at ${_discovery_dst} — skipping copy"
     else
         step "Copying discovery image to DVD server root"
-        cp "${_discovery_src}" "${_discovery_dst}"
+        sudo cp "${_discovery_src}" "${_discovery_dst}"
         step "Discovery image staged: $(du -sh "${_discovery_dst}" | cut -f1) at ${_discovery_dst}"
     fi
     step "Setting SELinux type cobbler_var_lib_t on discovery image (required by satellite-installer)"
