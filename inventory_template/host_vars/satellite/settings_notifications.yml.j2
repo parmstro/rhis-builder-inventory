@@ -5,15 +5,18 @@
 # Please uncomment those that you would like to configure
 # defaults can be set, use cautiously
 
-# settings_notifications:
+settings_notifications:
 
-#   - name: "rss_enable"
-#     full_name: "RSS enable"
-#     description: "Whether to pull RSS notifications or not"
-#     settings_type: "boolean"
-# #    default: "true"
-#     value: "true"
-
+  - name: "rss_enable"
+    full_name: "RSS enable"
+    description: "Whether to pull RSS notifications or not"
+    settings_type: "boolean"
+#    default: "true"
+{% if basevars_disconnected_domain | default(false) %}
+    value: "false"
+{% else %}
+    value: "true"
+{% endif %}
 #   - name: "rss_url"
 #     full_name: "RSS enable"
 #     description: "URL to fetch RSS notifications from"

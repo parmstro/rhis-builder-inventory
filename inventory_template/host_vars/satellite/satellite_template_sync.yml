@@ -1,3 +1,7 @@
+# Set to true to sync template repos even on a disconnected satellite.
+# Requires the satellite to have network access to the template git repos.
+satellite_template_sync_override: false
+
 satellite_template_repos:
   - name: "rhis builder sample repo"
     repo_url: "https://github.com/parmstro/rhis-builder-satellite-templates.git"

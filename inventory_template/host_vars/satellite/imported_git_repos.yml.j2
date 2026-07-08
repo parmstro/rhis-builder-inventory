@@ -6,13 +6,17 @@
 # This really allows you to import any git repos that may contain content
 # that you otherwise want to reference in your build
 
-# DISCONNECTED DEPLOYMENTS: clone: false tells ansible.builtin.git to verify
-# existing local repos without reaching GitHub. Roles must be pre-staged from
-# the export bundle before running the build.
+# DISCONNECTED DEPLOYMENTS:
+# Ansible roles arrive via the transfer bundle. bundle_delivery installs them to
+# /etc/ansible/roles/ before main.yml runs. The git clone loop below is skipped
+# by default on disconnected satellites.
 #
-# satellite_roles_source_path is NOT set here. It is injected automatically by
-# build_sat_disconnected_import.sh from the bundle path written by bundle_delivery
-# validate.yml. Default resolved path: /var/satellite_stage/satellite/ansible_roles
+# Set satellite_imported_git_repos_override: true if this satellite has access to
+# a highside git server (e.g. Gitea on the provisioner node) and you want to clone
+# or update roles from it. Update the repository URLs in git_repos to point to the
+# highside server before enabling this.
+satellite_imported_git_repos_override: false
+
 git_repos:
 # RHEL9
   - repository: "https://github.com/RedHatOfficial/ansible-role-rhel9-e8.git"

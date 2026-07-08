@@ -6,12 +6,16 @@
 # defaults can be set, use cautiously
 
 settings_rhcloud:
-#   - description: "Enable automatic upload of your host inventory to the Red Hat cloud"
-#     settings_type: "boolean"
-# #    default: true
-#     name: "allow_auto_inventory_upload"
-#     full_name: "Automatic inventory upload"
-#     value: true
+  - description: "Enable automatic upload of your host inventory to the Red Hat cloud"
+    settings_type: "boolean"
+#    default: true
+    name: "allow_auto_inventory_upload"
+    full_name: "Automatic inventory upload"
+{% if basevars_disconnected_domain | default(false) %}
+    value: "false"
+{% else %}
+    value: "true"
+{% endif %}
 #     readonly: false
 #     encrypted: false
 
@@ -21,9 +25,13 @@ settings_rhcloud:
     id: "allow_auto_insights_sync"
     name: "allow_auto_insights_sync"
     full_name: "Synchronize recommendations Automatically"
-    value: true
-    readonly: false
-    encrypted: false
+{% if basevars_disconnected_domain | default(false) %}
+    value: "false"
+{% else %}
+    value: "true"
+{% endif %}
+#    readonly: false
+#    encrypted: false
 
   - description: "Enable automatic deletion of mismatched host records from the Red Hat cloud"
     settings_type: "boolean"
@@ -31,7 +39,11 @@ settings_rhcloud:
     id: "allow_auto_insights_mismatch_delete"
     name: "allow_auto_insights_mismatch_delete"
     full_name: "Automatic mismatch deletion"
-    value: true
+{% if basevars_disconnected_domain | default(false) %}
+    value: "false"
+{% else %}
+    value: "true"
+{% endif %}
     readonly: false
     encrypted: false
 
