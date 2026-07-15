@@ -93,18 +93,17 @@ quay_servers:
 # kvm_nodes:
 # ocp_virt_nodes:
 # openstack_nodes:
+{% if rhis_system_count.vmware_vcenter is defined and rhis_system_count.vmware_vcenter > 0 %}
 vmware_vcenter_hosts:
   hosts:
     vcenter.{{ basevars_global_domain_name }}:
 
+{% endif %}
+{% if rhis_system_count.vmware_esxi is defined and rhis_system_count.vmware_esxi > 0 %}
 vmware_esx_hosts:
   hosts:
-    esx1.{{ basevars_global_domain_name }}:
-    esx2.{{ basevars_global_domain_name }}:
-    esx3.{{ basevars_global_domain_name }}:
-    esx4.{{ basevars_global_domain_name }}:
-    esx5.{{ basevars_global_domain_name }}:
-    esx6.{{ basevars_global_domain_name }}:
-    esx7.{{ basevars_global_domain_name }}:
-    esx8.{{ basevars_global_domain_name }}:
-    esx9.{{ basevars_global_domain_name }}:
+{% for num in range(1, rhis_system_count.vmware_esxi + 1) %}
+    esx{{ num }}.{{ basevars_global_domain_name }}:
+{% endfor %}
+
+{% endif %}

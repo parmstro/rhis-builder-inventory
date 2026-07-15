@@ -130,6 +130,11 @@ vmware1_vcenter_password_vault: "your_vcenter_users_password"                   
 vmware1_datacenter_name_vault: "{{ _runtime_global_domain_name }}"  # This is our standard. Put in your datacenter name for brownfield.
 vmware1_vcenter_hostname_vault: "{{ groups['vmware_vcenter_hosts'][0] }}"  # We put this in the inventory
 
+# rhis-builder-vmware — ESXi and VCSA deployment secrets
+vmware_esxi_root_password_vault: "{{ default_environment_password_vault }}"                        # notsecret
+vmware_vcsa_sso_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
+vmware_vcsa_root_password_vault: "{{ default_environment_password_vault }}"                        # notsecret
+
 ####################################################################
 # FOR PRODUCTION DEPLOYMENTS, set each password below individually #
 ####################################################################

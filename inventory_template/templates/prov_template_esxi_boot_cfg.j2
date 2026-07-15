@@ -1,0 +1,26 @@
+<%#
+name: ESXi Boot Configuration
+snippet: false
+model: ProvisioningTemplate
+kind: user_data
+description: |
+  ESXi boot.cfg template — referenced by mboot.c32 (BIOS) or mboot.efi (UEFI).
+  Lists the ESXi kernel modules from the installation media.
+  The kernelopt line includes the kickstart URL for unattended installation.
+
+  NOTE: This template should be customized per ESXi version. The modules= line
+  must match the contents of the ESXi installation ISO's boot.cfg. Copy the
+  modules line from your specific ESXi ISO and update this template accordingly.
+-%>
+<%
+  esxi_media_path = host_param('esxi_media_path') || '/esxi'
+-%>
+bootstate=0
+title=Loading ESXi installer
+timeout=5
+prefix=<%= esxi_media_path %>
+kernel=<%= esxi_media_path %>/b.b00
+kernelopt=ks=<%= foreman_url('provision') %>
+modules=<%= esxi_media_path %>/jumpstrt.gz --- <%= esxi_media_path %>/useropts.gz --- <%= esxi_media_path %>/features.gz --- <%= esxi_media_path %>/k.b00 --- <%= esxi_media_path %>/chardevs.b00 --- <%= esxi_media_path %>/user.b00 --- <%= esxi_media_path %>/procfs.b00 --- <%= esxi_media_path %>/uc_intel.b00 --- <%= esxi_media_path %>/uc_amd.b00 --- <%= esxi_media_path %>/uc_hygon.b00 --- <%= esxi_media_path %>/vmkapi_2_0_0_0.b00 --- <%= esxi_media_path %>/gc.b00 --- <%= esxi_media_path %>/vmx.v00 --- <%= esxi_media_path %>/vim.v00 --- <%= esxi_media_path %>/sb.v00 --- <%= esxi_media_path %>/s.v00 --- <%= esxi_media_path %>/esxi_base.v00 --- <%= esxi_media_path %>/esx_dvfilter.v00 --- <%= esxi_media_path %>/esx_ui.v00 --- <%= esxi_media_path %>/imgdb.tgz --- <%= esxi_media_path %>/state.tgz
+build=
+updated=0

@@ -1,0 +1,69 @@
+---
+# VMware ESXi provisioning configuration for Satellite
+# Used by rhis-builder-vmware to configure Satellite for ESXi PXE deployment
+
+{% raw %}
+# ESXi OS definition
+
+
+# ESXi installation media path
+# This is the HTTP-accessible path where ESXi installer files are staged
+# Extract the ESXi ISO content to this path on Satellite/Capsule
+vmware_esxi_media_path: "http://{{ '{{' }} ansible_fqdn {{ '}}' }}/pub/esxi"
+
+
+
+# ESXi subnet — override with your management network subnet name in Satellite
+vmware_esxi_subnet: "{{ basevars_global_domain_name }}"
+
+# ESXi host parameters passed through to provisioning templates
+{% raw %}
+vmware_esxi_root_password: "{{ vmware_esxi_root_password_vault }}"
+{% endraw %}
+# VCSA deployment configuration
+vmware_vcsa_iso_path: "/opt/isos/VMware-VCSA-all.iso"
+vmware_vcsa_target_esxi_host: "{{ '{{' }} groups['vmware_esx_hosts'][0] {{ '}}' }}"
+vmware_vcsa_datastore: "datastore1"
+vmware_vcsa_network: "VM Network"
+vmware_vcsa_hostname: "vcenter.{{ basevars_global_domain_name }}"
+vmware_vcsa_ip: ""
+vmware_vcsa_prefix: "24"
+vmware_vcsa_gateway: ""
+vmware_vcsa_dns_servers: ""
+vmware_vcsa_ntp_servers: ""
+vmware_vcsa_sso_domain: "vsphere.local"
+{% raw %}
+vmware_vcsa_sso_password: "{{ vmware_vcsa_sso_password_vault }}"
+vmware_vcsa_root_password: "{{ vmware_vcsa_root_password_vault }}"
+{% endraw %}
+# vCenter environment configuration
+vmware_vcenter_datacenter_name: "{{ basevars_global_domain_name }}"
+vmware_vcenter_cluster_name: "cluster1"
+vmware_vcenter_compute_resource_name: "VMware_Lab"
+
+# vCenter networking — override per deployment
+vmware_vcenter_vswitches:
+  - name: "vSwitch0"
+    nics:
+      - "vmnic0"
+    mtu: 1500
+
+vmware_vcenter_portgroups:
+  - name: "VM Network"
+    vswitch: "vSwitch0"
+    vlan_id: 0
+  - name: "Management Network"
+    vswitch: "vSwitch0"
+    vlan_id: 0
+
+# vCenter storage — override per deployment
+# vmware_vcenter_datastores:
+#   - name: "datastore1"
+#     type: "vmfs"
+
+# virt-who credentials for subscription reporting
+{% raw %}
+vmware_virtwho_username: "{{ vcenter_virtwho_username_vault }}"
+vmware_virtwho_password: "{{ vcenter_virtwho_password_vault }}"
+{% endraw %}
+...

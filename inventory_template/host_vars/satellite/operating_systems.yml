@@ -339,6 +339,42 @@ operating_systems:
       - name: "Kickstart default user data"
         template_kind: "user_data"
 
+  - name: "ESXi"
+    major: 6
+    minor: 7
+    description: "VMware ESXi 6.7"
+    family: "Redhat"
+    password_hash: "SHA256"
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
+    state: "present"
+    architectures:
+      - "x86_64"
+    provisioning_templates:
+      - "ESXi PXELinux Default"
+      - "ESXi PXEGrub2 Default"
+      - "ESXi Provision Default"
+      - "ESXi Boot Configuration"
+    ptables:
+      - "ESXi Default"
+    default_templates:
+      - name: "ESXi PXELinux Default"
+        type: "PXELinux"
+      - name: "ESXi PXEGrub2 Default"
+        type: "PXEGrub2"
+      - name: "ESXi Provision Default"
+        type: "provision"
+      - name: "ESXi Boot Configuration"
+        type: "user_data"
+      - name: ""
+        template_kind: "finish"
+      - name: ""
+        template_kind: "host_init_config"
+      - name: ""
+        template_kind: "iPXE"
+      - name: ""
+        template_kind: "kexec"
+
   # - name: "RedHat"
   #   major: 8
   #   minor: 10

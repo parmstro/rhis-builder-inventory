@@ -2,20 +2,42 @@
 # Tell the YAML linter to ignore long lines
 # yamllint disable rule:line-length
 
-# Where we have full kickstart trees, we sync them and include them in the content view
-# This is an example of web based media.
-# a server installing with this media needs internet access to the specified path/url
+# Installation media for non-RHEL operating systems.
+# RHEL hostgroups use kickstart_repository from synced content views instead.
+#
+# When load_medium is true, the role extracts the ISO content to
+# /var/www/html/pub/installmedia/<medium_root>/ on the Satellite server
+# and computes the HTTP path automatically.
 
-# installation_media:
+installation_media:
+
+  - name: "ESXi_Local"
+    os_family: "Redhat"
+    load_medium: true
+    medium_iso_source: "VMware-VMvisor-Installer-201912001-15160138.x86_64.iso"
+    medium_iso: "/opt/isos/VMware-VMvisor-Installer-201912001-15160138.x86_64.iso"
+    medium_root: "esxi"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+# # Web-based media examples (no ISO extraction needed)
 #   - name: "CentOS 7 mirror"
 #     os_family: "Redhat"
 #     path: "http://vault.centos.org/7.9.2009/os/x86_64/"
-#     organization: "{{ satellite_organization }}"
-#     location: "{{ satellite_location }}"
+#     organizations:
+#       - "{{ satellite_organization }}"
+#     locations:
+#       - "{{ satellite_location }}"
 
-# # for demo only - there is not publicly available kickstart tree - copy dvd locally and extract
+# # Local ISO-based media example
 #   - name: "OEL79"
 #     os_family: "Redhat"
-#     path: "http://{{ groups['sat_primary'][0] }}/pub/.oel79"
-#     organization: "{{ satellite_organization }}"
-#     location: "{{ satellite_location }}"
+#     load_medium: true
+#     medium_iso: "/opt/isos/OracleLinux-R7-U9-Server-x86_64.iso"
+#     medium_root: "oel79"
+#     organizations:
+#       - "{{ satellite_organization }}"
+#     locations:
+#       - "{{ satellite_location }}"

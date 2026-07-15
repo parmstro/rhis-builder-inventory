@@ -48,3 +48,13 @@ partition_tables:
       - "{{ satellite_organization }}"
     locations:
       - "{{ satellite_location }}"
+
+  - name: "ESXi Default"
+    os_family: "Redhat"
+    path: "ptable_esxi_server_blank_placeholder.j2"
+    description: "ESXi manages its own disk partitioning. This partition table is a placeholder for Satellite OS association"
+    audit_comment: "created by rhis-builder-satellite"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"

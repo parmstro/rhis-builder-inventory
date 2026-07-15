@@ -83,6 +83,28 @@ provisioning_templates:
     locations:
       - "{{ satellite_location }}"
 
+  - name: "soe_pxelinux_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXELinux - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxelinux_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_pxegrub2_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXEGrub2 - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxegrub2_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
 # provisioning
   - name: "OEM Kickstart Default"
     type: "provision"
@@ -172,23 +194,45 @@ provisioning_templates:
     locations:
       - "{{ satellite_location }}"
 
-  - name: "soe_pxelinux_discovery"
-    type: "snippet"
+  - name: "ESXi PXELinux Default"
+    type: "pxelinux"
     locked: false
-    description: "RHIS discovery snippet for PXELinux - supports custom discovery facts"
+    description: "The PXELinux template for ESXi hosts"
     audit_comment: "created by rhis-builder-satellite"
-    path: "prov_template_snippet_soe_pxelinux_discovery.j2"
+    path: "prov_template_esxi_pxelinux_default.j2"
     organizations:
       - "{{ satellite_organization }}"
     locations:
       - "{{ satellite_location }}"
 
-  - name: "soe_pxegrub2_discovery"
-    type: "snippet"
+  - name: "ESXi PXEGrub2 Default"
+    type: "pxegrub2"
     locked: false
-    description: "RHIS discovery snippet for PXEGrub2 - supports custom discovery facts"
+    description: "The PXEGrub2 template for ESXi hosts"
     audit_comment: "created by rhis-builder-satellite"
-    path: "prov_template_snippet_soe_pxegrub2_discovery.j2"
+    path: "prov_template_esxi_pxegrub2_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "ESXi Provision Default"
+    type: "provision"
+    locked: false
+    description: "The provisioning template for ESXi hosts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_esxi_provision_default.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "ESXi Boot Configuration"
+    type: "user_data"
+    locked: false
+    description: "The user data template for ESXi hosts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_esxi_boot_cfg.j2"
     organizations:
       - "{{ satellite_organization }}"
     locations:
