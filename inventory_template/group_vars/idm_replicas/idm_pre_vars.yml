@@ -29,7 +29,9 @@ ipa_crypto_policy: "Default"
 # before IdM DNS comes up in your network here
 # These are simply test values
 etc_hosts_list:
-  - ip: "{{ _default_network }}.13"
-    fqdn: "provisioner.{{ _runtime_global_domain_name }}"
-  - ip: "{{ _default_network }}.12"
+  - ip: "{{ hostvars[groups['idm_primary'][0]].ipv4_address }}"
+    fqdn: "{{ groups['idm_primary'][0] }}"
+  - ip: "{{ hostvars[groups['sat_primary'][0]].ipv4_address }}"
     fqdn: "{{ groups['sat_primary'][0] }}"
+  - ip: "{{ hostvars[groups['provisioner'][0]].ipv4_address }}"
+    fqdn: "{{ groups['provisioner'][0] }}"

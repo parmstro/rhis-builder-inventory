@@ -4,11 +4,11 @@
 _runtime_global_domain_name: "{{ basevars_global_domain_name }}"
 _global_domain_name: "{{ basevars_global_domain_name }}"  # deprecated — use _runtime_global_domain_name
 
-_default_network: "{{ default_network.split('.')[0:3] | join('.') }}"
+_default_network: "{{ default_network }}"
 _default_network_prefix: "{{ default_network_prefix }}"
 _default_network_mask: "{{ default_network_mask }}"
 
-_default_bond_network: "{{ default_bond_network.split('.')[0:3] | join('.') }}"
+_default_bond_network: "{{ default_bond_network }}"
 _default_bond_network_prefix: "{{ default_bond_network_prefix }}"
 _default_bond_network_mask: "{{ default_bond_network_mask }}"
 
@@ -24,6 +24,7 @@ _default_timeservers:
 # Satellite vars used by all configurations
 
 satellite_fqdn: "{{ groups['sat_primary'][0] }}"
+satellite_ipv4_address: "{{ hostvars[groups['sat_primary'][0]].ipv4_address }}"
 satellite_domain: "{{ _runtime_global_domain_name }}"
 
 satellite_initial_location: "Default Location"
@@ -40,7 +41,7 @@ satellite_username: "{{ satellite_username_vault }}"
 satellite_password: "{{ satellite_password_vault }}"
 satellite_use_gssapi: false
 
-vm_compute_resource: "{{ groups['vmware_vcenter_hosts'][0] }}"
+vm_compute_resource: "{{ groups['vmware_vcenter_hosts'][0] | default('') }}"
 
 search_dh_mac: "ff:ff:ff:ff:ff:ff"
 default_vm_mac: "00:50:56:ff:ff:ff"
@@ -89,8 +90,8 @@ ipareplica_domain: "{{ _runtime_global_domain_name }}"
 
 
 # ipaclient role variables used in multiple repos
-{% endraw %}ipa_client_dns_servers: "{{ target_net_cidr | ansible.utils.next_nth_usable(10) }}"
-{% raw %}ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
+ipa_client_dns_servers: "{{ hostvars[groups['idm_primary'][0]].ipv4_address }}"
+ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
 
 ipa_client_domain: "{{ _runtime_global_domain_name }}"
 ipaclient_domain: "{{ ipa_server_domain }}"

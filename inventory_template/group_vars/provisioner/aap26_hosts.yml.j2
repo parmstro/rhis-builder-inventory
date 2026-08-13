@@ -38,36 +38,36 @@ aap26_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:d2"
-        ip: "{{ _default_network }}.14"
+        mac: "{{ hostvars[groups['aap_controllers'][0]].mac_address | default('54:b2:03:f1:0b:d2') }}"
+        ip: "{{ hostvars[groups['aap_controllers'][0]].ipv4_address }}"
 
-  - fqdn: "aaphub1.{{ _runtime_global_domain_name }}"
-    delete_host: false
-    organization: "{{ satellite_organization }}"
-    location: "{{ satellite_location }}"
-    hostgroup: "hg_x86_64_rhel9_metal/aap9_26"
-    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-    compute_resource: "baremetal"
-    parameters:
-      - name: "boot_disk"
-        parameter_type: "string"
-        value: "/dev/nvme0n1"
-      - name: "root_disk"
-        parameter_type: "string"
-        value: "/dev/nvme0n1"
-    interfaces_attributes:
-      - type: "interface"
-        identifier: "{{ _default_provision_iface }}"
-        domain: "{{ _default_domain }}"
-        execution: true
-        managed: true
-        primary: true
-        provision: true
-        subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:0b:9f"
-        ip: "{{ _default_network }}.15"
-
-#   - fqdn: "aapdb.{{ _runtime_global_domain_name }}"
+#  - fqdn: "aaphub1.{{ _global_domain_name }}"
+#    delete_host: false
+#    organization: "{{ satellite_organization }}"
+#    location: "{{ satellite_location }}"
+#    hostgroup: "hg_x86_64_rhel9_metal/aap9_26"
+#    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+#    compute_resource: "baremetal"
+#    parameters:
+#      - name: "boot_disk"
+#        parameter_type: "string"
+#        value: "/dev/nvme0n1"
+#      - name: "root_disk"
+#        parameter_type: "string"
+#        value: "/dev/nvme0n1"
+#    interfaces_attributes:
+#      - type: "interface"
+#        identifier: "{{ _default_provision_iface }}"
+#        domain: "{{ _default_domain }}"
+#        execution: true
+#        managed: true
+#        primary: true
+#        provision: true
+#        subnet: "{{ _default_subnetname }}"
+#        mac: "{{ hostvars[groups['aap_hubs'][0]].mac_address | default('54:b2:03:f1:0b:6a') }}"
+#        ip: "{{ hostvars[groups['aap_hubs'][0]].ipv4_address }}"
+#
+#   - fqdn: "aapdb.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
 #     location: "{{ satellite_location }}"
@@ -84,9 +84,9 @@ aap26_hosts:
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
 #         mac: ""
-#         ip: "{{ _default_network }}.16"
+#         ip: "{{ hostvars[groups['aap_db'][0]].ipv4_address }}"
 
-#   - fqdn: "aapgateway1.{{ _runtime_global_domain_name }}"
+#   - fqdn: "aapgateway1.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
 #     location: "{{ satellite_location }}"
@@ -103,9 +103,9 @@ aap26_hosts:
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
 #         mac: ""
-#         ip: "{{ _default_network }}.17"
+#         ip: "{{ hostvars[groups['aap_gateway'][0]].ipv4_address }}"
 
-#   - fqdn: "aapedacontroller.{{ _runtime_global_domain_name }}"
+#   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
 #     delete_host: false
 #     organization: "{{ satellite_organization }}"
 #     location: "{{ satellite_location }}"
@@ -122,6 +122,6 @@ aap26_hosts:
 #         provision: true
 #         subnet: "{{ _default_subnetname }}"
 #         mac: ""
-#         ip: "{{ _default_network }}.18"
+#         ip: "{{ hostvars[groups['aap_edacontroller'][0]].ipv4_address }}"
 {% endraw %}
 ...
