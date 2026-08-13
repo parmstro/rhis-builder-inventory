@@ -50,8 +50,7 @@ rhis_system_count:
   aapcontroller: 1
   aaphub: 1
   quadlet: 2
-  vmware_esxi: 9
-  vmware_vcenter: 1
+
 rhis_aws_region: "us-east-2"
 rhis_azure_region: "East US 2"
 
