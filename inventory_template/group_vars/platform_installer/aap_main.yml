@@ -10,7 +10,7 @@ redhat_registry_password: "{{ redhat_registry_password_vault }}"
 redhat_automation_hub_token: "{{ redhat_automation_hub_token_vault }}"
 redhat_automation_hub_token_refresh_cmd: "{{ redhat_automation_hub_token_refresh_cmd_vault }}"
 private_hub_token: "{{ private_automation_hub_token_vault }}"
-private_hub_url: "https://{{ groups['aap_hubs'][0] }}/api/galaxy/"
+private_hub_url: "https://{{ groups['aap_hubs'][0] | default('hub-not-defined.fqdn') }}/api/galaxy/"
 aap_platform_host: "{{ groups['aap_controllers'][0] }}"
 aap_platform_username: "{{ aap_admin_username_vault }}"
 aap_platform_password: "{{ aap_admin_password_vault }}"
@@ -21,7 +21,7 @@ aap_admin_username: "{{ aap_admin_username_vault }}"
 aap_admin_password: "{{ aap_admin_password_vault }}"
 
 active_controller: "{{ groups['aap_controllers'][0] }}"
-active_aap_hub: "{{ groups['aap_hubs'][0] }}"
+active_aap_hub: "{{ groups['aap_hubs'][0] | default('hub-not-defined.fqdn') }}"
 aap_validate_certs: false
 aap_hub_validate_certs: false
 ah_container_token: ""
