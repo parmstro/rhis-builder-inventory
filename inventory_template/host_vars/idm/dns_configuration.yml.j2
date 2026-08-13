@@ -21,18 +21,14 @@ idm_dns_update_zones:
     allow_sync_ptr: true
     dynamic_update: true
 {% raw %}
+
 # you probably want to add some standard records to the new DNS
+# NOTE: Most records can be a list or string 
+# e.g. "A" records can be a list of IP addresses or a single IP address string
+# e.g. "PTR" records can be a list of hostnames or a single hostname string - remember to add the trailing dot to the hostname if you are using a string
+
 idm_dns_records:
   # Service records
-  - name: "_tcp._foreman"
-    zone_name: "{{ _runtime_global_domain_name }}"
-    record_type: "SRV"
-    srv_port: "443"
-    srv_priority: "0"
-    srv_weight: "100"
-    srv_target: "{{ groups['sat_primary'][0] }}."
-    state: "absent"
-
   - name: "_x-foreman._tcp"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "SRV"
@@ -48,6 +44,35 @@ idm_dns_records:
     record_type: "A"
     {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1) }}"
     {% raw %}a_create_reverse: true
+    state: "present"
+
+  # Example records for OCP deployment
+  - name: "ocp1.{{ _runtime_global_domain_name }}"
+    zone_name: "{{ _runtime_global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% raw %}a_create_reverse: false
+    state: "present"
+
+  - name: "*.api.ocp1.{{ _runtime_global_domain_name }}"
+    zone_name: "{{ _runtime_global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% raw %}a_create_reverse: false
+    state: "present"
+
+  - name: "*.apps.ocp1.{{ _runtime_global_domain_name }}"
+    zone_name: "{{ _runtime_global_domain_name }}"
+    record_type: "A"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% raw %}a_create_reverse: false
+    state: "present"
+
+  - name: ""
+    zone_name: "{{ default_network_reverse_dns_zone_name }}"
+    record_type: "PTR"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% raw %}a_create_reverse: false
     state: "present"
 
   - name: "c3s1n1"

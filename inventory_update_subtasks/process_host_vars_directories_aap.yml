@@ -8,10 +8,6 @@
   loop: "{{ range(0, system_info.value | int) | list }}"
 
 - name: "Defining {{ system_info.key }}{{ rhis_aap_release_version_concat }} host_vars directory Config as Code definitions"  # noqa name[template]
-  # debug:
-  #  msg:
-  #    - "rsync {{ system_info.key }}{{ rhis_aap_release_version_concat }} template to {{ system_info.key }}{{ item | int + 1 }}.{{ basevars_global_domain_name }}"
-  #    - "{{ system_info.key | regex_replace('^(.{3}).*$', '\\1') }}"
   ansible.posix.synchronize:
     src: "inventory_template/host_vars/{{ system_info.key }}{{ rhis_aap_release_version_concat }}/"
     dest: "./{{ deployment_dir }}/host_vars/{{ system_info.key }}{{ item | int + 1 }}.{{ basevars_global_domain_name }}/"

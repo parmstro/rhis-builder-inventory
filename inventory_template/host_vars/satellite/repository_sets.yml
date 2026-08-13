@@ -49,12 +49,11 @@ repository_sets:
 
 ############## Red Hat Edge Manager ##################
 
-  - name: "Red Hat Edge Manager 1.1 for RHEL 9 x86_64 (RPMs)"
+  - name: "Red Hat Edge Manager 1.1 for RHEL 10 x86_64 (RPMs)"
     product: "Red Hat Edge Manager"
 
-  # - name: "Red Hat Edge Manager 1.1 for RHEL 10 x86_64 (RPMs)"
-  #   product: "Red Hat Edge Manager"
-
+  - name: "Red Hat Edge Manager 1.1 for RHEL 9 x86_64 (RPMs)"
+    product: "Red Hat Edge Manager"
 
 ############## Red Hat Enterprise Linux for ARM 64 ##################
 

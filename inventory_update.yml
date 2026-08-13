@@ -147,7 +147,7 @@
 
     - name: Find and register paths to jinja templates - part one
       ansible.builtin.find:
-        paths: "inventory_template/files,inventory_template/group_vars,inventory_template/inventory,inventory_template/vault_SAMPLES"
+        paths: "inventory_template/inventory,inventory_template/files,inventory_template/group_vars,inventory_template/vault_SAMPLES"
         recurse: true
         patterns: "*.j2"
       register: jinja_template_paths_1
@@ -202,6 +202,12 @@
     - name: "Create the vault directory"
       ansible.builtin.file:
         path: "{{ deployment_dir }}/vault"
+        state: directory
+        mode: "0700"
+
+    - name: "Create the logs directory"
+      ansible.builtin.file:
+        path: "{{ deployment_dir }}/logs"
         state: directory
         mode: "0700"
 

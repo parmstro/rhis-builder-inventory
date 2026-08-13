@@ -50,17 +50,17 @@ See below for information on customizing your build further and run the Ansible 
 
 > **Note:** Networks, datastores, and other underlying hypervisor or hyperscaler resources referenced in your configurations **must already exist** before running the RHIS provisioner. Satellite will attempt to validate compute resources and profiles at runtime and will fail if they are absent.
 
-### global_domain_name
+### basevars_global_domain_name
 
 ```yaml
-global_domain_name: "example.ca"
+basevars_global_domain_name: "example.ca"
 ```
 
 The fully-qualified domain name for your RHIS deployment. This value drives:
 
-- The name of the generated deployment directory: `deployments/<global_domain_name>/`
-- The FQDN of every generated host: `<role><N>.<global_domain_name>` (e.g. `satellite1.example.ca`, `idm2.example.ca`)
-- The name of the generated container launch scripts at the repo root: `<global_domain_name>.24.sh` / `<global_domain_name>.25.sh`
+- The name of the generated deployment directory: `deployments/<basevars_global_domain_name>/`
+- The FQDN of every generated host: `<role><N>.<basevars_global_domain_name>` (e.g. `satellite1.example.ca`, `idm2.example.ca`)
+- The name of the generated container launch scripts at the repo root: `<basevars_global_domain_name>.24.sh` / `<basevars_global_domain_name>.25.sh`
 
 Set this to the actual DNS domain you will use for your environment.
 
