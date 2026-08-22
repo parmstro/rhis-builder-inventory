@@ -1,5 +1,9 @@
 # rhis-builder-inventory
 
+### Before you start
+---
+Ensure that you review the RHIS repositories. Specifically [rhis-builder-bootstrap-init](https://github.com/parmstro/rhis-builder-bootstrap-init). It is essential that you have an understanding of the process and workflow before you jump in. The pool is deep.
+
 ### Getting started fast
 ---
 You need a system with git and podman tools.
