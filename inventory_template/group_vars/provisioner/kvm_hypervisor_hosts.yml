@@ -32,7 +32,7 @@ kvm_hypervisor_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "54:b2:03:f1:0b:d2"
-        ip: "{{ _default_network }}.41"
+        ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(41) }}"
       # - type: "interface"
       #   identifier: "{{ _default_child_iface1 }}"
       #   mac: "00:30:18:0c:d5:bf"
@@ -81,7 +81,7 @@ kvm_hypervisor_hosts:
   #       provision: true
   #       subnet: "{{ _default_subnetname }}"
   #       mac: "54:b2:03:f1:0b:6a"
-  #       ip: "{{ _default_network }}.42"
+  #       ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(42) }}"
   #     # - type: "interface"
   #     #   identifier: "{{ _default_child_iface1 }}"
   #     #   mac: "00:30:18:0c:d5:77"
@@ -130,7 +130,7 @@ kvm_hypervisor_hosts:
   #       provision: true
   #       subnet: "{{ _default_subnetname }}"
   #       mac: "54:b2:03:f1:0b:46"
-  #       ip: "{{ _default_network }}.43"
+  #       ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(43) }}"
   #     # - type: "interface"
   #     #   identifier: "{{ _default_child_iface1 }}"
   #     #   mac: " 00:30:18:0c:d6:53"
@@ -179,7 +179,7 @@ kvm_hypervisor_hosts:
   #       provision: true
   #       subnet: "{{ _default_subnetname }}"
   #       mac: "54:b2:03:f1:00:6f"
-  #       ip: "{{ _default_network }}.44"
+  #       ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(44) }}"
   #     # - type: "interface"
   #     #   identifier: "{{ _default_child_iface1 }}"
   #     #   mac: "00:30:18:0c:d5:9d"
@@ -228,7 +228,7 @@ kvm_hypervisor_hosts:
   #       provision: true
   #       subnet: "{{ _default_subnetname }}"
   #       mac: "54:b2:03:f1:0b:e3"
-  #       ip: "{{ _default_network }}.45"
+  #       ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(45) }}"
   #     # - type: "interface"
   #     #   identifier: "{{ _default_child_iface1 }}"
   #     #   mac: "00:30:18:0c:d5:79"
@@ -277,7 +277,7 @@ kvm_hypervisor_hosts:
   #       provision: true
   #       subnet: "{{ _default_subnetname }}"
   #       mac: "54:b2:03:f1:00:cd"
-  #       ip: "{{ _default_network }}.46"
+  #       ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(46) }}"
   #     # - type: "interface"
   #     #   identifier: "{{ _default_child_iface1 }}"
   #     #   mac: "00:30:18:0c:d5:99"
@@ -326,7 +326,7 @@ kvm_hypervisor_hosts:
   #       provision: true
   #       subnet: "{{ _default_subnetname }}"
   #       mac: "54:b2:03:f1:0b:ef"
-  #       ip: "{{ _default_network }}.47"
+  #       ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(47) }}"
   #     # - type: "interface"
   #     #   identifier: "{{ _default_child_iface1 }}"
   #     #   mac: "00:30:18:cd:e4:28"

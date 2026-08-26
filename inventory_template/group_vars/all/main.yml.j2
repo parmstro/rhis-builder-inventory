@@ -64,7 +64,7 @@ _default_vm_provision_iface: "ens192"
 # Bond network
 _default_bond_subnetname: "bond_subnet"
 _default_bond_subnet_prefix: 23
-_default_bond_default_gateway: "{{ _default_network }}.1"
+_default_bond_default_gateway: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(1) }}"
 _default_bond_iface: "bond0"
 _default_child_iface1: "enp2s0f0"
 _default_child_iface2: "enp2s0f1"

@@ -3,7 +3,7 @@
 register_to_satellite: false
 
 # commonly changed variables
-ipaserver_ip_addresses: "{{ _default_network }}.5"
+ipaserver_ip_addresses: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(10) }}"
 ipaserver_hostname: "{{ ansible_fqdn }}"
 ipaserver_no_forwarders: "{{ idm_disconnected | default(false) }}"
 ipaserver_forwarders: "{{ [] if (idm_disconnected | default(false)) else ['8.8.8.8'] }}"

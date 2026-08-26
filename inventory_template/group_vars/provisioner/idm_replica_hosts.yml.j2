@@ -37,6 +37,6 @@ idm_replica_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "54:b2:03:f1:0b:ef"
-        ip: "{{ _default_network }}.6"
+        ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(11) }}"
 {% endraw %}
 ...

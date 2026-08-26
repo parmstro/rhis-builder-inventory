@@ -15,7 +15,7 @@ rhis_time_servers:
   - "1.rhel.pool.ntp.org"
   - "2.rhel.pool.ntp.org"
 
-idm_pre_dns_resolvers: "{{ [_default_network + '.1'] if (idm_disconnected | default(false)) else ['8.8.8.8', '8.8.4.4'] }}"
+idm_pre_dns_resolvers: "{{ [[_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(1)] if (idm_disconnected | default(false)) else ['8.8.8.8', '8.8.4.4'] }}"
 
 ipa_firewalld_zone: "public"
 # interface supporting the default ipv4 address
@@ -35,7 +35,7 @@ ipa_crypto_policy: "DEFAULT"
 # before IdM DNS comes up in your network here
 # These are simply test values
 etc_hosts_list:
-  - ip: "{{ _default_network }}.13"
+  - ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(13) }}"
     fqdn: "provisioner.{{ _runtime_global_domain_name }}"
-  - ip: "{{ _default_network }}.12"
+  - ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(12) }}"
     fqdn: "{{ groups['sat_primary'][0] }}"

@@ -9,7 +9,7 @@ repository_ids:
   - "rhel-{{ ansible_distribution_major_version }}-for-x86_64-supplementary-rpms"
   - "satellite-client-6-for-rhel-{{ ansible_distribution_major_version }}-x86_64-rpms"
 
-idm_pre_dns_resolvers: "{{ [_default_network + '.1'] if (idm_disconnected | default(false)) else ['8.8.8.8', '8.8.4.4'] }}"
+idm_pre_dns_resolvers: "{{ [[default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(1)] if (idm_disconnected | default(false)) else ['8.8.8.8', '8.8.4.4'] }}" # noqa yaml[line-length]
 
 ipa_firewalld_zone: "public"
 # interface supporting the default ipv4 address

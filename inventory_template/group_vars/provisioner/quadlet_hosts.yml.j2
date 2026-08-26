@@ -38,7 +38,7 @@ quadlet_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "54:b2:03:f1:00:6f"
-        ip: "{{ _default_network }}.71"
+        ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(71) }}"
 
   - name: "quadlet2"
     fqdn: "quadlet2.{{ _runtime_global_domain_name }}"
@@ -68,6 +68,6 @@ quadlet_hosts:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "54:b2:03:f1:0b:e3"
-        ip: "{{ _default_network }}.72"
+        ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(72) }}"
 {% endraw %}
 ...
