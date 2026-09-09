@@ -10,6 +10,7 @@
 # Static analysis tools will not detect aap26_hosts as "used" — expected. See
 # schema/audit_findings.md Scanner Limitation.
 
+
 # AAP 2.6 Growth Deployment
 {% raw %}
 aap26_hosts:
@@ -38,7 +39,7 @@ aap26_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "{{ hostvars[groups['aap_controllers'][0]].mac_address | default('54:b2:03:f1:0b:d2') }}"
+        mac: "{{ hostvars[groups['aap_controllers'][0]].mac_address | default('94:c6:91:a3:19:29') }}"
         ip: "{{ hostvars[groups['aap_controllers'][0]].ipv4_address }}"
 
 #  - fqdn: "aaphub1.{{ _global_domain_name }}"

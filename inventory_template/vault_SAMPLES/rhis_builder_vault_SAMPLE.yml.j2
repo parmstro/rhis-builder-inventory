@@ -74,6 +74,22 @@ cdn_activation_key_vault: "{{ default_activation_key_vault }}"                  
 
 
 #####################################
+# Bootstrap kickstart secrets
+#####################################
+# Used by rhis-builder-bootstrap-init to generate OEMDRV kickstart ISOs.
+# These are written into the kickstart %post section and applied at install time.
+
+# Generate encrypted passwords with: python3 -c "import crypt; print(crypt.crypt('PASSWORD', crypt.mksalt(crypt.METHOD_SHA512)))"
+encrypted_root_pass_vault: "$6$rounds=100000$somesalt$somelonghash"                                   # secret
+encrypted_grub_pass_vault: "$6$rounds=100000$somesalt$somelonghash"                                   # secret
+encrypted_user_pass_vault: "$6$rounds=100000$somesalt$somelonghash"                                   # secret
+
+# Sudoer policy dropped into /etc/sudoers.d/ during kickstart.
+# NOPASSWD is required — the provisioner and prepare_highside.sh use non-interactive SSH+sudo.
+user_sudoer_policy_vault: "ansiblerunner ALL=(ALL) NOPASSWD: ALL"                                     # secret
+
+
+#####################################
 # rhis-builder-awslz vault
 #####################################
 # For non-secrets, see the project variables

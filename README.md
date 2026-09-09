@@ -254,9 +254,9 @@ podman exec -it rhis-builder /bin/bash
 
 ## Disconnected (air-gapped) deployments
 
-A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There are a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names. 
+A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There are a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names.
 
-NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments my diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction.
+NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments may diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction.
 
 
 ### Deployment relationship model
@@ -284,22 +284,110 @@ Generate each deployment independently:
 ./inventory_update.sh -b highside.example.ca_inventory_basevars.yml
 ```
 
-### Disconnected workflow scripts
+### Export prerequisites
 
-These scripts live at the repo root and run **on the provisioner host directly** — not inside the container. The container is used for Ansible operations against remote hosts; these scripts handle local and inter-host operations.
+Before running the export, ensure the following are in place:
 
-#### Stage 1 — Export content from the lowside Satellite
+**1. Passwordless SSH to the lowside satellite.**
+Stage 2 runs `ansible-playbook` inside a container with stdout piped through `tee` — there is no interactive terminal, so `--ask-pass` cannot work. Key-based SSH from the provisioner to the satellite must be configured:
 
 ```bash
-./build_sat_disconnected_export.sh \
-    -x deployments/example.ca/vars/test/content_exports_test_epel9_cv.yml  # optional test override
+# Verify from the provisioner host:
+ssh -i ~/.ssh/id_ed25519 ansiblerunner@satellite1.example.ca hostname
 ```
 
-Runs the full disconnected export playbook. For a Library export (default), expect several hours. Prints the exact Stage 2 command when complete, including the bundle directory path and estimated transfer media size.
+If this prompts for a password, copy the key:
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519 ansiblerunner@satellite1.example.ca
+```
 
-> The Pulp export content is written directly to the transfer drive (mounted at `/var/lib/pulp/exports/`). Bundle artifacts (roles, inventory, ISOs, manifests) are staged in `rhis_export_root` on the satellite.
+**2. Bootstrap vault variables.**
+The OEMDRV kickstart ISO generation (Stage 3) requires these variables in your `rhis_builder_vault.yml`:
 
-#### Stage 2 — Copy bundle artifacts to the transfer drive
+| Variable | Content |
+|---|---|
+| `encrypted_root_pass_vault` | SHA-512 hashed root password (for kickstart `rootpw --iscrypted`) |
+| `encrypted_grub_pass_vault` | PBKDF2 grub password hash (output of `grub2-mkpasswd-pbkdf2`) |
+| `encrypted_user_pass_vault` | SHA-512 hashed user password |
+| `user_sudoer_policy_vault` | Sudoers policy line, e.g. `ansiblerunner ALL=(ALL:ALL) NOPASSWD: ALL` |
+| `ssh_pub_key_vault` | SSH public key for the ansiblerunner user |
+
+Generate password hashes with:
+```bash
+# SHA-512 (root and user passwords):
+python3 -c "import crypt; print(crypt.crypt('yourpassword', crypt.mksalt(crypt.METHOD_SHA512)))"
+
+# PBKDF2 (grub password):
+grub2-mkpasswd-pbkdf2
+```
+
+**3. Highside bootstrap hosts file.**
+A `highside_bootstrap_hosts.yml` file must exist at `deployments/<highside_domain>/vars/highside_bootstrap_hosts.yml`. This file defines the hosts (provisioner, IdM, satellite) for which OEMDRV kickstart ISOs are generated. A template is provided at `inventory_template/vars/highside_bootstrap_hosts.yml` — copy and customize it for your highside deployment.
+
+**4. Highside subscription manifest.**
+Download a separate subscription manifest ZIP from the [Red Hat Customer Portal](https://access.redhat.com/management) for the highside satellite and place it in `deployments/<highside_domain>/files/`. The highside satellite cannot reach `subscription.rhsm.redhat.com`, so its `manifests.yml` must have `generate: false`.
+
+### Lowside — export and transfer
+
+The export workflow runs on the lowside provisioner host, outside the container. It produces a staging directory containing everything the highside needs: container images, Pulp content export, inventory archive, bootstrap ISOs, subscription manifests, and operator tools.
+
+#### Step 1 — Export the deployment
+
+```bash
+./export_deployment.sh -b example.ca_inventory_basevars.yml
+```
+
+This is the primary export command. It runs a four-stage Ansible playbook (`export_deployment.yml`):
+
+| Stage | What it does |
+|---|---|
+| Stage 1 | Saves the provisioner container image (and any additional containers listed in `rhis_highside_containers`) |
+| Stage 2 | Runs `export_disconnected.yml` inside the provisioner container — Pulp content export and satellite artifact collection |
+| Stage 3 | Stages provisioner-side artifacts: inventory archive (git tree), OEMDRV bootstrap ISOs, subscription manifests, `rhis-builder-bootstrap-init`, and operator tools (`import_bundle.sh`, `prepare_highside.sh`, `validate_import_bundle.sh`) |
+| Stage 4 | Generates `rhis_export_manifest.yml` (checksums and metadata) and transfer scripts (`transfer_to_drive.sh`, `transfer_to_drive.yml`, `transfer_to_drive_vars.yml`) |
+
+Output is a staging directory at the export root (default `/var/rhis_export_staging/<highside>_<timestamp>/`).
+
+**Options:**
+
+| Flag | Description |
+|---|---|
+| `-b \| --basevars-file <file>` | Lowside basevars file (required) |
+| `--highside <domain>` | Target highside domain; required only if basevars lists more than one downstream |
+| `--ansible-ver <version>` | Provisioner container version (default: `2.5`) |
+| `--export-root <path>` | Staging root directory (default: `/var/rhis_export_staging`) |
+| `--dry-run` | Validate configuration and print the export plan without running the export |
+| `-y \| --yes` | Skip the confirmation prompt |
+
+When multiple highside deployments are configured in `basevars_downstream_disconnected_deployment`, the script presents an interactive menu unless `--highside` is specified.
+
+For a full Library export, expect several hours for Stage 2 (Pulp export). Subsequent runs detect a resume marker and skip the Pulp export if it completed previously — delete `deployments/<domain>/logs/.pulp_export_complete` to force a full re-export.
+
+#### Step 2 — Transfer to drive
+
+The export produces transfer scripts in the staging directory. Copy them to your operator workstation and run:
+
+```bash
+# From the operator workstation:
+scp ansiblerunner@<provisioner>:<staging>/transfer_to_drive.* .
+scp ansiblerunner@<provisioner>:<staging>/transfer_to_drive_vars.yml .
+./transfer_to_drive.sh -d /run/media/<user>/TRANSFER_DRV
+```
+
+`transfer_to_drive.sh` is an Ansible wrapper that pulls content from the provisioner and satellite to the local drive over SSH. It reads connection details from the generated `transfer_to_drive_vars.yml`. Options:
+
+| Flag | Description |
+|---|---|
+| `-d \| --drive-mount <path>` | Mount point of the transfer drive (required) |
+| `--dry-run` | Show plan and size estimate without transferring |
+| `--yes` | Skip confirmation prompt |
+| `--ask-become-pass` | Prompt for sudo password on the satellite |
+| `--ssh-user <user>` | SSH user (default: `ansiblerunner`) |
+| `--ssh-key <path>` | SSH private key (default: `~/.ssh/id_ed25519`) |
+
+#### Optional — Update the bundle without re-exporting
+
+If bundle artifacts change after the export (new ISOs, updated inventory, updated compliance roles) but the Pulp content does not need to be re-exported:
 
 ```bash
 ./update_transfer_bundle.sh \
@@ -307,45 +395,81 @@ Runs the full disconnected export playbook. For a Library export (default), expe
     -d /home/ansiblerunner/rhis_export/Library_2026-06-07_1416
 ```
 
-Syncs the bundle artifacts to the transfer drive using rsync — only changed or new files are transferred. Fast. **Run this whenever bundle artifacts change without needing to repeat the export.** Common scenarios:
-- ISOs were generated or updated after the export
-- Inventory archive was regenerated
-- Compliance roles were updated
+Uses rsync — only changed or new files are transferred. The Pulp export content is never touched.
 
-The Pulp export content at the drive root is never touched.
+#### Step 3 — Transport the drive
 
-#### Generate highside kickstart ISOs
+Physically move the transfer drive to the highside environment. The vault password must travel via a separate trusted channel — it is never placed on the drive.
 
-```bash
-./build_highside_isos.sh \
-    -b highside.example.ca_inventory_basevars.yml \
-    -d /home/ansiblerunner/rhis_export/Library_2026-06-07_1416
-```
+### Highside — import and build
 
-Generates OEMDRV kickstart ISOs for all highside hosts (provisioner, IdM, Satellite) from the highside deployment configuration. ISOs are generated on the provisioner host and pushed to the satellite's bundle `isos/` directory. The next run of `update_transfer_bundle.sh` includes them on the drive automatically.
+The transfer drive contains a self-contained operator guide (`README_FIRST.md`) and all scripts needed to stand up the highside environment. The sequence below is a summary; refer to the drive's `README_FIRST.md` for full detail including disk sizing, delivery methods, and troubleshooting.
 
-Upload the ISOs to vCenter (or attach as virtual media) to boot VMs with an OEMDRV kickstart. Boot the VM from the RHEL DVD ISO with the OEMDRV ISO as a second virtual CD.
+#### Prerequisites
 
-#### Validate the bundle before import
+- Three RHEL 9 hosts installed from ISO: provisioner, idm1, satellite1 (use the OEMDRV kickstart ISOs from `bootstrap/bootstrap_isos/` on the drive)
+- An operator workstation (RHEL with ansible-core installed) with SSH access to the provisioner and satellite
+- The vault password, delivered separately
 
-Run on the highside after mounting the transfer drive:
+#### Step 1 — Deliver data to the highside hosts
+
+Mount the drive on the operator workstation and run:
 
 ```bash
-validate_import_bundle.sh -d /mnt/transfer
+cd /run/media/<user>/TRANSFER_DRV
+./import_bundle.sh
 ```
 
-Checks that the bundle is complete, verifies SHA256 checksums against the manifest, and reports readiness. Prints `READY FOR IMPORT` or `NOT READY` with specific issues.
+The script prompts for a delivery method (`usb`, `rsync`, or `virtual_disk`), target host IPs, and SSH credentials, then pushes data to the provisioner and satellite. See `README_FIRST.md` on the drive for delivery method details.
 
-### Highside bootstrap sequence
+#### Step 2 — Prepare the provisioner
 
-1. Install RHEL 9 on three nodes from ISO: `provisioner`, `idm1`, `satellite1`
-2. Connect the transfer drive to the provisioner; mount it at `/mnt/transfer`
-3. Validate the bundle: `validate_import_bundle.sh -d /mnt/transfer`
-4. Extract the inventory: `tar xzf /mnt/transfer/rhis_transfer_*/inventory/*.tar.gz -C /home/ansiblerunner/rhis/`
-5. Load the provisioner container: `podman load < /mnt/transfer/rhis_transfer_*/container/rhis-provisioner.tar`
-6. Build IdM (optional): `build_idm_primary.sh`
-7. Build Satellite (triggers content import): `build_sat_primary.sh`
-8. Satellite provisions remaining infrastructure via kickstart
+SSH to the provisioner and run:
+
+```bash
+~/rhis_transfer/prepare_highside.sh \
+  --deployment highside.example.ca \
+  --idm-host   idm1.highside.example.ca \
+  --sat-host   satellite1.highside.example.ca
+```
+
+This loads container images into podman, places the inventory, loop-mounts the RHEL and Satellite DVD ISOs, starts a local HTTP repo server, and distributes repo files to the IdM and satellite hosts.
+
+> The HTTP server must remain running for IdM and Satellite builds — it is their only package source.
+
+#### Step 3 — Build IdM, then Satellite
+
+From inside the provisioner container, in order:
+
+```bash
+# 3a — IdM first
+build_idm_primary.sh --deployment highside.example.ca
+
+# 3b — Satellite (after IdM is fully operational)
+build_sat_disconnected_import.sh \
+  --delivery-method rsync \
+  --deployment highside.example.ca
+```
+
+IdM must be fully operational before Satellite — Satellite registers to IdM for Kerberos, certificates, and DNS.
+
+### What's on the transfer drive
+
+| Path | Contents |
+|---|---|
+| `import_bundle.sh` / `import_bundle.yml` | Operator entry point for data delivery |
+| `prepare_highside.sh` | Loads containers, mounts ISOs, distributes repo files |
+| `validate_import_bundle.sh` | Pre-import integrity check (checksums against manifest) |
+| `rhis_export_manifest.yml` | Bundle checksums and metadata |
+| `<Org_Folder>/` | Red Hat Pulp content export (RPMs, kickstart repos — large, do not modify) |
+| `bootstrap/bootstrap_isos/` | OEMDRV kickstart ISOs for provisioner, IdM, satellite |
+| `bootstrap/infra_isos/` | RHEL DVD ISO and Satellite DVD ISO |
+| `bootstrap/rhis-builder-bootstrap-init/` | Kickstart ISO tooling repo (regenerate ISOs if needed) |
+| `provisioner/inventory/` | rhis-builder-inventory archive for the highside deployment only |
+| `provisioner/containers/` | Provisioner container image (and any additional containers) |
+| `satellite/ansible_roles/` | Compliance Ansible roles |
+| `satellite/discovery_images/` | Foreman discovery PXE images |
+| `README_FIRST.md` | Full operator guide with disk sizing, delivery methods, troubleshooting |
 
 ---
 

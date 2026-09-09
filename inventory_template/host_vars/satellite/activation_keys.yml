@@ -3,7 +3,7 @@
 # Includes RHEL7, RHEL8, RHEL9 and RHEL 10 activation keys
 # purpose_role = [ "Red Hat Enterprise Linux Server" | "Red Hat Enterprise Linux Workstation" | "Red Hat Enterprise Linux Compute Node" ]
 # purpose_usage = [ "Development/Test" | "Production" | "Disaster Recovery" ]
-# service_level = [ "Premium" | "Standard" | "Self-Support" ]"
+# service_level = [ "Premium" | "Standard" | "Premium" ]"
 
 activation_keys:
 
@@ -46,7 +46,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "LEAPP_7_2_8"
   #   state: "present"
@@ -65,7 +65,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
 
 ############## SOE10 ##################
@@ -88,7 +88,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE10_qa"
     state: "present"
@@ -108,7 +108,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE10_prod"
     state: "present"
@@ -147,7 +147,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   # - name: "SOE10_dev_edge_manager"
   #   state: "present"
@@ -166,7 +166,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
 
 ############## SOE9 ##################
@@ -186,7 +186,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_qa"
     state: "present"
@@ -203,7 +203,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_prod"
     state: "present"
@@ -239,7 +239,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_dev_EPEL"
     state: "present"
@@ -256,7 +256,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_qa_EPEL"
     state: "present"
@@ -273,7 +273,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_prod_EPEL"
     state: "present"
@@ -309,7 +309,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_dev_JBoss"
     state: "present"
@@ -326,7 +326,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_qa_JBoss"
     state: "present"
@@ -343,7 +343,7 @@ activation_keys:
     unlimited_hosts: true
     purpose_role: "Red Hat Enterprise Linux Server"
     purpose_usage: "Development/Test"
-    service_level: "Self-Support"
+    service_level: "Premium"
 
   - name: "SOE9_prod_JBoss"
     state: "present"
@@ -378,7 +378,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE8_qa"
   #   state: "present"
@@ -393,7 +393,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE8_prod"
   #   state: "present"
@@ -427,7 +427,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE8_qa_EPEL"
   #   state: "present"
@@ -446,7 +446,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE8_prod_EPEL"
   #   state: "present"
@@ -482,7 +482,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE8_qa_JBoss"
   #   state: "present"
@@ -499,7 +499,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE8_prod_JBoss"
   #   state: "present"
@@ -538,7 +538,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "SOE7"
   #   state: "present"
@@ -553,7 +553,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "CentOS79"
   #   state: "present"
@@ -570,7 +570,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "OEL79"
   #   state: "present"
@@ -585,7 +585,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "convert_CentOS2RHEL7"
   #   state: "present"
@@ -610,7 +610,7 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"
 
   # - name: "convert_OEL2RHEL7"
   #   state: "present"
@@ -633,4 +633,4 @@ activation_keys:
   #   unlimited_hosts: true
   #   purpose_role: "Red Hat Enterprise Linux Server"
   #   purpose_usage: "Development/Test"
-  #   service_level: "Self-Support"
+  #   service_level: "Premium"

@@ -9,18 +9,18 @@
 # /var/www/html/pub/installmedia/<medium_root>/ on the Satellite server
 # and computes the HTTP path automatically.
 
-installation_media:
+# installation_media:
 
-  - name: "ESXi_Local"
-    os_family: "Redhat"
-    load_medium: true
-    medium_iso_source: "VMware-VMvisor-Installer-201912001-15160138.x86_64.iso"
-    medium_iso: "/opt/isos/VMware-VMvisor-Installer-201912001-15160138.x86_64.iso"
-    medium_root: "esxi"
-    organizations:
-      - "{{ satellite_organization }}"
-    locations:
-      - "{{ satellite_location }}"
+#   - name: "ESXi_Local"
+#     os_family: "Redhat"
+#     load_medium: true
+#     medium_iso_source: "VMware-VMvisor-Installer-201912001-15160138.x86_64.iso"
+#     medium_iso: "/opt/isos/VMware-VMvisor-Installer-201912001-15160138.x86_64.iso"
+#     medium_root: "esxi"
+#     organizations:
+#       - "{{ satellite_organization }}"
+#     locations:
+#       - "{{ satellite_location }}"
 
 # # Web-based media examples (no ISO extraction needed)
 #   - name: "CentOS 7 mirror"

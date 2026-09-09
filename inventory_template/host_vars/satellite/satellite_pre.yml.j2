@@ -2,6 +2,10 @@
 
 satellite_async_timeout: 43200
 
+# manage transient disconnects with CDN during repository syncs
+satellite_sync_retries: 3
+satellite_sync_retry_delay: 120
+
 # Rendered from basevars at inventory_update time
 satellite_disconnected: {{ basevars_disconnected_domain | default(false) | lower }}
 {% if basevars_disconnected_domain | default(false) %}
@@ -11,7 +15,7 @@ satellite_disconnected_http_repos: true
 # FDI discovery image is served by the provisioner's DVD HTTP server.
 # Copy fdi-image-latest.tar from the transfer bundle into /mnt/rhis_dvd/ before the build.
 # See rhis_discovery_source_url in your basevars file to change the URL.
-satellite_disconnected_discovery_source_url: "http://{{ groups['provisioner_host'][0] }}:7778/"
+satellite_disconnected_discovery_source_url: "http://{% raw %}{{ groups['provisioner'][0] }}{% endraw %}:7778/"
 {% endif %}
 
 # DISCONNECTED: path to discovery_images/ from the transfer bundle on the highside host.

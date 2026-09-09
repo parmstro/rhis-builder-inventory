@@ -871,7 +871,7 @@
           --lowside {{ lowside_domain }}
           --highside {{ highside_domain }}
           --generated {{ log_timestamp }}
-          --pulp-path {{ pulp_export_path | default('') }}
+          {{ ('--pulp-path ' ~ pulp_export_path) if pulp_export_path | default('') | length > 0 else '' }}
       changed_when: true
       register: _manifest_result
 
