@@ -21,7 +21,7 @@ while [[ "$#" -gt 0 ]]; do
     shift # Shift past the option
 done
 
-podman run --rm --userns=keep-id --env working_directory_external_to_container="$PWD" \
+podman run --rm --userns=keep-id --user $(id -u):$(id -g) --env working_directory_external_to_container="$PWD" \
            --volume $PWD:/rhis/external_inventory:Z,U \
            --workdir /rhis/external_inventory \
            --hostname inventory_update \
