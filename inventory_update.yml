@@ -2,6 +2,7 @@
 - name: "Generate the new inventory from templates"
   hosts: localhost
   connection: local
+  become: false
   gather_facts: false
 
   tasks:
