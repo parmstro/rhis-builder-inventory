@@ -31,6 +31,16 @@ aap_inventories:
     organization: "Default"
     state: present
 
+  - name: "SOE_northwind_pipeline_inventory"
+    description: "Northwind multi-tier app dev pipeline inventory"
+    organization: "Default"
+    state: present
+
+  - name: "SOE_northwind_qa_pipeline_inventory"
+    description: "Northwind multi-tier app QA pipeline inventory"
+    organization: "Default"
+    state: present
+
   - name: "convert2rhel_pipeline_inventory"
     description: "demo SOE pipeline inventory"
     organization: "Default"

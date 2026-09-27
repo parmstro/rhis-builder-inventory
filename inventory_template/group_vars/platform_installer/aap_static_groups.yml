@@ -44,6 +44,45 @@ aap_static_groups:
     inventory: "SOE_pipeline_inventory"
     state: present
 
+# Northwind Dev testing inventory static groups
+  - name: "Northwind"
+    description: "Parent group for all Northwind multi-tier app test servers"
+    hosts:
+      - "testnwdb2.{{ _runtime_global_domain_name }}"
+      - "testnwcache2.{{ _runtime_global_domain_name }}"
+      - "testnwapp2.{{ _runtime_global_domain_name }}"
+      - "testnwlb2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+
+  - name: "nw_dbservers"
+    description: "Northwind PostgreSQL database servers"
+    hosts:
+      - "testnwdb2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+
+  - name: "nw_cacheservers"
+    description: "Northwind Redis cache servers"
+    hosts:
+      - "testnwcache2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+
+  - name: "nw_appservers"
+    description: "Northwind Django application servers"
+    hosts:
+      - "testnwapp2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+
+  - name: "nw_lbservers"
+    description: "Northwind HAProxy load balancer servers"
+    hosts:
+      - "testnwlb2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+
   - name: "controller"
     description: "The automation controller"
     hosts:
@@ -126,6 +165,45 @@ aap_static_groups:
     hosts:
       - "qatestwordpress2.{{ _runtime_global_domain_name }}"
     inventory: "SOE_qa_pipeline_inventory"
+    state: present
+
+# Northwind QA testing inventory static groups
+  - name: "Northwind"
+    description: "Parent group for all Northwind multi-tier app QA test servers"
+    hosts:
+      - "qatestnwdb2.{{ _runtime_global_domain_name }}"
+      - "qatestnwcache2.{{ _runtime_global_domain_name }}"
+      - "qatestnwapp2.{{ _runtime_global_domain_name }}"
+      - "qatestnwlb2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+
+  - name: "nw_dbservers"
+    description: "Northwind PostgreSQL database servers"
+    hosts:
+      - "qatestnwdb2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+
+  - name: "nw_cacheservers"
+    description: "Northwind Redis cache servers"
+    hosts:
+      - "qatestnwcache2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+
+  - name: "nw_appservers"
+    description: "Northwind Django application servers"
+    hosts:
+      - "qatestnwapp2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+
+  - name: "nw_lbservers"
+    description: "Northwind HAProxy load balancer servers"
+    hosts:
+      - "qatestnwlb2.{{ _runtime_global_domain_name }}"
+    inventory: "SOE_northwind_qa_pipeline_inventory"
     state: present
 
 ...

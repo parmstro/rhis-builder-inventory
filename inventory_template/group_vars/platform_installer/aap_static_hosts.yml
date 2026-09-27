@@ -103,6 +103,118 @@ aap_static_hosts:
       mac: "00:50:56:ff:ff:ff"
       dhostname: ""
 
+  - name: "testnwdb2.{{ _runtime_global_domain_name }}"
+    description: "Northwind PostgreSQL SOE test host"
+    enabled: true
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testnwdb2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "testnwcache2.{{ _runtime_global_domain_name }}"
+    description: "Northwind Redis SOE test host"
+    enabled: true
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testnwcache2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "testnwapp2.{{ _runtime_global_domain_name }}"
+    description: "Northwind Django SOE test host"
+    enabled: true
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testnwapp2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "testnwlb2.{{ _runtime_global_domain_name }}"
+    description: "Northwind HAProxy SOE test host"
+    enabled: true
+    inventory: "SOE_northwind_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "testnwlb2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/dev/soe9_dev_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestnwdb2.{{ _runtime_global_domain_name }}"
+    description: "Northwind PostgreSQL SOE QA test host"
+    enabled: true
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestnwdb2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestnwcache2.{{ _runtime_global_domain_name }}"
+    description: "Northwind Redis SOE QA test host"
+    enabled: true
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestnwcache2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestnwapp2.{{ _runtime_global_domain_name }}"
+    description: "Northwind Django SOE QA test host"
+    enabled: true
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestnwapp2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
+  - name: "qatestnwlb2.{{ _runtime_global_domain_name }}"
+    description: "Northwind HAProxy SOE QA test host"
+    enabled: true
+    inventory: "SOE_northwind_qa_pipeline_inventory"
+    state: present
+    variables:
+      fqdn: "qatestnwlb2.{{ _runtime_global_domain_name }}"
+      hostgroup: "hg_x86_64_rhel9_vm/qa/soe9_qa_northwind"
+      kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.6"
+      compute_resource: "VMware_Lab"
+      compute_profile: "SOE_Medium"
+      mac: "00:50:56:ff:ff:ff"
+      dhostname: ""
+
   - name: "centosdemo1.{{ _runtime_global_domain_name }}"
     description: "convert2rhel test host"
     enabled: true

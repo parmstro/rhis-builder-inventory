@@ -308,6 +308,16 @@ aap_idm_machine_username_vault: "{{ default_admin_username_vault }}"            
 aap_idm_machine_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
 
 #####################################
+# Northwind Sample Application vault
+#####################################
+# Secrets for the Northwind multi-tier demo application
+# Used by testcontent/Northwind/ playbooks and job templates
+
+northwind_db_password_vault: "{{ default_environment_password_vault }}"                               # notsecret
+northwind_django_secret_vault: "{{ default_environment_password_vault }}"                             # notsecret
+northwind_haproxy_stats_password_vault: "{{ default_environment_password_vault }}"                    # notsecret
+
+#####################################
 # rhis-builder-quay vault
 #####################################
 # Quay container registry secrets

@@ -456,6 +456,21 @@ satellite_hostgroups:
     pxe_loader: "Grub2 UEFI"
     root_pass: "{{ satellite_password }}"
 
+  - name: "soe9_dev_northwind"
+    parent: "hg_x86_64_rhel9_vm/dev"
+    description: "RHEL 9 SOE for Northwind multi-tier app development vm"
+    organization: "{{ satellite_organization }}"
+    locations: "{{ satellite_location }}"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+    content_view: "SOE9_EPEL"
+    activation_keys: "SOE9_dev_EPEL"
+    ansible_roles:
+      - theforeman.foreman_scap_client
+    ptable: "RHEL_Server_Compliance"
+    pxe_loader: "Grub2 UEFI"
+    root_pass: "{{ satellite_password }}"
+
   - name: "qa"
     parent: "hg_x86_64_rhel9_vm"
     description: "RHEL 9 SOE qualification vm hostgroup"
@@ -506,6 +521,21 @@ satellite_hostgroups:
   - name: "soe9_qa_wordpress"
     parent: "hg_x86_64_rhel9_vm/qa"
     description: "RHEL 8 SOE for WordPress site qualification vm"
+    organization: "{{ satellite_organization }}"
+    locations: "{{ satellite_location }}"
+    compute_resource: "VMware_Lab"
+    compute_profile: "SOE_Medium"
+    content_view: "SOE9_EPEL"
+    activation_keys: "SOE9_qa_EPEL"
+    ansible_roles:
+      - theforeman.foreman_scap_client
+    ptable: "RHEL_Server_Compliance"
+    pxe_loader: "Grub2 UEFI"
+    root_pass: "{{ satellite_password }}"
+
+  - name: "soe9_qa_northwind"
+    parent: "hg_x86_64_rhel9_vm/qa"
+    description: "RHEL 9 SOE for Northwind multi-tier app qualification vm"
     organization: "{{ satellite_organization }}"
     locations: "{{ satellite_location }}"
     compute_resource: "VMware_Lab"

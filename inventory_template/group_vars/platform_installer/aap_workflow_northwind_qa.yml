@@ -1,0 +1,163 @@
+---
+
+aap_workflow_template_northwind_qa:
+  name: "SOE_ContentDeliveryPipeline_Northwind_QA"
+  description: "Northwind multi-tier content delivery pipeline for the Qualification Lifecycle"
+  organization: "Default"
+  notification_templates_approvals:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_success:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_error:
+    - "RedHatGCA_NotifySlack"
+  state: present
+  workflow_nodes:
+    - identifier: "DeployQA"
+      unified_job_template:
+        name: "NWQA1DeployServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "SnapshotQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "SnapshotQA"
+      unified_job_template:
+        name: "NWQA2SnapshotServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildDBQA"
+          - identifier: "BuildCacheQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildDBQA"
+      unified_job_template:
+        name: "NWQA3.1BuildQADB"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildAppQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildCacheQA"
+      unified_job_template:
+        name: "NWQA3.2BuildQACache"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildAppQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildAppQA"
+      all_parents_must_converge: true
+      unified_job_template:
+        name: "NWQA3.3BuildQAApp"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildLBQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildLBQA"
+      unified_job_template:
+        name: "NWQA3.4BuildQALB"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "TestQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "TestQA"
+      unified_job_template:
+        name: "NWQA3.5TestQADeployment"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "PromoteToProd"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "PromoteToProd"
+      unified_job_template:
+        name: "NWQA4PromoteToProd"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "DeleteSnapshotsQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "DeleteSnapshotsQA"
+      unified_job_template:
+        name: "NWQA5DeleteSnapshots"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "ApproveDeleteHostsQA"
+        failure_nodes:
+          - identifier: "PowerOffServersQA"
+        always_nodes: []
+        credentials: []
+    - identifier: "ApproveDeleteHostsQA"
+      unified_job_template:
+        name: "ApproveDeleteNorthwindHostsQA"
+        timeout: 10800
+        type: workflow_approval
+        description: "Approved to delete Northwind QA test hosts?"
+      related:
+        success_nodes:
+          - identifier: "DeleteServersQA"
+        failure_nodes:
+          - identifier: "PowerOffServersQA"
+        always_nodes: []
+        credentials: []
+    - identifier: "DeleteServersQA"
+      unified_job_template:
+        name: "NWQA6SDeleteServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "PowerOffServersQA"
+      organization: "Default"
+      unified_job_template:
+        name: "NWQA6FPowerOffServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+...

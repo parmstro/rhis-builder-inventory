@@ -7,5 +7,7 @@ aap_workflow_templates_list:
   - "{{ aap_workflow_template_soe_content_delivery_pipeline_qa }}"
   - "{{ aap_workflow_template_c2r_pipeline }}"                   # see workflow.convert2rhel_pipeline.yml
   - "{{ aap_workflow_template_test_vmware_plays_pipeline }}"         # see aap_workflow_test_vmware_plays_pipeline.yml
+  - "{{ aap_workflow_template_northwind_dev }}"                      # see aap_workflow_northwind_dev.yml
+  - "{{ aap_workflow_template_northwind_qa }}"                       # see aap_workflow_northwind_qa.yml
 
 ...
