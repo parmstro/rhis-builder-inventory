@@ -525,3 +525,31 @@ satellite_repositories:
   #   gpg_key: "OracleLinux7GPG"
   #   download_policy: "immediate"
   #   unprotected: false
+
+############## OpenShift Container Platform 4.20 ##################
+
+  - name: "ocp-release"
+    product: "OpenShift Container Platform 4.20"
+    content_type: "docker"
+    download_policy: "immediate"
+    mirroring_policy: "additive"
+
+  - name: "ocp-v4.0-art-dev"
+    product: "OpenShift Container Platform 4.20"
+    content_type: "docker"
+    download_policy: "immediate"
+    mirroring_policy: "additive"
+
+############## OpenShift Container Platform 4.22 ##################
+
+  - name: "ocp-release"
+    product: "OpenShift Container Platform 4.22"
+    content_type: "docker"
+    download_policy: "immediate"
+    mirroring_policy: "additive"
+
+  - name: "ocp-v4.0-art-dev"
+    product: "OpenShift Container Platform 4.22"
+    content_type: "docker"
+    download_policy: "immediate"
+    mirroring_policy: "additive"
