@@ -5,6 +5,14 @@
 # redhat.satellite does not support importing ansible roles at this time
 # The name is "smart_proxies.id-smart_proxies.name"
 # The Satellite that you are installing is always 1
+
+################# in 6.20 / 7.x #######################
+#
+#  Ansible roles need to be imported into 
+#  /var/lib/foreman-proxy/ansible/roles
+#
+#######################################################
+
 satellite_api_proxy_id_string: "1-{{ satellite_fqdn }}"
 
 ansible_roles_import_list:
