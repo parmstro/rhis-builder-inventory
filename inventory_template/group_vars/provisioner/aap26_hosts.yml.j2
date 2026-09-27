@@ -39,7 +39,7 @@ aap26_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "{{ hostvars[groups['aap_controllers'][0]].mac_address | default('94:c6:91:a3:19:29') }}"
+        mac: "{{ hostvars[groups['aap_controllers'][0]].mac_address | default('94:c6:91:a3:16:b8') }}"
         ip: "{{ hostvars[groups['aap_controllers'][0]].ipv4_address }}"
 
 #  - fqdn: "aaphub1.{{ _global_domain_name }}"
@@ -106,23 +106,23 @@ aap26_hosts:
 #         mac: ""
 #         ip: "{{ hostvars[groups['aap_gateway'][0]].ipv4_address }}"
 
-#   - fqdn: "aapedacontroller.{{ _global_domain_name }}"
-#     delete_host: false
-#     organization: "{{ satellite_organization }}"
-#     location: "{{ satellite_location }}"
-#     hostgroup: "hg_x86_64_rhel9_vm/dev/aap9_25_vm"
-#     kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-#     compute_resource: "VMware_Lab"
-#     interfaces_attributes:
-#       - type: "interface"
-#         identifier: "{{ _default_provision_iface }}"
-#         domain: "{{ _default_domain }}"
-#         execution: true
-#         managed: true
-#         primary: true
-#         provision: true
-#         subnet: "{{ _default_subnetname }}"
-#         mac: ""
-#         ip: "{{ hostvars[groups['aap_edacontroller'][0]].ipv4_address }}"
+  - fqdn: "aapedacontroller.{{ _global_domain_name }}"
+    delete_host: false
+    organization: "{{ satellite_organization }}"
+    location: "{{ satellite_location }}"
+    hostgroup: "hg_x86_64_rhel9_vm/dev/aap9_26"
+    kickstart_repository: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+    compute_resource: "baremetal"
+    interfaces_attributes:
+      - type: "interface"
+        identifier: "{{ _default_provision_iface }}"
+        domain: "{{ _default_domain }}"
+        execution: true
+        managed: true
+        primary: true
+        provision: true
+        subnet: "{{ _default_subnetname }}"
+        mac: "{{ hostvars[groups['aap_hubs'][0]].mac_address | default('94:c6:91:a3:19:29') }}"
+        ip: "{{ hostvars[groups['aap_edacontroller'][0]].ipv4_address }}"
 {% endraw %}
 ...

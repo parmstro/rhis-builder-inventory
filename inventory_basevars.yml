@@ -48,6 +48,7 @@ rhis_system_count:
   capsule: 1
   idm: 2
   aapcontroller: 1
+  aapedacontroller: 0
   aaphub: 1
   quadlet: 2
 

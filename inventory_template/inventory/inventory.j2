@@ -70,6 +70,13 @@ aap_controllers:
 {% endfor %}
 {% endif %}
 
+{% if rhis_system_count.aapedacontroller is defined and rhis_system_count.aapcontroller > 0 %}
+aap_edacontroller:
+  hosts:
+    aapedacontroller1.{{ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(15) }}"
+{% endif %}
+
 {#
 # aap_databases:
 #   hosts:
@@ -77,7 +84,6 @@ aap_controllers:
 # aap_hubs:
 #  hosts:
 #    aaphub{{ num }}.{{ basevars_global_domain_name }}:
-# aap_edacontrollers:
 # aap_execution_nodes:
 # aap_hop_nodes:
 #}
