@@ -1,64 +1,52 @@
-# This file uses version 3 schema supporting AAP 2.4 on RHEL9
-
 version: 3
 
 images:
   base_image:
     name: "{{ aap_execution_environment.base_image }}"
+  options:
+    build_args:
+      REDHAT_TOKEN: "{{ redhat_automation_hub_token_vault }}"
+      PRIVATE_HUB_URL: "{{ private_hub_url | default('') }}"
+      PRIVATE_HUB_TOKEN: "{{ private_hub_token | default('') }}"
+
+# Tell ansible-builder to safely copy the cert into the volatile context directory
+additional_build_files:
+  - src: katello-server-ca.crt
+    dest: context
 
 dependencies:
   galaxy: requirements.yml
   system: bindep.txt
   python: requirements.txt 
 {% if aap_execution_environment.additional_dependencies is defined %}  
-  {{ aap_execution_environment.additional_dependencies | to_nice_yaml | default(omit) }}
+  {{ aap_execution_environment.additional_dependencies | to_nice_yaml(indent=2) }}
 {% endif %}
 
 additional_build_steps:
   prepend_galaxy:
-    # ENV ANSIBLE_GALAXY_SERVER_LIST ensures the recognition other ENV vars
-    # for the ALL CAPS names of the servers in the list, see below
-    #    - ENV ANSIBLE_GALAXY_SERVER_LIST=automation_hub,private_hub
-    # need to ensure private hub certificate for use with private hub
-    # see prepend_base
-    # ARG below must be exported in the shell of the user executing the build command
-    # and passed as --build-arg for the ansible-builder build command
-    # e.g. ansible-builder build --build-arg ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN
+    - ARG REDHAT_TOKEN
+    - ARG PRIVATE_HUB_URL
+    - ARG PRIVATE_HUB_TOKEN
+    - RUN if [ -n "$PRIVATE_HUB_URL" ]; then \
+            export ANSIBLE_GALAXY_SERVER_LIST="AHVALIDATED,AHPUBLISHED,GALAXY_BASE,PRIVATE_HUB" && \
+            export ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_URL="$PRIVATE_HUB_URL" && \
+            export ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_TOKEN="$PRIVATE_HUB_TOKEN"; \
+          else \
+            export ANSIBLE_GALAXY_SERVER_LIST="AHVALIDATED,AHPUBLISHED,GALAXY_BASE"; \
+          fi
+    - ENV ANSIBLE_GALAXY_SERVER_GALAXY_BASE_URL="https://ansible.com"
+    - ENV ANSIBLE_GALAXY_SERVER_AHVALIDATED_URL="https://redhat.com"
+    - ENV ANSIBLE_GALAXY_SERVER_AHVALIDATED_AUTH_URL="https://redhat.com"
+    - ENV ANSIBLE_GALAXY_SERVER_AHVALIDATED_TOKEN="$REDHAT_TOKEN"
+    - ENV ANSIBLE_GALAXY_SERVER_AHPUBLISHED_URL="https://redhat.com"
+    - ENV ANSIBLE_GALAXY_SERVER_AHPUBLISHED_AUTH_URL="https://redhat.com"
+    - ENV ANSIBLE_GALAXY_SERVER_AHPUBLISHED_TOKEN="$REDHAT_TOKEN"
     
-{% if private_hub_url is defined %}
-    - ENV ANSIBLE_GALAXY_SERVER_LIST=galaxy_base,private_hub,automation_hub
-    # Private hub
-    - ENV ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_URL="{{ private_hub_url }}"
-    - ENV ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_TOKEN="{{ private_hub_token }}"
-    
-{% else %}
-    - ENV ANSIBLE_GALAXY_SERVER_LIST=galaxy_base,automation_hub
-    
-{% endif %}
-
-    # Galaxy base url
-    - ENV ANSIBLE_GALAXY_SERVER_GALAXY_BASE_URL=https://galaxy.ansible.com/
-
-    # RH automation hub
-    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_URL=https://cloud.redhat.com/api/automation-hub/
-    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
-    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN="{{ redhat_automation_hub_token_vault }}"
-    
-    
-  # adding the ca crt from IdM here allows it to be used
-  # later in the build process
   prepend_base:
+    # 2. Because it's now inside the context root, Podman can find it directly without paths
     - ADD katello-server-ca.crt /etc/pki/ca-trust/source/anchors/katello-server-ca.crt
     - RUN update-ca-trust
-  
+
   append_final:
-  # python requests installed by pip uses certifi.py which uses its own trust store
-  # this causes foreman_ansible_modules to fail if the certificate store does not 
-  # include our foreman servers certificate. The OS based install of requests
-  # is configured to use the standard locations for certificate checking.
-  # So, install python3-requests from our OS distro
-{% if aap_execution_environment.additional_dependencies.python_interpreter.package_system is defined and aap_execution_environment.additional_dependencies.python_interpreter.package_system == 'python311' %}
-    - RUN dnf -y install python3.11-requests
-{% else %}
-    - RUN dnf -y install python3-requests
-{% endif %}
+    - ENV REQUESTS_CA_BUNDLE="/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+    - ENV SSL_CERT_FILE="/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"

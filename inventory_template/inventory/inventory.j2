@@ -73,7 +73,7 @@ aap_controllers:
 {% if rhis_system_count.aapedacontroller is defined and rhis_system_count.aapcontroller > 0 %}
 aap_edacontroller:
   hosts:
-    aapedacontroller1.{{ basevars_global_domain_name }}:
+    aapedacontroller.{{ basevars_global_domain_name }}:
       ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(15) }}"
 {% endif %}
 
@@ -92,6 +92,7 @@ aap_hosts:
   children:
     aap_hubs:
     aap_controllers:
+    aap_edacontroller:
 
 {% if rhis_system_count.quadlet is defined and rhis_system_count.quadlet > 0 %}
 container_servers:
@@ -118,9 +119,9 @@ quay_servers:
 # kvm_nodes:
 # ocp_virt_nodes:
 # openstack_nodes:
-# vmware_vcenter_hosts:
-#   hosts:
-#     vcenter.{{ basevars_global_domain_name }}:
+vmware_vcenter_hosts:
+  hosts:
+    vcenter80.{{ basevars_global_domain_name }}:
 
 # vmware_esx_hosts:
 #   hosts:

@@ -18,15 +18,22 @@ platform_installer: true
 platform_deployment_type: "container" # container, rpm, openshift
 platform_topology: "growth"  # growth, enterprise, custom, standalone
 
+# Top-level vars required by rhis-builder-aap roles directly.
+# Jinja2 inside a YAML dictionary resolves from the global scope, not from
+# sibling keys, so these must be defined outside the dictionary.
+aap_bundle_file: "ansible-automation-platform-containerized-setup-bundle-2.6-12-x86_64.tar.gz"
+aap_destination_dir: "/home/{{ ansible_user }}/ansible_installer"
+aap_bundle_dir: "{{ aap_destination_dir }}/{{ aap_bundle_file | regex_replace('.tar.gz$', '') }}/bundle"
+
 platform_installer_config:
   # RHIS
   deployment_type: "{{ platform_deployment_type }}"
   topology: "{{ platform_topology }}"
   aap_product: "Red Hat Ansible Automation Platform"
   aap_file_repo_name: "Red Hat Ansible Automation Platform 2.6 for RHEL 9 x86_64 Files"
-  aap_bundle_file: "ansible-automation-platform-containerized-setup-bundle-2.6-7-x86_64.tar.gz"
-  aap_destination_dir: "/home/{{ ansible_user }}/ansible_installer"
-  aap_bundle_dir: "{{ aap_destination_dir }}/{{ aap_bundle_file | regex_replace('.tar.gz$', '') }}/bundle"
+  aap_bundle_file: "{{ aap_bundle_file }}"
+  aap_destination_dir: "{{ aap_destination_dir }}"
+  aap_bundle_dir: "{{ aap_bundle_dir }}"
   # Installer Template
   # All
   aap_admin_username: "admin"
