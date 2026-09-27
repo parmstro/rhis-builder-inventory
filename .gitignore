@@ -6,3 +6,5 @@
 *_inventory_basevars.yml
 *.2[0-9].sh
 deployments/
+.vscode/
+.claude/

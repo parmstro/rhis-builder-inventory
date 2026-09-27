@@ -78,18 +78,20 @@ compute_resources:
     locations: "{{ satellite_location }}"
     organizations: "{{ satellite_organization }}"
     images:
-      - name: "RHEL97_latest"
+      # RedHat:RHEL:9-lvm-gen2:9.8.2026080415
+      - name: "RHEL98_latest"
         architecture: "x86_64"
-        operatingsystem: "RHEL 9.7"
+        operatingsystem: "RHEL 9.8"
         image_username: "realm-capsule"
         image_password: "{{ satellite_password }}"
-        uuid: "marketplace://RedHat:RHEL:9-lvm-gen2:latest"
-      - name: "ImageBuilderImage"
+        uuid: "marketplace://RedHat:RHEL:9-lvm-gen2:9.8.2026080415"
+      # RedHat:RHEL:10-lvm-gen2:10.2.2026080415
+      - name: "RHEL102_latest"
         architecture: "x86_64"
-        operatingsystem: "RHEL 8.10"
+        operatingsystem: "RHEL 10.2"
         image_username: "realm-capsule"
         image_password: "{{ satellite_password }}"
-        uuid: "custom://composer-api-50f19253-239a-4478-b5c7-18ee052047df"
+        uuid: "marketplace://RedHat:RHEL:10-lvm-gen2:10.2.2026080415"
     provider_params:
       app_ident: "{{ azure1_client_id_vault }}"
       cloud: "{{ azure1_cloud_vault }}"

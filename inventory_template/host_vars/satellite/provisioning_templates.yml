@@ -83,6 +83,28 @@ provisioning_templates:
     locations:
       - "{{ satellite_location }}"
 
+  - name: "soe_pxelinux_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXELinux - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxelinux_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
+  - name: "soe_pxegrub2_discovery"
+    type: "snippet"
+    locked: false
+    description: "RHIS discovery snippet for PXEGrub2 - supports custom discovery facts"
+    audit_comment: "created by rhis-builder-satellite"
+    path: "prov_template_snippet_soe_pxegrub2_discovery.j2"
+    organizations:
+      - "{{ satellite_organization }}"
+    locations:
+      - "{{ satellite_location }}"
+
 # provisioning
   - name: "OEM Kickstart Default"
     type: "provision"
@@ -150,17 +172,6 @@ provisioning_templates:
     locations:
       - "{{ satellite_location }}"
 
-  - name: "SOE PXEGrub Global Default"
-    type: "pxegrub"
-    locked: false
-    description: "Only for grub v1.0 - The default RHIS PXEGrub v1 for unknown systems - supports custom discovery facts"
-    audit_comment: "created by rhis-builder-satellite"
-    path: "pxegrub_template_soe_pxegrub_global_default.j2"
-    organizations:
-      - "{{ satellite_organization }}"
-    locations:
-      - "{{ satellite_location }}"
-
   - name: "SOE PXEGrub2 Global Default"
     type: "pxegrub2"
     locked: false
@@ -178,39 +189,6 @@ provisioning_templates:
     description: "The default RHIS PXEGrub2 for systems local booting - supports custom discovery facts"
     audit_comment: "created by rhis-builder-satellite"
     path: "pxegrub2_template_soe_pxegrub2_default_local_boot.j2"
-    organizations:
-      - "{{ satellite_organization }}"
-    locations:
-      - "{{ satellite_location }}"
-
-  - name: "soe_pxelinux_discovery"
-    type: "snippet"
-    locked: false
-    description: "RHIS discovery snippet for PXELinux - supports custom discovery facts"
-    audit_comment: "created by rhis-builder-satellite"
-    path: "prov_template_snippet_soe_pxelinux_discovery.j2"
-    organizations:
-      - "{{ satellite_organization }}"
-    locations:
-      - "{{ satellite_location }}"
-
-  - name: "soe_pxegrub_discovery"
-    type: "snippet"
-    locked: false
-    description: "RHIS discovery snippet for PXEGrub - supports custom discovery facts"
-    audit_comment: "created by rhis-builder-satellite"
-    path: "prov_template_snippet_soe_pxegrub_discovery.j2"
-    organizations:
-      - "{{ satellite_organization }}"
-    locations:
-      - "{{ satellite_location }}"
-
-  - name: "soe_pxegrub2_discovery"
-    type: "snippet"
-    locked: false
-    description: "RHIS discovery snippet for PXEGrub2 - supports custom discovery facts"
-    audit_comment: "created by rhis-builder-satellite"
-    path: "prov_template_snippet_soe_pxegrub2_discovery.j2"
     organizations:
       - "{{ satellite_organization }}"
     locations:

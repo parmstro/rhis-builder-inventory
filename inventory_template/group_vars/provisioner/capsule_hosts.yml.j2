@@ -36,8 +36,8 @@ capsule_hosts:
         primary: true
         provision: true
         subnet: "{{ _default_subnetname }}"
-        mac: "54:b2:03:f1:00:cd"
-        ip: "{{ _default_network }}.81"
+        mac: "{{ hostvars[groups['sat_capsules'][0]].mac_address | default('54:b2:03:f1:0b:46') }}"
+        ip: "{{ hostvars[groups['sat_capsules'][0]].ipv4_address }}"
 
 {% endraw %}
 ...

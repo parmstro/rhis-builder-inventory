@@ -1,0 +1,28 @@
+---
+# content_export_prepare_drv role configuration
+#
+# This file configures the transfer drive used for disconnected satellite exports.
+# See also: content_exports.yml — defines what content this drive will carry
+#           (export type, organization, chunk size, destination server)
+#
+# Installation-mandated variables (SELinux context, mount options, filesystem
+# requirements) are in the role defaults and must not be changed. Only the
+# operator-appropriate variables below should be modified.
+
+# Label used to auto-discover the transfer drive on the satellite.
+# The drive must be formatted and labelled before use:
+#   mkfs.ext4 -L TRANSFER_DRV /dev/<device>   (or xfs equivalent)
+content_export_prepare_drv_label: "TRANSFER_DRV"
+
+# Mount point for the transfer drive.
+# Default matches the standard Pulp allowed export path.
+# Change only if your Satellite uses a non-standard pulp_export_path setting.
+content_export_prepare_drv_mount: "/var/lib/pulp/exports"
+
+# Set to true to validate and report without mounting.
+# Useful for pre-flight checks before a long export run.
+content_export_prepare_drv_dry_run: false
+
+# Set to true to unmount and remount an existing mount point if the SELinux
+# context is incorrect. WARNING: briefly interrupts any in-progress export.
+content_export_prepare_drv_force_remount: false

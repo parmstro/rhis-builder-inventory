@@ -36,7 +36,7 @@ hostgroup_test_hosts_rhel10:
         provision: true
         subnet: "{{ _default_subnetname }}"
         mac: "94:c6:91:a3:1d:fb"                          # c1s1n5
-        ip: "{{ _default_network }}.203"
+        ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(203) }}"
 
   - fqdn: "hg-x86-64-rhel10-vm1.{{ _runtime_global_domain_name }}"
     delete_host: false

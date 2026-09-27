@@ -45,7 +45,7 @@ registry_password="{{ platform_installer_config.aap_registry_password }}"
 redis_mode=standalone
 bundle_install=true
 # The bundle directory must include /bundle in the path
-bundle_dir='{{ lookup("ansible.builtin.env", "PWD") }}/bundle'
+bundle_dir='{{ platform_installer_config.aap_bundle_dir }}'
 
 # Platform gateway
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-gateway-variables

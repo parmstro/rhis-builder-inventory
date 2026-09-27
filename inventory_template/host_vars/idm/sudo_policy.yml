@@ -28,7 +28,7 @@ idm_sudo_rules:
   - name: "poc_admins"
     state: "present"              # default when omitted - set to absent to delete the rule
     action: "sudorule"            # default when omitted - set to memeber to act on lists in the rule
-    order: "1"
+    order: "101"
     description: "Sudo rules for administrators for POC or demo"
     sudo_options:                 # admins god-mode
       - "!authenticate"
@@ -42,7 +42,7 @@ idm_sudo_rules:
   - name: "sr-webadmin-sudo-rules"
     state: "present"              # default when omitted - set to absent to delete the rule
     action: "sudorule"            # default when omitted - set to memeber to act on lists in the rule
-    order: "42"
+    order: "142"
     description: "Sudo rules for webserver administrators group"
 #    sudo_options:                 # a list of sudo options
 #      - "!authenticate"

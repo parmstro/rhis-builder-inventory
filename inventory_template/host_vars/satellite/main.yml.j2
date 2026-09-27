@@ -22,7 +22,7 @@ satellite_validate_certs: true
 
 # Use the following variables if you are performing a disconnected installation
 # also you will want to examine the content_exports.yml and content_imports.yml configurations
-satellite_disconnected: false
+# satellite_disconnected is rendered at inventory_update time — see below
 
 # satellite_disconnected_root: "/var/media"
 # satellite_os_iso_source: "rhel9_dvd.iso"
@@ -31,7 +31,10 @@ satellite_disconnected: false
 # satellite_install_repo_mount: "{{ satellite_disconnected_root }}/satellite"
 # satellite_os_repo_template_name: "rhel_os_repo_file.j2"
 # satellite_os_repo_template_dest: "/etc/yum.repos.d/rhis_os_base.repo"
-# satellite_cdn_configuration_type: "export_sync"
 {% endraw %}
-# Satellite release version — rendered from inventory_basevars.yml at inventory_update time
+# Rendered from basevars at inventory_update time
+satellite_disconnected: {{ basevars_disconnected_domain | default(false) | lower }}
+{% if basevars_disconnected_domain | default(false) %}
+satellite_cdn_configuration_type: "export_sync"
+{% endif %}
 rhis_satellite_release_version: "{{ rhis_satellite_release_version }}"

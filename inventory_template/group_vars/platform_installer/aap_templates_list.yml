@@ -1,0 +1,16 @@
+---
+
+# list of template lists to process
+
+aap_job_templates_list:
+  - "{{ aap_job_templates_vm_day_2 }}"
+  - "{{ aap_job_templates_soe_dev }}"
+  - "{{ aap_job_templates_soe_qa }}"
+  - "{{ aap_job_templates_convert_2_rhel }}"  # totally broken with new ansible-core and current versions of collections
+  - "{{ aap_job_templates_default_monthly_publish }}"
+  - "{{ aap_job_templates_soe_ansible_callback }}"
+  - "{{ aap_job_templates_soe_imagebuilder }}"
+  - "{{ aap_job_templates_northwind_dev }}"
+  - "{{ aap_job_templates_northwind_qa }}"
+
+...

@@ -1,0 +1,36 @@
+<%#
+name: soe_ipa_ssh_scope
+description: |
+  Drop /etc/ssh/ssh_config.d/03-ipa-scope.conf to restrict SSSD SSH
+  host key lookup (sss_ssh_knownhosts) to the local IPA domain only.
+  Without this, ipa-client-install's 04-ipa.conf routes ALL SSH connections
+  through SSSD, causing timeouts to hosts in other domains or subnets.
+  This file loads before 04-ipa.conf (first-match-wins) so non-IPA hosts
+  bypass the lookup entirely.
+snippet: true
+model: ProvisioningTemplate
+organizations:
+- {{ satellite_organization }}
+-%>
+<%#
+This template accepts the following parameters:
+- ipa_ssh_scope (Default: true) — set false to skip placement
+%>
+
+<% if host_param_true?('ipa_ssh_scope', true) -%>
+cat > /etc/ssh/ssh_config.d/03-ipa-scope.conf << 'SSHEOF'
+# Restrict SSSD SSH proxy to the local IPA domain only.
+# Loaded before 04-ipa.conf — first-match-wins makes its Match exec true a no-op.
+
+# Hosts in the IPA domain: use the SSSD proxy (as IPA intended)
+Host *.{{ ipa_domain }}
+    KnownHostsCommand /usr/bin/sss_ssh_knownhosts %H
+    GSSAPIAuthentication yes
+
+# Everything else: skip the proxy entirely
+Host *
+    KnownHostsCommand none
+    GSSAPIAuthentication no
+SSHEOF
+chmod 0644 /etc/ssh/ssh_config.d/03-ipa-scope.conf
+<% end -%>

@@ -1,0 +1,201 @@
+---
+catalog_schema_version: "1.0"
+id: rhel9_base
+name: "RHEL 9 Base SOE"
+description: >
+  Standard Operating Environment for Red Hat Enterprise Linux 9.
+  Provides the full OS content lifecycle — BaseOS, AppStream, Supplementary,
+  Extensions, and Satellite Client repos — for x86_64; BaseOS, AppStream,
+  Supplementary, and Satellite Client for aarch64 (Extensions not available
+  for RHEL 9 aarch64). Includes kickstart provisioning templates, compliance
+  partition tables, and hostgroups for VM and baremetal deployment targets.
+  All layered RHEL 9 SOEs (JBoss, MSSQL, EPEL, AAP) require this entry as
+  their base.
+type: base
+status: active
+disk_estimate_gb:
+  x86_64: 22
+  aarch64: 16
+eus_minor_estimate_gb:
+  x86_64: 10
+  aarch64: 7
+
+os:
+  family: Redhat
+  major: 9
+  eus:
+    available: true
+    current_minor: "9.8"
+    supported_minors:
+      - "9.4"
+      - "9.6"
+      - "9.8"
+    note: >
+      Derived using the n-4 sliding window at RHEL 9.8: lower bound = 9.(8−4) = 9.4;
+      highest even non-last minor ≤ 9.8 = 9.8; result: 9.4, 9.6, 9.8.
+      Update current_minor and this list each time a new RHEL 9 minor is released.
+      See the catalog README for the full derivation algorithm and worked examples.
+      EUS repository sets carry distinct Satellite names from the streaming repos
+      and require an EUS add-on subscription. When enabled, EUS repos are added
+      alongside (not replacing) the streaming repos so the content view carries both.
+  architectures:
+    - id: x86_64
+      kickstart_versions:
+        - "9.8"
+        - "9.7"
+        - "9.6"
+        - "9.4"
+      kickstart_default: "9.7"
+      # NOTE: 9.8 kickstart has a CDN duplicate content bug (aadsshlogin).
+      # Use 9.7 as default until Red Hat resolves the upstream issue.
+      # See: schema/soe_build_requirements.md — Known Issues
+      # EUS minors 9.4, 9.6, 9.8 each require their matching kickstart version.
+      # A host provisioned from a 9.N kickstart cannot be pinned to an EUS minor < 9.N.
+    - id: aarch64
+      kickstart_versions:
+        - "9.8"
+        - "9.7"
+        - "9.2"
+      kickstart_default: "9.8"
+      # 9.2 aarch64 is available for hardware requiring the EUS 9.2 pin.
+
+content:
+  repository_sets:
+
+    # ── RHEL 9 x86_64 streaming ───────────────────────────────────────────────
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
+      releasever: "9"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
+      releasever: "9"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary (RPMs)"
+      releasever: "9"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (Kickstart)"
+      releasever: "{{ kickstart_version }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (Kickstart)"
+      releasever: "{{ kickstart_version }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - Extensions (RPMs)"
+      releasever: "9"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Satellite Client 6 for RHEL 9 x86_64 (RPMs)"
+      arch: x86_64
+
+    # ── RHEL 9 aarch64 streaming ──────────────────────────────────────────────
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS (RPMs)"
+      releasever: "9"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream (RPMs)"
+      releasever: "9"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 9 for ARM 64 - Supplementary (RPMs)"
+      releasever: "9"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS (Kickstart)"
+      releasever: "{{ kickstart_version_aarch64 }}"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream (Kickstart)"
+      releasever: "{{ kickstart_version_aarch64 }}"
+      arch: aarch64
+
+    - product: "Red Hat Enterprise Linux for ARM 64"
+      name: "Red Hat Satellite Client 6 for RHEL 9 aarch64 (RPMs)"
+      arch: aarch64
+
+    # ── LEAPP source repos (point-in-time, required for in-place upgrade) ────
+    # Enabled automatically when a LEAPP migration path targets RHEL 9.
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
+      releasever: "9.8"
+      arch: x86_64
+      tags: [leapp]
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
+      releasever: "9.8"
+      arch: x86_64
+      tags: [leapp]
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary (RPMs)"
+      releasever: "9.8"
+      arch: x86_64
+      tags: [leapp]
+
+  # ── EUS repository sets ──────────────────────────────────────────────────────
+  # EUS repos carry distinct Satellite names from their streaming equivalents —
+  # they are separate repository set entries in the CDN, not the same set with
+  # a different releasever. An EUS add-on subscription is required to access them.
+  # Enabled only when eus_enabled: true at deployment selection time.
+  # The releasever value is resolved from the operator's EUS minor selection.
+  #
+  # TODO: verify exact Satellite repository set names against a subscribed Satellite
+  # instance once EUS entitlements are available in the deployment.
+  eus_repository_sets:
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS - Extended Update Support (RPMs)"
+      releasever: "{{ eus_minor }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream - Extended Update Support (RPMs)"
+      releasever: "{{ eus_minor }}"
+      arch: x86_64
+
+  content_views:
+    - name: "SOE9"
+      arch: x86_64
+      desc: "RHEL 9 x86_64 Standard Operating Environment"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+    - name: "SOE9_aarch64"
+      arch: aarch64
+      desc: "RHEL 9 ARM64 Standard Operating Environment"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+lifecycle:
+  levels: [dev, qa, prod]
+  # Pattern: SOE9_{level}  →  SOE9_dev, SOE9_qa, SOE9_prod
+  # aarch64 activation keys follow the same pattern against SOE9_aarch64 CV.
+  activation_key_pattern: "SOE9_{level}"
+
+# provisioning section omitted — uses soe_catalog_schema.yml provisioning_defaults

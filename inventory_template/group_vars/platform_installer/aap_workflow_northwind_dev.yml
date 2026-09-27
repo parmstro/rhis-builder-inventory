@@ -1,0 +1,187 @@
+---
+
+aap_workflow_template_northwind_dev:
+  name: "SOE_ContentDeliveryPipeline_Northwind"
+  description: "Northwind multi-tier content delivery pipeline for the Development Lifecycle"
+  organization: "Default"
+  notification_templates_approvals:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_success:
+    - "RedHatGCA_NotifySlack"
+  notification_templates_error:
+    - "RedHatGCA_NotifySlack"
+  state: present
+  workflow_nodes:
+    - identifier: "PublishContent"
+      unified_job_template:
+        name: "NWDev1PublishContent"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "PromoteToDev"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "PromoteToDev"
+      unified_job_template:
+        name: "NWDev2PromoteToDev"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "DeployServers"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "DeployServers"
+      unified_job_template:
+        name: "NWDev3DeployServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "SnapshotServers"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "SnapshotServers"
+      unified_job_template:
+        name: "NWDev4SnapshotServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildDB"
+          - identifier: "BuildCache"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildDB"
+      unified_job_template:
+        name: "NWDev5.1BuildDB"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildApp"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildCache"
+      unified_job_template:
+        name: "NWDev5.2BuildCache"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildApp"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildApp"
+      all_parents_must_converge: true
+      unified_job_template:
+        name: "NWDev5.3BuildApp"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "BuildLB"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "BuildLB"
+      unified_job_template:
+        name: "NWDev5.4BuildLB"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "TestDeployment"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "TestDeployment"
+      unified_job_template:
+        name: "NWDev5.5TestDeployment"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "PromoteToQA"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "PromoteToQA"
+      unified_job_template:
+        name: "NWDev6PromoteToQA"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "DeleteSnapshots"
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "DeleteSnapshots"
+      unified_job_template:
+        name: "NWDev7DeleteSnapshots"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes:
+          - identifier: "ApproveDeleteHosts"
+        failure_nodes:
+          - identifier: "PowerOffServers"
+        always_nodes: []
+        credentials: []
+    - identifier: "ApproveDeleteHosts"
+      unified_job_template:
+        name: "ApproveDeleteNorthwindHosts"
+        timeout: 10800
+        type: workflow_approval
+        description: "Approved to delete Northwind test hosts?"
+      related:
+        success_nodes:
+          - identifier: "DeleteServers"
+        failure_nodes:
+          - identifier: "PowerOffServers"
+        always_nodes: []
+        credentials: []
+    - identifier: "DeleteServers"
+      unified_job_template:
+        name: "NWDev8SDeleteServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+    - identifier: "PowerOffServers"
+      organization: "Default"
+      unified_job_template:
+        name: "NWDev8FPowerOffServers"
+        organization:
+          name: "Default"
+        type: job_template
+      related:
+        success_nodes: []
+        failure_nodes: []
+        always_nodes: []
+        credentials: []
+
+...

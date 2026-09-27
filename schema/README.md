@@ -18,6 +18,13 @@ schema/
   soe_build_requirements.md         SOE build dependency model, checklist, and lessons learned
   soe_bundle_model.md               SOE bundle and snippet ordering design
   variable_migration.md             variable rename registry with migration scripts
+  architecture/
+    INDEX.md                        index of all architectural design discussions
+    disconnected_deployment_model.md spectrum of disconnected deployments (Tier 1→3), export
+                                     scoping, AAP git source requirements, template constraints
+    soe_selection_model.md          SOE selection problem — big box template vs. real deployments,
+                                     10-file dependency cascade, four solution approaches,
+                                     connection to disconnected export scoping
   scripts/
     migrate_inventory_variables.yml  Ansible playbook to apply variable renames to deployments
     migrations.yml                   machine-readable migration registry

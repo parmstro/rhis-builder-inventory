@@ -1,0 +1,47 @@
+---
+catalog_schema_version: "1.0"
+id: rhel9_edge_manager
+name: "RHEL 9 Edge Manager SOE"
+description: >
+  Extends the RHEL 9 Base SOE with Red Hat Edge Manager 1.1 content.
+  Edge Manager provides centralised management of edge devices and
+  RHEL for Edge deployments. This SOE is appropriate for hosts running
+  the Edge Manager service or edge device management workloads on RHEL 9.
+type: layered
+architectures: [x86_64, aarch64]
+status: active
+disk_estimate_gb:
+  x86_64: 1
+  aarch64: 1
+
+requires:
+  - rhel9_base
+
+content:
+  repository_sets:
+    - product: "Red Hat Edge Manager"
+      name: "Red Hat Edge Manager 1.1 for RHEL 9 x86_64 (RPMs)"
+      arch: x86_64
+
+  content_views:
+    - name: "RHEL9_EdgeManager"
+      desc: "Red Hat Edge Manager 1.1 content for RHEL 9"
+      environments:
+        - Library
+
+  composite_content_views:
+    - name: "SOE9_EdgeManager"
+      desc: "RHEL 9 Edge Manager Standard Operating Environment"
+      components:
+        - "SOE9"
+        - "RHEL9_EdgeManager"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+lifecycle:
+  levels: [dev, qa, prod]
+  activation_key_pattern: "SOE9_{level}_edge_manager"

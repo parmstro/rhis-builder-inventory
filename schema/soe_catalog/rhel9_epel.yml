@@ -1,0 +1,56 @@
+---
+catalog_schema_version: "1.0"
+id: rhel9_epel
+name: "RHEL 9 + EPEL"
+description: >
+  Extends the RHEL 9 Base SOE with the Extra Packages for Enterprise Linux
+  (EPEL 9) community repository. EPEL provides packages from the Fedora
+  project that are not available in the standard RHEL channels. Suitable
+  for development environments, developer workstations, and workloads
+  requiring community packages not in the Red Hat ecosystem.
+  Not recommended for production SOEs without explicit vetting of EPEL packages.
+type: layered
+architectures: [x86_64, aarch64]
+status: active
+disk_estimate_gb:
+  x86_64: 6
+  aarch64: 4
+
+requires:
+  - rhel9_base
+
+content:
+  custom_products:
+    - name: "EPEL9"
+      description: "Extra Packages for Enterprise Linux 9"
+      label: "EPEL9"
+      repositories:
+        - name: "EPEL9"
+          content_type: yum
+          url: "https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/"
+          gpg_key: "EPEL9GPG"
+          download_policy: immediate
+
+  content_views:
+    - name: "EPEL9"
+      desc: "EPEL 9 x86_64 community packages"
+      environments:
+        - Library
+
+  composite_content_views:
+    - name: "SOE9_EPEL"
+      desc: "RHEL 9 + EPEL Standard Operating Environment"
+      components:
+        - "SOE9"
+        - "EPEL9"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+lifecycle:
+  levels: [dev, qa, prod]
+  # Pattern: SOE9_{level}_EPEL  →  SOE9_dev_EPEL, SOE9_qa_EPEL, SOE9_prod_EPEL
+  activation_key_pattern: "SOE9_{level}_EPEL"

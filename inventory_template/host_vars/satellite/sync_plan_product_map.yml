@@ -36,9 +36,9 @@ product_plans:
     plan: "nightly_os"
     organization: "{{ satellite_organization }}"
 
-  - name: "Red Hat Enterprise Linux High Availability for x86_64"
-    plan: "nightly_os"
-    organization: "{{ satellite_organization }}"
+  # - name: "Red Hat Enterprise Linux High Availability for x86_64"
+  #   plan: "nightly_os"
+  #   organization: "{{ satellite_organization }}"
 
   # - name: "Red Hat Enterprise Linux Server"
   #   plan: "nightly_os"
@@ -57,13 +57,13 @@ product_plans:
 
 # Third Party Products (A→Z, newest release first)
 
-  - name: "CentOS Stream 9"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
+  # - name: "CentOS Stream 9"
+  #   plan: "nightly_third_party"
+  #   organization: "{{ satellite_organization }}"
 
-  - name: "CentOS Stream 8"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
+  # - name: "CentOS Stream 8"
+  #   plan: "nightly_third_party"
+  #   organization: "{{ satellite_organization }}"
 
   # - name: "CentOS79"
   #   plan: "nightly_third_party"
@@ -74,17 +74,17 @@ product_plans:
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
-  - name: "EPEL8"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
+  # - name: "EPEL8"
+  #   plan: "nightly_third_party"
+  #   organization: "{{ satellite_organization }}"
 
   - name: "Microsoft SQL Server for Linux 2022 for RHEL 9"
     plan: "nightly_third_party"
     organization: "{{ satellite_organization }}"
 
-  - name: "Microsoft SQL Server for Linux 2022 for RHEL 8"
-    plan: "nightly_third_party"
-    organization: "{{ satellite_organization }}"
+  # - name: "Microsoft SQL Server for Linux 2022 for RHEL 8"
+  #   plan: "nightly_third_party"
+  #   organization: "{{ satellite_organization }}"
 
   # - name: "OEL79"
   #   plan: "nightly_third_party"

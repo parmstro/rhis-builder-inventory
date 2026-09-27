@@ -1,0 +1,130 @@
+---
+catalog_schema_version: "1.0"
+id: rhel8_base
+name: "RHEL 8 Base SOE"
+description: >
+  Standard Operating Environment for Red Hat Enterprise Linux 8.
+  RHEL 8 reached End of Full Support on May 31, 2024 and enters Extended
+  Life Cycle Support (ELS) after November 2029. New deployments should
+  prefer RHEL 9 or RHEL 10. This entry is maintained for environments
+  running RHEL 8 workloads requiring Satellite-managed lifecycle and for
+  LEAPP source content when migrating RHEL 8 to RHEL 9.
+type: base
+status: aspirational
+disk_estimate_gb:
+  x86_64: 28
+  aarch64: 20
+eus_minor_estimate_gb:
+  x86_64: 12
+  aarch64: 8
+# status: aspirational — content view definitions exist but are commented out
+# in example.ca deployment. Re-activate if a deployment requires RHEL 8 SOE.
+
+os:
+  family: Redhat
+  major: 8
+  eus:
+    available: true
+    current_minor: "8.10"
+    supported_minors:
+      - "8.6"
+      - "8.8"
+    note: >
+      Derived using the n-4 sliding window at RHEL 8.10 (last minor — no 8.10 EUS):
+      lower bound = 8.(10−4) = 8.6; highest even non-last minor ≤ 8.10 = 8.8;
+      result: 8.6, 8.8. RHEL 8.10 is the terminal streaming release — the final
+      minor of a major is never offered as an EUS target.
+      See the catalog README for the full derivation algorithm.
+      EUS repository sets carry distinct Satellite names from streaming repos.
+  architectures:
+    - id: x86_64
+      kickstart_versions:
+        - "8.10"
+      kickstart_default: "8.10"
+    - id: aarch64
+      kickstart_versions:
+        - "8.10"
+      kickstart_default: "8.10"
+
+content:
+  repository_sets:
+
+    # ── RHEL 8 x86_64 streaming ───────────────────────────────────────────────
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
+      releasever: "8"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)"
+      releasever: "8"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary (RPMs)"
+      releasever: "8"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)"
+      releasever: "{{ kickstart_version }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)"
+      releasever: "{{ kickstart_version }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Satellite Client 6 for RHEL 8 x86_64 (RPMs)"
+      arch: x86_64
+
+    # ── LEAPP source repos (point-in-time, required for RHEL 8 → 9 upgrade) ──
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
+      releasever: "8.10"
+      arch: x86_64
+      tags: [leapp]
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)"
+      releasever: "8.10"
+      arch: x86_64
+      tags: [leapp]
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - Supplementary (RPMs)"
+      releasever: "8.10"
+      arch: x86_64
+      tags: [leapp]
+
+  eus_repository_sets:
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - BaseOS - Extended Update Support (RPMs)"
+      releasever: "{{ eus_minor }}"
+      arch: x86_64
+
+    - product: "Red Hat Enterprise Linux for x86_64"
+      name: "Red Hat Enterprise Linux 8 for x86_64 - AppStream - Extended Update Support (RPMs)"
+      releasever: "{{ eus_minor }}"
+      arch: x86_64
+
+  content_views:
+    - name: "SOE8"
+      arch: x86_64
+      desc: "RHEL 8 x86_64 Standard Operating Environment"
+      environments:
+        - Library
+        - Development
+        - Qualification
+        - Staging
+        - Production
+
+lifecycle:
+  levels: [dev, qa, prod]
+  activation_key_pattern: "SOE8_{level}"
+
+# provisioning section omitted — uses soe_catalog_schema.yml provisioning_defaults

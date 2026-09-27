@@ -4,13 +4,15 @@
 _runtime_global_domain_name: "{{ basevars_global_domain_name }}"
 _global_domain_name: "{{ basevars_global_domain_name }}"  # deprecated — use _runtime_global_domain_name
 
-_default_network: "{{ default_network.split('.')[0:3] | join('.') }}"
+_default_network: "{{ default_network }}"
 _default_network_prefix: "{{ default_network_prefix }}"
 _default_network_mask: "{{ default_network_mask }}"
 
-_default_bond_network: "{{ default_bond_network.split('.')[0:3] | join('.') }}"
+_default_bond_network: "{{ default_bond_network }}"
 _default_bond_network_prefix: "{{ default_bond_network_prefix }}"
 _default_bond_network_mask: "{{ default_bond_network_mask }}"
+
+idm_disconnected: {{ basevars_disconnected_domain | default(false) | lower }}
 
 _default_timeservers:
 {% for rhis_time_server_num in rhis_time_servers %}
@@ -22,6 +24,7 @@ _default_timeservers:
 # Satellite vars used by all configurations
 
 satellite_fqdn: "{{ groups['sat_primary'][0] }}"
+satellite_ipv4_address: "{{ hostvars[groups['sat_primary'][0]].ipv4_address }}"
 satellite_domain: "{{ _runtime_global_domain_name }}"
 
 satellite_initial_location: "Default Location"
@@ -38,7 +41,7 @@ satellite_username: "{{ satellite_username_vault }}"
 satellite_password: "{{ satellite_password_vault }}"
 satellite_use_gssapi: false
 
-vm_compute_resource: "{{ groups['vmware_vcenter_hosts'][0] }}"
+vm_compute_resource: "{{ groups['vmware_vcenter_hosts'][0] | default('') }}"
 
 search_dh_mac: "ff:ff:ff:ff:ff:ff"
 default_vm_mac: "00:50:56:ff:ff:ff"
@@ -61,7 +64,7 @@ _default_vm_provision_iface: "ens192"
 # Bond network
 _default_bond_subnetname: "bond_subnet"
 _default_bond_subnet_prefix: 23
-_default_bond_default_gateway: "{{ _default_network }}.1"
+_default_bond_default_gateway: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(1) }}"
 _default_bond_iface: "bond0"
 _default_child_iface1: "enp2s0f0"
 _default_child_iface2: "enp2s0f1"
@@ -87,8 +90,8 @@ ipareplica_domain: "{{ _runtime_global_domain_name }}"
 
 
 # ipaclient role variables used in multiple repos
-{% endraw %}ipa_client_dns_servers: "{{ target_net_cidr | ansible.utils.next_nth_usable(10) }}"
-{% raw %}ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
+ipa_client_dns_servers: "{{ hostvars[groups['idm_primary'][0]].ipv4_address }}"
+ipaclient_dns_servers: "{{ ipa_client_dns_servers }}"
 
 ipa_client_domain: "{{ _runtime_global_domain_name }}"
 ipaclient_domain: "{{ ipa_server_domain }}"

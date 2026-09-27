@@ -1,5 +1,8 @@
+---
+# yamllint disable rule:line-length
+
 job_templates:
-  - name: "Provisioning Action - Re-init baremetal Linux Host"
+  - name: "Provisioning Action - Re-init Linux Host"
     audit_comment: "RHIS builder created"
     path: "job_template_provisioning_wipe_host.j2"
     job_category: "Provisioning"
@@ -10,11 +13,11 @@ job_templates:
     snippet: false
     state: present
     template_inputs:
-      - name: "action"
+      - name: "Acknowledgement"
         advanced: false
         default: ""
-        description: "WARNING: This is descructive and cannot be undone. Provide action=wipe to proceed."
+        description: "I acknowledge that this command is destructive in nature and will cause unrecoverable data loss on all drives on the target system. This job is only intended for wiping systems for total re-provisioning. By acknowledging this warning I am accepting full responsibility for this action on the systems selected."
         input_type: "user"
-        options: [wipe]
+        options: ["Yes", "No"]
         required: true
         value_type: "plain"

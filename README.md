@@ -4,8 +4,8 @@
 ---
 Ensure that you review the RHIS repositories. Specifically [rhis-builder-bootstrap-init](https://github.com/parmstro/rhis-builder-bootstrap-init). It is essential that you have an understanding of the process and workflow before you jump in. The pool is deep.
 
-### Getting started fast
----
+## Getting started fast
+
 You need a system with git and podman tools.
 VSCode is very helpful.
 Having ansible language, ansible linter and wolfmah's ansible-vault inline is also super useful.
@@ -38,32 +38,33 @@ Review and edit `your.domain_inventory_basevars.yml`, then run the inventory_upd
 ./inventory_update.sh -b your.domain_inventory_basevars.yml
 ```
 
-`inventory_update.sh` will build a new directory at `deployments/your.domain/` containing the customized RHIS build configuration based on the parameters you have provided. Running it again with a different domain basevars file creates an independent deployment alongside the first.
+`inventory_update.sh` will build a new directory at `deployments/your.domain/` containing the customized RHIS build configuration based on the parameters you have provided. Running it again with a different domain basevars file creates an independent deployment alongside the first. (Hint: This is how you create disconnected/air-gapped environments. More later...)
 
 The inventory_update script will also create a custom launch script at the repo root (`your.domain.24.sh` or `your.domain.25.sh`) to pull and launch the rhis-provisioner container mounted against your deployment.
 
-See below for information on customizing your build further.
+The rhis-provisioner container has all the scripts, playbooks, roles, etc.. that are used to build the RHIS deployment. You can run from within the container or call the helper scripts through the entrypoint.
+
+See below for information on customizing your build further and run the Ansible plays.
 
 ---
 
 ## inventory_basevars.yml reference
 
-`inventory_basevars.yml` is the committed template that you copy to `<your.domain>_inventory_basevars.yml` before customizing. Domain-specific basevars files are gitignored so each user's environment details stay out of the shared repository. The file controls how your deployment directory is generated — the host names, network parameters, location metadata, and system counts. It does **not** configure the hosts themselves; that is done through the generated `host_vars/` and `group_vars/` files inside your deployment directory.
+`inventory_basevars.yml` is the committed template that you copy to `<your.domain>_inventory_basevars.yml` before customizing. Domain-specific basevars files are gitignored so each user's environment details stay out of any shared repository you create. The file controls how your deployment directory is generated — the host names, network parameters, location metadata, and system counts. It does **not** configure the hosts themselves; that is done through the generated `host_vars/` and `group_vars/` files inside your deployment directory.
 
 > **Note:** Networks, datastores, and other underlying hypervisor or hyperscaler resources referenced in your configurations **must already exist** before running the RHIS provisioner. Satellite will attempt to validate compute resources and profiles at runtime and will fail if they are absent.
 
-### global_domain_name
+### basevars_global_domain_name
 
 ```yaml
-global_domain_name: "example.ca"
+basevars_global_domain_name: "example.ca"
 ```
 
 The fully-qualified domain name for your RHIS deployment. This value drives:
 
-- The name of the generated deployment directory: `deployments/<global_domain_name>/`
-- The FQDN of every generated host: `<role><N>.<global_domain_name>` (e.g. `satellite1.example.ca`, `idm2.example.ca`)
-- The name of the generated container launch scripts at the repo root: `<global_domain_name>.24.sh` / `<global_domain_name>.25.sh`
-- The prefix of all `group_vars/platform_installer/` files
+- The name of the generated deployment directory: `deployments/<basevars_global_domain_name>/`
+- The FQDN of every generated host: `<role><N>.<basevars_global_domain_name>` (e.g. `satellite1.example.ca`, `idm2.example.ca`)
+- The name of the generated container launch scripts at the repo root: `<basevars_global_domain_name>.24.sh` / `<basevars_global_domain_name>.25.sh`
 
 Set this to the actual DNS domain you will use for your environment.
 
@@ -133,13 +134,14 @@ The list of NTP time servers to configure on your hosts via chrony. Use your org
 ### rhis_aap_release_version
 
 ```yaml
-rhis_aap_release_version: "2.4"
+rhis_aap_release_version: "2.6"
 ```
 
 The AAP release version to deploy. Accepted values are `"2.4"` and `"2.6"`. This controls:
 
 - Which AAP `host_vars` templates are used (`aapcontroller24`/`aaphub24` vs `aapcontroller26`/`aaphub26`)
 - The container image selected when launching the rhis-provisioner
+- AAP 2.4 is deprecated and will be removed in a future release
 
 This does **not** install AAP itself; it selects the correct configuration templates that the provisioner will use when it runs the AAP installation role.
 
@@ -148,7 +150,6 @@ This does **not** install AAP itself; it selects the correct configuration templ
 ```yaml
 rhis_system_count:
   satellite: 1
-  discosatellite: 0
   capsule: 1
   idm: 2
   aapcontroller: 1
@@ -161,7 +162,6 @@ Controls how many instances of each host role are included in your deployment. F
 | Key | Role | Notes |
 |---|---|---|
 | `satellite` | Red Hat Satellite | Primary Satellite server |
-| `discosatellite` | Disconnected Satellite | Satellite in a secure enclave that receives exported content from the primary Satellite for air-gapped environments; set to `0` if not needed |
 | `capsule` | Satellite Capsule | Remote Capsule servers |
 | `idm` | Red Hat IdM | Identity Management; typically 1 primary + 1 replica (count of 2) |
 | `aapcontroller` | AAP Controller | Automation controller nodes |
@@ -206,13 +206,14 @@ That practice fits naturally into a **GitOps** pipeline:
 Once your deployment directory is generated, run the domain launch script from the repo root:
 
 ```
-./your.domain.24.sh    # for AAP 2.4
+./your.domain.24.sh    # for AAP 2.4 (deprecated)
 ./your.domain.25.sh    # for AAP 2.5 / 2.6
 ```
+NOTE: With the deprecation of AAP 2.4 the need for multiple containers and any version decoration is removed. In a future release there will be only one file generated ./your.domain.sh
 
 The script starts the `rhis-provisioner` container interactively. Your deployment configuration is mounted read-write into the container at startup. The container hostname is set to `provisioner` and it is named `rhis-builder`.
 
-> **Note:** Any files you add to the mounted directories after the container starts will not be visible inside the container. You must stop and restart the container to pick up new files.
+> **Note:** Any files you add to the mounted directories after the container starts will be visible inside the container, but will not be accessible due to security configuraiton. You must stop and restart the container to pick up new files.
 
 ### What is mounted inside the container
 
@@ -241,7 +242,7 @@ Configure Satellite including content, lifecycle environments, activation keys, 
 **Phase 4 — Ansible Automation Platform (AAP)**
 Configure the AAP Controller, Private Automation Hub, and any additional nodes. AAP is configured last as it depends on both IdM (for authentication) and Satellite (for content and inventory sources).
 
-> **Phase 1 — Baremetal bootstrap** (runs outside the container, before the above phases): Use `rhis-builder-baremetal-init` to generate OEMDRV kickstart images and bootstrap your physical or virtual hosts to a base RHEL 9 install before running the container.
+> **Phase 1 — Bootstrap** (runs outside the container, before the above phases): Use `rhis-builder-baremetal-init` to generate OEMDRV kickstart images and bootstrap your physical or virtual hosts to a base RHEL 9 install before running the container. The ISO files are generated for use with hypervisors, ks.cfg files are created for using thumb drives with bare metal systems.
 
 ### Stopping and restarting the container
 
@@ -252,6 +253,227 @@ If the container is already running and you need to access it from another termi
 ```
 podman exec -it rhis-builder /bin/bash
 ```
+
+---
+
+## Disconnected (air-gapped) deployments
+
+A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There are a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names.
+
+NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments may diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction.
+
+
+### Deployment relationship model
+
+Two basevars files, one for each side of the air gap:
+
+```yaml
+# example.ca_inventory_basevars.yml (lowside — connected)
+basevars_global_domain_name: "example.ca"
+basevars_disconnected_domain: false
+basevars_downstream_disconnected_deployment:
+  - "highside.example.ca"    # list — one entry per air-gapped environment fed by this satellite
+
+# highside.example.ca_inventory_basevars.yml (highside — air-gapped)
+basevars_global_domain_name: "highside.example.ca"
+basevars_disconnected_domain: true
+basevars_upstream_connected_deployment:
+  - "example.ca"             # list — the connected satellite(s) that supply content to this deployment
+satellite_import_content: true    # triggers content import during satellite build
+```
+
+Generate each deployment independently:
+```bash
+./inventory_update.sh -b example.ca_inventory_basevars.yml
+./inventory_update.sh -b highside.example.ca_inventory_basevars.yml
+```
+
+### Export prerequisites
+
+Before running the export, ensure the following are in place:
+
+**1. Passwordless SSH to the lowside satellite.**
+Stage 2 runs `ansible-playbook` inside a container with stdout piped through `tee` — there is no interactive terminal, so `--ask-pass` cannot work. Key-based SSH from the provisioner to the satellite must be configured:
+
+```bash
+# Verify from the provisioner host:
+ssh -i ~/.ssh/id_ed25519 ansiblerunner@satellite1.example.ca hostname
+```
+
+If this prompts for a password, copy the key:
+```bash
+ssh-copy-id -i ~/.ssh/id_ed25519 ansiblerunner@satellite1.example.ca
+```
+
+**2. Bootstrap vault variables.**
+The OEMDRV kickstart ISO generation (Stage 3) requires these variables in your `rhis_builder_vault.yml`:
+
+| Variable | Content |
+|---|---|
+| `encrypted_root_pass_vault` | SHA-512 hashed root password (for kickstart `rootpw --iscrypted`) |
+| `encrypted_grub_pass_vault` | PBKDF2 grub password hash (output of `grub2-mkpasswd-pbkdf2`) |
+| `encrypted_user_pass_vault` | SHA-512 hashed user password |
+| `user_sudoer_policy_vault` | Sudoers policy line, e.g. `ansiblerunner ALL=(ALL:ALL) NOPASSWD: ALL` |
+| `ssh_pub_key_vault` | SSH public key for the ansiblerunner user |
+
+Generate password hashes with:
+```bash
+# SHA-512 (root and user passwords):
+python3 -c "import crypt; print(crypt.crypt('yourpassword', crypt.mksalt(crypt.METHOD_SHA512)))"
+
+# PBKDF2 (grub password):
+grub2-mkpasswd-pbkdf2
+```
+
+**3. Highside bootstrap hosts file.**
+A `highside_bootstrap_hosts.yml` file must exist at `deployments/<highside_domain>/vars/highside_bootstrap_hosts.yml`. This file defines the hosts (provisioner, IdM, satellite) for which OEMDRV kickstart ISOs are generated. A template is provided at `inventory_template/vars/highside_bootstrap_hosts.yml` — copy and customize it for your highside deployment.
+
+**4. Highside subscription manifest.**
+Download a separate subscription manifest ZIP from the [Red Hat Customer Portal](https://access.redhat.com/management) for the highside satellite and place it in `deployments/<highside_domain>/files/`. The highside satellite cannot reach `subscription.rhsm.redhat.com`, so its `manifests.yml` must have `generate: false`.
+
+### Lowside — export and transfer
+
+The export workflow runs on the lowside provisioner host, outside the container. It produces a staging directory containing everything the highside needs: container images, Pulp content export, inventory archive, bootstrap ISOs, subscription manifests, and operator tools.
+
+#### Step 1 — Export the deployment
+
+```bash
+./export_deployment.sh -b example.ca_inventory_basevars.yml
+```
+
+This is the primary export command. It runs a four-stage Ansible playbook (`export_deployment.yml`):
+
+| Stage | What it does |
+|---|---|
+| Stage 1 | Saves the provisioner container image (and any additional containers listed in `rhis_highside_containers`) |
+| Stage 2 | Runs `export_disconnected.yml` inside the provisioner container — Pulp content export and satellite artifact collection |
+| Stage 3 | Stages provisioner-side artifacts: inventory archive (git tree), OEMDRV bootstrap ISOs, subscription manifests, `rhis-builder-bootstrap-init`, and operator tools (`import_bundle.sh`, `prepare_highside.sh`, `validate_import_bundle.sh`) |
+| Stage 4 | Generates `rhis_export_manifest.yml` (checksums and metadata) and transfer scripts (`transfer_to_drive.sh`, `transfer_to_drive.yml`, `transfer_to_drive_vars.yml`) |
+
+Output is a staging directory at the export root (default `/var/rhis_export_staging/<highside>_<timestamp>/`).
+
+**Options:**
+
+| Flag | Description |
+|---|---|
+| `-b \| --basevars-file <file>` | Lowside basevars file (required) |
+| `--highside <domain>` | Target highside domain; required only if basevars lists more than one downstream |
+| `--ansible-ver <version>` | Provisioner container version (default: `2.5`) |
+| `--export-root <path>` | Staging root directory (default: `/var/rhis_export_staging`) |
+| `--dry-run` | Validate configuration and print the export plan without running the export |
+| `-y \| --yes` | Skip the confirmation prompt |
+
+When multiple highside deployments are configured in `basevars_downstream_disconnected_deployment`, the script presents an interactive menu unless `--highside` is specified.
+
+For a full Library export, expect several hours for Stage 2 (Pulp export). Subsequent runs detect a resume marker and skip the Pulp export if it completed previously — delete `deployments/<domain>/logs/.pulp_export_complete` to force a full re-export.
+
+#### Step 2 — Transfer to drive
+
+The export produces transfer scripts in the staging directory. Copy them to your operator workstation and run:
+
+```bash
+# From the operator workstation:
+scp ansiblerunner@<provisioner>:<staging>/transfer_to_drive.* .
+scp ansiblerunner@<provisioner>:<staging>/transfer_to_drive_vars.yml .
+./transfer_to_drive.sh -d /run/media/<user>/TRANSFER_DRV
+```
+
+`transfer_to_drive.sh` is an Ansible wrapper that pulls content from the provisioner and satellite to the local drive over SSH. It reads connection details from the generated `transfer_to_drive_vars.yml`. Options:
+
+| Flag | Description |
+|---|---|
+| `-d \| --drive-mount <path>` | Mount point of the transfer drive (required) |
+| `--dry-run` | Show plan and size estimate without transferring |
+| `--yes` | Skip confirmation prompt |
+| `--ask-become-pass` | Prompt for sudo password on the satellite |
+| `--ssh-user <user>` | SSH user (default: `ansiblerunner`) |
+| `--ssh-key <path>` | SSH private key (default: `~/.ssh/id_ed25519`) |
+
+#### Optional — Update the bundle without re-exporting
+
+If bundle artifacts change after the export (new ISOs, updated inventory, updated compliance roles) but the Pulp content does not need to be re-exported:
+
+```bash
+./update_transfer_bundle.sh \
+    -b example.ca_inventory_basevars.yml \
+    -d /home/ansiblerunner/rhis_export/Library_2026-06-07_1416
+```
+
+Uses rsync — only changed or new files are transferred. The Pulp export content is never touched.
+
+#### Step 3 — Transport the drive
+
+Physically move the transfer drive to the highside environment. The vault password must travel via a separate trusted channel — it is never placed on the drive.
+
+### Highside — import and build
+
+The transfer drive contains a self-contained operator guide (`README_FIRST.md`) and all scripts needed to stand up the highside environment. The sequence below is a summary; refer to the drive's `README_FIRST.md` for full detail including disk sizing, delivery methods, and troubleshooting.
+
+#### Prerequisites
+
+- Three RHEL 9 hosts installed from ISO: provisioner, idm1, satellite1 (use the OEMDRV kickstart ISOs from `bootstrap/bootstrap_isos/` on the drive)
+- An operator workstation (RHEL with ansible-core installed) with SSH access to the provisioner and satellite
+- The vault password, delivered separately
+
+#### Step 1 — Deliver data to the highside hosts
+
+Mount the drive on the operator workstation and run:
+
+```bash
+cd /run/media/<user>/TRANSFER_DRV
+./import_bundle.sh
+```
+
+The script prompts for a delivery method (`usb`, `rsync`, or `virtual_disk`), target host IPs, and SSH credentials, then pushes data to the provisioner and satellite. See `README_FIRST.md` on the drive for delivery method details.
+
+#### Step 2 — Prepare the provisioner
+
+SSH to the provisioner and run:
+
+```bash
+~/rhis_transfer/prepare_highside.sh \
+  --deployment highside.example.ca \
+  --idm-host   idm1.highside.example.ca \
+  --sat-host   satellite1.highside.example.ca
+```
+
+This loads container images into podman, places the inventory, loop-mounts the RHEL and Satellite DVD ISOs, starts a local HTTP repo server, and distributes repo files to the IdM and satellite hosts.
+
+> The HTTP server must remain running for IdM and Satellite builds — it is their only package source.
+
+#### Step 3 — Build IdM, then Satellite
+
+From inside the provisioner container, in order:
+
+```bash
+# 3a — IdM first
+build_idm_primary.sh --deployment highside.example.ca
+
+# 3b — Satellite (after IdM is fully operational)
+build_sat_disconnected_import.sh \
+  --delivery-method rsync \
+  --deployment highside.example.ca
+```
+
+IdM must be fully operational before Satellite — Satellite registers to IdM for Kerberos, certificates, and DNS.
+
+### What's on the transfer drive
+
+| Path | Contents |
+|---|---|
+| `import_bundle.sh` / `import_bundle.yml` | Operator entry point for data delivery |
+| `prepare_highside.sh` | Loads containers, mounts ISOs, distributes repo files |
+| `validate_import_bundle.sh` | Pre-import integrity check (checksums against manifest) |
+| `rhis_export_manifest.yml` | Bundle checksums and metadata |
+| `<Org_Folder>/` | Red Hat Pulp content export (RPMs, kickstart repos — large, do not modify) |
+| `bootstrap/bootstrap_isos/` | OEMDRV kickstart ISOs for provisioner, IdM, satellite |
+| `bootstrap/infra_isos/` | RHEL DVD ISO and Satellite DVD ISO |
+| `bootstrap/rhis-builder-bootstrap-init/` | Kickstart ISO tooling repo (regenerate ISOs if needed) |
+| `provisioner/inventory/` | rhis-builder-inventory archive for the highside deployment only |
+| `provisioner/containers/` | Provisioner container image (and any additional containers) |
+| `satellite/ansible_roles/` | Compliance Ansible roles |
+| `satellite/discovery_images/` | Foreman discovery PXE images |
+| `README_FIRST.md` | Full operator guide with disk sizing, delivery methods, troubleshooting |
 
 ---
 

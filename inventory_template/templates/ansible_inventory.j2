@@ -138,7 +138,7 @@ pg_host=''
 pg_port={{ pg_port | default(5432, true)}}
 
 pg_database='{{ pg_database | default("awx", true) }}'
-pg_username='{{ pg_username | default("awx", true) }}'
+pg_username='{{ pg_username | default("postgres", true) }}'
 pg_password='{{ pg_password }}'
 pg_sslmode='{{ pg_sslmode | default("prefer", true) }}'  
 
@@ -175,7 +175,7 @@ automationhub_pg_host='{{ automationhub_pg_host | default("", true) }}'
 automationhub_pg_port='{{ automationhub_pg_host | default(5432, true) }}'
 
 automationhub_pg_database='{{ automationhub_pg_database | default("automationhub", true) }}'
-automationhub_pg_username='{{ automationhub_pg_username | default("automationhub", true) }}'
+automationhub_pg_username='{{ automationhub_pg_username | default("postgres", true) }}'
 automationhub_pg_password='{{ automationhub_pg_password | default("", true) }}'
 automationhub_pg_sslmode='{{ automationhub_pg_sslmode | default("prefer", true) }}'
 
