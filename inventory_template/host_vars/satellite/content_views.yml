@@ -361,42 +361,42 @@ content_views:
 
 # Red Hat Edge Manager
 
-  # - name: "RHEL10_EdgeManager"
-  #   desc: "RHEL10 Red Hat Edge Manager Install RPMs"
-  #   org: "{{ satellite_organization }}"
-  #   force_publish: false
-  #   publication_threshold_hours: 24
-  #   repositories:
-  #     - name: "Red Hat Edge Manager 1.1 for RHEL 10 x86_64 RPMs"
-  #       product: "Red Hat Edge Manager"
-  #   filters:
-  #     - name: "Include_All_Packages_No_Errata"
-  #       type: "rpm"
-  #       inclusion: true
-  #       description: "Include all rpms with no errata for all repositories"
-  #       original_packages: true
-  #       repositories: "[]"
-  #     - name: "Include_All_Streams_No_Errata"
-  #       type: "modulemd"
-  #       inclusion: true
-  #       description: "Include all module streams with no errata for all repositories"
-  #       original_module_streams: true
-  #       repositories: "[]"
-  #     - name: "Include_Errata_By_Date"
-  #       type: "erratum"
-  #       inclusion: true
-  #       description: "Include all errata updated as of {{ errata_end_date }}"
-  #       repositories: "[]"
-  #       rules:
-  #         - name: "errata-by-date-{{ errata_end_date }}"
-  #           end_date: "{{ errata_end_date }}"
-  #           date_type: "updated"
-  #           types:
-  #             - "enhancement"
-  #             - "bugfix"
-  #             - "security"
-  #   environments:
-  #     - "Library"
+  - name: "RHEL10_EdgeManager"
+    desc: "RHEL10 Red Hat Edge Manager Install RPMs"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
+      - name: "Red Hat Edge Manager 1.1 for RHEL 10 x86_64 RPMs"
+        product: "Red Hat Edge Manager"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Include_Errata_By_Date"
+        type: "erratum"
+        inclusion: true
+        description: "Include all errata updated as of {{ errata_end_date }}"
+        repositories: "[]"
+        rules:
+          - name: "errata-by-date-{{ errata_end_date }}"
+            end_date: "{{ errata_end_date }}"
+            date_type: "updated"
+            types:
+              - "enhancement"
+              - "bugfix"
+              - "security"
+    environments:
+      - "Library"
 
   - name: "RHEL9_EdgeManager"
     desc: "RHEL9 Red Hat Edge Manager Install RPMs"
@@ -570,9 +570,8 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      # 9.8 kickstart excluded — aadsshlogin CDN duplicate content bug confirmed still present 2026-06-04.
-      # Every version of aadsshlogin appears twice with identical location_href in the 9.8 kickstart repos,
-      # causing Pulp to reject CV publish. Re-enable only after Red Hat resolves the CDN metadata issue.
+      # 9.8 kickstart excluded — CDN duplicate content bug confirmed still present 2026-09-09.
+      # kickstart repos are still broken. Publish fine with no filters, but break with filters
       # - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.8"
       #   product: "Red Hat Enterprise Linux for x86_64"
       # - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.8"
@@ -642,7 +641,7 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      # 9.8 kickstart excluded — aadsshlogin CDN duplicate content bug confirmed still present 2026-06-04.
+      # 9.8 kickstart excluded — CDN duplicate content bug confirmed still present 2026-09-09.
       # - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.8"
       #   product: "Red Hat Enterprise Linux for ARM 64"
       # - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.8"
