@@ -1,0 +1,22 @@
+---
+# Pulp container tag list bypass optimization
+# Set to true to deploy the optimization during satellite_post
+# This patches the installed pulp_container package in-place for
+# ~249x faster digest-based container sync operations.
+
+pulp_container_bypass_optimization: false
+
+# Action: 'install' to deploy, 'rollback' to revert
+# pulp_container_optimization_action: install
+
+# Override service list if your Satellite has a different worker count
+# pulp_container_optimization_services:
+#   - pulpcore-api
+#   - pulpcore-content
+#   - pulpcore-worker@1
+#   - pulpcore-worker@2
+#   - pulpcore-worker@3
+#   - pulpcore-worker@4
+
+# Backup location for original files before patching
+# pulp_container_optimization_backup_dir: /var/lib/pulp-backups
