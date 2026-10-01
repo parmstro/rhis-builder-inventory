@@ -157,6 +157,7 @@ aap_job_templates_soe_dev:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
@@ -187,7 +188,7 @@ aap_job_templates_soe_dev:
       - "idm_machine"
       - "default_vault"
     variables:
-      ansible_python_interpreter: /usr/bin/python3.9
+      ansible_python_interpreter: "/usr/bin/python3.9"
       http_port: 8080
       https_port: 8443
       sample_app_git_repo: https://github.com/parmstro/jboss-eap-quickstarts.git
@@ -351,6 +352,7 @@ aap_job_templates_soe_dev:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
@@ -381,6 +383,7 @@ aap_job_templates_soe_dev:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       enable_debug_logging: false
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
