@@ -10,8 +10,8 @@ satellite_subnets:
     dns_primary: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(10) }}"
     dns_secondary: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(11) }}"
     ipam: "Internal DB"
-    from_ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(100) }}"
-    to_ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(199) }}"
+    from_ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(257) }}" # .1
+    to_ip: "{{ [_default_network, '/', _default_network_prefix] | join() | ansible.utils.next_nth_usable(510) }}"  # .254 - the safe choice due to old gear
     boot_mode: "Static"
     discovery_capsule: "{{ satellite_fqdn }}"
     tftp_capsule: "{{ satellite_fqdn }}"
