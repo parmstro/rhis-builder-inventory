@@ -34,13 +34,37 @@
         that:
           - (rhis_system_count[item.key] | default(0) | int) <= (item.value | int)
         fail_msg: >-
-          System count for '{{ item.key }}' is {{ rhis_system_count[item.key] | default(0) }}
-          which exceeds the maximum allowed limit of {{ item.value }}.
-          To change limits, root must modify permissions on inventory_basevars_limits.yml.
+          Limit exceeded for '{{ item.key }}': count is {{ rhis_system_count[item.key] | default(0) }},
+          maximum is {{ item.value }}. Please reduce the count in your basevars file.
+          If you need to increase this limit, refer to the inventory addressing documentation
+          for limit increase requirements as changes impact IP band allocations.
         quiet: true
       loop: "{{ rhis_system_count_limits | dict2items }}"
       loop_control:
         label: "{{ item.key }}: {{ rhis_system_count[item.key] | default(0) }}/{{ item.value }}"
+
+    - name: "Warn on unrecognized server types in rhis_system_count"
+      when: item.key not in rhis_system_count_limits
+      ansible.builtin.pause:
+        seconds: 0
+        prompt: |
+
+          ╔══════════════════════════════════════════════════════════════════╗
+          ║  WARNING: Unrecognized server type '{{ item.key }}'
+          ╠══════════════════════════════════════════════════════════════════╣
+          ║  '{{ item.key }}' is defined in rhis_system_count but has no
+          ║  matching entry in inventory_basevars_limits.yml.
+          ║
+          ║  This server type will NOT be rendered in the inventory.
+          ║
+          ║  If this is a new server type, refer to the inventory
+          ║  addressing documentation for instructions on adding new
+          ║  server types and their IP band allocations.
+          ╚══════════════════════════════════════════════════════════════════╝
+
+      loop: "{{ rhis_system_count | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"
 
     - name: "Wait for connection...and gather facts"
       ansible.builtin.setup:
