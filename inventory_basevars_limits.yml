@@ -1,0 +1,18 @@
+---
+rhis_system_count_limits:
+  satellite: 1
+  capsule: 6
+  idm: 16
+  gitea: 1
+  logserver: 1
+  aapgateway: 9
+  aapcontroller: 9
+  aapedacontroller: 9
+  aaphub: 9
+  aapdatabase: 9
+  aapexecution: 9
+  aaphop: 9
+  kvm_hypervisors: 9
+  quadlet: 18
+  quay: 9
+...

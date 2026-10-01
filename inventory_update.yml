@@ -25,6 +25,23 @@
       ansible.builtin.include_vars:
         file: "{{ basevars_file }}"
 
+    - name: "Include system count limits"
+      ansible.builtin.include_vars:
+        file: "inventory_basevars_limits.yml"
+
+    - name: "Validate system counts do not exceed limits"
+      ansible.builtin.assert:
+        that:
+          - (rhis_system_count[item.key] | default(0) | int) <= (item.value | int)
+        fail_msg: >-
+          System count for '{{ item.key }}' is {{ rhis_system_count[item.key] | default(0) }}
+          which exceeds the maximum allowed limit of {{ item.value }}.
+          To change limits, root must modify permissions on inventory_basevars_limits.yml.
+        quiet: true
+      loop: "{{ rhis_system_count_limits | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}: {{ rhis_system_count[item.key] | default(0) }}/{{ item.value }}"
+
     - name: "Wait for connection...and gather facts"
       ansible.builtin.setup:
         gather_timeout: 60
