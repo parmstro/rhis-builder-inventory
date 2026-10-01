@@ -47,10 +47,18 @@ rhis_system_count:
   satellite: 1
   capsule: 1
   idm: 2
+  gitea: 0
+  logserver: 0
+  aapgateway: 0
   aapcontroller: 1
   aapedacontroller: 0
   aaphub: 1
+  aapdatabase: 0
+  aapexecution: 0
+  aaphop: 0
+  kvm_hypervisors: 0
   quadlet: 2
+  quay: 0
 
 rhis_aws_region: "us-east-2"
 rhis_azure_region: "East US 2"

@@ -1,49 +1,80 @@
 ---
+# ── IP Addressing Scheme ──────────────────────────────────────────────────────
+# Band  Offsets    Purpose              .x0 reserved        Host offsets
+# ──    1-9        Infra reserved       —                   —
+# 10    10-29      IdM                  10 = primary        11-26 (max 16 replicas)
+# 30    30-39      Core services        30 = emergency      31=gitea 32=satellite 33=provisioner 34=logserver
+# 40    40-49      Capsules             40 = emergency      41-46 (max 6)
+# 50    50-59      AAP Gateways         50 = emergency      51-59 (max 9)
+# 60    60-69      AAP Controllers      60 = emergency      61-69 (max 9)
+# 70    70-79      AAP EDA              70 = emergency      71-79 (max 9)
+# 80    80-94      VMware               80 = vcenter        81-94 (max 14 esxi)
+# ──    95-99      Buffer               —                   —
+# 100   100-109    AAP Hubs             100 = emergency     101-109 (max 9)
+# 110   110-119    AAP Databases        110 = emergency     111-119 (max 9)
+# 120   120-129    Execution Nodes      120 = emergency     121-129 (max 9)
+# 130   130-139    Hop Nodes            130 = emergency     131-139 (max 9)
+# 140   140-149    KVM Hypervisors      140 = emergency     141-149 (max 9)
+# 150   150-159    Quay                 150 = emergency     151-159 (max 9)
+# 160   160-179    Quadlet              160 = emergency     161-178 (max 18)
+# 180+  —          Future               —                   —
+# ──────────────────────────────────────────────────────────────────────────────
 
-provisioner:
-  hosts:
-    provisioner.{{ basevars_global_domain_name }}:
-      connection: local
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(13) }}"
-     
+# ── Band 10-29: IdM ──────────────────────────────────────────────────────────
+
 idm_primary:
   hosts:
     idm1.{{ basevars_global_domain_name }}:
       ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(10) }}"
 
-sat_primary:
-  hosts:  
-    satellite1.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(12) }}"
-
 {% if rhis_system_count.idm is defined and rhis_system_count.idm > 1 %}
 idm_replicas:
   hosts:
-    idm2.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(11) }}"
-{% for num in range(3, (rhis_system_count.idm | int) + 1) %}
+{% for num in range(2, (rhis_system_count.idm | int) + 1) %}
     idm{{ num }}.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(40 - 3 + num) }}"
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(9 + num) }}"
 {% endfor %}
 {% endif %}
 
-{% if rhis_system_count.kvm_hypervisors is defined and rhis_system_count.kvm_hypervisors > 1 %}
-kvm_hypervisors:
+# ── Band 30-39: Core Services ────────────────────────────────────────────────
+
+{% if rhis_system_count.gitea is defined and rhis_system_count.gitea > 0 %}
+gitea_servers:
   hosts:
-{% for num in range(1, (rhis_system_count.kvm_hypervisors | int) + 1) %}
-    kvm{{ num }}.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(20 + num) }}"
+{% for num in range(1, (rhis_system_count.gitea | int) + 1) %}
+    {{ 'gitea' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(30 + num) }}"
 {% endfor %}
 {% endif %}
+
+sat_primary:
+  hosts:
+    satellite1.{{ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(32) }}"
+
+provisioner:
+  hosts:
+    provisioner.{{ basevars_global_domain_name }}:
+      connection: local
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(33) }}"
+
+{% if rhis_system_count.logserver is defined and rhis_system_count.logserver > 0 %}
+log_servers:
+  hosts:
+{% for num in range(1, (rhis_system_count.logserver | int) + 1) %}
+    {{ 'logserver' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(33 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 40-49: Capsules ─────────────────────────────────────────────────────
 
 {% if rhis_system_count.capsule is defined and rhis_system_count.capsule > 0 %}
 sat_capsules:
   hosts:
-    capsule1.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(16) }}"
-{% for num in range(2, (rhis_system_count.capsule | int) + 1) %}
-    capsule{{ num }}.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(45 - 2 + num) }}"
+{% for num in range(1, (rhis_system_count.capsule | int) + 1) %}
+    {{ 'capsule' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(40 + num) }}"
 {% endfor %}
 {% endif %}
 
@@ -52,73 +83,54 @@ sat_trusted_hosts:
     sat_primary:
     sat_capsules:
 
+# ── Band 50-59: AAP Gateways ─────────────────────────────────────────────────
+
+{% if rhis_system_count.aapgateway is defined and rhis_system_count.aapgateway == 0 and rhis_system_count.aapcontroller is defined and rhis_system_count.aapcontroller == 1 %}
+# Growth mode: single AAP controller with no gateway, controller serves as gateway
+aap_gateways:
+  hosts:
+    aapcontroller1.{{ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(61) }}"
+{% elif rhis_system_count.aapgateway is defined and rhis_system_count.aapgateway > 0 %}
+aap_gateways:
+  hosts:
+{% for num in range(1, (rhis_system_count.aapgateway | int) + 1) %}
+    {{ 'aapgateway' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(50 + num) }}"
+{% endfor %}
+{% else %}
+# WARNING: No AAP gateway defined, and no AAP controller defined.  This is likely a misconfiguration.
+{% endif %}
+
+# ── Band 60-69: AAP Controllers ──────────────────────────────────────────────
+
 {% if rhis_system_count.aapcontroller is defined and rhis_system_count.aapcontroller > 0 %}
 platform_installer:
   hosts:
     aapcontroller1.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(14) }}"
-{% endif %}
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(61) }}"
 
-{% if rhis_system_count.aapcontroller is defined and rhis_system_count.aapcontroller > 0 %}
 aap_controllers:
   hosts:
-    aapcontroller1.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(14) }}"
-{% for num in range(2, (rhis_system_count.aapcontroller | int) + 1) %}
+{% for num in range(1, (rhis_system_count.aapcontroller | int) + 1) %}
     {{ 'aapcontroller' ~ num ~ '.' ~ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(50 - 2 + num) }}"
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(60 + num) }}"
 {% endfor %}
 {% endif %}
 
-{% if rhis_system_count.aapedacontroller is defined and rhis_system_count.aapcontroller > 0 %}
+# ── Band 70-79: AAP EDA Controllers ──────────────────────────────────────────
+
+{% if rhis_system_count.aapedacontroller is defined and rhis_system_count.aapedacontroller > 0 %}
 aap_edacontroller:
   hosts:
-    aapedacontroller.{{ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(15) }}"
-{% endif %}
-
-{#
-# aap_databases:
-#   hosts:
-#     aapdb.{{ basevars_global_domain_name }}:
-# aap_hubs:
-#  hosts:
-#    aaphub{{ num }}.{{ basevars_global_domain_name }}:
-# aap_execution_nodes:
-# aap_hop_nodes:
-#}
-
-aap_hosts:
-  children:
-    aap_hubs:
-    aap_controllers:
-    aap_edacontroller:
-
-{% if rhis_system_count.quadlet is defined and rhis_system_count.quadlet > 0 %}
-container_servers:
-  hosts:
-{% for num in range(1, (rhis_system_count.quadlet | int) + 1) %}
-    {{ 'quadlet' ~ num ~ '.' ~ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(17 - 1 + num) }}"
+{% for num in range(1, (rhis_system_count.aapedacontroller | int) + 1) %}
+    {{ 'aapedacontroller' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(70 + num) }}"
 {% endfor %}
 {% endif %}
 
-{% if rhis_system_count.quay is defined and rhis_system_count.quay > 0 %}
-quay_servers:
-  hosts:
-{% for num in range(1, (rhis_system_count.quay | int) + 1) %}
-    {{ 'quay' ~ num ~ '.' ~ basevars_global_domain_name }}:
-      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(71 - 1 + num) }}"
-{% endfor %}
-{% endif %}
+# ── Band 80-94: VMware ────────────────────────────────────────────────────────
 
-# aws_nodes:
-# azure_nodes:
-# baremetal_nodes:
-# gcp_nodes:
-# kvm_nodes:
-# ocp_virt_nodes:
-# openstack_nodes:
 vmware_vcenter_hosts:
   hosts:
     vcenter80.{{ basevars_global_domain_name }}:
@@ -134,3 +146,97 @@ vmware_vcenter_hosts:
 #     esx7.{{ basevars_global_domain_name }}:
 #     esx8.{{ basevars_global_domain_name }}:
 #     esx9.{{ basevars_global_domain_name }}:
+
+# ── Band 100-109: AAP Hubs ───────────────────────────────────────────────────
+
+{% if rhis_system_count.aaphub is defined and rhis_system_count.aaphub > 0 %}
+aap_hubs:
+  hosts:
+{% for num in range(1, (rhis_system_count.aaphub | int) + 1) %}
+    {{ 'aaphub' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(100 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 110-119: AAP Databases ──────────────────────────────────────────────
+
+{% if rhis_system_count.aapdatabase is defined and rhis_system_count.aapdatabase > 0 %}
+aap_databases:
+  hosts:
+{% for num in range(1, (rhis_system_count.aapdatabase | int) + 1) %}
+    {{ 'aapdb' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(110 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 120-129: Execution Nodes ─────────────────────────────────────────────
+
+{% if rhis_system_count.aapexecution is defined and rhis_system_count.aapexecution > 0 %}
+aap_execution_nodes:
+  hosts:
+{% for num in range(1, (rhis_system_count.aapexecution | int) + 1) %}
+    {{ 'aapexec' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(120 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 130-139: Hop Nodes ──────────────────────────────────────────────────
+
+{% if rhis_system_count.aaphop is defined and rhis_system_count.aaphop > 0 %}
+aap_hop_nodes:
+  hosts:
+{% for num in range(1, (rhis_system_count.aaphop | int) + 1) %}
+    {{ 'aaphop' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(130 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 140-149: KVM Hypervisors ─────────────────────────────────────────────
+
+{% if rhis_system_count.kvm_hypervisors is defined and rhis_system_count.kvm_hypervisors > 0 %}
+kvm_hypervisors:
+  hosts:
+{% for num in range(1, (rhis_system_count.kvm_hypervisors | int) + 1) %}
+    {{ 'kvm' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(140 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 150-159: Quay ───────────────────────────────────────────────────────
+
+{% if rhis_system_count.quay is defined and rhis_system_count.quay > 0 %}
+quay_servers:
+  hosts:
+{% for num in range(1, (rhis_system_count.quay | int) + 1) %}
+    {{ 'quay' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(150 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Band 160-179: Quadlet ────────────────────────────────────────────────────
+
+{% if rhis_system_count.quadlet is defined and rhis_system_count.quadlet > 0 %}
+container_servers:
+  hosts:
+{% for num in range(1, (rhis_system_count.quadlet | int) + 1) %}
+    {{ 'quadlet' ~ num ~ '.' ~ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(160 + num) }}"
+{% endfor %}
+{% endif %}
+
+# ── Group Aggregations ───────────────────────────────────────────────────────
+
+aap_hosts:
+  children:
+    aap_gateways:
+    aap_hubs:
+    aap_controllers:
+    aap_edacontroller:
+
+# aws_nodes:
+# azure_nodes:
+# baremetal_nodes:
+# gcp_nodes:
+# kvm_nodes:
+# ocp_virt_nodes:
+# openstack_nodes:
