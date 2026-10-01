@@ -129,6 +129,7 @@ aap_job_templates_northwind_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_northwind"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 
@@ -144,6 +145,7 @@ aap_job_templates_northwind_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_northwind"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 
@@ -159,6 +161,7 @@ aap_job_templates_northwind_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_northwind"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 
@@ -174,6 +177,7 @@ aap_job_templates_northwind_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_northwind"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 
@@ -189,6 +193,7 @@ aap_job_templates_northwind_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_northwind"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 

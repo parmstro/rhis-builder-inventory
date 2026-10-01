@@ -308,6 +308,15 @@ aap_idm_machine_username_vault: "{{ default_admin_username_vault }}"            
 aap_idm_machine_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
 
 #####################################
+# WordPress Sample Application vault
+#####################################
+# Secrets for the WordPress testcontent application
+# Used by testcontent/wordpress-nginx/ playbooks and job templates
+
+wp_admin_password_vault: "{{ default_environment_password_vault }}"                                   # notsecret
+wp_db_password_vault: "{{ default_environment_password_vault }}"                                      # notsecret
+
+#####################################
 # Northwind Sample Application vault
 #####################################
 # Secrets for the Northwind multi-tier demo application
