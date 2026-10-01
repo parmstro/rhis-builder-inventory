@@ -158,7 +158,7 @@ aap_job_templates_soe_dev:
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.12"
-      datacenter_folder: "/parmstrong.ca/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       host_list:
         - name: testjboss2.{{ _runtime_global_domain_name }}
@@ -353,7 +353,7 @@ aap_job_templates_soe_dev:
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
       ansible_python_interpreter: "/usr/bin/python3.12"
-      datacenter_folder: "/parmstrong.ca/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       host_list:
         - name: testjboss2.{{ _runtime_global_domain_name }}
@@ -385,7 +385,7 @@ aap_job_templates_soe_dev:
     variables:
       ansible_python_interpreter: "/usr/bin/python3.12"
       enable_debug_logging: false
-      datacenter_folder: "/parmstrong.ca/vm"
+      datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       host_list:
         - name: testjboss2.{{ _runtime_global_domain_name }}
