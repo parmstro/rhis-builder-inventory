@@ -25,6 +25,17 @@
       ansible.builtin.include_vars:
         file: "{{ basevars_file }}"
 
+    - name: "Validate network prefix supports the addressing scheme"
+      ansible.builtin.assert:
+        that:
+          - (default_network_prefix | int) <= 23
+        fail_msg: >-
+          The default_network_prefix is /{{ default_network_prefix }} which does not provide
+          enough address space for the RHIS IP band allocation scheme. A prefix of /23 or
+          smaller (e.g. /22) is required to ensure sufficient addresses for both infrastructure
+          bands and workload provisioning. Please update default_network_prefix in your
+          basevars file. Refer to the inventory addressing documentation for details.
+
     - name: "Include system count limits"
       ansible.builtin.include_vars:
         file: "inventory_basevars_limits.yml"
