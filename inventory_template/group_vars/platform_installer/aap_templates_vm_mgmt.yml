@@ -123,15 +123,15 @@ aap_job_templates_vm_day_2:
       snapshot_target_remove_children: false
       host_list:
         - name: testjboss2.{{ _runtime_global_domain_name }}
-          snap_name: testjboss2.original
+          snap_name: testjboss2.testsnap
           snap_description: "test base jboss build - delete me"
           quiesce: true
         - name: testlamp2.{{ _runtime_global_domain_name }}
-          snap_name: testlamp2.original
+          snap_name: testlamp2.testsnap
           snap_description: "test base LAMP build - delete me"
           quiesce: true
         - name: testwordpress2.{{ _runtime_global_domain_name }}
-          snap_name: testwordpress2.original
+          snap_name: testwordpress2.testsnap
           snap_description: "test base WordPress build - delete me"
           quiesce: true
 
@@ -177,15 +177,15 @@ aap_job_templates_vm_day_2:
       vmware_validate_certs: true
       host_list:
         - name: testjboss2.{{ _runtime_global_domain_name }}
-          snap_name: testjboss2.original
+          snap_name: testjboss2.testsnap
           snap_description: "test base jboss build - delete me"
           quiesce: true
         - name: testlamp2.{{ _runtime_global_domain_name }}
-          snap_name: testlamp2.original
+          snap_name: testlamp2.testsnap
           snap_description: "test base LAMP build - delete me"
           quiesce: true
         - name: testwordpress2.{{ _runtime_global_domain_name }}
-          snap_name: testwordpress.original
+          snap_name: testwordpress2.testsnap
           snap_description: "test base WordPress build - delete me"
           quiesce: true
 
