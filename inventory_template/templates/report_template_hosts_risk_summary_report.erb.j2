@@ -1,0 +1,111 @@
+<%#
+id: host_enhanced_risk_and_compliance
+name: Host Enhanced Risk and Compliance Report
+model: ReportTemplate
+description: Syntactically corrected inventory, compliance, and weighted CVE score report.
+-%>
+<%- report_headers(
+      'Host Name', 
+      'Host Group', 
+      'Lifecycle Environment', 
+      'Operating System', 
+      'OS Lifecycle Status', 
+      'Purpose Support Level', 
+      'Total Outstanding CVEs', 
+      'Weighted Risk Metric (CVSS)', 
+      'Traces Pending Resolution', 
+      'Failed Compliance Rules', 
+      'Automation Execution Status', 
+      'Reporting to Lightspeed', 
+      'NUMERIC RISK SCORE', 
+      'RISK RATING'
+    ) -%>
+<%- load_hosts(includes: [:hostgroup, :lifecycle_environments, :operatingsystem]).each_record do |host| -%>
+  <%- 
+    # 1. Gather Basic Inventory Properties
+    hostgroup_name = host.hostgroup ? host.hostgroup.name : 'Unassigned'
+    lifecycle_env  = host.lifecycle_environments ? host.lifecycle_environments.name : ''
+    os_name        = host.operatingsystem ? host.operatingsystem.to_s : ''
+    
+    # 2. Extract Red Hat Subscription/Purpose Data (if applicable)
+    purpose_support = host.respond_to?(:content_facet_attributes) && host.content_facet_attributes ? host.content_facet_attributes['purpose_usage'] : ''
+    if purpose_support.blank? && host.respond_to?(:facts_hash) && host.facts_hash
+      purpose_support = host.facts_hash['syspurpose_usage'] || host.facts_hash['redhat_release'] || 'Red Hat Enterprise Linux Server'
+    else
+      purpose_support = 'Red Hat Enterprise Linux Server'
+    end
+
+    # 3. Calculate Outstanding CVE Metrics
+    total_cves = 0
+    weighted_cvss = 0.0
+    begin
+      if host.respond_to?(:applicable_errata) && host.applicable_errata.present?
+        host.applicable_errata.where(type: 'security').each do |erratum|
+          erratum.cves.each do |cve|
+            total_cves += 1
+            weighted_cvss += (cve.try(:cvss3_score) || cve.try(:cvss2_score) || 0.0)
+          end
+        end
+      end
+    rescue
+    end
+
+    # 4. Traces Pending Resolution
+    has_traces = (host.respond_to?(:traces) && host.traces.any?) ? 'Yes' : 'No'
+
+    # 5. Failed OpenSCAP Compliance Rules
+    failed_compliance_count = 0
+    begin
+      if host.respond_to?(:openscap_reports) && host.openscap_reports.or_latest.present?
+        failed_compliance_count = host.openscap_reports.or_latest.first.try(:failed_rules_count) || 0
+      end
+    rescue
+    end
+
+    # 6. Automation Execution Status
+    global_status = host.try(:global_status_label) || 'OK'
+    automation_status = (global_status == 'OK' || global_status == 'Success') ? 'OK' : 'Warning/Error'
+
+    # 7. Reporting to Lightspeed
+    is_lightspeed = 'No'
+    begin
+      if host.respond_to?(:facts_hash) && host.facts_hash
+        insights_id = host.facts_hash['insights_id'] || host.facts_hash['rhsm_cloud_instance_id']
+        is_lightspeed = insights_id.present? ? 'Yes' : 'No'
+      end
+    rescue
+    end
+
+    # 8. Custom Derived Risk Algorithm matching your sample (Base 10 + CVSS Weight)
+    numeric_risk_score = 10 + weighted_cvss.round
+    
+    # Determine Risk Rating category based on score
+    if numeric_risk_score <= 15
+      risk_rating = 'Low'
+    elsif numeric_risk_score <= 35
+      risk_rating = 'Medium'
+    else
+      risk_rating = 'High'
+    end
+
+    # 9. OS Lifecycle Status (Helper logic for RHEL Lifecycles)
+    os_lifecycle = os_name.include?('7') ? 'Extended Life Cycle Support (ELS)' : 'Full Support'
+  -%>
+  <%- report_row(
+        'Host Name':                   host.name,
+        'Host Group':                  hostgroup_name,
+        'Lifecycle Environment':       lifecycle_env,
+        'Operating System':            os_name,
+        'OS Lifecycle Status':         os_lifecycle,
+        'Purpose Support Level':       purpose_support,
+        'Total Outstanding CVEs':      total_cves,
+        'Weighted Risk Metric (CVSS)': weighted_cvss.round(1),
+        'Traces Pending Resolution':   has_traces,
+        'Failed Compliance Rules':     failed_compliance_count,
+        'Automation Execution Status': automation_status,
+        'Reporting to Lightspeed':     is_lightspeed,
+        'NUMERIC RISK SCORE':          numeric_risk_score,
+        'RISK RATING':                 risk_rating
+      ) -%>
+<%- end -%>
+<%= report_render -%>
