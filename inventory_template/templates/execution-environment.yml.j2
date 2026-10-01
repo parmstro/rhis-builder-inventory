@@ -1,52 +1,47 @@
+---
 version: 3
 
 images:
   base_image:
     name: "{{ aap_execution_environment.base_image }}"
-  options:
-    build_args:
-      REDHAT_TOKEN: "{{ redhat_automation_hub_token_vault }}"
-      PRIVATE_HUB_URL: "{{ private_hub_url | default('') }}"
-      PRIVATE_HUB_TOKEN: "{{ private_hub_token | default('') }}"
 
-# Tell ansible-builder to safely copy the cert into the volatile context directory
 additional_build_files:
   - src: katello-server-ca.crt
-    dest: context
+    dest: certs
 
 dependencies:
   galaxy: requirements.yml
   system: bindep.txt
-  python: requirements.txt 
-{% if aap_execution_environment.additional_dependencies is defined %}  
-  {{ aap_execution_environment.additional_dependencies | to_nice_yaml(indent=2) }}
-{% endif %}
+  python: requirements.txt
+{% if aap_execution_environment.additional_dependencies is defined %}
+{{ aap_execution_environment.additional_dependencies | to_nice_yaml(indent=2) | indent(2, True) }}
+{%- endif %}
 
 additional_build_steps:
   prepend_galaxy:
-    - ARG REDHAT_TOKEN
-    - ARG PRIVATE_HUB_URL
-    - ARG PRIVATE_HUB_TOKEN
-    - RUN if [ -n "$PRIVATE_HUB_URL" ]; then \
-            export ANSIBLE_GALAXY_SERVER_LIST="AHVALIDATED,AHPUBLISHED,GALAXY_BASE,PRIVATE_HUB" && \
-            export ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_URL="$PRIVATE_HUB_URL" && \
-            export ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_TOKEN="$PRIVATE_HUB_TOKEN"; \
-          else \
-            export ANSIBLE_GALAXY_SERVER_LIST="AHVALIDATED,AHPUBLISHED,GALAXY_BASE"; \
-          fi
-    - ENV ANSIBLE_GALAXY_SERVER_GALAXY_BASE_URL="https://ansible.com"
-    - ENV ANSIBLE_GALAXY_SERVER_AHVALIDATED_URL="https://redhat.com"
-    - ENV ANSIBLE_GALAXY_SERVER_AHVALIDATED_AUTH_URL="https://redhat.com"
-    - ENV ANSIBLE_GALAXY_SERVER_AHVALIDATED_TOKEN="$REDHAT_TOKEN"
-    - ENV ANSIBLE_GALAXY_SERVER_AHPUBLISHED_URL="https://redhat.com"
-    - ENV ANSIBLE_GALAXY_SERVER_AHPUBLISHED_AUTH_URL="https://redhat.com"
-    - ENV ANSIBLE_GALAXY_SERVER_AHPUBLISHED_TOKEN="$REDHAT_TOKEN"
-    
-  prepend_base:
-    # 2. Because it's now inside the context root, Podman can find it directly without paths
-    - ADD katello-server-ca.crt /etc/pki/ca-trust/source/anchors/katello-server-ca.crt
-    - RUN update-ca-trust
+{% if private_hub_url is defined and private_hub_url | length > 0 %}
+    - ENV ANSIBLE_GALAXY_SERVER_LIST=galaxy_base,private_hub,automation_hub
+    # Private hub
+    - ENV ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_URL="{{ private_hub_url }}"
+    - ENV ANSIBLE_GALAXY_SERVER_PRIVATE_HUB_TOKEN="{{ private_hub_token }}"
+{% else %}
+    - ENV ANSIBLE_GALAXY_SERVER_LIST=galaxy_base,automation_hub
+{% endif %}
 
+    # Galaxy base url
+    - ENV ANSIBLE_GALAXY_SERVER_GALAXY_BASE_URL=https://galaxy.ansible.com/
+
+    # RH automation hub
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_URL=https://cloud.redhat.com/api/automation-hub/
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN="{{ redhat_automation_hub_token_vault }}"
+
+  prepend_base:
+    # Podman looks for files directly in the context root during execution
+    - ADD _build/certs/katello-server-ca.crt /etc/pki/ca-trust/source/anchors/katello-server-ca.crt
+    - RUN update-ca-trust
+  
   append_final:
+    # Set global trust anchors so pip packages (requests/certifi) respect your IdM CA cert
     - ENV REQUESTS_CA_BUNDLE="/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
     - ENV SSL_CERT_FILE="/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
