@@ -97,6 +97,7 @@ aap_job_templates_northwind_qa:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
@@ -238,6 +239,7 @@ aap_job_templates_northwind_qa:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
@@ -272,6 +274,7 @@ aap_job_templates_northwind_qa:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/parmstrong.ca/vm"
       vmware_validate_certs: false
       host_list:
