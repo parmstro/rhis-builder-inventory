@@ -15,6 +15,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       post_quiesce_delay_seconds: 30
@@ -46,6 +47,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: false
@@ -68,6 +70,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: true
@@ -90,6 +93,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: false
@@ -112,6 +116,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       snapshot_target_remove_all: true
@@ -144,6 +149,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: false
       power_action_force: false
@@ -166,6 +172,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: true
       host_list:
@@ -196,6 +203,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: true
       power_action_force: false
@@ -218,6 +226,7 @@ aap_job_templates_vm_day_2:
       - "default_vault"
       - "rhis_{{ _runtime_global_domain_name }}_vmware1"
     variables:
+      ansible_python_interpreter: "/usr/bin/python3.12"
       datacenter_folder: "/{{ _runtime_global_domain_name }}/vm"
       vmware_validate_certs: true
       power_action_force: false
