@@ -18,7 +18,7 @@ aap_execution_environments:
     pull: "always"
     organization: "Default"
     tag: "v1"
-    # remove_signatures: true # default == true
+    # remove_signatures: false # default == false
     git_repo: "https://github.com/parmstro/rhis_ansible_ee.git"
     git_dest: "{{ rhis_default_git_dest }}"
     git_clone: true
@@ -35,7 +35,7 @@ aap_execution_environments:
     pull: "always"
     organization: "Default"
     tag: "v1"
-    # remove_signatures: true # default == true
+    # remove_signatures: false # default == false
     git_repo: "https://github.com/parmstro/rhis_ansible_ee.git"
     git_dest: "{{ rhis_default_git_dest }}"
     git_clone: true
