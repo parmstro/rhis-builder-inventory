@@ -5,8 +5,9 @@
 # time services are managed at deployment time in rhis
 # Provide time servers in inventory_basevars.yml using the rhis_time_servers list:
 # rhis_time_servers:
-#   - time1.{{ basevars_global_domain_name }}
-#   - time2.{{ basevars_global_domain_name }}
+#   - 192.168.252.7
+#   - 192.168.252.8
+#   - 192.168.252.9
 {% raw %}
 platform_node_pre_preferred_boot_order: ["IP4", "IP6", "Red Hat"]
 platform_node_pre_reboot_on_finish: true

@@ -30,12 +30,12 @@ bootstrap_init_hosts:
       - "192.168.252.8"               # time2.parmstrong.ca  Stratum 1
       - "192.168.252.9"               # time3.parmstrong.ca  Stratum 1
     # mac: ""           # VMware assigns MAC at deploy time set actual MAC for PXE if needed
-    ipv4_address: "192.168.140.213"
+    ipv4_address: "192.168.240.33"
     ipv4_netmask: "255.255.252.0"
     ipv4_prefix: 22
-    ipv4_gateway: "192.168.140.1"
-    name_server1: "192.168.140.10"     # lowside IdM during bootstrap
-    name_server2: "192.168.140.11"     # lowside IdM replica
+    ipv4_gateway: "192.168.240.1"
+    name_server1: "192.168.240.10"     # highside IdM (must be bootstrapped first)
+    name_server2: "192.168.240.1"      # gateway fallback during bootstrap
     root_enc_pass: "{{ encrypted_root_pass_vault }}"
     grub_enc_pass: "{{ encrypted_grub_pass_vault }}"
     boot_disk: "/dev/sda"
@@ -64,12 +64,12 @@ bootstrap_init_hosts:
       - "192.168.252.8"               # time2.parmstrong.ca  Stratum 1
       - "192.168.252.9"               # time3.parmstrong.ca  Stratum 1
     # mac: ""                          # set actual MAC for PXE if needed
-    ipv4_address: "192.168.140.210"
+    ipv4_address: "192.168.240.10"
     ipv4_netmask: "255.255.252.0"
     ipv4_prefix: 22
-    ipv4_gateway: "192.168.140.1"
-    name_server1: "192.168.140.10"
-    name_server2: "192.168.140.11"     # lowside IdM replica
+    ipv4_gateway: "192.168.240.1"
+    name_server1: "192.168.240.1"      # gateway — IdM not yet available at own bootstrap
+    name_server2: "192.168.240.1"
     root_enc_pass: "{{ encrypted_root_pass_vault }}"
     grub_enc_pass: "{{ encrypted_grub_pass_vault }}"
     boot_disk: "/dev/sda"
@@ -98,12 +98,12 @@ bootstrap_init_hosts:
       - "192.168.252.8"               # time2.parmstrong.ca  Stratum 1
       - "192.168.252.9"               # time3.parmstrong.ca  Stratum 1
     # mac: ""           # set actual MAC for PXE if needed
-    ipv4_address: "192.168.140.212"
+    ipv4_address: "192.168.240.32"
     ipv4_netmask: "255.255.252.0"
     ipv4_prefix: 22
-    ipv4_gateway: "192.168.140.1"
-    name_server1: "192.168.140.10"
-    name_server2: "192.168.140.11"     # lowside IdM replica
+    ipv4_gateway: "192.168.240.1"
+    name_server1: "192.168.240.10"     # highside IdM (must be bootstrapped first)
+    name_server2: "192.168.240.1"      # gateway fallback during bootstrap
     root_enc_pass: "{{ encrypted_root_pass_vault }}"
     grub_enc_pass: "{{ encrypted_grub_pass_vault }}"
     boot_disk: "/dev/nvme0n1"          # bare metal 4TB NVMe
