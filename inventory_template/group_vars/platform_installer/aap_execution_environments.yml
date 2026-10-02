@@ -17,7 +17,7 @@ aap_execution_environments:
     description: "Execution Environment for rhis systems running RHEL 9 and registered to Satellite"
     pull: "always"
     organization: "Default"
-    tag: "v1"
+    tag: "latest"
     # remove_signatures: false # default == false
     git_repo: "https://github.com/parmstro/rhis_ansible_ee.git"
     git_dest: "{{ rhis_default_git_dest }}"
@@ -34,7 +34,7 @@ aap_execution_environments:
     description: "Execution Environment for rhis systems running RHEL 8 and registered to Satellite"
     pull: "always"
     organization: "Default"
-    tag: "v1"
+    tag: "latest"
     # remove_signatures: false # default == false
     git_repo: "https://github.com/parmstro/rhis_ansible_ee.git"
     git_dest: "{{ rhis_default_git_dest }}"
