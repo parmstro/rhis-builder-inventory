@@ -15,13 +15,12 @@ product_plans:
     plan: "nightly_infra"
     organization: "{{ satellite_organization }}"
 
-  # - name: "Red Hat Ansible Engine"
-  #   plan: "nightly_infra"
-  #   organization: "{{ satellite_organization }}"
-  # Deprecated — replaced by AAP
-
   - name: "Red Hat Client Tools for RHEL"
     plan: "nightly_third_party"
+    organization: "{{ satellite_organization }}"
+
+  - name: "Red Hat Edge Manager"
+    plan: "nightly_infra"
     organization: "{{ satellite_organization }}"
 
   - name: "Red Hat Enterprise Linux Bootc Containers"
