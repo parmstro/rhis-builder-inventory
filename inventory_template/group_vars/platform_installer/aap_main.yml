@@ -10,8 +10,10 @@ redhat_registry_password: "{{ redhat_registry_password_vault }}"
 redhat_automation_hub_token: "{{ redhat_automation_hub_token_vault }}"
 redhat_automation_hub_token_refresh_cmd: "{{ redhat_automation_hub_token_refresh_cmd_vault }}"
 private_hub_token: "{{ private_automation_hub_token_vault }}"
-private_hub_url: "https://{{ groups['aap_hubs'][0] | default('hub-not-defined.fqdn') }}/api/galaxy/"
-aap_platform_host: "{{ groups['aap_controllers'][0] }}"
+# AAP 2.5+ gateway proxies /api/galaxy/ to the hub pulp backend
+private_hub_url: "https://{{ aap_gateway_host }}/api/galaxy/"
+# AAP 2.5+ requires all API calls to route through the gateway
+aap_gateway_host: "{{ groups['aap_gateways'][0] }}"
 aap_platform_username: "{{ aap_admin_username_vault }}"
 aap_platform_password: "{{ aap_admin_password_vault }}"
 
@@ -20,8 +22,6 @@ aap_ldap_domain_map: "{{ _runtime_global_domain_name.split('.') | map('regex_rep
 aap_admin_username: "{{ aap_admin_username_vault }}"
 aap_admin_password: "{{ aap_admin_password_vault }}"
 
-active_controller: "{{ groups['aap_controllers'][0] }}"
-active_aap_hub: "{{ groups['aap_hubs'][0] | default('hub-not-defined.fqdn') }}"
 aap_validate_certs: false
 aap_hub_validate_certs: false
 ah_container_token: ""
