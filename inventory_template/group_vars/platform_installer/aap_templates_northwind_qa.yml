@@ -198,8 +198,8 @@ aap_job_templates_northwind_qa:
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 
-  - name: "NWQA4PromoteToProd"
-    description: "Promote the SOE Content for Northwind to Production"
+  - name: "NWQA4PromoteToStaging"
+    description: "Promote the SOE Content for Northwind to Staging"
     job_type: "run"
     organization: "Default"
     inventory: "TheProvisioner"
@@ -219,7 +219,7 @@ aap_job_templates_northwind_qa:
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       source_lce: "Qualification"
-      target_lce: "Production"
+      target_lce: "Staging"
       content_views:
         - name: "SOE9"
       composite_content_views:

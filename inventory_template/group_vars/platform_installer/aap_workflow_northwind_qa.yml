@@ -94,13 +94,13 @@ aap_workflow_template_northwind_qa:
         type: job_template
       related:
         success_nodes:
-          - identifier: "PromoteToProd"
+          - identifier: "PromoteToStaging"
         failure_nodes: []
         always_nodes: []
         credentials: []
-    - identifier: "PromoteToProd"
+    - identifier: "PromoteToStaging"
       unified_job_template:
-        name: "NWQA4PromoteToProd"
+        name: "NWQA4PromoteToStaging"
         organization:
           name: "Default"
         type: job_template
