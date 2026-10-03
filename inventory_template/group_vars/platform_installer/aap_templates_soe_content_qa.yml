@@ -203,8 +203,9 @@ aap_job_templates_soe_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_wordpress"
     variables:
-      ansible_python_interpreter: "/usr/bin/python3.9"
+      ansible_python_interpreter: "/usr/bin/python3"
       epel_rpms_repo_name: "Default_Organization_EPEL9_EPEL9"
       wp_version: "6.8.3"
       wp_url: "https://en-ca.wordpress.org/wordpress-6.8.3-en_CA.tar.gz"
@@ -233,8 +234,9 @@ aap_job_templates_soe_qa:
     credentials:
       - "idm_machine"
       - "default_vault"
+      - "rhis_{{ _runtime_global_domain_name }}_wordpress"
     variables:
-      ansible_python_interpreter: "/usr/bin/python3.9"
+      ansible_python_interpreter: "/usr/bin/python3"
 
   - name: "QA4PromoteToStaging"
     description: "Promote the SOE Content for JBoss, LAMP and Wordpress machines to Staging"
