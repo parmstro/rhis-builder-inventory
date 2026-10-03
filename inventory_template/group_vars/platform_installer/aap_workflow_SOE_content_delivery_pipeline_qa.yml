@@ -113,7 +113,7 @@ aap_workflow_template_soe_content_delivery_pipeline_qa:
     - identifier: "PromoteNextQA"
       all_parents_must_converge: true
       unified_job_template:
-        name: "QA4PromoteToProd"
+        name: "QA4PromoteToStaging"
         organization:
           name: "Default"
         type: job_template

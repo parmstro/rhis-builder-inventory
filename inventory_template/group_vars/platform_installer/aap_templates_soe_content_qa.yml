@@ -236,8 +236,8 @@ aap_job_templates_soe_qa:
     variables:
       ansible_python_interpreter: "/usr/bin/python3.9"
 
-  - name: "QA4PromoteToProd"
-    description: "Promote the SOE Content for JBoss, LAMP and Wordpress machines to Qualification"
+  - name: "QA4PromoteToStaging"
+    description: "Promote the SOE Content for JBoss, LAMP and Wordpress machines to Staging"
     job_type: "run"
     organization: "Default"
     inventory: "TheProvisioner"
@@ -257,7 +257,7 @@ aap_job_templates_soe_qa:
       satellite_location: "{{ satellite_location }}"
       satellite_validate_certs: true
       source_lce: "Qualification"
-      target_lce: "Production"
+      target_lce: "Staging"
       content_views:
         - name: "SOE9"
       composite_content_views:
