@@ -1,15 +1,15 @@
 ---
 
 aap_notifications:
-  - name: "RedHatGCA_NotifySlack"
-    descritpion: "Sample Slack Notifier"
+  - name: "SlackMsg"
+    descritpion: "Slack Notifier"
     organization: "Default"
     state: present
     validate_certs: true
     notification_type: "slack"
     notification_configuration:
       targets:
-        - "#rhis_notify"
+        - "#rhis-notify"
       token: "{{ redhatgca_notify_slack_token_vault }}"
 
 ## notification_types
