@@ -5,11 +5,13 @@ aap_workflow_template_northwind_qa:
   description: "Northwind multi-tier content delivery pipeline for the Qualification Lifecycle"
   organization: "Default"
   notification_templates_approvals:
-    - "RedHatGCA_NotifySlack"
+    - "SlackMsg"
+  notification_templates_started:
+    - "SlackMsg"
   notification_templates_success:
-    - "RedHatGCA_NotifySlack"
+    - "SlackMsg"
   notification_templates_error:
-    - "RedHatGCA_NotifySlack"
+    - "SlackMsg"
   state: present
   workflow_nodes:
     - identifier: "DeployQA"
