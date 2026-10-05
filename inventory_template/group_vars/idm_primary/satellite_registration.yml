@@ -1,0 +1,11 @@
+---
+
+# Satellite registration for the IdM primary host
+# Used by register_idm_to_satellite.yml in rhis-provisioner-container
+
+satellite_existing_hosts:
+  - activation_keys: "SOE9"
+    lifecycle_environment: "Library"
+    force: true
+    setup_insights: false
+    setup_remote_execution: true
