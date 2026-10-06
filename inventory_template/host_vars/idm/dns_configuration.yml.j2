@@ -1,17 +1,31 @@
 ---
-{% raw %}
-# Set these if you are forwarding zones (you probably are not)
-# idm_dns_forward_zones:
-#   - name: "{{ _runtime_global_domain_name }}"
-#     forwarders:
-#       {% endraw %}- ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(10) }}"
-#       - ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(11) }}"
-#     forward_policy: "only"
-#     skip_overlap_check: true
-{% raw %}
+
+# Add the global DNS Forwarders and Forward Policy to the IdM server configuration
+# Internet address requests must be service by an internet DNS server, 
+# so we will use the Google DNS servers as the forwarders for this example. 
+# You can change these to your own preferred DNS servers if you wish.
+
+idm_dns_global_configuration:
+  forwarders:
+    - ip_address: "8.8.8.8"
+    - ip_address: "8.8.4.4"
+  forward_policy: "first"
+  allow_sync_ptr: true
+
+# Testing zone forwarding for parmstrong.ca — resolve demo environment hosts from example.ca
+# If you need internal zone forwarding, you can add the zone name and the forwarders here.
+
+idm_dns_forward_zones:
+  - name: "parmstrong.ca"
+    forwarders:
+      - ip_address: "192.168.252.10"
+      - ip_address: "192.168.252.11"
+    forward_policy: "only"
+    skip_overlap_check: true
+
 # # Set the bind policy for zones managed by the IdM server
 # Example of setting up zone update policy. This is actually managed for satellite by the prepare_realm task, but you can override it here if you want to customize it.
-
+{% raw %}
 # idm_dns_update_zones:
 #   - name: "{{ _runtime_global_domain_name }}"
 #     {% endraw %}foreman_proxy_BIND_update_policy: 'grant {{ basevars_global_domain_name | upper }} krb5-self * A; grant {{ basevars_global_domain_name | upper }} krb5-self * AAAA; grant {{ basevars_global_domain_name | upper }} krb5-self * SSHFP; grant realm-capsule\@{{ basevars_global_domain_name | upper }} wildcard * ANY;' # noqa yaml[line-length]
