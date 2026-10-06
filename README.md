@@ -25,7 +25,8 @@ Bootstrap Backplane hosts (outside container)
         │
       Configure Backplane hosts (inside container)
         |  
-        └── Provisioner ─── render inventory ─── launch container
+        └── Provisioner ─── render inventory ─── preflight check ─── launch container
+              ├── preflight_check.sh                ← ping, IP match, SSH, sudo, conflict scan
               ├── build_idm_primary.sh              ← identity, DNS, certificates
               ├── register_provisioner_to_idm.sh    ← provisioner joins IdM
               ├── build_sat_primary.sh              ← content, lifecycle, provisioning
@@ -79,6 +80,8 @@ ansible-playbook -i inventory \
 
 ### What bootstrap-init does
 
+The bootstrap-init role takes advantage of a feature of anaconda that allows it to automatically discover a ks.cfg file when it is located in the root of a volume labelled 'OEMDRV'. Anaconda will automatically provision the booting system based on the ks.cfg without intervention. Our bootstrap process uses the standard RHEL 9.x boot ISO and the OEMDRV drive to boot the system to our spec. These can be ISOs mounted to a hypervisor or BMC. For cloud environments, bootstrapping will be incorporated into the "landing zone" roles. For now, in cloud environments, build 3 systems using the hypervisor tooling or Terraform.
+
 For each host in your `bootstrap_init_hosts` list, it generates:
 - A `ks.cfg` kickstart file on the OEMDRV mount point
 - A named copy (`satellite1_example_ca_ks.cfg`) so you can identify which host a USB drive is for
@@ -122,9 +125,11 @@ During bootstrap, the satellite host needs to reach the internet for CDN registr
 
 ## Getting started fast
 
-You need a system with git and podman tools.
+You need a system with git and podman tools. 
 VSCode is very helpful.
 Having Ansible Language, Ansible Linter, and wolfmah's Ansible Vault Inline are also super useful.
+
+This will be your provisioner.
 
 We are currently running Fedora and RHEL 9.latest systems. Your mileage may vary.
 
@@ -144,19 +149,23 @@ git push -u origin main
 
 This repository supports multiple simultaneous RHIS deployments. Each deployment has its own directory under `deployments/` and its own basevars file.
 
+example.ca is the sample domain that we develop with.
+
 Copy `inventory_basevars.yml` to a domain-specific file and edit it for your environment:
+
 ```
-cp inventory_basevars.yml your.domain_inventory_basevars.yml
+cp inventory_basevars.yml example.ca_inventory_basevars.yml
 ```
 
 Review and edit `your.domain_inventory_basevars.yml`, then run the inventory_update shell script passing your domain basevars file:
+
 ```
-./inventory_update.sh -b your.domain_inventory_basevars.yml
+./inventory_update.sh -b example.ca_inventory_basevars.yml
 ```
 
 `inventory_update.sh` will build a new directory at `deployments/your.domain/` containing the customized RHIS build configuration based on the parameters you have provided. Running it again with a different domain basevars file creates an independent deployment alongside the first. (Hint: This is how you create disconnected/air-gapped environments. More later...)
 
-The inventory_update script will also create a custom launch script at the repo root (`your.domain.24.sh` or `your.domain.25.sh`) to pull and launch the rhis-provisioner container mounted against your deployment.
+The inventory_update script will also create a custom launch script at the repo root (`your.domain.25.sh`) to pull and launch the rhis-provisioner container mounted against your deployment. (The 25 means that it only works with AAP 2.5 and greater when adding AAP deployments. We no longer support AAP version 2.4 or earlier. Eventually we will drop the 25.)
 
 The rhis-provisioner container has all the scripts, playbooks, roles, etc. that are used to build the RHIS deployment. You can run from within the container or call the helper scripts through the entrypoint.
 
@@ -180,7 +189,7 @@ The fully-qualified domain name for your RHIS deployment. This value drives:
 
 - The name of the generated deployment directory: `deployments/<basevars_global_domain_name>/`
 - The FQDN of every generated host: `<role><N>.<basevars_global_domain_name>` (e.g. `satellite1.example.ca`, `idm2.example.ca`)
-- The name of the generated container launch scripts at the repo root: `<basevars_global_domain_name>.24.sh` / `<basevars_global_domain_name>.25.sh`
+- The name of the generated container launch script at the repo root: `<basevars_global_domain_name>.25.sh`
 
 Set this to the actual DNS domain you will use for your environment.
 
@@ -245,7 +254,7 @@ rhis_time_servers:
   - "3.rhel.pool.ntp.org"
 ```
 
-The list of NTP time servers to configure on your hosts via chrony. Use your organization's internal NTP servers if available. The public RHEL pool servers are a reasonable default if you have internet access.
+The list of NTP time servers to configure on your hosts via chrony. Use your organization's internal NTP servers if available. The public RHEL pool servers are a reasonable default if you have internet access. If you are using names, they must be resolvable; otherwise, use IP addresses.
 
 ### rhis_aap_release_version
 
@@ -253,13 +262,12 @@ The list of NTP time servers to configure on your hosts via chrony. Use your org
 rhis_aap_release_version: "2.6"
 ```
 
-The AAP release version to deploy. Accepted values are `"2.4"` and `"2.6"`. This controls:
+The AAP release version to deploy. Only `"2.6"` is currently tested. Please note:
 
-- Which AAP `host_vars` templates are used (`aapcontroller24`/`aaphub24` vs `aapcontroller26`/`aaphub26`)
-- The container image selected when launching the rhis-provisioner
-- AAP 2.4 is deprecated and will be removed in a future release
+- AAP nodes are now post-fixed with a number like other node types (`aapcontroller1`/`aaphub1`)
+- The container image selected when launching the rhis-provisioner is always 2.5. This means the ansible collections included in the rhis-provisioner container only support configuring AAP 2.5 or greater when deploying a full RHIS architecture.
+- AAP 2.4 is deprecated and has been removed.
 
-This does **not** install AAP itself; it selects the correct configuration templates that the provisioner will use when it runs the AAP installation role.
 
 ### rhis_system_count
 
@@ -287,6 +295,8 @@ Controls how many instances of each host role are included in your deployment. F
 Setting a count to `0` skips that role entirely — no `host_vars` directory or inventory entry is generated for it.
 
 `rhis_system_count` controls **quantity only**. Per-host configuration (IP addresses, disk layout, credentials, etc.) is done in the generated `host_vars/<hostname>/` files inside your deployment directory after running `inventory_update.sh`.
+
+IP addresses are assigned automatically from a structured band allocation scheme based on node type and count. Each service group occupies its own contiguous address band with defined boundaries, emergency reservations, and documented limits. For full details — band table, system count limits, and instructions for adding new server types — see [docs/inventory_addressing.md](docs/inventory_addressing.md).
 
 ### rhis_aws_region / rhis_azure_region
 
@@ -322,11 +332,8 @@ That practice fits naturally into a **GitOps** pipeline:
 Once your deployment directory is generated, run the domain launch script from the repo root:
 
 ```
-./your.domain.24.sh    # for AAP 2.4 (deprecated)
 ./your.domain.25.sh    # for AAP 2.5 / 2.6
 ```
-NOTE: With the deprecation of AAP 2.4, the need for multiple containers and any version decoration is removed. In a future release, there will be only one file generated: `./your.domain.sh`
-
 The script starts the `rhis-provisioner` container interactively. Your deployment configuration is mounted read-write into the container at startup. The container hostname is set to `provisioner` and it is named `rhis-builder`.
 
 > **Note:** Any files you add to the mounted directories after the container starts will be visible inside the container, but will not be accessible due to security configuration. You must stop and restart the container to pick up new files.
@@ -340,10 +347,12 @@ The script starts the `rhis-provisioner` container interactively. Your deploymen
 | `deployments/<domain>/files/` | `/rhis/vars/files/` | Supporting files (RPMs, SCAP content, scripts) |
 | `deployments/<domain>/group_vars/` | `/rhis/vars/group_vars/` | Group variable files |
 | `deployments/<domain>/host_vars/` | `/rhis/vars/host_vars/` | Host variable files |
+| `deployments/<domain>/logs/` | `/rhis/vars/logs/` | Build logs (persisted across container restarts) |
 | `deployments/<domain>/templates/` | `/rhis/vars/templates/` | Jinja2 templates |
 | `deployments/<domain>/vars/` | `/rhis/vars/vars/` | Non-secret variable files |
 | `deployments/<domain>/vault/` | `/rhis/vars/vault/` | Vault-encrypted secrets |
 | `~/.ssh/` | `/root/.ssh/` | SSH keys for reaching provisioned hosts |
+| `~/rhis_transfer/` | `/home/ansiblerunner/rhis_transfer/` | Highside transfer data (mounted only when directory exists) |
 
 ### Build phases
 
@@ -376,7 +385,7 @@ podman exec -it rhis-builder /bin/bash
 
 A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There is a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names.
 
-NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments may diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction.
+NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments may diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction. In a future release, we are introducing "tailoring files" to allow you to customize multiple deployments from a common set of templates and retain the customizations over time and upgrades of RHIS. Schema validation and migration enhancements will be released with the above features.
 
 
 ### Deployment relationship model
@@ -607,10 +616,10 @@ Provide the configuration definitions to the rhis-provisioner container for all 
     * this folder contains files required by RHIS to build the environment. Examples are the OpenSCAP contents and tailoring files and scripts necessary to install roles consumed by the RHIS Satellite installation.
 
 * group_vars directory
-    * this folder contains a folder for each of the groups in the inventory that require group specific configuration. Each group's folder will contain the variable files necessary for that group's configuration. All files in the folders with a yaml or yml extension will be consumed by RHIS plays when executing against the specified group systems.
+    * this folder contains a folder for each of the groups in the inventory that require group-specific configuration. Each group's folder will contain the variable files necessary for that group's configuration. All files in the folders with a yaml or yml extension will be consumed by RHIS plays when executing against the specified group systems.
 
 * host_vars directory
-    * this folder contains a folder for each of the hosts in the inventory that require host specific configuration. Each host's folder will contain the variable files necessary for that host's configuration. All files in the folders with a yaml or yml extension will be consumed by RHIS plays when executing against the specified host systems.
+    * this folder contains a folder for each of the hosts in the inventory that require host-specific configuration. Each host's folder will contain the variable files necessary for that host's configuration. All files in the folders with a yaml or yml extension will be consumed by RHIS plays when executing against the specified host systems.
 
 * inventory directory
     * an inventory folder is used to contain one or more inventory files for the organization (e.g. a DEV inventory vs. a QA inventory). Only one inventory file is used at a time.

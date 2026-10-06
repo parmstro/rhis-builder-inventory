@@ -1,0 +1,112 @@
+---
+# RHIS pre-flight checks: ping, IP match, SSH, sudo, conflict scan.
+#
+# Future: This playbook should be extended with a full deployment sanity
+# check — schema validation, SOE selection consistency, and inventory
+# completeness — once the SOE selection/flatten work and Cockpit UI are
+# in place. That is a significant effort tied to the broader schema
+# validation and migration initiative.
+
+- name: "RHIS pre-flight connectivity check"
+  hosts: "{{ preflight_hosts | default('idm_primary,sat_primary') }}"
+  gather_facts: false
+  vars:
+    preflight_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+
+  tasks:
+
+    - name: "Ping backplane hosts"
+      ansible.builtin.command:
+        cmd: "ping -c 1 -W 3 {{ inventory_hostname }}"
+      delegate_to: localhost
+      changed_when: false
+      register: ping_result
+
+    - name: "Verify resolved IP matches inventory for {{ inventory_hostname }}"
+      vars:
+        resolved_ip: "{{ ping_result.stdout | regex_search('\\(([0-9.]+)\\)', '\\1') | first }}"
+      ansible.builtin.assert:
+        that:
+          - resolved_ip == ipv4_address
+        fail_msg: "STALE CONFIG: {{ inventory_hostname }} resolved to {{ resolved_ip }} but inventory has {{ ipv4_address }}"
+        success_msg: "{{ inventory_hostname }} resolves to {{ resolved_ip }} — matches inventory"
+
+- name: "RHIS pre-flight SSH and sudo check"
+  hosts: "{{ preflight_hosts | default('idm_primary,sat_primary') }}"
+  gather_facts: false
+  vars:
+    preflight_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+
+  tasks:
+
+    - name: "SSH connectivity as {{ preflight_user }}"
+      ansible.builtin.ping:
+
+    - name: "Sudo escalation"
+      ansible.builtin.command:
+        cmd: "whoami"
+      become: true
+      changed_when: false
+      register: sudo_check
+      failed_when: sudo_check.stdout != "root"
+
+    - name: "Pre-flight results for {{ inventory_hostname }}"
+      ansible.builtin.debug:
+        msg:
+          result: "PASSED"
+          host: "{{ inventory_hostname }}"
+          inventory_ip: "{{ ipv4_address }}"
+          resolved_ip: "{{ ping_result.stdout | regex_search('\\(([0-9.]+)\\)', '\\1') | first }}"
+          ip_match: "OK"
+          ping: "OK"
+          ssh: "{{ preflight_user }}@{{ inventory_hostname }}"
+          sudo: "root"
+
+- name: "RHIS pre-flight IP conflict scan"
+  hosts: localhost
+  gather_facts: false
+  vars:
+    preflight_hosts_pattern: "{{ preflight_hosts | default('idm_primary,sat_primary') }}"
+    skip_groups:
+      - "vmware_vcenter_hosts"
+      - "vmware_esx_hosts"
+  tasks:
+
+    - name: "Build list of IPs to scan for conflicts"
+      vars:
+        checked: "{{ preflight_hosts_pattern.split(',') | map('trim') | select('in', groups) | map('extract', groups) | flatten | unique | list }}"
+        skip: "{{ skip_groups | select('in', groups) | map('extract', groups) | flatten | list }}"
+        candidates: "{{ groups['all'] | difference(checked) | difference(skip) | reject('eq', 'localhost') | reject('in', groups['provisioner'] | default([])) | list }}"
+        has_ip: "{{ hostvars | dict2items | selectattr('value.ipv4_address', 'defined') | map(attribute='key') | list }}"
+      ansible.builtin.set_fact:
+        scan_hosts: "{{ candidates | select('in', has_ip) | list }}"
+
+    - name: "Ping scan for unexpected responses"
+      ansible.builtin.command:
+        cmd: "ping -c 1 -W 1 {{ hostvars[item].ipv4_address }}"
+      loop: "{{ scan_hosts }}"
+      register: conflict_pings
+      changed_when: false
+      failed_when: false
+
+    - name: "Flag potential IP conflicts"
+      ansible.builtin.debug:
+        msg:
+          warning: "POTENTIAL IP CONFLICT"
+          host: "{{ item.item }}"
+          ip: "{{ hostvars[item.item].ipv4_address }}"
+          detail: "Address responded to ping but host should not be built yet"
+      loop: "{{ conflict_pings.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+      when: item.rc == 0
+
+    - name: "IP conflict scan summary"
+      vars:
+        conflicts: "{{ conflict_pings.results | selectattr('rc', 'eq', 0) | list }}"
+      ansible.builtin.debug:
+        msg:
+          scan: "IP conflict check"
+          hosts_scanned: "{{ scan_hosts | length }}"
+          conflicts_found: "{{ conflicts | length }}"
+          status: "{{ 'WARNING — review conflicts above' if conflicts | length > 0 else 'CLEAN — no unexpected responses' }}"
