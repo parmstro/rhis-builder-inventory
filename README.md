@@ -2,15 +2,131 @@
 
 ### Before you start
 ---
-Ensure that you review the RHIS repositories. Specifically [rhis-builder-bootstrap-init](https://github.com/parmstro/rhis-builder-bootstrap-init). It is essential that you have an understanding of the process and workflow before you jump in. The pool is deep.
+
+RHIS requires three backplane hosts to get started:
+
+| Host | Role |
+|---|---|
+| **Provisioner** | Runs the rhis-provisioner container that builds everything else |
+| **IdM primary** | Identity management — Kerberos, DNS, certificates |
+| **Satellite primary** | Content management — repos, lifecycle, host provisioning |
+
+These can be bare metal, virtual machines, cloud instances, or any mix — it doesn't matter as long as they run RHEL 9 and can reach each other on the network.
+
+If you already have a RHEL 9 system with `git`, `podman`, and `ansible-core`, you can use it as your provisioner. Otherwise, [rhis-builder-bootstrap-init](https://github.com/parmstro/rhis-builder-bootstrap-init) can bootstrap all three hosts from scratch using kickstart.
+
+Here is the overall build sequence:
+
+```
+Bootstrap Backplane hosts (outside container)
+  ├── Provisioner  ← existing RHEL 9 system, or bootstrap from kickstart
+  ├── IdM primary  ← bootstrap from kickstart
+  └── Satellite    ← bootstrap from kickstart
+        │
+      Configure Backplane hosts (inside container)
+        |  
+        └── Provisioner ─── render inventory ─── launch container
+              ├── build_idm_primary.sh              ← identity, DNS, certificates
+              ├── register_provisioner_to_idm.sh    ← provisioner joins IdM
+              ├── build_sat_primary.sh              ← content, lifecycle, provisioning
+              ├── register_idm_to_satellite.sh      ← IdM gets content management
+              ├── deploy_aap_hosts.sh               ← provision AAP hosts via Satellite
+              ├── configure_aap_controller.sh       ← credentials, projects, templates, workflows
+              └── (location-by-location infrastructure + workloads via AAP workflows)
+```
+The repositories and sample templates have been configured to use all components by default. That doesn't mean you have to implement them all. You can absolutely customize rhis-builder to build whatever configuration you want. We strongly suggest that you build the sample environment first to see how systems interconnect and what services they provide. After that, you can start examining how you will integrate your custom services. It's easier than it appears at first glance!
+
+In general, each step depends on the one before it. To take full advantage of Red Hat Enterprise Linux features and minimize setup runs and changes, we build systems in a specific order based on service dependencies. For example, IdM must be fully operational before Satellite is built (Satellite registers to IdM for Kerberos and certificates). Satellite must be operational before other hosts can be provisioned. We use Satellite provisioning as a single known method to build hosts on any target: bare metal, KVM, VMware, Hyper-V, OpenShift Virtualization, Proxmox, OpenStack, Azure Local, Azure, AWS, Google Cloud, ... a long list.
+
+Ensure that you review the RHIS repositories before you jump in. The pool is deep.
+
+Think of this as the "PADI discover scuba diving" course: Let's see the ocean safely and have some fun. 
+
+---
+
+## Bootstrapping
+
+[rhis-builder-bootstrap-init](https://github.com/parmstro/rhis-builder-bootstrap-init) generates kickstart files and OEMDRV ISOs to automate the base RHEL 9 install on your backplane hosts. As mentioned above, if you have a system to use as a provisioner already, you only need to bootstrap your IdM and Satellite servers.
+
+### Aside: Why you might want a persistent provisioner node
+
+Having a persistent provisioner node helps as a focal point for your configuration git connections. It is also a known instance when working in more complex environments that have network-appliance-based firewall rules. It can reduce change request churn.
+
+### Getting started with bootstrap-init
+
+Sample host configuration files for the Provisioner, IdM, and Satellite are provided at:
+- `rhis-builder-bootstrap-init/group_vars/provisioner/provisioner_init_vars.yml`
+- `rhis-builder-bootstrap-init/group_vars/provisioner/idm1_init_vars.yml`
+- `rhis-builder-bootstrap-init/group_vars/provisioner/satellite1_init_vars.yml`
+
+Disk configuration is important — your Satellite needs a lot of space, especially if you are going to add a disconnected environment later. The above samples have reasonable defaults. Long-running provisioners will want a larger lv_home volume; your Satellite wants a big lv_var volume. These are taken care of just by creating or giving the systems big disks. The samples expect bare metal with NVMe drives (what we develop on).
+
+Update the network (and disk) configuration in each file for your environment, then from the `rhis-builder-bootstrap-init` directory, run:
+
+```bash
+# Generate the IdM kickstart
+ansible-playbook -i inventory \
+  -e "bootstrap_init_hosts={{ idm_bootstrap_init_hosts }}" \
+  -e "vault_path=/path/to/vault.yml" \
+  --ask-vault-pass main.yml
+
+# Generate the Satellite kickstart
+ansible-playbook -i inventory \
+  -e "bootstrap_init_hosts={{ satellite_bootstrap_init_hosts }}" \
+  -e "vault_path=/path/to/vault.yml" \
+  --ask-vault-pass main.yml
+```
+
+### What bootstrap-init does
+
+For each host in your `bootstrap_init_hosts` list, it generates:
+- A `ks.cfg` kickstart file on the OEMDRV mount point
+- A named copy (`satellite1_example_ca_ks.cfg`) so you can identify which host a USB drive is for
+- An OEMDRV ISO (optional, for iDRAC/iLO/Redfish virtual media) containing both files
+
+The kickstart handles: disk partitioning, static network configuration (MAC detected at install time), user creation with SSH key, chrony time services, CDN registration (connected) or local repo setup (disconnected), and `/etc/hosts` population for all bootstrap hosts.
+
+### Bootstrap host order
+
+The backplane hosts must be bootstrapped in this order due to service dependencies:
+
+| Order | Host | Why |
+|---|---|---|
+| 1 | Provisioner | Runs the container that builds everything else |
+| 2 | IdM primary | Must be operational before Satellite (Kerberos, certs, DNS) |
+| 3 | Satellite primary | Must be operational before AAP (content, host registration) |
+
+### Post-bootstrap registration
+
+After the core hosts are built, two cross-registration steps resolve the circular dependencies:
+
+**1. Register the provisioner to IdM** (after IdM is built):
+```bash
+# Inside the container:
+./register_provisioner_to_idm.sh
+```
+This installs the IPA client on the provisioner so it can resolve and authenticate to all IdM-managed hosts, including systems built later by Satellite.
+
+**2. Register the IdM server to Satellite** (after Satellite is built):
+```bash
+# Inside the container:
+./register_idm_to_satellite.sh
+```
+This registers the IdM host with Satellite for content management (patching, errata, compliance).
+
+### DNS considerations
+
+During bootstrap, the satellite host needs to reach the internet for CDN registration and initial content sync. Its kickstart `name_server` entries should point to an external DNS resolver (e.g. your gateway or ISP DNS). When `rhis-builder-satellite` runs, it switches the satellite's DNS to use the IdM servers.
+
+---
 
 ## Getting started fast
 
 You need a system with git and podman tools.
 VSCode is very helpful.
-Having ansible language, ansible linter and wolfmah's ansible-vault inline is also super useful.
+Having Ansible Language, Ansible Linter, and wolfmah's Ansible Vault Inline are also super useful.
 
-We are currently running fedora and rhel 9.latest systems. Your mileage may vary.
+We are currently running Fedora and RHEL 9.latest systems. Your mileage may vary.
 
 Get this repository:
 ```
@@ -42,7 +158,7 @@ Review and edit `your.domain_inventory_basevars.yml`, then run the inventory_upd
 
 The inventory_update script will also create a custom launch script at the repo root (`your.domain.24.sh` or `your.domain.25.sh`) to pull and launch the rhis-provisioner container mounted against your deployment.
 
-The rhis-provisioner container has all the scripts, playbooks, roles, etc.. that are used to build the RHIS deployment. You can run from within the container or call the helper scripts through the entrypoint.
+The rhis-provisioner container has all the scripts, playbooks, roles, etc. that are used to build the RHIS deployment. You can run from within the container or call the helper scripts through the entrypoint.
 
 See below for information on customizing your build further and run the Ansible plays.
 
@@ -209,11 +325,11 @@ Once your deployment directory is generated, run the domain launch script from t
 ./your.domain.24.sh    # for AAP 2.4 (deprecated)
 ./your.domain.25.sh    # for AAP 2.5 / 2.6
 ```
-NOTE: With the deprecation of AAP 2.4 the need for multiple containers and any version decoration is removed. In a future release there will be only one file generated ./your.domain.sh
+NOTE: With the deprecation of AAP 2.4, the need for multiple containers and any version decoration is removed. In a future release, there will be only one file generated: `./your.domain.sh`
 
 The script starts the `rhis-provisioner` container interactively. Your deployment configuration is mounted read-write into the container at startup. The container hostname is set to `provisioner` and it is named `rhis-builder`.
 
-> **Note:** Any files you add to the mounted directories after the container starts will be visible inside the container, but will not be accessible due to security configuraiton. You must stop and restart the container to pick up new files.
+> **Note:** Any files you add to the mounted directories after the container starts will be visible inside the container, but will not be accessible due to security configuration. You must stop and restart the container to pick up new files.
 
 ### What is mounted inside the container
 
@@ -242,7 +358,7 @@ Configure Satellite including content, lifecycle environments, activation keys, 
 **Phase 4 — Ansible Automation Platform (AAP)**
 Configure the AAP Controller, Private Automation Hub, and any additional nodes. AAP is configured last as it depends on both IdM (for authentication) and Satellite (for content and inventory sources).
 
-> **Phase 1 — Bootstrap** (runs outside the container, before the above phases): Use `rhis-builder-baremetal-init` to generate OEMDRV kickstart images and bootstrap your physical or virtual hosts to a base RHEL 9 install before running the container. The ISO files are generated for use with hypervisors, ks.cfg files are created for using thumb drives with bare metal systems.
+> **Phase 1 — Bootstrap** (runs outside the container, before the above phases): Use `rhis-builder-bootstrap-init` to generate OEMDRV kickstart images and bootstrap your physical or virtual hosts to a base RHEL 9 install before running the container. See the [Bootstrapping](#bootstrapping) section above for the full sequence including post-bootstrap cross-registration steps.
 
 ### Stopping and restarting the container
 
@@ -258,7 +374,7 @@ podman exec -it rhis-builder /bin/bash
 
 ## Disconnected (air-gapped) deployments
 
-A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There are a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names.
+A disconnected RHIS deployment is just another RHIS deployment — same inventory structure, same roles, same build scripts. The difference is expressed entirely through basevars flags. The highside gets its own domain name. There is a set of variables used to control disconnected behaviour. In your basevars file it is best practice to relate your upstream and downstream relationships explicitly and not to rely on domain names.
 
 NOTE: These do not have to be identical deployments, however, they typically are to start. Once on the highside, the deployments may diverge. Divergent deployments should be copied to a separate repo. It is expected that the configuration will have differences. This is fundamentally a templating methodology to reduce operational friction.
 
@@ -480,7 +596,7 @@ IdM must be fully operational before Satellite — Satellite registers to IdM fo
 ## What is in this repository
 
 NOTE:
-The rhis-builder-inventory now contains a version.txt file. Its purpose is to allow users to recognize change and updates to the schema and to help align the sample data with the rhis-provisioner container. This capability will be enhanced through releases with the intention of eventually providing configuration validation. As we consume a huge number of projects under rhis-builder this task will be ongoing.
+The rhis-builder-inventory now contains a version.txt file. Its purpose is to allow users to recognize changes and updates to the schema and to help align the sample data with the rhis-provisioner container. This capability will be enhanced through releases with the intention of eventually providing configuration validation. As we consume a huge number of projects under rhis-builder, this task will be ongoing.
 
 Provide the configuration definitions to the rhis-provisioner container for all RHIS repositories for a given Organization including:
 
