@@ -9,17 +9,18 @@
 #     forward_policy: "only"
 #     skip_overlap_check: true
 {% raw %}
-# Set the bind policy for zones managed by the IdM server
-# The realm-capsule bind policy should be much more restrictive
-idm_dns_update_zones:
-  - name: "{{ _runtime_global_domain_name }}"
-    {% endraw %}foreman_proxy_BIND_update_policy: 'grant {{ basevars_global_domain_name | upper }} krb5-self * A; grant {{ basevars_global_domain_name | upper }} krb5-self * AAAA; grant {{ basevars_global_domain_name | upper }} krb5-self * SSHFP; grant realm-capsule\@{{ basevars_global_domain_name | upper }} wildcard * ANY;' # noqa yaml[line-length]
-    allow_sync_ptr: true
-    dynamic_update: true
-  - name: "{{ default_network_reverse_dns_zone_name }}"
-    foreman_proxy_BIND_update_policy: 'grant {{ basevars_global_domain_name | upper }} krb5-subdomain {{ default_network_reverse_dns_zone_name }}. PTR; grant realm-capsule\@{{ basevars_global_domain_name | upper }} wildcard * ANY;'
-    allow_sync_ptr: true
-    dynamic_update: true
+# # Set the bind policy for zones managed by the IdM server
+# Example of setting up zone update policy. This is actually managed for satellite by the prepare_realm task, but you can override it here if you want to customize it.
+
+# idm_dns_update_zones:
+#   - name: "{{ _runtime_global_domain_name }}"
+#     {% endraw %}foreman_proxy_BIND_update_policy: 'grant {{ basevars_global_domain_name | upper }} krb5-self * A; grant {{ basevars_global_domain_name | upper }} krb5-self * AAAA; grant {{ basevars_global_domain_name | upper }} krb5-self * SSHFP; grant realm-capsule\@{{ basevars_global_domain_name | upper }} wildcard * ANY;' # noqa yaml[line-length]
+#     allow_sync_ptr: true
+#     dynamic_update: true
+#   - name: "{{ default_network_reverse_dns_zone_name }}"
+#     foreman_proxy_BIND_update_policy: 'grant {{ basevars_global_domain_name | upper }} krb5-subdomain {{ default_network_reverse_dns_zone_name }}. PTR; grant realm-capsule\@{{ basevars_global_domain_name | upper }} wildcard * ANY;'
+#     allow_sync_ptr: true
+#     dynamic_update: true
 {% raw %}
 
 # you probably want to add some standard records to the new DNS
@@ -68,12 +69,12 @@ idm_dns_records:
     {% raw %}a_create_reverse: false
     state: "present"
 
-  - name: ""
-    zone_name: "{{ default_network_reverse_dns_zone_name }}"
-    record_type: "PTR"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
-    {% raw %}a_create_reverse: false
-    state: "present"
+#  - name: ""
+#    {% endraw %}zone_name: "{{ default_network_reverse_dns_zone_name }}"
+#    {% raw %}record_type: "PTR"
+#    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+#    {% raw %}a_create_reverse: false
+#    state: "present"
 
   - name: "c3s1n1"
     zone_name: "{{ _runtime_global_domain_name }}"
@@ -187,73 +188,73 @@ idm_dns_records:
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "vcenter"
+  - name: "vcenter80"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(30) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(80) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx1"
+  - name: "esx81"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(31) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(81) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx2"
+  - name: "esx82"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(32) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(82) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx3"
+  - name: "esx83"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(33) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(83) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx4"
+  - name: "esx84"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(34) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(84) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx5"
+  - name: "esx85"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(35) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(85) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx6"
+  - name: "esx86"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(36) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(86) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx7"
+  - name: "esx87"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(37) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(87) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx8"
+  - name: "esx88"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(38) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(88) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
-  - name: "esx9"
+  - name: "esx89"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(39) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(89) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 {% endraw %}
