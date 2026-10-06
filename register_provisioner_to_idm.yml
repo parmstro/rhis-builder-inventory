@@ -1,0 +1,109 @@
+---
+# Register the Provisioner to IdM
+#
+# Run after IdM is built.
+# Uses redhat.rhel_idm.ipaclient to install and configure the IPA client
+# on the provisioner so it can resolve and authenticate to all IdM-managed hosts.
+#
+# Required inventory variables:
+#   ipaserver_domain, ipaserver_realm, ipa_server_fqdn,
+#   ipaadmin_principal (via vault), ipaadmin_password (via vault),
+#   ipaclient_* variables from group_vars/all
+
+- name: "Register Provisioner to IdM"
+  hosts: provisioner
+  become: true
+  gather_facts: true
+
+  tasks:
+
+    - name: "Load the vault variables"
+      when: vault_dir is defined
+      ansible.builtin.include_vars:
+        dir: "{{ vault_dir }}"
+      tags:
+        - always
+
+    - name: "Ensure IPA client packages are installed"
+      ansible.builtin.dnf:
+        name:
+          - ipa-client
+        state: present
+
+    - name: "Register provisioner to IdM"
+      ansible.builtin.include_role:
+        name: redhat.rhel_idm.ipaclient
+
+    - name: "Validate IdM registration"
+      block:
+        - name: "Verify kinit authentication"
+          ansible.builtin.command:
+            cmd: "kinit {{ ipaadmin_principal }}"
+            stdin: "{{ ipaadmin_password }}"
+          changed_when: false
+          register: kinit_result
+
+        - name: "Assert kinit succeeded"
+          ansible.builtin.assert:
+            that:
+              - kinit_result.rc == 0
+            fail_msg: "kinit failed — IdM authentication is not working"
+            success_msg: "kinit succeeded for {{ ipaadmin_principal }}"
+
+        - name: "Verify local domain DNS resolution"
+          ansible.builtin.command:
+            cmd: "dig +short {{ ipa_server_fqdn }}"
+          changed_when: false
+          register: local_dns_result
+
+        - name: "Assert local domain resolves"
+          ansible.builtin.assert:
+            that:
+              - local_dns_result.stdout | length > 0
+            fail_msg: "Cannot resolve {{ ipa_server_fqdn }} — local DNS is not working"
+            success_msg: "{{ ipa_server_fqdn }} resolves to {{ local_dns_result.stdout }}"
+
+        - name: "Verify forward zone DNS resolution"
+          when: hostvars[groups['idm_primary'][0]].idm_dns_forward_zones is defined and (hostvars[groups['idm_primary'][0]].idm_dns_forward_zones | length) > 0
+          ansible.builtin.command:
+            cmd: "dig +short SOA {{ hostvars[groups['idm_primary'][0]].idm_dns_forward_zones[0].name }}"
+          changed_when: false
+          register: forward_dns_result
+
+        - name: "Assert forward zone is reachable"
+          when: hostvars[groups['idm_primary'][0]].idm_dns_forward_zones is defined and (hostvars[groups['idm_primary'][0]].idm_dns_forward_zones | length) > 0
+          ansible.builtin.assert:
+            that:
+              - forward_dns_result.stdout | length > 0
+            fail_msg: "Cannot reach {{ hostvars[groups['idm_primary'][0]].idm_dns_forward_zones[0].name }} — zone forwarding is not working"
+            success_msg: "Forward zone {{ hostvars[groups['idm_primary'][0]].idm_dns_forward_zones[0].name }} is reachable"
+
+        - name: "Verify internet DNS resolution"
+          ansible.builtin.command:
+            cmd: "dig +short www.redhat.com"
+          changed_when: false
+          register: internet_dns_result
+
+        - name: "Assert internet DNS resolves"
+          ansible.builtin.assert:
+            that:
+              - internet_dns_result.stdout | length > 0
+            fail_msg: "Cannot resolve www.redhat.com — global forwarders are not working"
+            success_msg: "Internet DNS working — www.redhat.com resolves to {{ internet_dns_result.stdout_lines[0] }}"
+
+        - name: "Post-registration validation summary"
+          ansible.builtin.debug:
+            msg:
+              status: "PASSED"
+              kinit: "{{ ipaadmin_principal }} authenticated"
+              local_dns: "{{ ipa_server_fqdn }} → {{ local_dns_result.stdout }}"
+              forward_dns: "{{ (hostvars[groups['idm_primary'][0]].idm_dns_forward_zones[0].name + ' → ' + forward_dns_result.stdout) if hostvars[groups['idm_primary'][0]].idm_dns_forward_zones is defined and (hostvars[groups['idm_primary'][0]].idm_dns_forward_zones | length) > 0 else 'no forward zones configured' }}"
+              internet_dns: "www.redhat.com → {{ internet_dns_result.stdout_lines[0] }}"
+              nameserver: "{{ ansible_dns.nameservers[0] | default('unknown') }}"
+
+      always:
+        - name: "Destroy Kerberos ticket"
+          ansible.builtin.command:
+            cmd: "kdestroy"
+          changed_when: false
+...
