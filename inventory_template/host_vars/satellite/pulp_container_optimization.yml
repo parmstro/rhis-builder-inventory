@@ -4,7 +4,11 @@
 # This patches the installed pulp_container package in-place for
 # ~249x faster digest-based container sync operations.
 
-pulp_container_bypass_optimization: false
+# WARNING: This optimization is not supported by Red Hat
+# and may break your Satellite installation. Use at your own risk. (But we have tested it and it works fine in our lab environment.)
+# It is recommended to test this in a lab environment before deploying to production.
+
+pulp_container_bypass_optimization: true
 
 # Action: 'install' to deploy, 'rollback' to revert
 # pulp_container_optimization_action: install
