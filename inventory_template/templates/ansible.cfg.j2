@@ -1,0 +1,26 @@
+## Rendered by rhis-builder-inventory — do not edit manually
+{% raw %}
+[defaults]
+remote_tmp: /var/tmp
+timeout: 300
+result_format=yaml
+
+[ssh_connection]
+ssh_args = -o StrictHostKeyChecking=accept-new
+
+[galaxy]
+server_list = automation_hub_validated,automation_hub_published,galaxy_root
+
+[galaxy_server.galaxy_root]
+url=https://galaxy.ansible.com
+
+[galaxy_server.automation_hub_published]
+url={{ redhat_automation_hub_content_published }}
+auth_url={{ redhat_automation_hub_auth_url }}
+token={{ redhat_automation_hub_token_vault }}
+
+[galaxy_server.automation_hub_validated]
+url={{ redhat_automation_hub_content_validated }}
+auth_url={{ redhat_automation_hub_auth_url }}
+token={{ redhat_automation_hub_token_vault }}
+{% endraw %}

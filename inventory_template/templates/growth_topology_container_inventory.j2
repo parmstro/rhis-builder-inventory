@@ -48,12 +48,17 @@ bundle_install=true
 # The bundle directory must include /bundle in the path
 bundle_dir='{{ platform_installer_config.aap_bundle_dir }}'
 
+# TLS
+custom_ca_cert="{{ platform_installer_config.aap_custom_ca_crt }}"
+
 # Platform gateway
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-gateway-variables
 # -----------------------------------------------------
 gateway_admin_password="{{ platform_installer_config.aap_platform_password }}"
 gateway_pg_host="{{ ansible_fqdn }}"
 gateway_pg_password="{{ platform_installer_config.aap_pg_password }}"
+gateway_tls_cert="{{ platform_installer_config.aap_gateway_ssl_crt }}"
+gateway_tls_key="{{ platform_installer_config.aap_gateway_ssl_key }}"
 
 # Automation controller
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-controller-variables
@@ -62,6 +67,8 @@ controller_admin_password="{{ platform_installer_config.aap_platform_password }}
 controller_pg_host="{{ ansible_fqdn }}"
 controller_pg_password="{{ platform_installer_config.aap_pg_password }}"
 controller_percent_memory_capacity=0.5
+controller_tls_cert="{{ platform_installer_config.aap_controller_ssl_crt }}"
+controller_tls_key="{{ platform_installer_config.aap_controller_ssl_key }}"
 
 # Automation hub
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#ref-hub-variables
@@ -70,6 +77,8 @@ hub_admin_password="{{ platform_installer_config.aap_platform_password }}"
 hub_pg_host="{{ ansible_fqdn }}"
 hub_pg_password="{{ platform_installer_config.aap_pg_password }}"
 hub_seed_collections=true
+hub_tls_cert="{{ platform_installer_config.aap_hub_ssl_crt }}"
+hub_tls_key="{{ platform_installer_config.aap_hub_ssl_key }}"
 
 # Event-Driven Ansible controller
 # https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.5/html/containerized_installation/appendix-inventory-files-vars#event-driven-ansible-controller
@@ -77,3 +86,5 @@ hub_seed_collections=true
 eda_admin_password="{{ platform_installer_config.aap_platform_password }}"
 eda_pg_host="{{ ansible_fqdn }}"
 eda_pg_password="{{ platform_installer_config.aap_pg_password }}"
+eda_tls_cert="{{ platform_installer_config.aap_edacontroller_ssl_crt }}"
+eda_tls_key="{{ platform_installer_config.aap_edacontroller_ssl_key }}"

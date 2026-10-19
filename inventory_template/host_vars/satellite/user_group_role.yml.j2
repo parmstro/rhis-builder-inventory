@@ -17,7 +17,26 @@ satellite_users:
     email: "bobsurunkle@{{ _runtime_global_domain_name }}"
     description: "Uncle Bob"
     admin: "false"
-    user_password: "random_password"  # not_a_secret
+    user_password: "{{ default_user_password }}"
+    default_location: "{{ satellite_location }}"
+    default_organization: "{{ satellite_organization }}"
+    auth_source: "Internal"  # or "External"
+{% endraw %}
+    timezone: "{{ split_rhis_timezone[1] }}"
+    locale: "{{ rhis_locale }}"{% raw %}
+    locations:
+      - "{{ satellite_location }}"
+    organizations:
+      - "{{ satellite_organization }}"
+    state: "present"  # not Ontario or South Carolina
+
+  - name: "ansiblerunner"
+    firstname: "Anne Sibel"
+    lastname: "Blerowski-Unner"
+    email: "ansiblerunner@{{ _runtime_global_domain_name }}"
+    description: "Anne Sibleau-Unner"
+    admin: "false"
+    user_password: "{{ default_user_password }}"
     default_location: "{{ satellite_location }}"
     default_organization: "{{ satellite_organization }}"
     auth_source: "Internal"  # or "External"
@@ -57,9 +76,16 @@ satellite_user_groups:
       - "Create ARF report" 
     state: "present"
 
-
   - name: "Administrators"
     admin: "true"
+    state: "present"
+
+  - name: "rhis"
+    admin: "false"
+    users:
+      - "ansiblerunner"
+    roles:
+      - "System admin"
     state: "present"
 
 # auth_source: "External" == FreeIPA/Red Hat Identity Manager login

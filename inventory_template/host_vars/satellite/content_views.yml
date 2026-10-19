@@ -54,12 +54,6 @@ content_views:
         description: "Include all rpms with no errata for all repositories"
         original_packages: true
         repositories: "[]"
-      - name: "Include_All_Streams_No_Errata"
-        type: "modulemd"
-        inclusion: true
-        description: "Include all module streams with no errata for all repositories"
-        original_module_streams: true
-        repositories: "[]"
       - name: "Include_Errata_By_Date"
         type: "erratum"
         inclusion: true
@@ -436,8 +430,12 @@ content_views:
       - "Library"
 
 # Standard Operating Environment — OS Content Views
-  - name: "SOE10"
-    desc: "Red Hat Enterprise Linux 10 x86_64 Standard Operating Environment Content"
+# Kickstart repos isolated to avoid CDN duplicate content bugs during CV publish.
+# Base + Kickstart are combined via composite CVs named SOE*.
+
+# RHEL10 Kickstart
+  - name: "RHEL10_Kickstart"
+    desc: "Red Hat Enterprise Linux 10 x86_64 Kickstart Content"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
@@ -446,6 +444,54 @@ content_views:
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS Kickstart 10.2"
         product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Exclude_Restricted_Content"
+        type: "rpm"
+        inclusion: false
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
+        repositories: "[]"
+        rules:
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
+    environments:
+      - "Library"
+
+# RHEL10 Base
+  - name: "RHEL10_Base"
+    desc: "Red Hat Enterprise Linux 10 x86_64 Base Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
       - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream RPMs 10"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS RPMs 10"
@@ -482,26 +528,39 @@ content_views:
               - "enhancement"
               - "bugfix"
               - "security"
-      - name: "Exclude_FireFox"
+      - name: "Exclude_Restricted_Content"
         type: "rpm"
         inclusion: false
-        description: "Do not provide Firefox to servers"
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-          - name: "firefox*"
-            basearch: "x86_64"
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
-      - "Development"
-      - "Qualification"
-      - "Staging"
-      - "Production"
 
-# RHEL10 SOE aarch64 content
+# RHEL10 Kickstart aarch64
 # OPTIONAL
-  - name: "SOE10_aarch64"
-    desc: "Red Hat Enterprise Linux 10 aarch64 Standard Operating Environment Content"
+  - name: "RHEL10_Kickstart_aarch64"
+    desc: "Red Hat Enterprise Linux 10 aarch64 Kickstart Content"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
@@ -510,6 +569,55 @@ content_views:
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS Kickstart 10.2"
         product: "Red Hat Enterprise Linux for ARM 64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Exclude_Restricted_Content"
+        type: "rpm"
+        inclusion: false
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
+        repositories: "[]"
+        rules:
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
+    environments:
+      - "Library"
+
+# RHEL10 Base aarch64
+# OPTIONAL
+  - name: "RHEL10_Base_aarch64"
+    desc: "Red Hat Enterprise Linux 10 aarch64 Base Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
       - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream RPMs 10"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS RPMs 10"
@@ -546,40 +654,108 @@ content_views:
               - "enhancement"
               - "bugfix"
               - "security"
-      - name: "Exclude_FireFox"
+      - name: "Exclude_Restricted_Content"
         type: "rpm"
         inclusion: false
-        description: "Do not provide Firefox to servers"
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-          - name: "firefox*"
-            basearch: "x86_64"
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
-      - "Development"
-      - "Qualification"
-      - "Staging"
-      - "Production"
 
-# SOE RHEL9 x86_64 content
-# REQUIRED
-  - name: "SOE9"
-    desc: "Red Hat Enterprise Linux 9 x86_64 Standard Operating Environment Content"
+# RHEL9 Kickstart — isolated from base repos to avoid CDN duplicate content bugs
+# during content view publish. Combined with RHEL9_Base via composite CVs.
+  - name: "RHEL9_Kickstart"
+    desc: "Red Hat Enterprise Linux 9 x86_64 Kickstart Content"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      # 9.8 kickstart excluded — CDN duplicate content bug confirmed still present 2026-09-09.
-      # kickstart repos are still broken. Publish fine with no filters, but break with filters
-      # - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.8"
-      #   product: "Red Hat Enterprise Linux for x86_64"
-      # - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.8"
-      #   product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
         product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.8"
+        product: "Red Hat Enterprise Linux for x86_64"
+      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.8"
+        product: "Red Hat Enterprise Linux for x86_64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Exclude_Restricted_Content"
+        type: "rpm"
+        inclusion: false
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
+        repositories: "[]"
+        rules:
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
+      - name: "Exclude_CDN_Duplicate_Streams"
+        type: "modulemd"
+        inclusion: false
+        description: "Exclude module streams with known CDN duplicate content objects"
+        repositories: "[]"
+        rules:
+          - name: "mariadb"
+            fail_on_missing: true
+    environments:
+      - "Library"
+
+# RHEL9 Base — OS content without kickstart repos
+# REQUIRED
+  - name: "RHEL9_Base"
+    desc: "Red Hat Enterprise Linux 9 x86_64 Base Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
       - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream RPMs 9"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS RPMs 9"
@@ -616,44 +792,113 @@ content_views:
               - "enhancement"
               - "bugfix"
               - "security"
-      - name: "Exclude_FireFox"
+      - name: "Exclude_Restricted_Content"
         type: "rpm"
         inclusion: false
-        description: "Do not provide Firefox to servers"
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-          - name: "firefox*"
-            basearch: "x86_64"
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
-      - "Development"
-      - "Qualification"
-      - "Staging"
-      - "Production"
 
 
-# SOE RHEL9 aarch64 content
+# RHEL9 Kickstart aarch64
 # OPTIONAL - used for RHEL edge system use cases
-  - name: "SOE9_aarch64"
-    desc: "Red Hat Enterprise Linux 9 aarch64 Standard Operating Environment Content"
+  - name: "RHEL9_Kickstart_aarch64"
+    desc: "Red Hat Enterprise Linux 9 aarch64 Kickstart Content"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      # 9.8 kickstart excluded — CDN duplicate content bug confirmed still present 2026-09-09.
-      # - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.8"
-      #   product: "Red Hat Enterprise Linux for ARM 64"
-      # - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.8"
-      #   product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.8"
+        product: "Red Hat Enterprise Linux for ARM 64"
+      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.8"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.2"  # known to work with RPi4++
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.2"     # known to work with RPi4++
         product: "Red Hat Enterprise Linux for ARM 64"
+    filters:
+      - name: "Include_All_Packages_No_Errata"
+        type: "rpm"
+        inclusion: true
+        description: "Include all rpms with no errata for all repositories"
+        original_packages: true
+        repositories: "[]"
+      - name: "Include_All_Streams_No_Errata"
+        type: "modulemd"
+        inclusion: true
+        description: "Include all module streams with no errata for all repositories"
+        original_module_streams: true
+        repositories: "[]"
+      - name: "Exclude_Restricted_Content"
+        type: "rpm"
+        inclusion: false
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
+        repositories: "[]"
+        rules:
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
+      - name: "Exclude_CDN_Duplicate_Streams"
+        type: "modulemd"
+        inclusion: false
+        description: "Exclude module streams with known CDN duplicate content objects"
+        repositories: "[]"
+        rules:
+          - name: "mariadb"
+            fail_on_missing: true
+    environments:
+      - "Library"
+
+# RHEL9 Base aarch64 — OS content without kickstart repos
+# OPTIONAL - used for RHEL edge system use cases
+  - name: "RHEL9_Base_aarch64"
+    desc: "Red Hat Enterprise Linux 9 aarch64 Base Operating Environment Content"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    repositories:
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream RPMs 9"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS RPMs 9"
@@ -688,21 +933,34 @@ content_views:
               - "enhancement"
               - "bugfix"
               - "security"
-      - name: "Exclude_FireFox"
+      - name: "Exclude_Restricted_Content"
         type: "rpm"
         inclusion: false
-        description: "Do not provide Firefox to servers"
+        description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-          - name: "firefox*"
-            basearch: "x86_64"
+            - name: gnome-*
+            - name: xorg-x11-*
+            - name: lightdm
+            - name: gdm
+            - name: sddm
+            - name: desktop-backgrounds*
+            - name: xfce*
+            - name: kde*
+            - name: alsa-*
+            - name: pulseaudio*
+            - name: pipewire*
+            - name: cups*
+            - name: sane-backends*
+            - name: firefox
+            - name: chromium*
+            - name: libreoffice*
+            - name: thunderbird*
+            - name: iwl*firmware
+            - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
-      - "Development"
-      - "Qualification"
-      - "Staging"
-      - "Production"
 
 # SOE RHEL8 content
   # - name: "SOE8"
@@ -1070,13 +1328,49 @@ composite_content_views:
 
 ############## SOE10 Composites #####################
 
+  - name: "SOE10"
+    desc: "Red Hat Enterprise Linux 10 x86_64 Standard Operating Environment"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "RHEL10_Kickstart"
+        latest: true
+      - content_view: "RHEL10_Base"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Staging"
+      - "Production"
+
+  - name: "SOE10_aarch64"
+    desc: "Red Hat Enterprise Linux 10 aarch64 Standard Operating Environment"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "RHEL10_Kickstart_aarch64"
+        latest: true
+      - content_view: "RHEL10_Base_aarch64"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Staging"
+      - "Production"
+
   - name: "SOE10_AAP26"
     desc: "SOE for Ansible Automation Platform 2.6 Servers"
     org: "{{ satellite_organization }}"
     force_publish: false
     publication_threshold_hours: 24
     components:
-      - content_view: "SOE10"
+      - content_view: "RHEL10_Kickstart"
+        latest: true
+      - content_view: "RHEL10_Base"
         latest: true
       - content_view: "AAP26_RHEL10_Files"
         latest: true
@@ -1086,26 +1380,64 @@ composite_content_views:
       - "Library"
       - "Development"
       - "Qualification"
+      - "Staging"
+      - "Production"
 
-  # - name: "SOE10_EdgeManager"
-  #   desc: "SOE for RHEL10 with EdgeManager"
-  #   org: "{{ satellite_organization }}"
-  #   force_publish: false
-  #   publication_threshold_hours: 24
-  #   components:
-  #     - content_view: "SOE10"
-  #       latest: true
-  #     - content_view: "RHEL10_EdgeManager"
-  #       latest: true
-  #   environments:
-  #     - "Library"
-  #     - "Development"
-  #     - "Qualification"
-  #     - "Staging"
-  #     - "Production"
+  - name: "SOE10_EdgeManager"
+    desc: "SOE for RHEL10 with EdgeManager"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "RHEL10_Kickstart"
+        latest: true
+      - content_view: "RHEL10_Base"
+        latest: true
+      - content_view: "RHEL10_EdgeManager"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Staging"
+      - "Production"
 
 
 ############## SOE9 Composites ######################
+
+  - name: "SOE9"
+    desc: "Red Hat Enterprise Linux 9 x86_64 Standard Operating Environment"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "RHEL9_Kickstart"
+        latest: true
+      - content_view: "RHEL9_Base"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Staging"
+      - "Production"
+
+  - name: "SOE9_aarch64"
+    desc: "Red Hat Enterprise Linux 9 aarch64 Standard Operating Environment"
+    org: "{{ satellite_organization }}"
+    force_publish: false
+    publication_threshold_hours: 24
+    components:
+      - content_view: "RHEL9_Kickstart_aarch64"
+        latest: true
+      - content_view: "RHEL9_Base_aarch64"
+        latest: true
+    environments:
+      - "Library"
+      - "Development"
+      - "Qualification"
+      - "Staging"
+      - "Production"
 
   - name: "SOE9_AAP26"
     desc: "SOE for Ansible Automation Platform 2.6 Servers"
@@ -1113,7 +1445,9 @@ composite_content_views:
     force_publish: false
     publication_threshold_hours: 24
     components:
-      - content_view: "SOE9"
+      - content_view: "RHEL9_Kickstart"
+        latest: true
+      - content_view: "RHEL9_Base"
         latest: true
       - content_view: "AAP26_RHEL9_Files"
         latest: true
@@ -1123,6 +1457,8 @@ composite_content_views:
       - "Library"
       - "Development"
       - "Qualification"
+      - "Staging"
+      - "Production"
 
   - name: "SOE9_EdgeManager"
     desc: "SOE for RHEL9 with EdgeManager"
@@ -1130,7 +1466,9 @@ composite_content_views:
     force_publish: false
     publication_threshold_hours: 24
     components:
-      - content_view: "SOE9"
+      - content_view: "RHEL9_Kickstart"
+        latest: true
+      - content_view: "RHEL9_Base"
         latest: true
       - content_view: "RHEL9_EdgeManager"
         latest: true
@@ -1147,7 +1485,9 @@ composite_content_views:
     force_publish: false
     publication_threshold_hours: 24
     components:
-      - content_view: "SOE9"
+      - content_view: "RHEL9_Kickstart"
+        latest: true
+      - content_view: "RHEL9_Base"
         latest: true
       - content_view: "EPEL9"
         latest: true
@@ -1164,7 +1504,9 @@ composite_content_views:
     force_publish: false
     publication_threshold_hours: 24
     components:
-      - content_view: "SOE9"
+      - content_view: "RHEL9_Kickstart"
+        latest: true
+      - content_view: "RHEL9_Base"
         latest: true
       - content_view: "JBoss9EAP74"
         latest: true
@@ -1183,7 +1525,9 @@ composite_content_views:
     force_publish: false
     publication_threshold_hours: 24
     components:
-      - content_view: "SOE9"
+      - content_view: "RHEL9_Kickstart"
+        latest: true
+      - content_view: "RHEL9_Base"
         latest: true
       - content_view: "mssqlserver2022_rhel9"
         latest: true
@@ -1191,7 +1535,8 @@ composite_content_views:
       - "Library"
       - "Development"
       - "Qualification"
-
+      - "Staging"
+      - "Production"
 
 ############## SOE8 Composites ######################
 

@@ -23,6 +23,7 @@ platform_topology: "standalone_hub"  # growth, enterprise, custom, standalone, s
 # sibling keys, so these must be defined outside the dictionary.
 aap_bundle_file: "ansible-automation-platform-containerized-setup-bundle-2.6-12-x86_64.tar.gz"
 aap_destination_dir: "/home/{{ ansible_user }}/ansible_installer"
+platform_ssl_certs_user_base_dir: "/home/{{ ansible_user }}/.ssl"
 
 platform_installer_config:
   # RHIS
@@ -53,10 +54,10 @@ platform_installer_config:
   aap_pg_password: "{{ aap_pg_password_vault }}"
   aap_pg_sslmode: "prefer"
   aap_pg_use_ssl: true
-  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
-  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
+  aap_pg_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
+  aap_pg_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
 
   # Automation Controller
   aap_hub_verify_ssl: true
-  aap_hub_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
-  aap_hub_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
+  aap_hub_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
+  aap_hub_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"

@@ -3,8 +3,8 @@
 # Ansible execution environments
 aap_execution_environments:
   - name: "satellite_ee_9"
-    credential: "aaphub24_containers"
-    base_image: "registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest"
+    credential: "aap_ee_containers"
+    base_image: "registry.redhat.io/ansible-automation-platform-26/ee-minimal-rhel9:latest"
     repository: "rhis"
     image: "{{ aap_gateway_host }}/rhis/satellite_ee_9"
     ansible_requirements_template: "satellite_ee_9.requirements.yml.j2"
@@ -23,22 +23,4 @@ aap_execution_environments:
     git_dest: "{{ rhis_default_git_dest }}"
     git_clone: true
     git_force: true
-  - name: "satellite_ee_8"
-    credential: "aaphub24_containers"
-    base_image: "registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel8:latest"
-    repository: "rhis"
-    image: "{{ aap_gateway_host }}/rhis/satellite_ee_8"
-    ansible_requirements_template: "satellite_ee_8.requirements.yml.j2"
-    python_requirements_template: "satellite_ee_8.requirements.txt.j2"
-    system_requirements_template: "satellite_ee_8.bindep.txt.j2"
-    description: "Execution Environment for rhis systems running RHEL 8 and registered to Satellite"
-    pull: "always"
-    organization: "Default"
-    tag: "latest"
-    # remove_signatures: false # default == false
-    git_repo: "https://github.com/parmstro/rhis_ansible_ee.git"
-    git_dest: "{{ rhis_default_git_dest }}"
-    git_clone: true
-    git_force: true
-
-...
+  

@@ -127,6 +127,12 @@ aap_edacontroller:
     {{ 'aapedacontroller' ~ num ~ '.' ~ basevars_global_domain_name }}:
       ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(70 + num) }}"
 {% endfor %}
+{% elif rhis_system_count.aapcontroller is defined and rhis_system_count.aapcontroller == 1 %}
+# Growth mode: controller serves as EDA host
+aap_edacontroller:
+  hosts:
+    aapcontroller1.{{ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(61) }}"
 {% endif %}
 
 # ── Band 80-94: VMware ────────────────────────────────────────────────────────
@@ -156,6 +162,12 @@ aap_hubs:
     {{ 'aaphub' ~ num ~ '.' ~ basevars_global_domain_name }}:
       ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(100 + num) }}"
 {% endfor %}
+{% elif rhis_system_count.aapcontroller is defined and rhis_system_count.aapcontroller == 1 %}
+# Growth mode: controller serves as hub host
+aap_hubs:
+  hosts:
+    aapcontroller1.{{ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(61) }}"
 {% endif %}
 
 # ── Band 110-119: AAP Databases ──────────────────────────────────────────────
@@ -167,6 +179,12 @@ aap_databases:
     {{ 'aapdb' ~ num ~ '.' ~ basevars_global_domain_name }}:
       ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(110 + num) }}"
 {% endfor %}
+{% elif rhis_system_count.aapcontroller is defined and rhis_system_count.aapcontroller == 1 %}
+# Growth mode: controller serves as database host
+aap_databases:
+  hosts:
+    aapcontroller1.{{ basevars_global_domain_name }}:
+      ipv4_address: "{{ [default_network, '/', default_network_prefix] | join() | ansible.utils.next_nth_usable(61) }}"
 {% endif %}
 
 # ── Band 120-129: Execution Nodes ─────────────────────────────────────────────
@@ -232,6 +250,7 @@ aap_hosts:
     aap_hubs:
     aap_controllers:
     aap_edacontroller:
+    aap_databases:
 
 # aws_nodes:
 # azure_nodes:

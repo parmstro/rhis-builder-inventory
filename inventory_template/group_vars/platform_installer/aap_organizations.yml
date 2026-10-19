@@ -7,10 +7,10 @@ aap_organizations:
     galaxy_credentials:
       - "Ansible Galaxy"
       - "Automation_Hub_validated"
-      - "Automation_Hub_rh_certified"
+      - "Automation_Hub_published"
       - "Private_Hub_community"
-      - "Private_Hub_rh_certified"
       - "Private_Hub_validated"
+      - "Private_Hub_published"
     state: present
 
 #    instance_groups:

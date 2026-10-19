@@ -35,8 +35,10 @@ default_admin_username_vault: "admin"                                           
 
 # These are technically no longer secrets as the no longer contain organization identifying data.
 # The URLs for the automation hub are necessary for logging in and pulling collections.
-automation_hub_url_vault: "https://console.redhat.com/api/automation-hub/content/published/"
-automation_hub_auth_url_vault: "https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token"
+# URLs are now defined in group_vars/all/redhat_automation_hub.yml
+# These aliases remain for backward compatibility with existing ansible.cfg files
+automation_hub_url_vault: "{{ redhat_automation_hub_content_published }}"
+automation_hub_auth_url_vault: "{{ redhat_automation_hub_auth_url }}"
 
 
 # Red Hat Hybrid Cloud Console tokens
@@ -46,7 +48,7 @@ automation_hub_auth_url_vault: "https://sso.redhat.com/auth/realms/redhat-extern
 # Used by rhis-builder-provisioner to setup the provisioner note
 # Used by rhis-builder-day-2-ops to configure AAP hub synchronization
 redhat_automation_hub_token_vault: "ey..............a.long.string................Xmg"              # notsecret
-automation_hub_token_refresh_cmd_vault: 'curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id="cloud-services" -d refresh_token="{{ automation_hub_token_vault }}" --fail --silent --show-error --output /dev/null'
+redhat_automation_hub_token_refresh_cmd_vault: 'curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id="cloud-services" -d refresh_token="{{ redhat_automation_hub_token_vault }}" --fail --silent --show-error --output /dev/null'
 
 imagebuilder_offline_token_vault: "ey.............. a.long.string................ gY"              # notsecret
 imagebuilder_offline_token_refresh_cmd_vault: 'curl https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token -d grant_type=refresh_token -d client_id="cloud-services" -d refresh_token="{{ imagebuilder_offline_token_vault }}" --fail --silent --show-error --output /dev/null'

@@ -24,6 +24,7 @@ platform_topology: "growth"  # growth, enterprise, custom, standalone
 aap_bundle_file: "ansible-automation-platform-containerized-setup-bundle-2.6-12-x86_64.tar.gz"
 aap_destination_dir: "/home/{{ ansible_user }}/ansible_installer"
 aap_bundle_dir: "{{ aap_destination_dir }}/{{ aap_bundle_file | regex_replace('.tar.gz$', '') }}/bundle"
+platform_ssl_certs_user_base_dir: "/home/{{ ansible_user }}/.ssl"
 
 platform_installer_config:
   # RHIS
@@ -52,14 +53,23 @@ platform_installer_config:
   aap_pg_password: "{{ aap_pg_password_vault }}"
   aap_pg_sslmode: "prefer"
   aap_pg_use_ssl: true
-  aap_pg_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
-  aap_pg_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+  aap_pg_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_databases'][0] }}/{{ groups['aap_databases'][0] }}.crt"
+  aap_pg_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_databases'][0] }}/{{ groups['aap_databases'][0] }}.key"
   # Automation Controller
   aap_controller_verify_ssl: true
-  aap_controller_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
-  aap_controller_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
-  aap_web_server_ssl_crt: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
-  aap_web_server_ssl_key: "{{ platform_ssl_certs_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+  aap_controller_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_controller_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+  aap_web_server_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.crt"
+  aap_web_server_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_controllers'][0] }}/{{ groups['aap_controllers'][0] }}.key"
+  # Gateway
+  aap_gateway_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_gateways'][0] }}/{{ groups['aap_gateways'][0] }}.crt"
+  aap_gateway_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_gateways'][0] }}/{{ groups['aap_gateways'][0] }}.key"
+  # Hub
+  aap_hub_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.crt"
+  aap_hub_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_hubs'][0] }}/{{ groups['aap_hubs'][0] }}.key"
+  # EDA
+  aap_edacontroller_ssl_crt: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_edacontroller'][0] }}/{{ groups['aap_edacontroller'][0] }}.crt"
+  aap_edacontroller_ssl_key: "{{ platform_ssl_certs_user_base_dir }}/{{ groups['aap_edacontroller'][0] }}/{{ groups['aap_edacontroller'][0] }}.key"
 
   aap_platform_username: "{{ aap_admin_username }}"
   aap_platform_password: "{{ aap_admin_password }}"

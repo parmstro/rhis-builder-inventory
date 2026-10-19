@@ -32,8 +32,8 @@ additional_build_steps:
     - ENV ANSIBLE_GALAXY_SERVER_GALAXY_BASE_URL=https://galaxy.ansible.com/
 
     # RH automation hub
-    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_URL=https://cloud.redhat.com/api/automation-hub/
-    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_AUTH_URL=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_URL={{ redhat_automation_hub_base_url }}/
+    - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_AUTH_URL={{ redhat_automation_hub_auth_url }}
     - ENV ANSIBLE_GALAXY_SERVER_AUTOMATION_HUB_TOKEN="{{ redhat_automation_hub_token_vault }}"
 
   prepend_base:

@@ -4,7 +4,7 @@
 
 collection_remotes:
   - name: "rh-validated"
-    url: "https://console.redhat.com/api/automation-hub/content/validated/"
+    url: "{{ redhat_automation_hub_content_validated }}"
     include_deps: true
     token: "{{ remote_rh_validated_vault }}"
     sso_url: "{{ remote_rh_sso_url_vault }}"
@@ -22,7 +22,7 @@ collection_remotes:
     download_concurrency: 10
     # rate_limit_req_per_sec: default is not limited
   - name: "rh-certified"
-    url: "https://console.redhat.com/api/automation-hub/content/published/"
+    url: "{{ redhat_automation_hub_content_published }}"
     include_deps: true
     token: "{{ remote_rh_certified_vault }}"
     sso_url: "{{ remote_rh_sso_url_vault }}"

@@ -34,6 +34,7 @@ aap_job_templates_soe_ansible_callback:
     execution_environment: "satellite_ee_9"
     playbook: "post_provisioning_base.yml"
     become_enabled: true
+    allow_callbacks: true
     ask_limit_on_launch: true
     host_config_key: "{{ satellite_ansible_callback_config_key }}"
     credentials:

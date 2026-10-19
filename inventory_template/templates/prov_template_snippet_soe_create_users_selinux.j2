@@ -28,5 +28,8 @@ description: |
 <%=     "EOF" %>
 <%=     "chown -R #{user.login}:#{user.login} ~#{user.login}/.ssh" %>
 <%=     "chmod -R go= ~#{user.login}/.ssh" %>
+<%=     "cat >> /etc/sudoers.d/#{user.login} <<EOF" %>
+<%=     "#{user.login}  ALL=(ALL)   NOPASSWD: ALL" %>
+<%=     "EOF" %>
 <%-   end -%>
 <%- end %>
