@@ -8,7 +8,8 @@
 {% raw %}
 global_parameters:
   - name: "ansible_controller_api_url"
-    value: "https://aapcontroller1.{{ _runtime_global_domain_name }}/api/v2"
+    # This is the URL to the Ansible Automation Platform controller 2.5+ API
+    value: "https://aapcontroller1.{{ _runtime_global_domain_name }}/api/controller/v2"
     parameter_type: "string"
     hidden_value: false
     state: "present"
@@ -20,7 +21,7 @@ global_parameters:
     state: "present"
 
   - name: "ansible_job_template_id"
-    value: 125
+    value: 63
     parameter_type: "integer"
     hidden_value: false
     state: "present"
@@ -32,13 +33,14 @@ global_parameters:
     state: "present"
 
   - name: "ansible_tower_api_url"
-    value: "https://aapcontroller1.{{ _runtime_global_domain_name }}/api/v2"
+    # This is the URL to the Ansible Automation Platform controller 2.5+ API
+    value: "https://aapcontroller1.{{ _runtime_global_domain_name }}/api/controller/v2"
     parameter_type: "string"
     hidden_value: false
     state: "present"
 
   - name: "ansible_tower_provisioning"
-    value: false
+    value: true
     parameter_type: "boolean"
     hidden_value: false
     state: "present"
