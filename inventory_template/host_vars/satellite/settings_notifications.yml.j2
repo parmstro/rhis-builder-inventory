@@ -17,9 +17,10 @@ settings_notifications:
 {% else %}
     value: "true"
 {% endif %}
-#   - name: "rss_url"
-#     full_name: "RSS enable"
-#     description: "URL to fetch RSS notifications from"
-#     settings_type: "string"
-# #    default: "https://www.redhat.com/en/rss/blog/channel/red-hat-satellite"
-#     value: "https://www.redhat.com/en/rss/blog/channel/red-hat-satellite"
+  - name: "rss_url"
+    full_name: "RSS enable"
+    description: "URL to fetch RSS notifications from"
+    settings_type: "string"
+#    default: "https://www.redhat.com/en/rss/blog/channel/red-hat-satellite"
+    value: "https://security.access.redhat.com/data/meta/v1/rhsa.rss"
+    # Red Hat Security Advisories RSS feed

@@ -169,6 +169,8 @@ vmware_vcsa_root_password_vault: "{{ default_environment_password_vault }}"     
 ipa_admin_principal_vault: "{{ default_admin_username_vault }}"                                    # notsecret
 ipa_admin_password_vault: "{{ default_environment_password_vault }}"                               # notsecret
 ipa_dm_password_vault: "{{ default_environment_password_vault }}"                                  # notsecret
+ipa_default_user_password_vault: "{{ default_environment_password_vault }}"                        # notsecret
+satellite_user_default_password_vault: "{{ default_environment_password_vault }}"                   # notsecret
 
 # Service user for interacting with IdM
 ipa_principal_username_vault: "{{ ipa_admin_principal_vault }}"
