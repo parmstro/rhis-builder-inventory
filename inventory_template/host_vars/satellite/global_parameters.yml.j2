@@ -91,8 +91,8 @@ global_parameters:
     state: "present"
 
   - name: "enc_target_drives"
-    value: '["/dev/sda"]'
-    parameter_type: "array"
+    {% endraw %}value: '["{{ basevars_default_virtual_root_disk }}"]'
+    {% raw %}parameter_type: "array"
     state: "present"
 
   - name: "grubmenu_pass"

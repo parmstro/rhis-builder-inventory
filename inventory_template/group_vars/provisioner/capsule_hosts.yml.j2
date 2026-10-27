@@ -23,10 +23,10 @@ capsule_hosts:
     parameters:
       - name: "boot_disk"
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"

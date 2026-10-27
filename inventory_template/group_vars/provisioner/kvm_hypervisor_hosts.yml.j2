@@ -1,4 +1,5 @@
 ---
+{% raw %}
 # PATTERN: kvm_hypervisor_hosts is a payload variable consumed via extra-vars dispatch:
 #   --extra-vars "platform_hosts={{ kvm_hypervisor_hosts }}"
 # The deploy script (deploy_kvm_hypervisors.sh) assigns it to the generic
@@ -18,10 +19,10 @@ kvm_hypervisor_hosts:
     parameters:
       - name: "boot_disk"
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -67,10 +68,10 @@ kvm_hypervisor_hosts:
   #   parameters:
   #     - name: "boot_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
   #   interfaces_attributes:
   #     - type: "interface"
   #       identifier: "{{ _default_provision_iface }}"
@@ -116,10 +117,10 @@ kvm_hypervisor_hosts:
   #   parameters:
   #     - name: "boot_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
   #   interfaces_attributes:
   #     - type: "interface"
   #       identifier: "{{ _default_provision_iface }}"
@@ -165,10 +166,10 @@ kvm_hypervisor_hosts:
   #   parameters:
   #     - name: "boot_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
   #   interfaces_attributes:
   #     - type: "interface"
   #       identifier: "{{ _default_provision_iface }}"
@@ -214,10 +215,10 @@ kvm_hypervisor_hosts:
   #   parameters:
   #     - name: "boot_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
   #   interfaces_attributes:
   #     - type: "interface"
   #       identifier: "{{ _default_provision_iface }}"
@@ -263,10 +264,10 @@ kvm_hypervisor_hosts:
   #   parameters:
   #     - name: "boot_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
   #   interfaces_attributes:
   #     - type: "interface"
   #       identifier: "{{ _default_provision_iface }}"
@@ -312,10 +313,10 @@ kvm_hypervisor_hosts:
   #   parameters:
   #     - name: "boot_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
   #   interfaces_attributes:
   #     - type: "interface"
   #       identifier: "{{ _default_provision_iface }}"
@@ -349,3 +350,4 @@ kvm_hypervisor_hosts:
   #     #   bond_options: "miimon=100 xmit_hash_policy=layer3+4"
   #     #   mode: "802.3ad"
   #     #   virtual: true
+{% endraw %}

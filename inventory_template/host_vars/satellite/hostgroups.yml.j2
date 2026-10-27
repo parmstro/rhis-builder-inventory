@@ -1,5 +1,6 @@
 ---
 
+{% raw %}
 satellite_hostgroups:
 ############## RHEL 10 ##################
 
@@ -28,11 +29,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
 
   - name: "aap10_26"
     parent: "hg_x86_64_rhel10_metal"
@@ -59,11 +60,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
 
 # RHEL 10 x86_64 Virtual Machine
   - name: "hg_x86_64_rhel10_vm"
@@ -92,11 +93,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_root_disk }}{% raw %}"
 
   - name: "dev"
     parent: "hg_x86_64_rhel10_vm"
@@ -125,11 +126,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_root_disk }}{% raw %}"
 
   # - name: "rhel10_edge_manager_vm"
   #   parent: "hg_x86_64_rhel10_vm/dev"
@@ -175,11 +176,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_root_disk }}{% raw %}"
 
 ############## RHEL 9 ##################
 
@@ -208,11 +209,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
 
   - name: "kvm_host"
     parent: "hg_x86_64_rhel9_metal"
@@ -239,11 +240,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
       - name: "kvm_host_enabled"
         hidden_value: false
         parameter_type: "boolean"
@@ -274,11 +275,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
 
   - name: "satellite_capsule"
     parent: "hg_x86_64_rhel9_metal"
@@ -303,11 +304,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
 
 # RHEL 9 x86_64 Virtual Machine
   - name: "hg_x86_64_rhel9_vm"
@@ -336,11 +337,11 @@ satellite_hostgroups:
       - name: "boot_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_boot_disk }}{% raw %}"
       - name: "root_disk"
         hidden_value: false
         parameter_type: "string"
-        value: "/dev/sda"
+        value: "{% endraw %}{{ basevars_default_virtual_root_disk }}{% raw %}"
 
   - name: "dev"
     parent: "hg_x86_64_rhel9_vm"
@@ -575,11 +576,11 @@ satellite_hostgroups:
   #     - name: "boot_disk"
   #       hidden_value: false
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
   #     - name: "root_disk"
   #       hidden_value: false
   #       parameter_type: "string"
-  #       value: "/dev/nvme0n1"
+  #       value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
 
 # RHEL 8 x86_64 Virtual Machine
   # - name: "hg_x86_64_rhel8_vm"

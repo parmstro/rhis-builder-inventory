@@ -39,6 +39,13 @@ rhis_time_servers:
   - "2.rhel.pool.ntp.org"
   - "3.rhel.pool.ntp.org"
 
+basevars_default_baremetal_boot_disk: "/dev/nvme0n1"
+basevars_default_baremetal_root_disk: "/dev/nvme0n1"
+basevars_default_virtual_boot_disk: "/dev/sda"
+basevars_default_virtual_root_disk: "/dev/sda"
+# basevars_default_virtual_boot_disk: "/dev/vda"   # e.g. for KVM deployments
+# basevars_default_virtual_root_disk: "/dev/vda"
+
 rhis_aap_release_version: "2.6"
 rhis_satellite_release_version: "6.18"
 rhis_satellite_os_major_version: "9"

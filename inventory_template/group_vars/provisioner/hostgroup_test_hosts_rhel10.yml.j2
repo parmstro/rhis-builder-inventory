@@ -1,4 +1,5 @@
 ---
+{% raw %}
 # Tested 2025-11-16 - Success
 
 # PATTERN: hostgroup_test_hosts_rhel10 is a payload variable consumed via extra-vars dispatch:
@@ -22,10 +23,10 @@ hostgroup_test_hosts_rhel10:
     parameters:
       - name: "boot_disk"
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_boot_disk }}{% raw %}"
       - name: "root_disk"
         parameter_type: "string"
-        value: "/dev/nvme0n1"
+        value: "{% endraw %}{{ basevars_default_baremetal_root_disk }}{% raw %}"
     interfaces_attributes:
       - type: "interface"
         identifier: "{{ _default_provision_iface }}"
@@ -53,3 +54,4 @@ hostgroup_test_hosts_rhel10:
     pxe_loader: "Grub2 UEFI"
     mac: "00:50:56:ff:ff:ff"
     comment: "rhis_test_host deleteme"
+{% endraw %}
