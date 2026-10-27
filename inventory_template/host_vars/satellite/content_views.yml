@@ -691,10 +691,10 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
-        product: "Red Hat Enterprise Linux for x86_64"
-      - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
-        product: "Red Hat Enterprise Linux for x86_64"
+      # - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.7"
+      #   product: "Red Hat Enterprise Linux for x86_64"
+      # - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.7"
+      #   product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream Kickstart 9.8"
         product: "Red Hat Enterprise Linux for x86_64"
       - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS Kickstart 9.8"
@@ -830,10 +830,10 @@ content_views:
     force_publish: false
     publication_threshold_hours: 24
     repositories:
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
-        product: "Red Hat Enterprise Linux for ARM 64"
-      - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
-        product: "Red Hat Enterprise Linux for ARM 64"
+      # - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.7"
+      #   product: "Red Hat Enterprise Linux for ARM 64"
+      # - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.7"
+      #   product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream Kickstart 9.8"
         product: "Red Hat Enterprise Linux for ARM 64"
       - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS Kickstart 9.8"
