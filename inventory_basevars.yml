@@ -59,7 +59,7 @@ rhis_system_count:
   aapgateway: 0
   aapcontroller: 1
   aapedacontroller: 0
-  aaphub: 1
+  aaphub: 0
   aapdatabase: 0
   aapexecution: 0
   aaphop: 0
