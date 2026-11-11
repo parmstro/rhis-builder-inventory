@@ -47,7 +47,7 @@ basevars_default_virtual_root_disk: "/dev/sda"
 # basevars_default_virtual_root_disk: "/dev/vda"
 
 rhis_aap_release_version: "2.6"
-rhis_satellite_release_version: "6.18"
+rhis_satellite_release_version: "6.19"
 rhis_satellite_os_major_version: "9"
 
 rhis_system_count:
