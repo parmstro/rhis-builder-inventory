@@ -18,8 +18,8 @@ satellite_users:
     description: "Uncle Bob"
     admin: "false"
     user_password: "{{ satellite_user_default_password }}"
-    default_location: "{{ satellite_location }}"
-    default_organization: "{{ satellite_organization }}"
+    location_on_login: "{{ satellite_location }}"
+    organization_on_login: "{{ satellite_organization }}"
     auth_source: "Internal"  # or "External"
 {% endraw %}
     timezone: "{{ split_rhis_timezone[1] }}"
@@ -37,8 +37,8 @@ satellite_users:
     description: "Anne Sibleau-Unner"
     admin: "false"
     user_password: "{{ satellite_user_default_password }}"
-    default_location: "{{ satellite_location }}"
-    default_organization: "{{ satellite_organization }}"
+    location_on_login: "{{ satellite_location }}"
+    organization_on_login: "{{ satellite_organization }}"
     auth_source: "Internal"  # or "External"
 {% endraw %}
     timezone: "{{ split_rhis_timezone[1] }}"

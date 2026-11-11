@@ -177,12 +177,12 @@ global_parameters:
     state: "present"
 
   - name: "remote_execution_ssh_keys"
-    value: "{{ remote_execution_ssh_keys_vault }}"
+    value: "{{ '' if satellite_pre_use_idm else remote_execution_ssh_keys_vault }}"
     parameter_type: "string"
     state: "present"
 
   - name: "remote_execution_ssh_user"
-    value: "{{ remote_execution_ssh_user_vault }}"
+    value: "{{ foreman_proxy_realm_principal if satellite_pre_use_idm else remote_execution_ssh_user_vault }}"
     parameter_type: "string"
     state: "present"
 

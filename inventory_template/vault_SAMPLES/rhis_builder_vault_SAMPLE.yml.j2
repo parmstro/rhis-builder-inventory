@@ -249,6 +249,10 @@ satellite_virtwho_password_vault: "{{ default_environment_password_vault }}"    
 {% raw %}satellite_smtp_password_vault: "eyJhbGciOiJSUzUxMiJ9"                                              # notsecret
 satellite_smtp_authentication: "login"                                                             # notsecret
 
+idm_smtp_username_vault: "{{ satellite_smtp_user_name_vault }}"
+idm_smtp_password_vault: "{{ satellite_smtp_password_vault }}"
+idm_smtp_authentication_vault: "{{ satellite_smtp_authentication_vault }}"
+
 # satellite provisioning settings secrets
 nbde_encryption_password_vault: "{{ default_environment_password_vault }}"                         # notsecret
 default_provisioning_root_password_vault: "{{ default_environment_password_vault }}"               # notsecret

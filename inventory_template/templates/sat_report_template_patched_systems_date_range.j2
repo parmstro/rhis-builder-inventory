@@ -1,0 +1,140 @@
+<%#
+name: Patched Hosts - Date Range
+snippet: false
+template_inputs:
+- name: Since
+  required: false
+  input_type: user
+  description: Start of date range. Supports natural language, e.g. "30 days ago"
+    or "2024-10-01". Defaults to 30 days ago if blank.
+  advanced: false
+  value_type: date
+- name: Up to
+  required: false
+  input_type: user
+  description: End of date range. Supports natural language, e.g. "now" or
+    "end of last month". Defaults to now if blank.
+  advanced: false
+  value_type: date
+- name: Include Katello Jobs
+  required: false
+  input_type: user
+  description: Include Katello script-based jobs (errata install, package
+    install/update/remove). This is the primary patching category.
+  options: "Yes\r\nNo"
+  advanced: false
+- name: Include Katello Ansible Jobs
+  required: false
+  input_type: user
+  description: Include Katello Ansible-based jobs (errata and package operations
+    via Ansible provider).
+  options: "Yes\r\nNo"
+  advanced: false
+- name: Include Ansible Playbook Jobs
+  required: false
+  input_type: user
+  description: Include generic Ansible playbook jobs run through Satellite
+    remote execution.
+  options: "Yes\r\nNo"
+  advanced: false
+- name: Include Other Jobs
+  required: false
+  input_type: user
+  description: Include Commands, Puppet, and other job categories.
+  options: "Yes\r\nNo"
+  advanced: false
+- name: Status
+  required: false
+  input_type: user
+  description: Limit the search based on the job result status.
+  options: "all\r\nsuccess\r\nerror\r\nwarning\r\ncancelled\r\npending"
+  advanced: false
+- name: Hosts filter
+  required: false
+  input_type: user
+  description: Limit the report only on hosts found by this search query. Keep empty
+    for report on all available hosts.
+  advanced: false
+  value_type: search
+  resource_type: Host
+model: ReportTemplate
+require:
+- plugin: foreman_remote_execution
+  version: 4.4.0
+description: |
+  Report of hosts with patching activity within a date range.
+  Scope is controlled by job category toggles that map to the
+  actual job_category values in Satellite (Katello, Katello via
+  Ansible, Ansible Playbook, Commands, Puppet).
+  This report queries JobInvocation and TemplateInvocation records
+  to reconstruct patching history from remote execution task data.
+  For errata-only reporting, the built-in Host - Applied Errata
+  report uses a dedicated database table that is authoritative for
+  errata and includes errata metadata (type, severity, issued date).
+  This report trades that detail for broader scope across all job
+  categories. Activity performed outside of Satellite REX (e.g.
+  manual dnf update, external Ansible runs) is not captured.
+  Results depend on Dynflow task finalization — jobs that completed
+  within the last few minutes may not yet appear. Date defaults
+  use beginning/end of day to absorb timezone offset between the
+  Satellite application and the system clock.
+-%>
+<%- report_headers 'Host', 'Organization', 'Location', 'Operating System', 'Job Category', 'Job Template', 'Job Description', 'Executed At', 'Completed At', 'Result' -%>
+<%-
+  since_date = input('Since').blank? ? 30.days.ago.beginning_of_day : Time.parse(input('Since'))
+  up_to_date = input('Up to').blank? ? Time.now.end_of_day : Time.parse(input('Up to'))
+
+  categories = []
+  categories << 'Katello' if input('Include Katello Jobs').blank? || input('Include Katello Jobs') == 'Yes'
+  categories << 'Katello via Ansible' if input('Include Katello Ansible Jobs').blank? || input('Include Katello Ansible Jobs') == 'Yes'
+  categories << 'Ansible Playbook' if input('Include Ansible Playbook Jobs') == 'Yes'
+  if input('Include Other Jobs') == 'Yes'
+    categories << 'Commands'
+    categories << 'Puppet'
+  end
+
+  status_filter = input('Status').blank? ? 'all' : input('Status')
+
+  host_ids = nil
+  host_filter = input('Hosts filter')
+  unless host_filter.blank?
+    host_ids = Host::Managed.authorized.search_for(host_filter).pluck(:id).to_set
+  end
+-%>
+<%- unless categories.empty? -%>
+<%-   relevant_job_ids = TemplateInvocation
+                           .joins(:run_host_job_task)
+                           .where('foreman_tasks_tasks.started_at' => since_date..up_to_date)
+                           .select(:job_invocation_id)
+                           .distinct -%>
+<%-   jobs = JobInvocation.where(id: relevant_job_ids)
+                         .where(job_category: categories)
+                         .includes(:template_invocations => [:host, :run_host_job_task, :template])
+                         .reorder('job_invocations.id ASC') -%>
+<%-   jobs.each do |job| -%>
+<%-     job.template_invocations.each do |ti| -%>
+<%-       next unless ti.host -%>
+<%-       next if host_ids && !host_ids.include?(ti.host_id) -%>
+<%-       task = ti.run_host_job_task -%>
+<%-       next unless task -%>
+<%-       next unless task.started_at.present? && task.started_at >= since_date && task.started_at <= up_to_date -%>
+<%-       result = task.result -%>
+<%-       next if status_filter != 'all' && result != status_filter -%>
+<%-       desc = job.description -%>
+<%-       desc = desc.gsub("''", 'all packages') if desc&.include?("''") -%>
+<%-       report_row(
+            'Host': ti.host.name,
+            'Organization': ti.host.organization&.name,
+            'Location': ti.host.location&.name,
+            'Operating System': ti.host.operatingsystem&.to_s,
+            'Job Category': job.job_category,
+            'Job Template': ti.template&.name,
+            'Job Description': desc,
+            'Executed At': task.started_at.blank? ? nil : format_time(task.started_at),
+            'Completed At': task.ended_at.blank? ? nil : format_time(task.ended_at),
+            'Result': result
+          ) -%>
+<%-     end -%>
+<%-   end -%>
+<%- end -%>
+<%= report_render -%>
