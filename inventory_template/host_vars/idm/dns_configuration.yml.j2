@@ -61,126 +61,126 @@ idm_dns_records:
   - name: "ocp1.{{ _runtime_global_domain_name }}"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(501) }}"
     {% raw %}a_create_reverse: false
     state: "present"
 
   - name: "*.api.ocp1.{{ _runtime_global_domain_name }}"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(501) }}"
     {% raw %}a_create_reverse: false
     state: "present"
 
   - name: "*.apps.ocp1.{{ _runtime_global_domain_name }}"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(501) }}"
     {% raw %}a_create_reverse: false
     state: "present"
 
 #  - name: ""
 #    {% endraw %}zone_name: "{{ default_network_reverse_dns_zones[0] }}"
 #    {% raw %}record_type: "PTR"
-#    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1001) }}"
+#    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(501) }}"
 #    {% raw %}a_create_reverse: false
 #    state: "present"
 
   - name: "c3s1n1"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1009) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(480) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s1n2"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1010) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(481) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s1n3"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1011) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(482) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s1n4"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1012) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(483) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s1n5"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1013) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(484) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s1n6"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1014) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(485) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s1n7"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1015) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(486) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n1"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1016) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(487) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n2"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1017) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(488) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n3"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1018) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(489) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n4"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1019) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(490) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n5"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1020) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(491) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n6"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1021) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(492) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
   - name: "c3s2n7"
     zone_name: "{{ _runtime_global_domain_name }}"
     record_type: "A"
-    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(1022) }}"
+    {% endraw %}ip_address: "{{ target_net_cidr | ansible.utils.next_nth_usable(493) }}"
     {% raw %}a_create_reverse: true
     state: "present"
 
