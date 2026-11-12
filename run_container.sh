@@ -103,7 +103,7 @@ echo "ansible-ver: $ansiblever"
 echo "registry: $registry"
 echo "repo: $repo"
 echo "tag: $tag"
-echo "NOTE: files added to any of the diretories will not be accessible."
+echo "NOTE: files added to any of the directories will not be accessible."
 echo "      You must restart the container to access new files."
 
 if [[ $secretsdir == "" ]]; then
