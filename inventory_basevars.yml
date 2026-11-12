@@ -52,7 +52,7 @@ rhis_satellite_os_major_version: "9"
 
 rhis_system_count:
   satellite: 1
-  capsule: 1
+  capsule: 0
   idm: 2
   gitea: 0
   logserver: 0

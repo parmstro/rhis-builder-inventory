@@ -124,35 +124,26 @@
       ansible.builtin.set_fact:
         default_network_type_output: "{{ target_net_cidr | ansible.utils.ipaddr('private') }}"
 
-# Check network is part of a RFC1918 private network and determine type
-    - name: "Target network type test - 192.168.0.0/16 and 172.16.0.0/16"
-      when: (default_network_type_output | length != 0 and '192.168.0.0/16' | ansible.utils.network_in_network(target_net_cidr)) or
-            (default_network_type_output | length != 0 and '172.16.0.0/16' | ansible.utils.network_in_network(target_net_cidr))
+# Compute per-/24 reverse DNS zones from the network CIDR.
+# A /22 produces 4 zones, a /24 produces 1, etc.
+    - name: Compute per-/24 reverse DNS zones for the network
+      when: default_network_type_output | length != 0
       ansible.builtin.set_fact:
-        target_net_octets: "{{ default_network.split('.')[0:2] | join('.') }}"
-
-    - name: Target network type test - 10.0.0.0/8
-      when: default_network_type_output | length != 0 and '10.0.0.0/8' | ansible.utils.network_in_network(target_net_cidr)
-      ansible.builtin.set_fact:
-        target_net_octets: "{{ default_network.split('.')[0:1] | join('.') }}"
-
-    - name: Target network type confirmation
-      when: target_net_octets | length != 0
-      ansible.builtin.debug:
-        msg:
-          - "The default_network {{ default_network_type_output }} is a RFC1918 private network"
-          - "Octet split is {{ target_net_octets }}"
-
-    - name: Define reverse DNS zone name for the network
-      ansible.builtin.set_fact:
-        default_network_reverse_dns_zone_name: "{{ target_net_octets.split('.') | reverse | join('.') }}.in-addr.arpa"
+        default_network_reverse_dns_zones: >-
+          {%- set count = target_net_cidr | ansible.utils.ipsubnet(24) | int -%}
+          {%- set zones = [] -%}
+          {%- for i in range(count) -%}
+          {%-   set net = (target_net_cidr | ansible.utils.ipsubnet(24, i) | ansible.utils.ipaddr('network')).split('.') -%}
+          {%-   set _ = zones.append(net[2] ~ '.' ~ net[1] ~ '.' ~ net[0] ~ '.in-addr.arpa') -%}
+          {%- endfor -%}
+          {{ zones }}
 
     - name: Print target network details
       ansible.builtin.debug:
         msg:
           - "The default_network is: {{ default_network }}"
           - "The target network CIDR for {{ default_network }} with prefix {{ default_network_prefix }} is: {{ target_net_cidr }}"
-          - "The reverse DNS zone name for the network is: {{ default_network_reverse_dns_zone_name }}"
+          - "Reverse DNS zones: {{ default_network_reverse_dns_zones }}"
 
     - name: Sync directory with rsync (excluding jinja templates)
       ansible.posix.synchronize:
