@@ -62,11 +62,13 @@ repository_sets:
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
       - releasever: "10.2"
+      - releasever: "10.3"
 
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
       - releasever: "10.2"
+      - releasever: "10.3"
 
   - name: "Red Hat Enterprise Linux 10 for ARM 64 - BaseOS (RPMs)"
     product: "Red Hat Enterprise Linux for ARM 64"
@@ -95,15 +97,15 @@ repository_sets:
   - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
+      - releasever: "9.9"
       - releasever: "9.8"
-      - releasever: "9.7"
       - releasever: "9.2"
 
   - name: "Red Hat Enterprise Linux 9 for ARM 64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for ARM 64"
     repository_list:
+      - releasever: "9.9"
       - releasever: "9.8"
-      - releasever: "9.7"
       - releasever: "9.2"
 
   - name: "Red Hat Enterprise Linux 9 for ARM 64 - BaseOS (RPMs)"
@@ -132,11 +134,13 @@ repository_sets:
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
       - releasever: "10.2"
+      - releasever: "10.3"
 
   - name: "Red Hat Enterprise Linux 10 for x86_64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
       - releasever: "10.2"
+      - releasever: "10.3"
 
   - name: "Red Hat Enterprise Linux 10 for x86_64 - BaseOS (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
@@ -165,32 +169,32 @@ repository_sets:
   - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
+      - releasever: "9.9"
       - releasever: "9.8"
-      - releasever: "9.7"
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (Kickstart)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
+      - releasever: "9.9"
       - releasever: "9.8"
-      - releasever: "9.7"
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - BaseOS (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
       - releasever: "9"
-      - releasever: "9.8"  # Used for LEAPP
+      - releasever: "9.9"  # Used for LEAPP
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - AppStream (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
       - releasever: "9"
-      - releasever: "9.8"  # Used for LEAPP
+      - releasever: "9.9"  # Used for LEAPP
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
     repository_list:
       - releasever: "9"
-      - releasever: "9.8"  # Used for LEAPP
+      - releasever: "9.9"  # Used for LEAPP
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - Extensions (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
