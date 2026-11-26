@@ -467,25 +467,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
     environments:
       - "Library"
 
@@ -538,25 +538,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
@@ -596,25 +596,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
     environments:
       - "Library"
 
@@ -668,25 +668,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
@@ -726,25 +726,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
       - name: "Exclude_CDN_Duplicate_Streams"
         type: "modulemd"
         inclusion: false
@@ -806,25 +806,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
@@ -869,25 +869,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
       - name: "Exclude_CDN_Duplicate_Streams"
         type: "modulemd"
         inclusion: false
@@ -947,25 +947,25 @@ content_views:
         description: "Exclude desktop and GUI packages not appropriate for headless servers"
         repositories: "[]"
         rules:
-            - name: gnome-*
-            - name: xorg-x11-*
-            - name: lightdm
-            - name: gdm
-            - name: sddm
-            - name: desktop-backgrounds*
-            - name: xfce*
-            - name: kde*
-            - name: alsa-*
-            - name: pulseaudio*
-            - name: pipewire*
-            - name: cups*
-            - name: sane-backends*
-            - name: firefox
-            - name: chromium*
-            - name: libreoffice*
-            - name: thunderbird*
-            - name: iwl*firmware
-            - name: bluez*
+          - name: gnome-*
+          - name: xorg-x11-*
+          - name: lightdm
+          - name: gdm
+          - name: sddm
+          - name: desktop-backgrounds*
+          - name: xfce*
+          - name: kde*
+          - name: alsa-*
+          - name: pulseaudio*
+          - name: pipewire*
+          - name: cups*
+          - name: sane-backends*
+          - name: firefox
+          - name: chromium*
+          - name: libreoffice*
+          - name: thunderbird*
+          - name: iwl*firmware
+          - name: bluez*
     date_filter_name: "Include_Errata_By_Date"
     environments:
       - "Library"
