@@ -152,6 +152,11 @@ satellite_repositories:
     content_type: "yum"
     download_policy: "immediate"
 
+  - name: "Red Hat CodeReady Linux Builder for RHEL 10 ARM 64 RPMs 10"
+    product: "Red Hat CodeReady Linux Builder for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
   - name: "Red Hat Satellite Client 6 for RHEL 10 aarch64 RPMs"
     product: "Red Hat Enterprise Linux for ARM 64"
     content_type: "yum"
@@ -203,6 +208,11 @@ satellite_repositories:
     content_type: "yum"
     download_policy: "immediate"
 
+  - name: "Red Hat CodeReady Linux Builder for RHEL 9 ARM 64 RPMs 9"
+    product: "Red Hat CodeReady Linux Builder for ARM 64"
+    content_type: "yum"
+    download_policy: "immediate"
+
   - name: "Red Hat Satellite Client 6 for RHEL 9 aarch64 RPMs"
     product: "Red Hat Enterprise Linux for ARM 64"
     content_type: "yum"
@@ -249,6 +259,11 @@ satellite_repositories:
 
   - name: "Red Hat Enterprise Linux 10 for x86_64 - Extensions RPMs 10"
     product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat CodeReady Linux Builder for RHEL 10 x86_64 RPMs 10"
+    product: "Red Hat CodeReady Linux Builder for x86_64"
     content_type: "yum"
     download_policy: "immediate"
 
@@ -310,6 +325,11 @@ satellite_repositories:
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - Supplementary RPMs 9.9"  # Used for LEAPP
     product: "Red Hat Enterprise Linux for x86_64"
+    content_type: "yum"
+    download_policy: "immediate"
+
+  - name: "Red Hat CodeReady Linux Builder for RHEL 9 x86_64 RPMs 9"
+    product: "Red Hat CodeReady Linux Builder for x86_64"
     content_type: "yum"
     download_policy: "immediate"
 

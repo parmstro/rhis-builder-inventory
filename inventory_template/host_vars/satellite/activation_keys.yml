@@ -149,6 +149,63 @@ activation_keys:
     purpose_usage: "Development/Test"
     service_level: "Premium"
 
+  - name: "SOE10_dev_EPEL"
+    state: "present"
+    description: "Activate a RHEL 10 with EPEL system in development"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "codeready-builder-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "Default_Organization_EPEL10_EPEL10"
+        override: "enabled"
+    content_view: "SOE10_EPEL"
+    lifecycle_environment: "Development"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Development/Test"
+    service_level: "Premium"
+
+  - name: "SOE10_qa_EPEL"
+    state: "present"
+    description: "Activate a RHEL 10 with EPEL system in development"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "codeready-builder-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "Default_Organization_EPEL10_EPEL10"
+        override: "enabled"
+    content_view: "SOE10_EPEL"
+    lifecycle_environment: "Qualification"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Development/Test"
+    service_level: "Premium"
+
+  - name: "SOE10_prod_EPEL"
+    state: "present"
+    description: "Activate a RHEL 10 with EPEL system in development"
+    organization: "{{ satellite_organization }}"
+    auto_attach: false
+    content_overrides:
+      - label: "satellite-client-6-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "codeready-builder-for-rhel-10-x86_64-rpms"
+        override: "enabled"
+      - label: "Default_Organization_EPEL10_EPEL10"
+        override: "enabled"
+    content_view: "SOE10_EPEL"
+    lifecycle_environment: "Production"
+    unlimited_hosts: true
+    purpose_role: "Red Hat Enterprise Linux Server"
+    purpose_usage: "Development/Test"
+    service_level: "Premium"
+
   # - name: "SOE10_dev_edge_manager"
   #   state: "present"
   #   description: "Activate a RHEL 10 Edge Manager system in development"
@@ -249,6 +306,8 @@ activation_keys:
     content_overrides:
       - label: "satellite-client-6-for-rhel-9-x86_64-rpms"
         override: "enabled"
+      - label: "codeready-builder-for-rhel-9-x86_64-rpms"
+        override: "enabled"
       - label: "Default_Organization_EPEL9_EPEL9"
         override: "enabled"
     content_view: "SOE9_EPEL"
@@ -266,6 +325,8 @@ activation_keys:
     content_overrides:
       - label: "satellite-client-6-for-rhel-9-x86_64-rpms"
         override: "enabled"
+      - label: "codeready-builder-for-rhel-9-x86_64-rpms"
+        override: "enabled"
       - label: "Default_Organization_EPEL9_EPEL9"
         override: "enabled"
     content_view: "SOE9_EPEL"
@@ -282,6 +343,8 @@ activation_keys:
     auto_attach: false
     content_overrides:
       - label: "satellite-client-6-for-rhel-9-x86_64-rpms"
+        override: "enabled"
+      - label: "codeready-builder-for-rhel-9-x86_64-rpms"
         override: "enabled"
       - label: "Default_Organization_EPEL9_EPEL9"
         override: "enabled"

@@ -90,6 +90,11 @@ repository_sets:
     repository_list:
       - releasever: "10"
 
+  - name: "Red Hat CodeReady Linux Builder for RHEL 10 ARM 64 (RPMs)"
+    product: "Red Hat CodeReady Linux Builder for ARM 64"
+    repository_list:
+      - releasever: "10"
+
   - name: "Red Hat Satellite Client 6 for RHEL 10 aarch64 (RPMs)"
     product: "Red Hat Enterprise Linux for ARM 64"
 
@@ -120,6 +125,11 @@ repository_sets:
 
   - name: "Red Hat Enterprise Linux 9 for ARM 64 - Supplementary (RPMs)"
     product: "Red Hat Enterprise Linux for ARM 64"
+    repository_list:
+      - releasever: "9"
+
+  - name: "Red Hat CodeReady Linux Builder for RHEL 9 ARM 64 (RPMs)"
+    product: "Red Hat CodeReady Linux Builder for ARM 64"
     repository_list:
       - releasever: "9"
 
@@ -162,6 +172,11 @@ repository_sets:
     repository_list:
       - releasever: "10"
 
+  - name: "Red Hat CodeReady Linux Builder for RHEL 10 x86_64 (RPMs)"
+    product: "Red Hat CodeReady Linux Builder for x86_64"
+    repository_list:
+      - releasever: "10"
+
   - name: "Red Hat Satellite Client 6 for RHEL 10 x86_64 (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
 
@@ -198,6 +213,11 @@ repository_sets:
 
   - name: "Red Hat Enterprise Linux 9 for x86_64 - Extensions (RPMs)"
     product: "Red Hat Enterprise Linux for x86_64"
+    repository_list:
+      - releasever: "9"
+
+  - name: "Red Hat CodeReady Linux Builder for RHEL 9 x86_64 (RPMs)"
+    product: "Red Hat CodeReady Linux Builder for x86_64"
     repository_list:
       - releasever: "9"
 

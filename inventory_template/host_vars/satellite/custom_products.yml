@@ -99,6 +99,20 @@ custom_products:
         password: ""
         download_policy: "immediate"
 
+  - name: "EPEL10"
+    description: "Extra Packages for Enterprise Linux 10"
+    org: "{{ satellite_organization }}"
+    label: "EPEL10"
+    repositories:
+      - name: "EPEL10"
+        upstream_name: ""
+        content_type: "yum"
+        url: "https://dl.fedoraproject.org/pub/epel/10/Everything/x86_64/"
+        gpg_key: "EPEL10GPG"
+        username: ""
+        password: ""
+        download_policy: "immediate"
+
   # - name: "CentOS Stream 9"
   #   desc: "CentOS Stream 9 from CentOS.org"
   #   org: "{{ satellite_organization }}"
