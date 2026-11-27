@@ -177,22 +177,25 @@ custom_products:
         password: ""
         download_policy: "immediate"
 
-  - name: "Red Hat Enterprise Linux Bootc Containers"
-    desc: "Red Hat containers from registry.redhat.io"
-    org: "{{ satellite_organization }}"
-    label: "rh_rhel9_bootc_containers"
-    repositories:
-      - name: "rhel9/rhel-bootc"
-        label: "rhel9_rhel-bootc"
-        description: "rhel9 bootc image mode container repo"
-        docker_upstream_name: "rhel9/rhel-bootc"
-        content_type: "docker"
-        url: "https://registry.redhat.io"
-        upstream_username: "{{ redhat_registry_username_vault }}"
-        upstream_password: "{{ redhat_registry_password_vault }}"
-        download_policy: "immediate"
-        include_tags: "9*"
-        exclude_tags: "*-source"
+  # Synching these container images without a strong filter can result in a very large number of images being downloaded.
+  # Try only latest and GA releases, and avoid synching component images unless they are required for your deployment.
+  #
+  # - name: "Red Hat Enterprise Linux Bootc Containers"
+  #   desc: "Red Hat containers from registry.redhat.io"
+  #   org: "{{ satellite_organization }}"
+  #   label: "rh_rhel9_bootc_containers"
+  #   repositories:
+  #     - name: "rhel9/rhel-bootc"
+  #       label: "rhel9_rhel-bootc"
+  #       description: "rhel9 bootc image mode container repo"
+  #       docker_upstream_name: "rhel9/rhel-bootc"
+  #       content_type: "docker"
+  #       url: "https://registry.redhat.io"
+  #       upstream_username: "{{ redhat_registry_username_vault }}"
+  #       upstream_password: "{{ redhat_registry_password_vault }}"
+  #       download_policy: "immediate"
+  #       include_tags: "9*"
+  #       exclude_tags: "*-source"
 
   - name: "OpenShift Container Platform 4.20"
     desc: "OCP 4.20 release and component container images"
