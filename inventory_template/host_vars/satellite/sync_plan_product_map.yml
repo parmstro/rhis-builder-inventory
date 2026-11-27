@@ -23,9 +23,9 @@ product_plans:
     plan: "nightly_infra"
     organization: "{{ satellite_organization }}"
 
-  - name: "Red Hat Enterprise Linux Bootc Containers"
-    plan: "nightly_infra"
-    organization: "{{ satellite_organization }}"
+  # - name: "Red Hat Enterprise Linux Bootc Containers"
+  #   plan: "nightly_infra"
+  #   organization: "{{ satellite_organization }}"
 
   - name: "Red Hat Enterprise Linux for ARM 64"
     plan: "nightly_os"
