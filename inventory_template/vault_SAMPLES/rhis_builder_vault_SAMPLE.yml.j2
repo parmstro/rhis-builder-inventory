@@ -176,8 +176,25 @@ satellite_user_default_password_vault: "{{ default_environment_password_vault }}
 ipa_principal_username_vault: "{{ ipa_admin_principal_vault }}"
 ipa_principal_password_vault: "{{ ipa_admin_password_vault }}"
 
-# for creating kvm services
-# kvm_ssl_rsa_key_pass_vault: "{{ default_environment_password_vault }}"
+#####################################
+# rhis-builder-kvm vault
+#####################################
+# Secrets for KVM hypervisor provisioning and libvirt TLS
+kvm_host_username_vault: "{{ rhis_builder_default_user }}"                                          # notsecret
+kvm_host_password_vault: "{{ default_environment_password_vault }}"                                 # notsecret
+kvm_ssl_rsa_key_pass_vault: "{{ default_environment_password_vault }}"                              # notsecret
+
+#####################################
+# rhis-builder-ocp-virt vault
+#####################################
+# Secrets for OpenShift Virtualization compute resources
+# Used by rhis-builder-satellite and rhis-builder-ocp-virt-lz
+ocp_virt_api_url_vault: "https://api.ocp.example.ca:6443"                                          # notsecret
+ocp_virt_username_vault: "your_ocp_service_account"                                                 # notsecret
+ocp_virt_password_vault: "your_ocp_password"                                                        # notsecret
+ocp_virt_token_vault: ""                                                                            # notsecret
+ocp_virt_namespace_vault: "rhis-vms"                                                                # notsecret
+ocp_virt_ca_cert_vault: ""                                                                          # notsecret
 
 
 #####################################
@@ -333,6 +350,13 @@ wp_db_password_vault: "{{ default_environment_password_vault }}"                
 northwind_db_password_vault: "{{ default_environment_password_vault }}"                               # notsecret
 northwind_django_secret_vault: "{{ default_environment_password_vault }}"                             # notsecret
 northwind_haproxy_stats_password_vault: "{{ default_environment_password_vault }}"                    # notsecret
+
+#####################################
+# rhis-builder-keycloak vault
+#####################################
+# Keycloak SSO secrets
+keycloak_admin_password_vault: "{{ default_environment_password_vault }}"                             # notsecret
+keycloak_db_user_password_vault: "{{ default_environment_password_vault }}"                           # notsecret
 
 #####################################
 # rhis-builder-quay vault
