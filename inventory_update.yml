@@ -112,10 +112,6 @@
       ansible.builtin.set_fact:
         split_basevars_global_domain_name: "{{ basevars_global_domain_name | split('.') }}"
 
-    - name: Split timezone name
-      ansible.builtin.set_fact:
-        split_rhis_timezone: "{{ rhis_timezone | split('/') }}"
-
     - name: Generate network address CIDR
       ansible.builtin.set_fact:
         target_net_cidr: "{{ default_network }}/{{ default_network_prefix }}"

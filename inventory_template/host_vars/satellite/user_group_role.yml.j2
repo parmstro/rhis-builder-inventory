@@ -21,8 +21,8 @@ satellite_users:
     location_on_login: "{{ satellite_location }}"
     organization_on_login: "{{ satellite_organization }}"
     auth_source: "Internal"  # or "External"
+    timezone: "Eastern Time (US & Canada)"
 {% endraw %}
-    timezone: "{{ split_rhis_timezone[1] }}"
     locale: "{{ rhis_locale }}"{% raw %}
     locations:
       - "{{ satellite_location }}"
@@ -40,8 +40,8 @@ satellite_users:
     location_on_login: "{{ satellite_location }}"
     organization_on_login: "{{ satellite_organization }}"
     auth_source: "Internal"  # or "External"
+    timezone: "Eastern Time (US & Canada)"
 {% endraw %}
-    timezone: "{{ split_rhis_timezone[1] }}"
     locale: "{{ rhis_locale }}"{% raw %}
     locations:
       - "{{ satellite_location }}"
